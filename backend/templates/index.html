@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Goldman:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <title>Learning Zone API</title>
+</head>
+<body>
+    <!--Encabezado para decorar la documnatación de la app-->
+    <header>
+        <!--Titulo del encabezado-->
+        <h2 class="header-title">Learning Zone API</h2>
+    </header>
+    <!--Contenido sobre la app-->
+    <section class="about-app">
+        <h1>Learning Zone API</h1>
+        <p><span class="about-app-span">Learning Zone API</span> es una API robusta diseñada y creada en FastAPI para la gestión eficiente del proyecto Learning Zone, desarrollada por el equipo CJE-TECHNOLOGIES. Optimiza la administración de recursos y procesos academicos, garantizando un rendimiento fluido y proporcionando material educativo de diferente tipo siendo ademas efectiva al potenciar el aprendizaje y la colaboración.</p>
+        <p>Puedes ver la documentación agregando <a href="redoc" target="_blank">/redoc</a> a la barra de busqueda o prueba nuestra api dando click en el boton de abajo:</p>
+        <a href="/docs" target="_blank">
+            <button class="about-app-button">Documentación</button>
+        </a>
+    </section>
+    <!--Recursos extra-->
+    <section class="characteristics">
+        <h2 style="text-align: center; margin-bottom: 0;">Caracteristicas</h2>
+        <div class="characteristics-container">
+            <article>
+            <h3>Velocidad</h3>
+            <p>
+                Desarrollada con FastAPI, un framework de Python reconocido por su alta velocidad y eficiencia,
+                esta solución garantiza un rendimiento óptimo, respuestas rápidas y una escalabilidad robusta
+                para aplicaciones modernas.
+            </p>
+        </article>
+        <article>
+            <h3>Optimización</h3>
+            <p>
+                Esta api optimiza el proceso de creación de cursos y lecciones enfocados en el aprendizaje,
+                ademas contiene variadad de contendio educativo listo para ser usado en tu plataforma
+                optimisando el tiempo de desarrollo de tu aplicación educativa.
+            </p>
+        </article>
+        <article>
+            <h3>Escalablilidad</h3>
+            <p>
+                Learning Zone API es una api con contendio educativo en constante crecimiento al ser de
+                codigo abierto, por lo que le permite a las aplicaciones construidas con esta api
+                crecer tanto como les sea posible.
+            </p>
+        </article>
+        </div>
+    </section>
+
+</body>
+</html>

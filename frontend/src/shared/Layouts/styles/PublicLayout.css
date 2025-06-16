@@ -1,0 +1,10 @@
+/* *{
+    margin: 0;
+    padding: 0;
+    box-sizing: 0;
+} */
+.public-layout{
+    display: grid;
+    min-height: 100dvh;
+    grid-template-rows: .8fr auto .8fr;
+}

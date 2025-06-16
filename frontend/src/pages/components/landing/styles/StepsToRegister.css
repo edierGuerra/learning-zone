@@ -1,0 +1,56 @@
+.section-steps-register{
+    padding: 60px 20px ;
+    display: flex;
+    flex-direction: column;
+    background-color: #48e;
+    gap:100px;
+    height: 730px;
+
+}
+.title-section-steps{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.title-section-steps h2{
+    font-size: 44px;
+    color: rgb(204, 225, 255);
+    background-color: rgb(50, 112, 206);
+    align-self: center;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    border-left: 1px solid #fff;
+    padding: .5rem;
+    border-radius: 10px;
+    
+    
+    
+}
+.title-section-steps p{
+    font-size: 24px;
+    color: rgba(244, 239, 239, 0.573);
+    background-color: rgb(76, 148, 255);
+    align-self: center;
+    margin-top: -.5px;
+    z-index: 1;
+    padding: 1.4rem;
+    border-radius:0 0 10px 10px;
+    transition: .3s ease-in-out;
+    
+    
+}
+.title-section-steps p:hover{
+    color: #fff;
+    font-size: 26px;
+    transform: translateY(-4px);
+    background-color: rgb(3, 49, 117);
+    
+    
+}
+
+
+.description-step{
+    font-weight: 300;
+    letter-spacing: 1.4px;
+    color: rgba(212, 210, 212, 0.933);
+} 

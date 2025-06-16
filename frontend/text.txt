@@ -1,0 +1,4 @@
+ejecutar para card --> npm i framer-motion
+ejecutar para steps--> npm i framer-motion
+
+Ejecutar para rutas ---> npm i react-router-dom

@@ -38,8 +38,9 @@ header > a{
     align-items: center;
     text-align: center;
 }
-.about-app > h1{
+.about-app > h1, h2, h3{
     margin-top: 20px;
+    color: #e0d9d9;
 }
 .about-app > p{
     margin: 0;
@@ -77,4 +78,7 @@ p > a:hover{
 }
 article{
     max-width: 400px;
+}
+svg {
+    color: white;
 }

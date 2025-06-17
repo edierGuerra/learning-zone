@@ -12,6 +12,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+# Modulos internos
+from database.config_db import Base, engine
+from models.student_model import Student
+from models.identification_model import Identification
+
 # Crear la app
 app = FastAPI(
     title = "Learning Zone API",
@@ -35,3 +40,9 @@ async def root(request: Request):
     """
     # Retorna el archivo index.html, pasando el objeto request obligatorio
     return templates.TemplateResponse("index.html", {"request": request})
+
+# Mapear la base de datos al iniciar la app
+@app.on_event("startup")
+async def startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)

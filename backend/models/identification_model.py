@@ -13,7 +13,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database.config_db import Base
 
 class Identification(Base):
-    __tablename__ = "identification"
+    __tablename__ = "identifications"
     id:Mapped[int] = mapped_column(Integer,primary_key=True, autoincrement=True)
     n_identification:Mapped[int] = mapped_column(Integer, nullable=False, unique=True)
     

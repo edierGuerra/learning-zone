@@ -1,0 +1,21 @@
+/* Contenedor general */
+.main-privacy {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+/* Titulo principal */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Parrafo */
+.text-privacy {
+  text-align: justify;
+  white-space: pre-line;
+}
+
+
+

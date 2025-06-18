@@ -1,5 +1,11 @@
 import iconLz from '../../assets/learningZone/icon-learning-zone.jpg'
 import iconIER from '../../assets/juanTamayo/icon-institucion.png'
+// icons de react icons
+import { FaTiktok } from "react-icons/fa";
+import { FaFacebookF } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { FiGithub } from "react-icons/fi";
+import { IoLocationOutline } from "react-icons/io5";
 import './Styles/Footer.css'
 export default function Footer() {
   return (
@@ -10,27 +16,29 @@ export default function Footer() {
             <img src={iconLz} alt="" />
           </div>
           <div className="contendor-ubi">
-            {/* <img src={icon} alt="" /> */}
+            {<IoLocationOutline className='icon iconUbi'/>}
             <p>Alfonso L</p>
           </div>
           
         </section>
         <section className="contenedor-2">
             <div className="contenedor-terminos-condiciones">
-              <h3>Copyright</h3>
-              <div className="contenedor-terminos-politicas">
-                <p>Copyright © 2025 © Cje-Tecnology inc. Todos los derechos reservados</p>
+              <p>Copyright © 2025 © Cje-Tecnology inc. Todos los derechos reservados</p>
+              <div className="container-all-t-p">
+                <p>Términos y condiciones   |   Políticas y Privacidad</p>
               </div>
             </div>
+
             <div className="contenedor-institucion">
               <h3>I.E.R Juan Tamayo</h3>
               <img src={iconIER} alt="" />
             </div>
             <div className="contenedor-redes">
               <ul>
-                <li className="itemRed tikTok">Tik Tok</li>
-                <li className="itemRed facebook">Facebook</li>
-                <li className="itemRed instagram">Instagram</li>
+                <li className="tikTok">{<FaTiktok className='icon' />}</li>
+                <li className="facebook">{<FaFacebookF className='icon' />}</li>
+                <li className="instagram">{<FaInstagram className='icon' />}</li>
+                <li className="gitHub">{<FiGithub className='icon' />}</li>
               </ul>
             </div>
         </section>

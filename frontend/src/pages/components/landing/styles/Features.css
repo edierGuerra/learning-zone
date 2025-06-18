@@ -18,24 +18,25 @@
 .title-features-big{
     color: #d4b412;
     font-size: 44px;
+    margin-bottom: 3rem;
 }
 
 
-.divid{
-    margin: 4% 0 8% 0;
+/* .divid{
+    margin: 4% 0 4% 0;
     content: '';
     width: 6%;
     height: 10px;
     border-radius: 8px;
     background:linear-gradient( #d4e4ff,transparent,#43443d);
-}
+} */
 
 .features{
     display: grid;
-    grid-template-columns: repeat(3 ,1fr);
+    grid-template-columns:6fr 6fr 6fr;
     align-items: center;
     justify-content: center;
-    gap: 4rem;
+    gap: 2rem;
 }
 
 
@@ -63,4 +64,96 @@
 }
 .title-feature{
     color: #43443d;
+}
+
+.feature-card-btn{
+    border-radius: 20px 20px 0 0;
+    width: 80%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    perspective: 600px;
+}
+
+
+.feature-card-btn button{
+    padding: .6rem;
+    border: none;
+    font-size: 28px;
+    background-color: #311c12;
+    width: 100%;
+    color: #ffffff;
+    transition: .3s ease-in-out;
+    align-self: center;
+
+}
+.feature-card-btn button:hover{
+    width: 90%;
+    box-shadow: 0 0 10px #742118;
+
+}
+
+.div-card-button , .div-card-top{
+    content: '';
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+}
+
+.div-card-top {
+    border-radius: 16px 16px 0 0;
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 32px;
+    align-items: center;
+    background: #8E0E00;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1F1C18, #8E0E00);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+    transform-origin: bottom center;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+.div-card-button {
+    border-radius:0 0 16px 16px ;
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 32px;
+    align-items: center;
+    background: #8E0E00;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #1F1C18, #8E0E00);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+    transform-origin: top center;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+/* Efecto baúl: cuando el botón está en hover, rota la tapa */
+.feature-card-btn button:hover ~ .div-card-top,
+.feature-card-btn:has(button:hover) ~ .div-card-top {
+    transform: rotateX(180deg);
+}
+
+/* Si .div-card-top está dentro de .feature-card-btn, usa este selector: */
+.feature-card-btn:hover .div-card-top {
+    transform: rotateX(180deg);
+}
+/* Efecto baúl: cuando el botón está en hover, rota la tapa */
+.feature-card-btn button:hover ~ .div-card-button,
+.feature-card-btn:has(button:hover) ~ .div-card-button {
+    transform: rotateX(-180deg);
+}
+
+/* Si .div-card-top está dentro de .feature-card-btn, usa este selector: */
+.feature-card-btn:hover .div-card-button {
+    transform: rotateX(-180deg);
 }

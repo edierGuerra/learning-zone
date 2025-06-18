@@ -1,0 +1,1 @@
+/* Hook que agrupa la logica del Register */

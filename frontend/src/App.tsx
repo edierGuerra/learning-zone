@@ -1,14 +1,13 @@
 import './App.css'
-import { ContextProvider } from './modules/auth/Context/AuthContext'
-import UserProfilePage from './modules/users/pages/UserProfilePage'
-import { GeneralPage } from './pages/info/SitePolicies'
+/* import UserProfilePage from './modules/users/pages/UserProfilePage' */
+import RoutersPublic from './routers/public'
 /* import PublicLayout from './shared/Layouts/PublicLayout' */
 
 function App() {
 
   return (
     <>
-    <GeneralPage/>
+    <RoutersPublic/>
     
     </>
   )

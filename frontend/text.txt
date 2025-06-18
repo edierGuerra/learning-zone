@@ -2,3 +2,12 @@ ejecutar para card --> npm i framer-motion
 ejecutar para steps--> npm i framer-motion
 
 Ejecutar para rutas ---> npm i react-router-dom
+
+Axios para conexion con backend --> npm i axios
+Animatiion text --> npx shadcn@latest add "https://magicui.design/r/morphing-text"
+Galery ---> npm install ogl
+Animation Scroll --> npm install aos --save
+                     npm install --save-dev @types/aos
+Explosion confeti --> npm install react-confetti-explosion
+
+npm install react-icons --save ---> react icons

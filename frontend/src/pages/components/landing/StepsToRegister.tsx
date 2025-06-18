@@ -1,16 +1,30 @@
+import { useEffect } from 'react';
 import Magnet from '../../../shared/animations/AnimationMagnet'
 import Stepper, { Step } from '../../../shared/animations/AnimationStepper';
 import './styles/StepsToRegister.css'
+import '../../../../node_modules/aos/dist/aos.css'
+import AOS from 'aos';
 
 
 export default function StepsToRegister() {
+    
+    useEffect(() => {
+      AOS.init({
+        duration: 1000,
+        once: false, // solo una vez
+      });
+    
+      setTimeout(() => {
+        AOS.refresh(); // recalcula los elementos visibles
+      }, 100);
+    }, []);
   return (
-    <div className='section-steps-register'>
+    <div data-aos="fade-down" className='section-steps-register'>
         <section className='title-section-steps'>
             <h2>¿ Aun no tienes Cuenta?</h2>
             <p className='paragrap-steps-title'>Y estas en el grado 11°</p>
         </section>
-            <Stepper
+            <Stepper  data-aos="zoom-out-up"
             initialStep={1}
             onStepChange={(step) => {
                 console.log(step);

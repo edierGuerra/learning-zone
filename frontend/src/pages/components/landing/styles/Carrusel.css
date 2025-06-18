@@ -1,5 +1,6 @@
 .section-carrusel{
     background: rgba(255, 240, 200, 0.733);
+    height: 100vh;
 }
 .titulo{
     cursor: pointer;

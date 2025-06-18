@@ -2,8 +2,8 @@ import { AnimationNavbar } from "../animations/AnimationNavbar";
 
 export default function Navbar() {
   const items = [
-  { label: "Register", href: "#" },
-  { label: "Login", href: "#" },
+  { label: "Register", href: "register" },
+  { label: "Login", href: "login" },
 ];
   return (
   <div >

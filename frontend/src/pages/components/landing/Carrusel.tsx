@@ -1,9 +1,11 @@
 import './Styles/Carrusel.css'
 import imgIcon from '../../assets/Carrusel/img-ier.jpg'
+
     export default function Carrusel() {
+
   return (
   <section className='section-carrusel'>
-            <h2 className='titulo'>Lz - Juan Tamayo</h2>
+            
             <div className='container-carrusel'>
                 <ul>
                     <li>

@@ -4,6 +4,7 @@
     box-sizing: 0;
 }
 footer{
+    padding: 20px 0px;
     background-color: #01022D;
     display: flex;
     flex-direction: column;
@@ -19,9 +20,12 @@ footer{
     border-bottom: 1px solid #fff;
 }
 .container-nombre{
+    font-family: 'Clash Display';
+
     display: flex;
     align-items: center;
     gap: 15px;
+    font-size: 32px;
 }
 .container-nombre img{
     width: 80px;
@@ -31,12 +35,18 @@ footer{
 }
 .contendor-ubi{
     display: flex;
-    gap: 8px;
-    padding: 6px;
+    gap: 12px;
+    padding: 6px 15px;
     border-radius: 20px;
     border: 1px solid #fff;
     align-items: center;
 
+}
+.icon{
+    font-size: 32px;
+}
+.iconUbi{
+    color: #fff;
 }
 
 
@@ -51,6 +61,11 @@ footer{
 }
 .contenedor-terminos-condiciones{
     margin-left: 45px;
+}
+
+.subtitle-copyright{
+    font-size: 22px;
+    font-weight: 400;
 }
 .contenedor-institucion{
     display: flex;
@@ -74,7 +89,7 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 18px;
     list-style: none;
 
 }

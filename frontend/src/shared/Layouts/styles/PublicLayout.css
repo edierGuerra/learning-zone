@@ -6,5 +6,5 @@
 .public-layout{
     display: grid;
     min-height: 100dvh;
-    grid-template-rows: .8fr auto .8fr;
+    grid-template-rows: auto 1fr auto;
 }

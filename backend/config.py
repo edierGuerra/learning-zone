@@ -1,7 +1,12 @@
 # app/config.py
+""" 
+Este módulo define la configuración central de la aplicación utilizando la biblioteca pydantic-settings para gestionar variables de 
+entorno de forma segura y estructurada.
+"""
+
+# Modulos externos
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Optional
 
 class Settings(BaseSettings): #clase de configuracion heredando BaseSettings
     # Esto le dice a Pydantic que busque el archivo .env

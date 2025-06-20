@@ -6,21 +6,19 @@
 # Modulos esternos
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
-import os # Importamos el módulo os para acceder a las variables de entorno
-from dotenv import load_dotenv # Importamos load_dotenv
 
-# Cargamos las variables de entorno del archivo .env
-load_dotenv()
+# Módulo interno: Importamos nuestra instancia de configuración
+from config import settings # de config importamos settings
 
 # Definimos la URL de conexión
-# Usamos asyncmy como driver asincrónico para MySQL
-# Ahora obtenemos la URL de las variables de entorno
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Ahora la obtenemos de nuestra instancia de configuración
+DATABASE_URL = settings.database_url
+
 
 # Creamos el motor de conexión asíncrono
 engine = create_async_engine(
     DATABASE_URL,
-    echo=True,    # Para mostrar en consola las consultas SQL ejecutadas
+    echo=True, # Para mostrar en consola las consultas SQL ejecutadas
 )
 
 # Creamos la fábrica de sesiones asíncronas

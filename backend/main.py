@@ -16,6 +16,7 @@ from fastapi.templating import Jinja2Templates
 from database.config_db import Base, engine
 from models.student_model import Student
 from models.identification_model import Identification
+from routes.student_routes import router as student_router
 
 # Crear la app
 app = FastAPI(
@@ -46,3 +47,6 @@ async def root(request: Request):
 async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+# Rutas de la app
+app.include_router(student_router)

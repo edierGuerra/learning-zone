@@ -5,7 +5,7 @@ garantizando una representación coherente y optimizada de la información.
 """
 
 # Modulos externos
-from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy import Boolean, Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # Modulos internos
@@ -25,3 +25,7 @@ class Student(Base):
     
     # Relaciones
     identification:Mapped["Identification"] = relationship(back_populates="student", uselist=False)
+    
+    # Validación de correo
+    email_token: Mapped[str] = mapped_column(String(255), nullable=True, unique=True, comment="Token único para verificación de correo")
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, comment="Indica si el correo fue verificado")

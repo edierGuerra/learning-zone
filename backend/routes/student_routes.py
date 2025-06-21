@@ -5,7 +5,8 @@ Este modulo contiene todas las rutas propias del estudiante.
 """
 
 # Modulos externos
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import JSONResponse
 
 # Modulos internos
 from schemas.student_schemas import StudentRegister
@@ -32,4 +33,9 @@ async def create_student(student_data:StudentRegister, services:StudentService =
     """
 
     student = await services.register_student(student_data)
-    return student
+    if not student:
+        raise HTTPException(status_code=500, detail="Error al registrar el usuario")
+    return JSONResponse(content={
+        "email":student.email
+    },
+    status_code=201)

@@ -13,6 +13,7 @@ import logging
 # Modulos internos
 from schemas.student_schemas import StudentRegister
 from models.student_model import Student
+from .utils import hash_password
 
 logger = logging.getLogger(__name__)# Objeto para tirar logs
 
@@ -42,6 +43,10 @@ class StudentRepository:
             
             # Objeto del nuevo estudiante
             new_student = Student(**student_data)
+            
+            # Hashear la contraseña
+            hashed_password = hash_password(new_student.password)
+            new_student.password = hashed_password.decode("utf-8")
             
             # Agregar el usuario a la base de datos
             self.db.add(new_student) # Agregar el estudiante a la session

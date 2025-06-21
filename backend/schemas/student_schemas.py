@@ -1,4 +1,4 @@
-#user_schemas.py
+#student_schemas.py
 """ 
 Este módulo define esquemas de validación y respuesta para la gestión de datos de estudiantes utilizando la biblioteca pydantic.
 """
@@ -27,4 +27,8 @@ class StudentResponse(BaseModel):
     email: EmailStr = Field(..., title="Correo Electrónico")
 
     class Config:
-        from_atributes = True  # Permite que Pydantic convierta objetos ORM (como los de SQLAlchemy)
+        from_attributes = True  # Permite que Pydantic convierta objetos ORM (como los de SQLAlchemy)
+
+# Esquema de respuesta simple para verificación o confirmaciones
+class MessageResponse(BaseModel):
+    message: str

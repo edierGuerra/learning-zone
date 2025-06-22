@@ -16,20 +16,24 @@ from schemas.student_schemas import StudentResponse
 
 router = APIRouter(prefix="/api/v1/student", tags=["Students"])
 
-@router.post("/", response_model=StudentResponse, summary="Registrar estudiante", description="Facilita el registro de un nuevo estudiante en la base de datos, validando y almacenando los datos proporcionados de forma segura.")
+@router.post("/", response_model=StudentResponse)
 async def create_student(student_data:StudentRegister, services:StudentService = Depends(get_student_services)):
-    """Crea un nuevo estudiante a partir de los datos proporcionados.
+    """## Registrar un nuevo estudiante
 
-    Esta ruta permite registrar un nuevo estudiante en el sistema. Se valida la información recibida usando el esquema
-    `StudentRegister` y, si es válida, se almacena de forma segura en la base de datos. Devuelve los datos del estudiante
-    recién creado sin incluir información sensible como la contraseña.
+    Registra un estudiante en el sistema a partir de los datos proporcionados.  
+    La información recibida se valida usando el esquema `StudentRegister`.  
+    Si el proceso es exitoso, se crea el estudiante y se retorna su correo electrónico.
 
-    Args:
-        student_data (StudentRegister): Información del estudiante validada mediante Pydantic.
-        services (StudentService): Dependencia que encapsula la lógica de negocio para estudiantes.
+    ### Parámetros:
+    - `student_data (StudentRegister)`: Datos del estudiante, validados automáticamente mediante Pydantic.
+    - `services (StudentService)`: Servicio de negocio encargado de gestionar el registro de estudiantes (inyectado con Depends).
 
-    Returns:
-        StudentResponse: Representación del estudiante registrado.
+    ### Respuesta:
+    - `201 Created`: Diccionario con el campo `"email"` del estudiante recién creado.
+    - `500 Internal Server Error`: Si ocurre un fallo inesperado durante el registro.
+
+    ### Nota:
+    Aunque se especifica `response_model=StudentResponse`, la función devuelve manualmente una respuesta personalizada (`JSONResponse`) con solo el correo del estudiante.
     """
 
     student = await services.register_student(student_data)

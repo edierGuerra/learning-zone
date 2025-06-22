@@ -11,7 +11,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings): #clase de configuracion heredando BaseSettings
     # Esto le dice a Pydantic que busque el archivo .env
     """
-    este modulo contiene la conexion al archivo .env para traer la url de la conexion a la base de datos
+    Este modulo contiene la conexion al archivo .env para traer la url de la conexion a la base de datos
     """
     model_config = SettingsConfigDict( #aca se configura como base settings cargara los valores
         env_file='.env', #le indica a pydantic que busque un archivo .env en el directorio actual

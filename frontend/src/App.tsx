@@ -4,13 +4,11 @@ import RoutersPublic from './routers/public'
 /* import PublicLayout from './shared/Layouts/PublicLayout' */
 
 function App() {
-
   return (
-    <>
-    <RoutersPublic/>
-    
-    </>
-  )
+    <div>
+      <RoutersPublic/>
+    </div>
+  );
 }
 
-export default App
+export default App;

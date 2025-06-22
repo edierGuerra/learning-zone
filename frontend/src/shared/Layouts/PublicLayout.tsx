@@ -4,17 +4,15 @@ import './styles/PublicLayout.css'
 import SplashCursor from "../animations/SplashCursor";
 import { Outlet } from "react-router-dom";
 
+
 export default function PublicLayout() {
   return (
     <div className="public-layout">
       <Header/>
-        <Outlet/>
+       <Outlet/> 
       <SplashCursor/>
       <Footer/>
 
-
-    
-      
     </div>
   )
 }

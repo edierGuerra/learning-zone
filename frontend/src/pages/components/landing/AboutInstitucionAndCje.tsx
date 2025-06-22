@@ -10,8 +10,10 @@ import imgJunior from '../../../assets/cjeTect/img-junior.jpg';
 import '../../../../node_modules/aos/dist/aos.css'
 import AOS from 'aos';
 import { useEffect } from 'react';
+import { useNavigationHandler } from '../../../hooks/useNavigationHandler';
 
 export default function AboutInstitucionAndCje() {
+  const handleBtnNavigate =useNavigationHandler();
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -54,7 +56,7 @@ const itemsIer = [
                 borderRadius={.04}
               />
             </div>
-            <button className='btn-view-about-team'>Ver Mas</button>
+            <button onClick={()=>handleBtnNavigate('/aboutUs')}className='btn-view-about-team'>Ver Mas</button>
         </div>
         <div className="container-landing-institution" style={{ height: '600px', position: 'relative' }}>
             <h2 className='title-landing-institution'>I.E.R Juan Tamayo</h2>
@@ -66,7 +68,7 @@ const itemsIer = [
                   borderRadius={.04}
                 />
               </div>
-            <button className='btn-view-about-institution'>Ver Mas</button>
+            <button onClick={()=>handleBtnNavigate('/aboutInstitution')} className='btn-view-about-institution'>Ver Mas</button>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-type AppRoutes = "/home" | "/login" | "/profile" | "/back";
+type AppRoutes = "/home" | "/login" | "/profile" | "/back" | "/aboutUs" | "/aboutInstitution" ;
 
 export const useNavigationHandler = () => {
     const navigate = useNavigate();

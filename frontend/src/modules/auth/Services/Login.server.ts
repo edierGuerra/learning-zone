@@ -2,10 +2,10 @@
 const LOGIN_ENDPOINT = import.meta.env.VITE_AUTH_ENDPOINT; */
 
 import axios from 'axios'
-import type { TUser } from '../../types/User';
+import type { TStudent } from '../../types/User';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const loginAPI = (email: TUser['email'], password: TUser['password']) => {
+export const loginAPI = (email: TStudent['email'], password: TStudent['password']) => {
   return axios.post(`${API_URL}/login`, { email, password });
 };

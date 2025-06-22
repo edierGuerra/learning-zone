@@ -1,118 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { registerAPI } from "../Services/Register.server";
-import { loginAPI } from "../Services/Login.server";
-import type { TUser, TUserProfile } from "../../types/User";
 import { UserContext } from "./userContext";
-import { authStorage } from "../../../shared/Utils/authStorage";
+import { authStorage } from "../../../shared/Utils/authStorage"; // Módulo que gestiona localStorage (guardar y obtener token/user)
+import type { TStudentProfile } from "../../types/User";
+import { useNavigationHandler } from "../../../hooks/useNavigationHandler"; // Hook personalizado para manejar navegación sin usar useNavigate directo
 
-// Importa el módulo de almacenamiento centralizado
-
-// Tipo para los props del proveedor
+// Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
   children: React.ReactNode;
 };
 
-export const UserProvider = ({ children }: Props) => {
-  const navigate = useNavigate();
+// Provider principal que controla todo lo relacionado con la sesión del estudiante
+export const StudentProvider = ({ children }: Props) => {
+  const handleBtnNavigate = useNavigationHandler(); // Instancia del hook para redirigir
 
-  // Estado para el token y el usuario autenticado
+  // Estado para guardar el token y el usuario actual
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<TUserProfile | null>(null);
+  const [student, setStudent] = useState<TStudentProfile | null>(null);
 
-  // Estado para indicar que ya se hizo la validación inicial
+  // Estado para confirmar que ya se cargó la sesión al iniciar la app
   const [isReady, setIsReady] = useState(false);
 
-  // Efecto que se ejecuta una vez al iniciar para verificar si hay sesión guardada
+  // Carga inicial: verifica si hay token y usuario guardados en localStorage
   useEffect(() => {
-    const storedUser = authStorage.getUser(); // Usa método seguro
-    const storedToken = authStorage.getToken(); // Usa método seguro
+    const storedStudent = authStorage.getUser(); // Trae el usuario guardado si existe
+    const storedToken = authStorage.getToken();  // Trae el token guardado si existe
 
-    if (storedUser && storedToken) {
-      setUser(storedUser);
+    // Si hay sesión guardada, se setean los valores
+    if (storedStudent && storedToken) {
+      setStudent(storedStudent);
       setToken(storedToken);
     }
 
-    setIsReady(true); // Indica que la app ya está lista para renderizar
+    // Marca que ya terminó la validación de la sesión inicial
+    setIsReady(true);
   }, []);
 
-  // Registro de usuario: llama a la API y guarda los datos si tiene éxito
-  const registerUser = async (
-    num_identification: TUser['num_identification'],
-    name: TUser['name'],
-    lastNames: TUser['lastNames'],
-    email: TUser['email'],
-    password: TUser['password']
-  ) => {
-    try {
-      const res = await registerAPI({ num_identification, name, lastNames, email, password });
-      if (res) {
-        const token = res.data.token;
-        const userObj = {
-          name: res.data.userName,
-          email: res.data.email,
-        };
+  // Booleano que indica si el usuario está logueado (se basa en si hay un usuario en estado)
+  const isLoggedIn =  !!student;
 
-        // Guarda usando el módulo de almacenamiento centralizado
-        authStorage.setToken(token);
-        authStorage.setUser(userObj);
 
-        setToken(token);
-        setUser(userObj);
-        navigate("/login"); // Redirige tras registro exitoso
-      }
-    } catch (error) {
-      console.error("Error en el registro:", error);
-    }
-  };
-
-  // Login del usuario: consume la API y guarda el token/usuario
-  const loginUser = async ({
-    email,
-    password,
-  }: {
-    email: TUser['email'];
-    password: TUser['password'];
-  }) => {
-    try {
-      const res = await loginAPI(email, password);
-      if (res) {
-        const token = res.data.token;
-        const userObj = {
-          name: res.data.userName,
-          email: res.data.email,
-        };
-
-        // Guarda usando el módulo de almacenamiento centralizado
-        authStorage.setToken(token);
-        authStorage.setUser(userObj);
-
-        setToken(token);
-        setUser(userObj);
-        navigate("/home"); // Redirige al dashboard tras login
-      }
-    } catch (error) {
-      console.error("Error en el login:", error);
-    }
-  };
-
-  // Verifica si el usuario está logueado
-  const isLoggedIn = () => !!user;
-
-  // Cierra sesión: limpia los datos y redirige
+  // Función que cierra sesión: limpia todo lo guardado y redirige al inicio
   const logout = () => {
-    authStorage.removeToken(); // Limpia con el método centralizado
-    authStorage.removeUser();  // Limpia con el método centralizado
-    setUser(null);
-    setToken(null);
-    navigate("/");
+    authStorage.removeToken();     // Elimina token del almacenamiento
+    authStorage.removeUser();      // Elimina usuario del almacenamiento
+    setStudent(null);              // Limpia usuario en estado global
+    setToken(null);                // Limpia token en estado global
+    handleBtnNavigate("/");        // Redirige al inicio (se podrias usar replace si deseas evitar retroceder)
   };
 
   return (
-    <UserContext.Provider
-      value={{ loginUser, user, token, logout, isLoggedIn, registerUser }}
-    >
-      {/* Espera a que se haga la verificación inicial antes de renderizar */}
+    // El Provider envuelve toda la app y expone el contexto con los valores globales
+    <UserContext.Provider value={{  student,
+    token,
+    logout,
+    isLoggedIn,
+    setStudent,
+    setToken }}>
+      {/* Solo renderiza la app si ya se hizo la validación inicial de sesión */}
       {isReady ? children : null}
     </UserContext.Provider>
   );

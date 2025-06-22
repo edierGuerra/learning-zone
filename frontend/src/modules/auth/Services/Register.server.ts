@@ -1,16 +1,27 @@
-import axios from "axios";
-import type { TUser } from "../../types/User";
+import axios from "../../../api/axiosInstance";
+import type { TStudent } from "../../types/User";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const REGISTER_ENDPOINT = import.meta.env.VITE_REGISTER_ENDPOINT;
 
-export const registerAPI = (
- dataRegister: Omit<TUser, 'id'>
-) => {
-  return axios.post(`${API_URL}/register`, {
-    num_identification : dataRegister.num_identification,
-    name:dataRegister.name,
-    lastNames:dataRegister.lastNames,
-    email:dataRegister.email,
-    password:dataRegister.password,
-  });
-};
+export const registerAPI = async (
+ dataRegister:Omit<TStudent, 'id'>
+):Promise<TStudent['id']> => {
+  try{
+    const registerData = {
+      num_identification : dataRegister.numIdentification,
+      name:dataRegister.name,
+      lastNames:dataRegister.lastNames,
+      email:dataRegister.email,
+      password:dataRegister.password,
+    }
+    const response = await axios.post(`${REGISTER_ENDPOINT}`,registerData);
+    if(response.status === 200){
+      // retornar data
+      return response.data
+    }
+    throw new Error('Error del servidor')
+  }catch(error){
+    console.error('Error en RegisterAPI', error)
+    throw error
+  }
+}

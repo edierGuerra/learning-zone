@@ -1,36 +1,30 @@
-export type TUser ={
+export type TStudent ={
     id:number 
-    num_identification: number
+    numIdentification: number
     name: string 
     lastNames: string
     email:string
     password: string
 
 }
-// Define el tipo de datos que tendrá el contexto
-export type UserContextType = {
-  user: TUserProfile | null;
-  token: TUserProfileToken["token"] | null;
-  // Métodos disponibles desde el contexto
-  registerUser: (
-    num_identification: number,
-    name: string,
-    lastNames: string,
-    email: string,
-    password: string
-  ) => void;
-  loginUser: (dataLogin: Pick<TUser, "email" | "password">) => void;
-  logout: () => void;
-  isLoggedIn: () => boolean;
-};
 
-export type TUserProfileToken  ={
-    name: TUser['name'],
-    email:TUser['email'],
+
+export type TStudentProfileToken  ={
+    name: TStudent['name'],
+    email:TStudent['email'],
     token:string
 }
-
-export type TUserProfile ={
-    name: TUser['name'],
-    email:TUser['email']
+export type TStudentProfile ={
+  name: TStudent['name'],
+  email:TStudent['email']
 }
+
+export type StudentContextType = {
+  student: TStudentProfile | null; // Usuario actual
+  token: TStudentProfileToken["token"] | null; // Token JWT
+  isLoggedIn: boolean; // Indica si está logueado
+  logout: () => void; // Cierra sesión
+  setStudent?: React.Dispatch<React.SetStateAction<TStudentProfile | null>>; // Opcional: útil si lo usas desde hooks
+  setToken?: React.Dispatch<React.SetStateAction<string | null>>; // Opcional: igual que arriba
+};
+

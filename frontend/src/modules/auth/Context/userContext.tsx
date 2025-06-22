@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import type { UserContextType } from "../../types/User"; // ajusta la ruta según tu estructura
+import type { StudentContextType } from "../../types/User";
 
-export const UserContext = createContext<UserContextType>({} as UserContextType);
+export const UserContext = createContext<StudentContextType>({} as StudentContextType);

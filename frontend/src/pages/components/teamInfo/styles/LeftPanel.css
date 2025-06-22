@@ -1,0 +1,76 @@
+/* Componente principal */
+.panel-content-left {
+  width: 400px;
+  height: 100%;
+  background-color: #081431;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+
+.panel-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #4dd0e1;
+}
+
+.panel-subtitle {
+  font-size: 29px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.panel-description {
+  font-size: 22px;
+  line-height: 1.6;
+  color: #dddddd;
+  margin-bottom: 9rem;
+}
+
+.panel-section h3 {
+  font-size: 29px;
+  font-weight: 600;
+  color: #4dd0e1;
+  margin-bottom: 0.5rem;
+}
+
+.panel-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 25px;
+  line-height: 1.6;
+  color: #dddddd;
+}
+
+.panel-list li {
+  margin-bottom: 0.5rem;
+}
+
+.panel-info-place {
+  font-size: 20px;
+  color: #bbbbbb;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

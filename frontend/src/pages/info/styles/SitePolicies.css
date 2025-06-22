@@ -1,0 +1,121 @@
+/* Contenedor principal con flexbox */
+.container-page-legal {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fafafa;
+}
+
+/* background de la pagina */
+.container-legal-information {
+  flex: 1;
+  padding: 60px 80px;
+  overflow-y: auto;
+  
+}
+
+/* Sidebar izquierdo */
+.container-sidebar {
+  width: 300px;
+  background-color: #081431e3;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #000000;
+  box-shadow: 0 40px 40px rgb(0, 0, 0);
+}
+
+/* Icono de react */
+/* Estilo para el botón que envuelve el ícono */
+.btn-icon {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+/* Estilo para el ícono */
+.icon-back {
+  font-size: 80px;
+  color: #fffdfd;
+}
+
+
+.icon-back:hover {
+  color: #34bb19; 
+}
+
+/* Botones de Terms y Privacy*/
+.sidebar-button {
+  cursor: pointer;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  font-size: 25px;
+  text-align: left;
+  font-weight: bold;
+  color: #f0f0f0;
+
+}
+
+/* Btn cambia de color al pasar cursor */
+.sidebar-button:hover {
+  color: #1c52e3;
+}
+
+/* Nav del sidebar espaciado */
+
+.section-nav li {
+  margin-bottom: 50px;
+  
+}
+
+/* Todo lo de Contacto */
+.section-contact button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #f3f3f3;
+  margin-bottom: px;
+  font-size: 22px;
+}
+.section-contact button:hover {
+  color: #1541ba; 
+}
+
+.contacts-number li {
+  margin-bottom: 4px;
+  color: #f6f6f6;
+  font-size: 24px;
+  text-decoration: underline
+}
+
+/* Título */
+.container-legal-information h1 {
+  font-size: 50px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-align: center;
+  
+}
+
+/* Párrafos del contenido */
+.container-legal-information p {
+  font-size: 22px;
+  line-height: 1.7;
+  text-align: justify;
+  color: #333;
+  
+}
+
+/* Imagen */
+.politicas {
+  width: 210px;        
+  height: auto;            
+  margin: 1rem auto;  
+
+}

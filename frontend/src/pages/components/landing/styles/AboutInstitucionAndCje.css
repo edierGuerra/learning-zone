@@ -1,0 +1,120 @@
+.container-about-institucion-and-cje{
+  padding: 60px 20px ;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-primary-blue-dark); /* azul oscuro por ejemplo */
+
+   
+  }
+.title-about-landing{
+  font-size: 46px;
+  font-weight: bold;
+  font-family:'Clash Display' ;
+  color: #fff;
+
+
+  }
+
+.container-all-about{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-content: center;
+
+}
+
+
+.container-landing-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.title-landing-team, .title-landing-institution{
+    font-family: 'Clash Display';
+    color: var();
+    font-size: 36px;
+    letter-spacing: 1.8px;
+}
+
+.title-landing-team{
+  color: var(--color-primary-blue-medium);
+
+}
+.title-landing-institution{
+  color: var(--color-accent-orange)
+}
+.gallery-wrapper {
+  flex: 1;
+  width: 800px;
+  max-width: 800px;
+  position: relative;
+}
+.btn-view-about-team, .btn-view-about-institution{
+  border: none;
+  padding: 1rem;
+  text-align: center;
+  width: 100%;
+  font-size: 22px;
+  color: #fff;
+  font-family:'Satoshi';
+  transition: .3s ease-in-out;
+  cursor: pointer;
+}
+  
+
+.btn-view-about-team {background-image: linear-gradient(to right, #000428 0%, #004e92  51%, #000428  100%)}
+.btn-view-about-team {
+   margin: 10px;
+   padding: 15px 45px;
+   text-align: center;
+   text-transform: uppercase;
+   transition: 0.5s;
+   background-size: 200% auto;
+   color: white;            
+   border-radius: 10px;
+   display: block;
+ }
+
+ .btn-view-about-team:hover {
+   background-position: right center; /* change the direction of the change here */
+   text-decoration: none;
+ }
+         
+         
+         
+
+
+.container-landing-institution {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+
+
+
+.btn-view-about-institution{background-image: linear-gradient(to right, #ffb347 0%, #f9e29b  51%, #ffb347  100%)}
+.btn-view-about-institution {
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    border-radius: 10px;
+    display: block;
+  }
+
+.btn-view-about-institution:hover{
+    background-position: right center; /* change the direction of the change here */
+    text-decoration: none;
+  }
+         

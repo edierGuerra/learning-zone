@@ -1,0 +1,107 @@
+/* Hoja de estilos del Register */
+.form-register{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+}
+.title-register{
+    color: var(--color-vibrant-red-orange);
+}
+
+.container-label-input-r{
+    position: relative; /* Es el contenedor del input y label */
+    margin-top: 30px; /* Deja espacio para cuando el label suba */ 
+}
+.container-label-input-r input {
+    width: 120%;
+    padding: 15px 10px 5px 10px; /* Padding para el texto del input */
+    border: none;
+    border-radius: 10px;
+    border-bottom: 2px solid #ccc; /* Borde inferior para un diseño limpio */
+    border: 2px solid #ccc; /* Borde inferior para un diseño limpio */
+    background-color: transparent; /* Fondo transparente */
+    font-size: 1rem;
+    color: #b7b3b3;
+    transition: border-color 0.3s ease; 
+    width: 250px;
+}
+
+.container-label-input-r input:focus {
+    outline: none; /* Quita el outline predeterminado */
+    border-color: #f2f7fc; /* Color del borde al enfocar */
+}
+
+.container-label-input-r label {
+    letter-spacing: 1.4px;
+    position: absolute;
+    top: 12px; /* Posición inicial, al mismo nivel que el texto del input */
+    left: 10px; /* Alineado con el padding del input */
+    color: var(--color-text-light);
+    font-size: 16px;
+    pointer-events: none; /* Permite hacer clic a través del label hacia el input */
+    transition: transform 0.3s ease, font-size 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+    transform-origin: left top; /* Punto de origen para la transformación */
+}
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0; 
+  line-height: 1.2; 
+  display: block;
+}
+/* Estado del label cuando el input está enfocado O tiene contenido */
+.container-label-input-r input:focus + label, /* Cuando el input está enfocado */
+.container-label-input-r input.has-content + label /* Cuando el input tiene contenido (gracias a React) */
+{
+    color: var(--color-text-light);
+    padding: 0 .7rem;
+    background-color: var(--color-dark-gray-brown);
+    transform: translateY(-26px) scale(0.85); /* Sube y reduce el tamaño */
+    font-size: 20px;
+}
+
+
+/* Estilos para el ícono de ver/ocultar contraseña */
+.icon-show-r {
+    margin-left: 0;
+    text-align: right;
+    cursor: pointer;
+    color: #1f1fff;
+    font-size: 22px; 
+    font-weight: bold;
+    z-index: 10; 
+}
+.icon-show-r:hover {
+  color: #0c80ec;
+}
+
+
+
+.btn-verify-register{background-image:       linear-gradient(to right, #fe8c00 0%, #f83600  51%, #fe8c00  100%)}
+.btn-verify-register {
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    border-radius: 10px;
+    display: block;
+    cursor: pointer;
+    width: 100%;
+    padding: .4rem;
+    color: #101011;
+    font-size: 20px;
+ }
+
+.btn-verify-register:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+         

@@ -1,0 +1,96 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: 0;
+}
+footer{
+    padding: 20px 0px;
+    background-color: var(--color-primary-dark-bg);
+    display: flex;
+    flex-direction: column;
+    color: var( --color-text-light);
+
+}
+.contenedor-1{
+    padding: 8px 25px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #fff;
+}
+.container-nombre{
+    font-family: 'Clash Display';
+    color: var(--color-primary-blue-medium);
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 32px;
+}
+.container-nombre img{
+    width: 80px;
+    height: auto;
+    border-radius: 50%;
+
+}
+.contendor-ubi{
+    display: flex;
+    gap: 12px;
+    padding: 6px 15px;
+    border-radius: 20px;
+    border: 1px solid #fff;
+    align-items: center;
+
+}
+.icon{
+    font-size: 32px;
+}
+.iconUbi{
+    color: #fff;
+}
+
+
+
+
+
+.contenedor-2{
+    padding: 16px ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subtitle-copyright{
+    font-size: 22px;
+    font-weight: 400;
+}
+.container-all-t-p{
+    cursor: pointer;
+}
+.contenedor-institucion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:12px;
+}
+.contenedor-institucion h3{
+    color: var( --color-accent-orange);
+}
+
+.contenedor-institucion img{
+    width: 60px;
+}
+.contenedor-redes{
+    padding-right: 40px;
+    
+}
+
+.contenedor-redes ul{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    list-style: none;
+
+}

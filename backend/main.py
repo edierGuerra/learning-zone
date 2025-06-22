@@ -32,9 +32,6 @@ async def lifespan(app: FastAPI):
     print("✅ Base de datos inicializada correctamente")
     yield
     print("🛑 Servidor detenido")
-from database.config_db import Base, engine
-from models.student_model import Student
-from models.identification_model import Identification
 
 # Crear la app
 app = FastAPI(

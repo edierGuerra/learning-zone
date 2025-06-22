@@ -2,7 +2,7 @@
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from repository.identification_repository import IdentificationRepository
-from schemas.validation import RegistrationResponse
+from schemas.validation_schemas import RegistrationResponse
 from starlette import status
 
 class IdentificationService:

@@ -16,7 +16,7 @@ from contextlib import asynccontextmanager #reemplazo de on_event
 
 # Modulos internos
 from database.config_db import Base, engine #Base de datos
-from routes.identification import router as identification_router #ruta modular
+from routes.identification_routes import router as identification_router #ruta modular
 from routes.student_routes import router as student_router
 from models import Student, Identification  # importamos los modulos antes de usar Base.metadata.create_all para evitar el problema de resolucion de relaciones antes de tiempo, evitar errores de relaciones circulares
 

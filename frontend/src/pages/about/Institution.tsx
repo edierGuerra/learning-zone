@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import  { useState } from "react";
 import InstitutionSlide from "..//components/institution/Slide"; 
 import './styles/Institution.css'
 

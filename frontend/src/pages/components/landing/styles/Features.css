@@ -1,5 +1,5 @@
 .section-feaures{
-    background-color:#ffffff;
+    background-color:var( --color-primary-dark-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,11 +12,11 @@
     text-align: center;
 }
 .title-features-smalll{
-    color: #96969e;
+    color: var(--color-neutral-medium-gray);
     font-size: 28px;
 }
 .title-features-big{
-    color: #d4b412;
+    color: var( --color-accent-orange);
     font-size: 44px;
     margin-bottom: 3rem;
 }
@@ -63,7 +63,7 @@
    /*  box-shadow: rgba(255, 214, 10, 0.5); */
 }
 .title-feature{
-    color: #43443d;
+    color: var(--color-text-light);
 }
 
 .feature-card-btn{
@@ -80,16 +80,20 @@
     padding: .6rem;
     border: none;
     font-size: 28px;
-    background-color: #311c12;
+    background-color: transparent;
+    
     width: 100%;
     color: #ffffff;
     transition: .3s ease-in-out;
     align-self: center;
-
+    
 }
 .feature-card-btn button:hover{
     width: 90%;
-    box-shadow: 0 0 10px #742118;
+    border-left: 2px solid #fff;
+    border-right: 2px solid #fff;
+    background-color: #f49c2a;
+    box-shadow: 0 0 10px #a9c2ec;
 
 }
 
@@ -110,9 +114,11 @@
     color: #ffffff;
     font-size: 32px;
     align-items: center;
-    background: #8E0E00;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #1F1C18, #8E0E00);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    border-top: 2px solid #ffff;
+    border-right: 2px solid #ffff;
+    background: #108dc7;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ef8e38, #108dc7);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ef8e38, #108dc7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
     transform-origin: bottom center;
     backface-visibility: hidden;
@@ -128,9 +134,11 @@
     color: #ffffff;
     font-size: 32px;
     align-items: center;
-    background: #8E0E00;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #1F1C18, #8E0E00);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #1F1C18, #8E0E00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    border-bottom: 2px solid #ffff;
+    border-left: 2px solid #ffff;
+    background: #D1913C;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #FFD194, #D1913C);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #FFD194, #D1913C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
     transform-origin: top center;
     backface-visibility: hidden;

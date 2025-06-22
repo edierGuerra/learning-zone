@@ -1,5 +1,5 @@
 .section-carrusel{
-    background: rgba(255, 240, 200, 0.733);
+    background: var(--color-primary-blue-medium);
     height: 100vh;
 }
 .titulo{

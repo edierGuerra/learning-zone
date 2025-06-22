@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #0f172a; /* azul oscuro por ejemplo */
+  background-color: var(--color-primary-blue-dark); /* azul oscuro por ejemplo */
 
    
   }
@@ -35,11 +35,18 @@
 }
 .title-landing-team, .title-landing-institution{
     font-family: 'Clash Display';
-    color: #fff;
+    color: var();
     font-size: 36px;
     letter-spacing: 1.8px;
 }
 
+.title-landing-team{
+  color: var(--color-primary-blue-medium);
+
+}
+.title-landing-institution{
+  color: var(--color-accent-orange)
+}
 .gallery-wrapper {
   flex: 1;
   width: 800px;

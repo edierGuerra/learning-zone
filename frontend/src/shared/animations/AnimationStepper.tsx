@@ -282,9 +282,9 @@ function StepIndicator({
     >
       <motion.div
         variants={{
-          inactive: { scale: 1, backgroundColor: "#9cd2fc", color: "#fff" },
-          active: { scale: 1, backgroundColor: "#559cd3", color: "#fff" },
-          complete: { scale: 1, backgroundColor: "#115d97", color: "#fff" },
+          inactive: { scale: 1, backgroundColor: "#9cd2fc", color: "var(--color-text-dark)" },
+          active: { scale: 1, backgroundColor: "#559cd3", color: "var(--color-text-dark)" },
+          complete: { scale: 1, backgroundColor: "#115d97", color: "var(--color-text-dark)" },
         }}
         transition={{ duration: 0.3 }}
         className="step-indicator-inner"

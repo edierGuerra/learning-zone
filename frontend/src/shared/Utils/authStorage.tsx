@@ -1,20 +1,21 @@
 // PARA MAYOR SEGURIDAD MIGRAR ESTO A COOKIES
 // Importa los tipos de datos definidos para el usuario y su token
-import type { TUserProfile, TUserProfileToken } from "../../modules/types/User";
+
+import type { TStudentProfile, TStudentProfileToken } from "../../modules/types/User";
 
 // Objeto que encapsula el acceso al almacenamiento local (localStorage)
 export const authStorage = {
   
   // Guarda el objeto de usuario en localStorage bajo la clave "user"
-  setUser: (user: TUserProfile) =>
-    localStorage.setItem("user", JSON.stringify(user)),
+  setStudent: (student: TStudentProfile) =>
+    localStorage.setItem("student", JSON.stringify(student)),
 
   // Recupera el objeto de usuario desde localStorage
-  getUser: (): TUserProfile | null => {
+  getUser: (): TStudentProfile | null => {
     try {
-      const raw = localStorage.getItem("user");
+      const raw = localStorage.getItem("student");
       // Intenta parsear el string a un objeto; si falla, devuelve null
-      return raw ? JSON.parse(raw) as TUserProfile : null;
+      return raw ? JSON.parse(raw) as TStudentProfile : null;
     } catch (e) {
       console.error("El JSON está mal formado :", e);
       return null;
@@ -22,10 +23,10 @@ export const authStorage = {
   },
 
   // Elimina el usuario del localStorage
-  removeUser: () => localStorage.removeItem("user"),
+  removeUser: () => localStorage.removeItem("student"),
 
   // Guarda el token de autenticación en localStorage bajo la clave "token"
-  setToken: (token: TUserProfileToken["token"]) =>
+  setToken: (token: TStudentProfileToken["token"]) =>
     localStorage.setItem("token", token),
 
   // Recupera el token desde localStorage

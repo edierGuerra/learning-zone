@@ -5,10 +5,10 @@
 }
 footer{
     padding: 20px 0px;
-    background-color: #01022D;
+    background-color: var(--color-primary-dark-bg);
     display: flex;
     flex-direction: column;
-    color: #fff;
+    color: var( --color-text-light);
 
 }
 .contenedor-1{
@@ -21,6 +21,7 @@ footer{
 }
 .container-nombre{
     font-family: 'Clash Display';
+    color: var(--color-primary-blue-medium);
 
     display: flex;
     align-items: center;
@@ -59,13 +60,13 @@ footer{
     justify-content: space-between;
     align-items: center;
 }
-.contenedor-terminos-condiciones{
-    margin-left: 45px;
-}
 
 .subtitle-copyright{
     font-size: 22px;
     font-weight: 400;
+}
+.container-all-t-p{
+    cursor: pointer;
 }
 .contenedor-institucion{
     display: flex;
@@ -74,7 +75,7 @@ footer{
     gap:12px;
 }
 .contenedor-institucion h3{
-    color: wheat;
+    color: var( --color-accent-orange);
 }
 
 .contenedor-institucion img{

@@ -5,22 +5,21 @@ import { MainPrivacy } from "../components/information/MainPrivacy";
 import { MainTerms } from "../components/information/MainTerms";
 import { useState } from "react";
 import "./styles/SitePolicies.css"; 
+import { useNavigationHandler } from '../../hooks/useNavigationHandler';
 
-export const GeneralPage =()=> {
-  /* const navigate = useNavigate(); */
-  const [clickTerms, setClickTerms]= useState(false)
-  const [clickPrivacy, setClickPrivacy]= useState(true)
+export const SitePolicies =()=> {
 
-  const handleClickBtnTerms=()=> {
-    setClickPrivacy(false)
-    setClickTerms(true)
+  const [clickBtnPolicies, setClickBtnPolicies]= useState(true)
 
-  }
-  const handleClickBtnPrivacy=()=> {
-    setClickPrivacy(true)
-    setClickTerms(false)
+  //Extraer funcion del hook useNavigationHandler
+  const handleBtnNavigate = useNavigationHandler();
+  
+  const handleClickBtnPolicies=(click:boolean)=> {
+    setClickBtnPolicies(!click)
 
   }
+
+
     return (
         <div className="container-page-legal">
             <div className="container-sidebar">
@@ -28,15 +27,15 @@ export const GeneralPage =()=> {
                     <ul>
                         <li>
                             {/* Agregar este boton de forma global para que sea reutilizable */}
-                            <button className="btn-icon">
+                            <button className="btn-icon" onClick={()=>handleBtnNavigate('/back')}>
                             {<IoArrowBackCircleSharp className="icon-back"/>}
                             </button>
                         </li>
                         <li>
-                            <button className="sidebar-button" onClick={handleClickBtnTerms}>Terminos y condiciones</button>
+                            <button className="sidebar-button" onClick={()=>handleClickBtnPolicies(true)}>Terminos y condiciones</button>
                         </li>
                         <li>
-                            <button className="sidebar-button" onClick={handleClickBtnPrivacy}>Politicas y privacidad</button>
+                            <button className="sidebar-button" onClick={()=>handleClickBtnPolicies(false)}>Politicas y privacidad</button>
                         </li>
                         <img src={politicImage} alt="politicas" className="politicas" />
                       
@@ -54,13 +53,9 @@ export const GeneralPage =()=> {
                 </div>
             </div>
             <div className="container-legal-information">
-                {clickPrivacy? <MainPrivacy/> : <MainTerms/>}
+                {clickBtnPolicies? <MainPrivacy/> : <MainTerms/>}
             </div>
             
         </div>
     )
 }
-/* { <button onClick={() => navigate("/")} className="back-button">
-      back button
-    </button> 
-} */

@@ -152,12 +152,12 @@ const handleClickBtnView =()=>{
         {isExploding && (
             <div style={{ position: "relative", top: "-10%", left: "94%", transform: "translateX(-50%)" }}>
               <ConfettiExplosion
-                particleCount={650}
+                particleCount={350}
                 duration={8000}
                 force={.4}
                 width={2000}
                 zIndex={2000}
-                colors={["#D4AF37", "#800020", "#ffffff"]}
+                colors={["#D4AF37", "#f49c2a", "#ffffff"]}
               />
             </div>
           )}

@@ -6,8 +6,16 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FiGithub } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
+//Style
 import './Styles/Footer.css'
+// navegacion
+import { useNavigate } from 'react-router-dom';
 export default function Footer() {
+  const navigate = useNavigate();
+  const handleClickPolicies =()=>{
+    navigate('/sitePolicies')
+  }
+
   return (
     <footer>
         <section className='contenedor-1'>
@@ -25,7 +33,7 @@ export default function Footer() {
             <div className="contenedor-terminos-condiciones">
               <p>Copyright © 2025 © Cje-Tecnology inc. Todos los derechos reservados</p>
               <div className="container-all-t-p">
-                <p>Términos y condiciones   |   Políticas y Privacidad</p>
+                <p onClick={handleClickPolicies}>Términos y condiciones   |   Políticas y Privacidad</p>
               </div>
             </div>
 

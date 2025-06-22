@@ -8,6 +8,9 @@ import { CiFacebook } from "react-icons/ci";
 import { FaInstagram } from "react-icons/fa";
 import Boton from '../institution/Boton'
 import '../../about/styles/Institution.css'
+import { IoArrowBackCircleSharp } from 'react-icons/io5';
+import { useNavigationHandler } from '../../../hooks/useNavigationHandler';
+
 
 type SlideProps = {
   index: number;
@@ -15,6 +18,7 @@ type SlideProps = {
 };
 
 export default function InstitutionSlide({ index, setIndex }: SlideProps) {
+  const handleBtnNavigate =useNavigationHandler()
 
   const staticBackgroundImages = [img2, img3, img1, img4]; 
 
@@ -62,6 +66,9 @@ export default function InstitutionSlide({ index, setIndex }: SlideProps) {
 
   return (
     <div className="slide">
+      <button className="btn-back-confirm" onClick={()=>handleBtnNavigate('/back')}>{<IoArrowBackCircleSharp/>}</button>
+
+
         
       <div className="slide-images">
         

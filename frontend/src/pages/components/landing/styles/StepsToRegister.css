@@ -28,8 +28,8 @@
 }
 .title-section-steps p{
     font-size: 24px;
-    color: rgba(244, 239, 239, 0.573);
-    background-color: rgb(76, 148, 255);
+    color: var(--color-neutral-light-gray);
+    background-color: var(--color-accent-orange);
     align-self: center;
     margin-top: -.5px;
     z-index: 1;

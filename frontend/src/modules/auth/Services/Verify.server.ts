@@ -1,24 +1,20 @@
 // Conexion al backend y envio de el numero de identificacion
 import type { TStudent } from "../../types/User";
 import axios from "../../../api/axiosInstance";
-
+type VerifyResponse = {
+  message: string;
+  can_register: boolean;
+  status_code: number;
+  identification_id?: number;
+};
 const VERIFY_ENDPOINT = import.meta.env.VITE_VERIFY_ENDPOINT;
 
-export default async function verifyAPI(nIdentification:TStudent['numIdentification']):Promise<TStudent['id']> {
-
+export default async function verifyAPI(nIdentification:TStudent['numIdentification']):Promise<VerifyResponse> {
     try{
-        const response = await axios.post(`${VERIFY_ENDPOINT}`,{nIdentification:nIdentification}) 
-        if(response.status === 200){
-            // Retornar id del numero de identificacion
-            return response.data
-        }
-        if(response.status === 404){
-            throw new Error('N identificación no encontrado')
-            // Lanzado si el servidor dice que NO encontró al usuario.
-            // Esto obliga al componente a manejarlo como error (por ejemplo, mostrar alerta).
-        }
-        throw new Error('Error del servidor')
-        //Lanzado si el status no es ni 200 ni 404. (ej: 500, 400, etc.)
+        const response = await axios.post(`${VERIFY_ENDPOINT}`, {
+  identification_code: nIdentification
+});
+        return response.data
     }catch(error){
         console.error('Error en verifyAPI', error)
         throw error // Relanza el error para que la función que usa verifyAPI pueda capturar dicho error.

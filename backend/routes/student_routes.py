@@ -13,6 +13,7 @@ from schemas.student_schemas import StudentRegister
 from dependencies.student_dependencie import get_student_services
 from services.student_services import StudentService
 from schemas.student_schemas import StudentResponse
+from core.security import encode_access_token
 
 router = APIRouter(prefix="/api/v1/student", tags=["Students"])
 
@@ -43,3 +44,37 @@ async def create_student(student_data:StudentRegister, services:StudentService =
         "email":student.email
     },
     status_code=201)
+    
+@router.get("/verify_email")
+async def verify_email_token(email_token:str,id_user:int, service:StudentService = Depends(get_student_services)):
+    """ 
+    # Verificación de correo electrónico de un estudiante.
+
+    Esta ruta valida el correo electrónico de un usuario usando un token de verificación. 
+    Si el token es válido y el usuario existe, se genera un token de acceso (JWT).
+
+    ## Parámetros:
+    - `email_token` (str): Token enviado al correo del usuario para validación.
+    - `id_user` (int): ID del usuario en la base de datos.
+
+    ## Respuesta:
+    - `200 OK` con un token de acceso y los datos básicos del estudiante si todo es válido.
+    - Otro código de estado si ocurre algún fallo en la verificación o búsqueda del usuario.
+    """
+    token_valid = await service.verify_email(token=email_token)
+    if token_valid:
+        student = await service.get_student_by_id(id_user)
+        if student:
+            student_pyload = {
+                "sub":str(student.id)
+            }
+            token = encode_access_token(student_pyload)
+            return JSONResponse(
+                content={
+                    "access_token": token,
+                    "token_type":"bearer",
+                    "is_active":student.is_verified,
+                    "names_student":student.names
+                    },
+                status_code=200
+            )

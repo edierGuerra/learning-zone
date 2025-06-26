@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { TStudent } from "../../types/User";
-/* import verifyAPI from "../Services/Verify.server"; */ 
+import verifyAPI from "../Services/Verify.server"; 
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 
 export default function useFormRegister() {
@@ -104,14 +104,18 @@ const validateForm = (form: RegisterForm): FormErrors => {
     
     setLoading(true)
     try{
-      if(!nIdentification || nIdentification?.toString().length <= 10){
+      if(!nIdentification || nIdentification?.toString().length <10){
         alert('Ingresa un N Identificación Valido')
         return
       }
-      /* await verifyAPI(nIdentification); */
+      const response = await verifyAPI(nIdentification); 
+      if(!response?.can_register){
+        alert(response.message)
+        return
+      }
+      alert(response.message)
       /* Cambiar el estado del formulario se verify para que se muestre el de register */
       setFormVerify(false)
-      alert('Goof')
 
     }catch{
       alert('No se pudo verificar el numero de identificación')

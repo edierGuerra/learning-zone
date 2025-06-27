@@ -21,7 +21,7 @@ header{
 .header-title{
     margin: 0 auto;
     color: #ffffff;
-    font-family: "VT323", monospace;
+    font-family: 'VT323', monospace;
     font-weight: 600;
     font-style: normal;
     font-size: 50px;

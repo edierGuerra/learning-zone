@@ -3,7 +3,7 @@ from sqlalchemy.future import select
 from models.identification_model import Identification
 
 class IdentificationRepository:
-    """
+    '''
     Repositorio encargado de acceder a los datos del modelo 'Identification' en la base de datos.
 
     Este patrón organiza las operaciones relacionadas con la persistencia de datos,
@@ -11,7 +11,7 @@ class IdentificationRepository:
     Centraliza todas las conexiones a la base de datos separandolas del resto
     
     - Esta clase retornara Un objeto del modelo 'Identification' si se encuentra, sino devuelve None.
-    """
+    '''
     @staticmethod #especifica una funcion normal dentro de una clase
     async def get_by_code(session: AsyncSession, code: int) -> Identification | None: #esta funcion devuelve un objeto de tipo Identification o None
         # Buscar el número de identificación en la base de datos

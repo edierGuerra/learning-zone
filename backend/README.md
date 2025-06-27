@@ -33,13 +33,13 @@ Organizamos las rutas por dominio funcional usando `APIRouter` con **prefijos cl
 from fastapi import APIRouter
 
 router = APIRouter(
-    prefix="/api/v1/users",
-    tags=["Users"]
+    prefix='/api/v1/users',
+    tags=['Users']
 )
 
-@router.get("/profile")
+@router.get('/profile')
 def get_user_profile():
-    return {"msg": "Perfil de usuario"}
+    return {'msg': 'Perfil de usuario'}
 ```
 
 ```python
@@ -64,7 +64,7 @@ Cada endpoint debe tener un **docstring descriptivo**. FastAPI usa esto para gen
 **Formato estándar del docstring:**
 
 ```python
-"""
+'''
 ## Titulo
 
 Breve descripción del endpoint.
@@ -75,15 +75,15 @@ Breve descripción del endpoint.
 
 ### Respuesta:
 - `Retorna(tipo)`: descripción del objeto/respuesta.
-"""
+'''
 ```
 
 **Ejemplo real:**
 
 ```python
-@router.post("/login")
+@router.post('/login')
 def login_user(username: str, password: str):
-    """
+    '''
     # Validar usuario
 
     Inicia sesión de un usuario.
@@ -91,7 +91,7 @@ def login_user(username: str, password: str):
     - `username()`: str — Nombre de usuario.
     - `password()`: str — Contraseña del usuario.
     - `Retorna`: dict con token de autenticación y datos del usuario.
-    """
+    '''
     ...
 ```
 
@@ -117,15 +117,15 @@ class LoginRequest(BaseModel):
 ```
 
 ```python
-@router.post("/login", response_model=TokenResponse, status_code=200)
+@router.post('/login', response_model=TokenResponse, status_code=200)
 def login_user(payload: LoginRequest):
-    """
+    '''
     Autenticación de usuario.
 
     - `payload.username(str)`: Nombre de usuario
     - `payload.password(str)`: Contraseña
     - `Retorna`: token JWT y datos del usuario
-    """
+    '''
     ...
 ```
 

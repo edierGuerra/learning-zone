@@ -5,7 +5,7 @@ type VerifyResponse = {
   message: string;
   can_register: boolean;
   status_code: number;
-  identification_id?: number;
+  id_autoIncrement: TStudent['id'] ;
 };
 const VERIFY_ENDPOINT = import.meta.env.VITE_VERIFY_ENDPOINT;
 

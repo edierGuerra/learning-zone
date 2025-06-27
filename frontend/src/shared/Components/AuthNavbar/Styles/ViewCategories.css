@@ -1,0 +1,32 @@
+.container-view-categories{
+    right: 420px;
+    top: 150px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    background-color:#f6f2ee ;
+    padding: 4rem;
+    border-radius: 20px;
+}
+.container-view-categories button{
+    cursor: pointer;
+    padding: .4rem;
+    width:180px;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    transition: .3s ease-in-out;
+}
+.container-view-categories button:hover{
+    font-size: 20px;
+}
+.btn-powerPoint{
+    background-color: var(--color-main-powerPoint);
+}
+.btn-excel {
+    background-color: var(--color-main-excel);
+}
+.btn-word {
+    background-color: var(--color-main-word);
+}

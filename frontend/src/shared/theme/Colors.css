@@ -112,5 +112,10 @@
        - Sombras de cajas (`box-shadow`) en modales, menús desplegables, tarjetas o elementos que se elevan sobre el fondo.
        - Efectos visuales que simulan profundidad.
     */
+
+    /* Colores de cursos */
+    --color-main-powerPoint :#EC5A00;
+    --color-main-excel : #0D9E34;
+    --color-main-word : #007AFF;
     --color-shadow-dark: rgba(0, 0, 0, 0.4);
 }

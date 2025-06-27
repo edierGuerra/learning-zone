@@ -2,14 +2,11 @@
 
 
 # Modulos externos
-import os
-from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 
 from jose import jwt
+from config import Settings #modulo de donde se conecta al archivo .env
 
-load_dotenv()
-MY_TOKEN_KEY = os.getenv("TOKEN_KEY")
 ALGORITHM = "HS256"
 def encode_access_token(payload:dict, exp_time:int = 3600) -> str:
     """  
@@ -35,5 +32,5 @@ def encode_access_token(payload:dict, exp_time:int = 3600) -> str:
     to_encode["exp"] = int(expiration_time.timestamp())
 
     # Configruacion del token
-    token = jwt.encode(to_encode,MY_TOKEN_KEY,ALGORITHM)
+    token = jwt.encode(to_encode,Settings.token_key,ALGORITHM)
     return token

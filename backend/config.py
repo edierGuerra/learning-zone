@@ -23,6 +23,9 @@ class Settings(BaseSettings): #clase de configuracion heredando BaseSettings
     database_url: str = Field(..., env="DATABASE_URL") # 'env' especifica el nombre de la variable de entorno
     #el ... especifica que el campo es obligatorio
     #env el env sera el la variable de entorno que estara en el .env
+    
+    token_key: str = Field(..., env="TOKEN_KEY")  # variable añadida para el token key
+    
 
 # Instancia de la configuración que se usará en toda la aplicación
 settings = Settings()

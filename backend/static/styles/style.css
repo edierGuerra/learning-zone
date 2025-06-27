@@ -8,6 +8,7 @@ body{
 }
 p{
     color: #9d9898;
+    margin-bottom: 0;
 }
 /*Estilos para el header*/
 header{

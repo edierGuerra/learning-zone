@@ -3,19 +3,19 @@
 Este modulo permite enviar un correo de confirmación al estudiante
 '''
 
-# Modulos externos
-from dotenv import load_dotenv
+# Módulos externos
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-import os
+from datetime import datetime
 
-# Cargar variables de entorno
-load_dotenv()
+# Módulos internos
+from config import settings
+
 
 # Constantes
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+SENDGRID_API_KEY = settings.sendgrid_api_key
 EMAIL_FROM = 'no-reply@cjetechnology.org'
-TEMPLATE_ID = os.getenv('SENDGRID_TEMPLATE_ID')
+TEMPLATE_ID = settings.sendgrid_template_id
 
 def send_verification_email(to_email: str, verification_link: str, student_name='Estudiante'):
     try:
@@ -23,13 +23,14 @@ def send_verification_email(to_email: str, verification_link: str, student_name=
             from_email=EMAIL_FROM,
             to_emails=to_email
         )
-
+        date_now = datetime.now()
+        year = date_now.year
         message.template_id = TEMPLATE_ID
 
         message.dynamic_template_data = {
             'student_name': student_name,
             'verification_link': verification_link,
-            'current_year': 2025
+            'current_year': year
         }
 
         sg = SendGridAPIClient(SENDGRID_API_KEY)

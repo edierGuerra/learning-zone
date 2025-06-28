@@ -24,10 +24,10 @@ class Settings(BaseSettings): #clase de configuracion heredando BaseSettings
     #el ... especifica que el campo es obligatorio
     #env el env sera el la variable de entorno que estara en el .env
     
-    smtp_user: str = Field(..., env="SMTP_USER")
-    smtp_password: str = Field(..., env="SMTP_PASSWORD")
-    smtp_server: str = Field(default="smtp.gmail.com", env="SMTP_SERVER")
-    smtp_port: int = Field(default=587, env="SMTP_PORT")
+
+    
+    sendgrid_api_key:str = Field(..., env="SENDGRID_API_KEY")
+    sendgrid_template_id:str = Field(..., env="SENDGRID_TEMPLATE_ID")
 
     # Token
     token_key: str = Field(..., env="TOKEN_KEY") #variable añadida para el token key

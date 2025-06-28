@@ -8,6 +8,7 @@ body{
 }
 p{
     color: #9d9898;
+    margin-bottom: 0;
 }
 /*Estilos para el header*/
 header{
@@ -20,10 +21,10 @@ header{
 .header-title{
     margin: 0 auto;
     color: #ffffff;
-    font-family: "VT323", monospace;
+    font-family: 'VT323', monospace;
     font-weight: 600;
     font-style: normal;
-    font-size: 50px;
+    font-size: 60px;
 }
 header > a{
     display: flex;

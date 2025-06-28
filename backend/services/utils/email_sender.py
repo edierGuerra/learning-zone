@@ -1,46 +1,41 @@
 #services/utils/email_sender.py
-""" 
+''' 
 Este modulo permite enviar un correo de confirmación al estudiante
-"""
+'''
 
 # Modulos externos
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import os
-
-# Modulos internos
 
 # Cargar variables de entorno
 load_dotenv()
 
-# Constantenes con información para mandar el correo
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-SMTP_USER = "cjetechnologies.tech@gmail.com"
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+# Constantes
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+EMAIL_FROM = 'no-reply@cjetechnology.org'
+TEMPLATE_ID = os.getenv('SENDGRID_TEMPLATE_ID')
 
-
-# Enviar correo
-def send_verification_email(to_email:str, link:str):
+def send_verification_email(to_email: str, verification_link: str, student_name='Estudiante'):
     try:
-        subject = "Verificación de correo"
-        body = f"Confirma tu correo haciendo clic aquí: {link}"
+        message = Mail(
+            from_email=EMAIL_FROM,
+            to_emails=to_email
+        )
 
-        msg = MIMEMultipart()
-        msg["From"] = SMTP_USER
-        msg["To"] = to_email
-        msg["Subject"] = subject
-        msg.attach(MIMEText(body, "plain"))
+        message.template_id = TEMPLATE_ID
 
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.sendmail(SMTP_USER, to_email, msg.as_string())
-        
-        print(f"📤 Correo de verificación enviado a {to_email}")
+        message.dynamic_template_data = {
+            'student_name': student_name,
+            'verification_link': verification_link,
+            'current_year': 2025
+        }
+
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        response = sg.send(message)
+
+        print(f'📨 Email enviado a {to_email} (Status: {response.status_code})')
 
     except Exception as e:
-        print(f"❌ Error al enviar correo: {e}")
-
+        print(f'❌ Error al enviar correo: {e}')

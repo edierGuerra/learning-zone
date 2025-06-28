@@ -1,11 +1,5 @@
-/* *{
-    margin: 0;
-    padding: 0;
-    box-sizing: 0;
-} */
-.public-layout{
+.private-layout{
     display: grid;
     min-height: 100dvh;
     grid-template-rows: auto 1fr auto;
-   
 }

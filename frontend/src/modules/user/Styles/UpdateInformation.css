@@ -1,0 +1,78 @@
+.form-update{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.title-form-update{
+    font-size: 26px;
+    letter-spacing: 1.4px;
+    color: #c9defa;
+}
+/* --- ESTILOS PARA EL FLOATING LABEL --- */
+
+.container-label-input-u {
+  position: relative; /* Es el contenedor del input y label */
+  margin-top: 30px; /* Deja espacio para cuando el label suba */
+  display: flex;
+  flex-direction: column;
+}
+
+.container-label-input-u input {
+    width: 120%;
+    padding: 15px 10px 5px 10px; /* Padding para el texto del input */
+    border: none;
+    border-radius: 10px;
+    border-bottom: 2px solid #ccc; /* Borde inferior para un diseño limpio */
+    border: 2px solid #d9d6d6; /* Borde inferior para un diseño limpio */
+    background-color: transparent; /* Fondo transparente */
+    font-size: 1rem;
+    color: #b7b3b3;
+    transition: border-color 0.3s ease; 
+    width: 250px;
+}
+
+.container-label-input-u input:focus {
+    outline: none; /* Quita el outline predeterminado */
+    border-color: #f2f7fc; /* Color del borde al enfocar */
+}
+
+.container-label-input-u label {
+    letter-spacing: 1.4px;
+    color: var(--color-text-light);
+    font-size: 16px;
+    pointer-events: none; /* Permite hacer clic a través del label hacia el input */
+    transition: transform 0.3s ease, font-size 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+    transform-origin: left top; /* Punto de origen para la transformación */
+}
+
+
+
+
+
+.btn-update {background-image: linear-gradient(to right, #FF8008 0%, #FFC837  51%, #FF8008  100%)}
+.btn-update {
+    border: none;
+    margin: 22px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    border-radius: 10px;
+    display: block;
+    cursor: pointer;
+    width: 60%;
+    padding: .4rem;
+    color: #101011;
+    font-size: 20px;
+ }
+
+.btn-update:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+

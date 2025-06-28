@@ -3,25 +3,30 @@ import type { TStudent } from "../../types/User";
 
 const REGISTER_ENDPOINT = import.meta.env.VITE_REGISTER_ENDPOINT;
 
+type registerResponse ={
+  email: TStudent['email'],
+  id: TStudent['id'],
+}
 export const registerAPI = async (
- dataRegister:Omit<TStudent, 'id'>
-):Promise<TStudent['id']> => {
+ dataRegister:TStudent
+):Promise<registerResponse> => {
   try{
     const registerData = {
-      num_identification : dataRegister.numIdentification,
-      name:dataRegister.name,
-      lastNames:dataRegister.lastNames,
+
+      identification_number : dataRegister.numIdentification,
+      names:dataRegister.name,
+      last_names:dataRegister.lastNames,
       email:dataRegister.email,
       password:dataRegister.password,
+      identification_id:dataRegister.id
     }
     const response = await axios.post(`${REGISTER_ENDPOINT}`,registerData);
-    if(response.status === 200){
-      // retornar data
-      return response.data
-    }
-    throw new Error('Error del servidor')
+    return response.data
   }catch(error){
     console.error('Error en RegisterAPI', error)
     throw error
   }
 }
+
+
+

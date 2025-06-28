@@ -15,8 +15,12 @@ export type TStudentProfileToken  ={
     token:string
 }
 export type TStudentProfile ={
+  id: TStudent['id']
+  numIdentification : TStudent['numIdentification']
   name: TStudent['name'],
-  email:TStudent['email']
+  lastNames: TStudent['lastNames'],
+  email:TStudent['email'],
+  prefixProfile:string,
 }
 
 export type StudentContextType = {

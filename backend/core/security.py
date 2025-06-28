@@ -1,24 +1,20 @@
 #core/security.py
 
 # Modulos externos
-import os
-from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 from jose import jwt
+from config import settings #modulo de donde se conecta al archivo .env
 from fastapi import Depends, HTTPException, status
 from fastapi.security.oauth2 import OAuth2PasswordBearer
 
 # Modulos internos
 from dependencies.student_dependencie import get_student_services
 from services.student_services import StudentService
+from config import settings #modulo de donde se conecta al archivo .env
 
 # Generación y manipulación del token
 
 oauth2_scheme_register = OAuth2PasswordBearer(tokenUrl='api/v1/student/verify_email')
-
-load_dotenv()
-MY_TOKEN_KEY = os.getenv('TOKEN_KEY')
-ALGORITHM = 'HS256'
 
 def encode_access_token(payload:dict, exp_time:int = 3600) -> str:
     '''  
@@ -44,7 +40,7 @@ def encode_access_token(payload:dict, exp_time:int = 3600) -> str:
     to_encode['exp'] = int(expiration_time.timestamp())
 
     # Configruacion del token
-    token = jwt.encode(to_encode,MY_TOKEN_KEY,ALGORITHM)
+    token = jwt.encode(to_encode, settings.token_key, settings.token_algorithm)
     return token
 
 async def get_current_student(token:str = Depends(oauth2_scheme_register), services:StudentService = Depends(get_student_services)):
@@ -65,7 +61,7 @@ async def get_current_student(token:str = Depends(oauth2_scheme_register), servi
         `status(401)`: En caso de que el token sea invalido o el estudiante no este autorizado.
     '''
     # Desencripta el token y obtiene el id 
-    pyload = jwt.decode(token=token, key=MY_TOKEN_KEY, algorithms=[ALGORITHM])
+    pyload = jwt.decode(token=token, key=settings.token_key, algorithms=[settings.token_algorithm])
     student_id = pyload.get('sub')
     
     # Lanza excepción en caso de no obtener el id del estudiante

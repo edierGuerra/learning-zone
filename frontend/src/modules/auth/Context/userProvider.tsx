@@ -3,6 +3,7 @@ import { UserContext } from "./userContext";
 import { authStorage } from "../../../shared/Utils/authStorage"; // Módulo que gestiona localStorage (guardar y obtener token/user)
 import type { TStudentProfile } from "../../types/User";
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler"; // Hook personalizado para manejar navegación sin usar useNavigate directo
+import { GetStudentAPI } from "../Services/GetInformationStudent";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -22,9 +23,28 @@ export const StudentProvider = ({ children }: Props) => {
 
   // Carga inicial: verifica si hay token y usuario guardados en localStorage
   useEffect(() => {
-    const storedStudent = authStorage.getUser(); // Trae el usuario guardado si existe
     const storedToken = authStorage.getToken();  // Trae el token guardado si existe
-
+    if(storedToken){
+      // SI existe un token ejeuctar el services que envia el token al backen y obtiene la info del estudiante
+      const infoStudent = async ()=>{
+        // Accediendo al backend y obteniendo la info
+        const dataStudent = await GetStudentAPI();
+        // Conversion de sintaxis 
+        const dataStudentLocalStorage:TStudentProfile ={
+          id:dataStudent.id,
+          numIdentification:dataStudent.identification_number,
+          name:dataStudent.names,
+          lastNames:dataStudent.last_names,
+          email: dataStudent.email,
+          prefixProfile: dataStudent.prefix_profile
+        }
+        // Almacenando la informacion del estudiante en el localStorage
+        authStorage.setStudent(dataStudentLocalStorage) 
+      }
+      infoStudent()
+    }
+    // Recuperar la informacion del usuario
+    const storedStudent = authStorage.getUser(); // Trae el usuario guardado si existe
     // Si hay sesión guardada, se setean los valores
     if (storedStudent && storedToken) {
       setStudent(storedStudent);

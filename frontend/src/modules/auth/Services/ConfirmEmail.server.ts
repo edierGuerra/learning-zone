@@ -2,22 +2,25 @@
 
 
 import axios from '../../../api/axiosInstance'
-import type { TStudentProfileToken } from '../../types/User';
+import type { TStudent, TStudentProfileToken } from '../../types/User';
+type confirmEmailAPIProps ={
+    token: TStudentProfileToken['token'];
+    idAutoIncrementStudent?: TStudent['id'];
+}
+type confirmEmailAPIPromise ={
+    access_token:TStudentProfileToken['token'],
+    is_active: boolean,
+}
 
 const VITE_CONFIRMEMAIL_ENDPOINT = import.meta.env.VITE_CONFIRMEMAIL_ENDPOINT;
 
-export default async function confirmEmailAPI(token:TStudentProfileToken['token'])/* :Promise<TStudent[''] */ {
-
+export default async function confirmEmailAPI({token,idAutoIncrementStudent}:confirmEmailAPIProps):Promise<confirmEmailAPIPromise>  {
+    alert(idAutoIncrementStudent)
     try{
-        const response = await axios.get(`${VITE_CONFIRMEMAIL_ENDPOINT}?token=${token}`);
-        if(response.status === 201){
-            // Quiere decir que ya fue registrado exitosamente
-            return response.data
-        }
-        if(response.status === 404){
-            throw new Error('Token no encontrado')
-        }
-        throw new Error('Error en el servidor')
+        const response = await axios.get(`${VITE_CONFIRMEMAIL_ENDPOINT}?email_token=${token}&id_user=${idAutoIncrementStudent}`);
+        // Quiere decir que ya fue registrado exitosamente
+        console.log(response.data)
+        return response.data
 
     }catch(error){
         console.error('Error en confirmEmailAPI', error)

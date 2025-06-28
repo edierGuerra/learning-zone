@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-type AppRoutes =  "/" | "/register" | "/login"  |  "/confirmEmail" |"/home"  | "/userPage" | "/back" | "/sitePolicies" | "/aboutUs" | "/aboutInstitution" | '/word' | '/excel' | '/powerPoint' ;
+type AppRoutes =  "/" | "/register" | "/login"  |  "/confirmEmail" |"/home"  | "/userPage" | "/back" | "/sitePolicies" | "/aboutUs" | "/aboutInstitution" | '/word' | '/excel' | '/powerPoint' | '/help' ;
 
 export const useNavigationHandler = () => {
     const navigate = useNavigate();

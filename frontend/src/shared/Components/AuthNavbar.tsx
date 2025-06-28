@@ -23,7 +23,7 @@ export default function AuthNavbar() {
           {/* Categorias (word, powerPoint, Excel) */}
           <button className="icon-auth-navBar icon-categories" onClick={()=>  setViewCategories(!viewCategories)}><IoBook/></button>
           {/* Ayuda */}
-          <button className="icon-auth-navBar icon-help"><BiSolidHelpCircle/></button>
+          <button className="icon-auth-navBar icon-help" onClick={()=> handleBtnNavigate('/help')}><BiSolidHelpCircle/></button>
           {/* Bandeja de entrada de notificaciones */}
           <button className="icon-auth-navBar icon-notifications" onClick={()=> setViewNotifications(!viewNotifications)}><IoMdNotifications/></button>
           {/* Btn user Page */}

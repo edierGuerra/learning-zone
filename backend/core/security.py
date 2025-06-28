@@ -66,15 +66,15 @@ async def get_current_student(token:str = Depends(oauth2_scheme_register), servi
     """
     # Desencripta el token y obtiene el id 
     pyload = jwt.decode(token=token, key=MY_TOKEN_KEY, algorithms=[ALGORITHM])
-    user_id = pyload.get('sub')
+    student_id = pyload.get('sub')
     
     # Lanza excepción en caso de no obtener el id del estudiante
-    if user_id is None:
+    if student_id is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Token inválido o estudiante no autorizado')
     
     # Ejecutamos en caso de obtener el id del estudiante
-    elif user_id is not None:
-        id_to_valid = int(user_id) # Convertir el id del estudiante a entero
+    elif student_id is not None:
+        id_to_valid = int(student_id) # Convertir el id del estudiante a entero
         
         # Obtener el estudiante de la base de datos
         student = await services.get_student_by_id(id=id_to_valid)

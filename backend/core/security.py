@@ -5,9 +5,8 @@
 from datetime import datetime, timedelta, timezone
 
 from jose import jwt
-from config import Settings #modulo de donde se conecta al archivo .env
+from config import settings #modulo de donde se conecta al archivo .env
 
-ALGORITHM = "HS256"
 def encode_access_token(payload:dict, exp_time:int = 3600) -> str:
     """  
     Codifica un token de acceso.
@@ -32,5 +31,5 @@ def encode_access_token(payload:dict, exp_time:int = 3600) -> str:
     to_encode["exp"] = int(expiration_time.timestamp())
 
     # Configruacion del token
-    token = jwt.encode(to_encode,Settings.token_key,ALGORITHM)
+    token = jwt.encode(to_encode, settings.token_key, settings.token_algorithm)
     return token

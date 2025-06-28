@@ -24,8 +24,14 @@ class Settings(BaseSettings): #clase de configuracion heredando BaseSettings
     #el ... especifica que el campo es obligatorio
     #env el env sera el la variable de entorno que estara en el .env
     
-    token_key: str = Field(..., env="TOKEN_KEY")  # variable añadida para el token key
-    
+    smtp_user: str = Field(..., env="SMTP_USER")
+    smtp_password: str = Field(..., env="SMTP_PASSWORD")
+    smtp_server: str = Field(default="smtp.gmail.com", env="SMTP_SERVER")
+    smtp_port: int = Field(default=587, env="SMTP_PORT")
+
+    # Token
+    token_key: str = Field(..., env="TOKEN_KEY") #variable añadida para el token key
+    token_algorithm: str = Field(default="HS256", env="TOKEN_ALGORITHM")
 
 # Instancia de la configuración que se usará en toda la aplicación
 settings = Settings()

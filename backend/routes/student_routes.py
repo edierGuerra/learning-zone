@@ -1,8 +1,8 @@
 # student_routes.py
 
-"""
+'''
 Este modulo contiene todas las rutas propias del estudiante.
-"""
+'''
 
 # Modulos externos
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -16,11 +16,11 @@ from services.student_services import StudentService
 from schemas.student_schemas import StudentResponse
 from core.security import encode_access_token, get_current_student
 
-router = APIRouter(prefix="/api/v1/student", tags=["Students"])
+router = APIRouter(prefix='/api/v1/student', tags=['Students'])
 
-@router.post("/", response_model=StudentResponse)
+@router.post('/', response_model=StudentResponse)
 async def create_student(student_data:StudentRegister, services:StudentService = Depends(get_student_services)):
-    """## Registrar un nuevo estudiante
+    '''## Registrar un nuevo estudiante
 
     Registra un estudiante en el sistema a partir de los datos proporcionados.  
     La información recibida se valida usando el esquema `StudentRegister`.  
@@ -31,24 +31,24 @@ async def create_student(student_data:StudentRegister, services:StudentService =
     - `services (StudentService)`: Servicio de negocio encargado de gestionar el registro de estudiantes (inyectado con Depends).
 
     ### Respuesta:
-    - `201 Created`: Diccionario con el campo `"email"` del estudiante recién creado.
+    - `201 Created`: Diccionario con el campo `'email'` del estudiante recién creado.
     - `500 Internal Server Error`: Si ocurre un fallo inesperado durante el registro.
 
     ### Nota:
     Aunque se especifica `response_model=StudentResponse`, la función devuelve manualmente una respuesta personalizada (`JSONResponse`) con solo el correo del estudiante.
-    """
+    '''
 
     student = await services.register_student(student_data)
     if not student:
-        raise HTTPException(status_code=500, detail="Error al registrar el usuario")
+        raise HTTPException(status_code=500, detail='Error al registrar el usuario')
     return JSONResponse(content={
-        "email":student.email
+        'email':student.email
     },
     status_code=201)
     
-@router.get("/verify_email")
-async def verify_email_token(email_token:str,id_user:int, service:StudentService = Depends(get_student_services)):
-    """ 
+@router.get('/verify_email')
+async def verify_email_token(email_token:str,id_student:int, service:StudentService = Depends(get_student_services)):
+    ''' 
     ## Verificación de correo electrónico de un estudiante.
 
     Esta ruta valida el correo electrónico de un usuario usando un token de verificación. 
@@ -56,43 +56,43 @@ async def verify_email_token(email_token:str,id_user:int, service:StudentService
 
     ### Parámetros:
     - `email_token(str)`: Token enviado al correo del usuario para validación.
-    - `id_user(int)`: ID del usuario en la base de datos.
+    - `id_student(int)`: ID del usuario en la base de datos.
 
     ### Respuesta:
     - `200 OK` con un token de acceso y los datos básicos del estudiante si todo es válido.
     - Otro código de estado si ocurre algún fallo en la verificación o búsqueda del usuario.
-    """
+    '''
     token_valid = await service.verify_email(token=email_token)
     if token_valid:
-        student = await service.get_student_by_id(id_user)
+        student = await service.get_student_by_id(id_student)
         if student:
             student_pyload = {
-                "sub":str(student.id)
+                'sub':str(student.id)
             }
             token = encode_access_token(student_pyload)
             return JSONResponse(
                 content={
-                    "access_token": token,
-                    "token_type":"bearer",
-                    "is_active":student.is_verified,
-                    "names_student":student.names
+                    'access_token': token,
+                    'token_type':'bearer',
+                    'is_active':student.is_verified,
+                    'names_student':student.names
                     },
                 status_code=200
             )
     else:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ha ocurrido un error en el servidor.")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Ha ocurrido un error en el servidor.')
 
-@router.get("/", response_model=StudentResponse)
-async def get_user(user:Student = Depends(get_current_student)):
-    """ 
+@router.get('/', response_model=StudentResponse)
+async def get_student(student:Student = Depends(get_current_student)):
+    ''' 
     ## Obtener estudiante
     
     Ruta que permite obtener los datos del estudiante por medio de su token.
     
     ### Parámetros:
-    - `user(Student)`: Objeto de tipo estudiante obtenido al validar el `token`
-    """
+    - `student(Student)`: Objeto de tipo estudiante obtenido al validar el `token`
+    '''
     try:
-        return user
+        return student
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Error inesperado en el servidor :(")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Error inesperado en el servidor :(')

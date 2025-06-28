@@ -1,7 +1,7 @@
 #conexion a la base de datos
 
 # database.py
-""" Configuración de la conexion con la base de datos """
+''' Configuración de la conexion con la base de datos '''
 
 # Modulos esternos
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
@@ -35,9 +35,9 @@ class Base(DeclarativeBase):
 # Dependencia para obtener una sesión en cada operación
 #Función especial que da una nueva sesión por request, con yield.
 async def get_session():
-    """
+    '''
     Proporciona una sesión de base de datos asíncrona en cada request.
     Se usa con Depends en FastAPI.
-    """
+    '''
     async with async_session() as session:
         yield session

@@ -17,11 +17,11 @@ from services.student_services import StudentService
 oauth2_scheme_register = OAuth2PasswordBearer(tokenUrl='api/v1/student/verify_email')
 
 load_dotenv()
-MY_TOKEN_KEY = os.getenv("TOKEN_KEY")
-ALGORITHM = "HS256"
+MY_TOKEN_KEY = os.getenv('TOKEN_KEY')
+ALGORITHM = 'HS256'
 
 def encode_access_token(payload:dict, exp_time:int = 3600) -> str:
-    """  
+    '''  
     Codifica un token de acceso.
 
     Args:
@@ -31,24 +31,24 @@ def encode_access_token(payload:dict, exp_time:int = 3600) -> str:
     Returns:
         token(str): El token ya encriptado con la información del estudiante
 
-    """
+    '''
     # Copia de pyload
     to_encode = payload.copy()
 
     # Tiempo de emisión 
     issued_at = datetime.now(timezone.utc)
-    to_encode["iat"] = int(issued_at.timestamp())
+    to_encode['iat'] = int(issued_at.timestamp())
 
     # Tiempo de expiración
     expiration_time = issued_at + timedelta(seconds=exp_time)
-    to_encode["exp"] = int(expiration_time.timestamp())
+    to_encode['exp'] = int(expiration_time.timestamp())
 
     # Configruacion del token
     token = jwt.encode(to_encode,MY_TOKEN_KEY,ALGORITHM)
     return token
 
 async def get_current_student(token:str = Depends(oauth2_scheme_register), services:StudentService = Depends(get_student_services)):
-    """ 
+    ''' 
     ## Obtener Estudiante 
     
     Permite obtener un estudiante atravez de un access token.
@@ -63,7 +63,7 @@ async def get_current_student(token:str = Depends(oauth2_scheme_register), servi
     ### Excepciones:
         `status(404)`: En caso de no econtrar el estudiante.
         `status(401)`: En caso de que el token sea invalido o el estudiante no este autorizado.
-    """
+    '''
     # Desencripta el token y obtiene el id 
     pyload = jwt.decode(token=token, key=MY_TOKEN_KEY, algorithms=[ALGORITHM])
     student_id = pyload.get('sub')

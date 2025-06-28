@@ -10,7 +10,7 @@
 - **pylint/black** (Python).
 - Sangría: 2 espacios.
 - Comillas: `'simples'` (mantén la consistencia).
-- Variables en inglés y en **snake_case** (`user_data`, `total_price`).
+- Variables en inglés y en **snake_case** (`student_data`, `total_price`).
 - Constantes en **UPPER_CASE_SNAKE**.
 - Nombres claros y descriptivos. No más `data1`, `res2`, ni cosas que ni tu mamá entiende.
 
@@ -28,29 +28,29 @@ Organizamos las rutas por dominio funcional usando `APIRouter` con **prefijos cl
 **Ejemplo:**
 
 ```python
-# src/routes/user_routes.py
+# src/routes/student_routes.py
 
 from fastapi import APIRouter
 
 router = APIRouter(
-    prefix="/api/v1/users",
-    tags=["Users"]
+    prefix='/api/v1/students',
+    tags=['students']
 )
 
-@router.get("/profile")
-def get_user_profile():
-    return {"msg": "Perfil de usuario"}
+@router.get('/profile')
+def get_student_profile():
+    return {'msg': 'Perfil de usuario'}
 ```
 
 ```python
 # src/main.py
 
 from fastapi import FastAPI
-from routes import user_routes
+from routes import student_routes
 
 app = FastAPI()
 
-app.include_router(user_routes.router)
+app.include_router(student_routes.router)
 ```
 
 > 🎯 **Regla:** Todos los routers deben usar un `prefix` y estar agrupados por dominio. ¡No más rutas flotando en `main.py`!
@@ -64,7 +64,7 @@ Cada endpoint debe tener un **docstring descriptivo**. FastAPI usa esto para gen
 **Formato estándar del docstring:**
 
 ```python
-"""
+'''
 ## Titulo
 
 Breve descripción del endpoint.
@@ -75,27 +75,27 @@ Breve descripción del endpoint.
 
 ### Respuesta:
 - `Retorna(tipo)`: descripción del objeto/respuesta.
-"""
+'''
 ```
 
 **Ejemplo real:**
 
 ```python
-@router.post("/login")
-def login_user(username: str, password: str):
-    """
+@router.post('/login')
+def login_student(studentname: str, password: str):
+    '''
     # Validar usuario
 
     Inicia sesión de un usuario.
 
-    - `username()`: str — Nombre de usuario.
+    - `studentname()`: str — Nombre de usuario.
     - `password()`: str — Contraseña del usuario.
     - `Retorna`: dict con token de autenticación y datos del usuario.
-    """
+    '''
     ...
 ```
 
-> 🧠 Este docstring sirve tanto para devs como para autogenerar documentación externa si se usa Swagger UI, Redoc o tools como **FastAPI-Users**, **FastAPI-OpenAPI-Generator**, etc.
+> 🧠 Este docstring sirve tanto para devs como para autogenerar documentación externa si se usa Swagger UI, Redoc o tools como **FastAPI-students**, **FastAPI-OpenAPI-Generator**, etc.
 
 ---
 
@@ -112,20 +112,20 @@ def login_user(username: str, password: str):
 from pydantic import BaseModel
 
 class LoginRequest(BaseModel):
-    username: str
+    studentname: str
     password: str
 ```
 
 ```python
-@router.post("/login", response_model=TokenResponse, status_code=200)
-def login_user(payload: LoginRequest):
-    """
+@router.post('/login', response_model=TokenResponse, status_code=200)
+def login_student(payload: LoginRequest):
+    '''
     Autenticación de usuario.
 
-    - `payload.username(str)`: Nombre de usuario
+    - `payload.studentname(str)`: Nombre de usuario
     - `payload.password(str)`: Contraseña
     - `Retorna`: token JWT y datos del usuario
-    """
+    '''
     ...
 ```
 
@@ -136,7 +136,7 @@ def login_user(payload: LoginRequest):
 * ❌ Rutas en `main.py`
 * ❌ Código sin docstring
 * ❌ Nombres genéricos como `/do` o `/run`
-* ❌ Prefijos mezclados (`/users`, `/usuario`, `/perfil_usuario`)
+* ❌ Prefijos mezclados (`/students`, `/usuario`, `/perfil_usuario`)
 
 ---
 
@@ -145,7 +145,7 @@ def login_user(payload: LoginRequest):
 ## 🔄 Control de Versiones
 
 - Rama principal: `main` (solo código estable).
-- Trabaja en ramas feature/fix: `feature/login`, `fix/user-auth`.
+- Trabaja en ramas feature/fix: `feature/login`, `fix/student-auth`.
 - Pull requests con descripción clara: qué se hizo, por qué, y cómo probarlo.
 - Revisión de código obligatoria antes de merge.
 

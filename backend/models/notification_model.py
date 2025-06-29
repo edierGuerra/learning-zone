@@ -11,6 +11,14 @@ from database.config_db import Base
 from sqlalchemy import DateTime, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .datetime_model import DateTime
+    from .mapped_model import Mapped
+    from .int_model import int
+    from .str_model import str
+
 
 class Notification(Base):
     __tablename__ = "notifications"

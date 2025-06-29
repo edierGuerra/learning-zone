@@ -11,6 +11,13 @@ from database.config_db import Base
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .mapped_model import Mapped
+    from .int_model import int
+    from .str_model import str
+
 
 class StudentNotification(Base):
     __tablename__ = "student_notifications"

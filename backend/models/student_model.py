@@ -30,7 +30,7 @@ class Student(Base):
     identification:Mapped['Identification'] = relationship(back_populates='student', uselist=False)
     comments: Mapped[List['Comment']] = relationship(back_populates='student')
     course: Mapped[List['Course']] = relationship(back_populates='students', secondary=course_student)
-    students: Mapped[List['Lesson']] = relationship(back_populates='students', secondary=progress_model)
+    lessons: Mapped[List['Lesson']] = relationship(back_populates='students', secondary=progress_model)
     
     # Validación de correo
     email_token: Mapped[str] = mapped_column(String(255), nullable=True, unique=True, comment='Token único para verificación de correo')

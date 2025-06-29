@@ -5,11 +5,14 @@ garantizando una representación coherente y optimizada de la información.
 '''
 
 # Modulos externos
+from typing import List
 from sqlalchemy import Boolean, Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # Modulos internos
 from database.config_db import Base
+from .course_student_model import course_student
+from .progress_model import progress_model
 
 class Student(Base):
     __tablename__ = 'students'
@@ -25,6 +28,9 @@ class Student(Base):
     
     # Relaciones
     identification:Mapped['Identification'] = relationship(back_populates='student', uselist=False)
+    comments: Mapped[List['Comment']] = relationship(back_populates='student')
+    course: Mapped[List['Course']] = relationship(back_populates='students', secondary=course_student)
+    students: Mapped[List['Lesson']] = relationship(back_populates='students', secondary=progress_model)
     
     # Validación de correo
     email_token: Mapped[str] = mapped_column(String(255), nullable=True, unique=True, comment='Token único para verificación de correo')

@@ -5,7 +5,7 @@ export default function ViewNotifications() {
   return (
     <div className='container-view-notifications'>
         notifications
-      
+
     </div>
   )
 }

@@ -4,8 +4,8 @@ export default function RightPanel() {
     <div className="panel-content right">
       <h2>Sobre Nosotros</h2>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim ullam 
-        facilis aliquam omnis maxime nam amet qui odit sint adipisci consequuntur dolorum quo, 
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim ullam
+        facilis aliquam omnis maxime nam amet qui odit sint adipisci consequuntur dolorum quo,
         sunt soluta excepturi doloribus deleniti, natus distinctio!
       </p>
 

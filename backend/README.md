@@ -218,4 +218,3 @@ def login_student(payload: LoginRequest):
 ---
 
 ¿Listo para hacer backend como un verdadero ninja del código? 🥷 Entonces sigue estas reglas y evita caos, bugs y mal karma.
-

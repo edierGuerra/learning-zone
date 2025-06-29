@@ -28,7 +28,7 @@
     background-color: transparent; /* Fondo transparente */
     font-size: 1rem;
     color: #b7b3b3;
-    transition: border-color 0.3s ease; 
+    transition: border-color 0.3s ease;
     width: 250px;
 }
 
@@ -59,7 +59,7 @@
     text-transform: uppercase;
     transition: 0.5s;
     background-size: 200% auto;
-    color: white;            
+    color: white;
     border-radius: 10px;
     display: block;
     cursor: pointer;
@@ -74,5 +74,3 @@
     color: #fff;
     text-decoration: none;
 }
-
-

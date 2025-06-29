@@ -7,9 +7,9 @@ export default function LandingPage() {
 
   return (
     <div className="container-landing">
-      <Carrusel/> 
+      <Carrusel/>
       <Features />
-      <StepsToRegister /> 
+      <StepsToRegister />
       <AboutInstitucionAndCje/>
     </div>
   )

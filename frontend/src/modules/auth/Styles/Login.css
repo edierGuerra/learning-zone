@@ -33,7 +33,7 @@
     background-color: transparent; /* Fondo transparente */
     font-size: 1rem;
     color: #b7b3b3;
-    transition: border-color 0.3s ease; 
+    transition: border-color 0.3s ease;
     width: 250px;
 }
 
@@ -68,9 +68,9 @@
 /* Estilos para el ícono de ver/ocultar contraseña */
 .icon-show {cursor: pointer;
   color: #fefeff;
-  font-size: 22px; 
+  font-size: 22px;
   font-weight: bold;
-  z-index: 10; 
+  z-index: 10;
 }
 .icon-show:hover {
   color: #0c80ec;
@@ -100,7 +100,7 @@
     text-transform: uppercase;
     transition: 0.5s;
     background-size: 200% auto;
-    color: white;            
+    color: white;
     border-radius: 10px;
     display: block;
     cursor: pointer;
@@ -115,7 +115,7 @@
     color: #fff;
     text-decoration: none;
 }
-         
+
 
 
 .paragraph-create-account{

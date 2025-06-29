@@ -53,7 +53,7 @@
     position: relative;
     transition: .3s ease-in-out;
     overflow: hidden;
-    
+
 }
 
 .feature-card:hover {
@@ -81,12 +81,12 @@
     border: none;
     font-size: 28px;
     background-color: transparent;
-    
+
     width: 100%;
     color: #ffffff;
     transition: .3s ease-in-out;
     align-self: center;
-    
+
 }
 .feature-card-btn button:hover{
     width: 90%;

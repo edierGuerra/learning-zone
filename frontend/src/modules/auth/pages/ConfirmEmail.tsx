@@ -42,8 +42,8 @@ export default function ConfirmEmail() {
                         {!success &&  message && <p>{message}</p>} {/* Mostrar error generico */}
                     </div>
                 </DecayCard>
-       
-      
+
+
     </div>
   )
 }

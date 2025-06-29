@@ -4,7 +4,7 @@ import { IoArrowBackCircleSharp } from "react-icons/io5";
 import { MainPrivacy } from "../components/information/MainPrivacy";
 import { MainTerms } from "../components/information/MainTerms";
 import { useState } from "react";
-import "./styles/SitePolicies.css"; 
+import "./styles/SitePolicies.css";
 import { useNavigationHandler } from '../../hooks/useNavigationHandler';
 
 export const SitePolicies =()=> {
@@ -13,7 +13,7 @@ export const SitePolicies =()=> {
 
   //Extraer funcion del hook useNavigationHandler
   const handleBtnNavigate = useNavigationHandler();
-  
+
   const handleClickBtnPolicies=(click:boolean)=> {
     setClickBtnPolicies(!click)
 
@@ -38,7 +38,7 @@ export const SitePolicies =()=> {
                             <button className="sidebar-button" onClick={()=>handleClickBtnPolicies(false)}>Politicas y privacidad</button>
                         </li>
                         <img src={politicImage} alt="politicas" className="politicas" />
-                      
+
                     </ul>
                 </nav>
                 <div className="section-contact">
@@ -55,7 +55,7 @@ export const SitePolicies =()=> {
             <div className="container-legal-information">
                 {clickBtnPolicies? <MainPrivacy/> : <MainTerms/>}
             </div>
-            
+
         </div>
     )
 }

@@ -5,7 +5,7 @@ import imgIcon from '../../assets/Carrusel/img-ier.jpg'
 
   return (
   <section className='section-carrusel'>
-            
+
             <div className='container-carrusel'>
                 <ul>
                     <li>

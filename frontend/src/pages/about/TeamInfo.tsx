@@ -1,11 +1,11 @@
 import { useState } from "react";
-import aboutImage from "../../assets/cjeTect/Team.jpg"; 
+import aboutImage from "../../assets/cjeTect/Team.jpg";
 import "../about/styles/TeamInfo.css";
-import RightPanel from "../components/teamInfo/RightPanel"; 
-import LeftPanel from "../components/teamInfo/LeftPanel"; 
-import LearningZoneInfo from "../components/teamInfo/LearningZoneInfo"; 
-import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai"; 
-import { FaArrowRight } from "react-icons/fa"; 
+import RightPanel from "../components/teamInfo/RightPanel";
+import LeftPanel from "../components/teamInfo/LeftPanel";
+import LearningZoneInfo from "../components/teamInfo/LearningZoneInfo";
+import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
+import { FaArrowRight } from "react-icons/fa";
 
 export const AboutUs = () => {
   // Estados para controlar los paneles laterales y el contenido central

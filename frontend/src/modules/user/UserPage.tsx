@@ -14,13 +14,13 @@ export default function UserPage() {
               <p className="process-main">Proceso General <span className="number-process">50/100</span></p>
             </section>
             <section className="section-info-user">
-                
+
                 <UpdateInformation/>
             </section>
 
 
         </div>
-      
+
     </div>
   )
 }

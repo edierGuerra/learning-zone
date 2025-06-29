@@ -27,6 +27,3 @@ export const registerAPI = async (
     throw error
   }
 }
-
-
-

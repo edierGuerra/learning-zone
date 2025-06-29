@@ -7,13 +7,13 @@ import AOS from 'aos';
 
 
 export default function StepsToRegister() {
-    
+
     useEffect(() => {
       AOS.init({
         duration: 1000,
         once: false, // solo una vez
       });
-    
+
       setTimeout(() => {
         AOS.refresh(); // recalcula los elementos visibles
       }, 100);
@@ -48,7 +48,7 @@ export default function StepsToRegister() {
                             <h3 className='description-step'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa unde pariatur quia? Et nam numquam optio consequuntur architecto nulla soluta iste quis, commodi ullam doloremque quibusdam distinctio libero exercitationem reiciendis.</h3>
                     </Magnet>
                 </Step>
-                
+
             </Stepper>
 
 
@@ -62,8 +62,8 @@ export default function StepsToRegister() {
 
 
 
-           
-      
+
+
     </div>
   )
 }

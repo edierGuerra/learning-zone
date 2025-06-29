@@ -146,7 +146,7 @@ const handleClickBtnView =()=>{
         </div>
         <div className="feature-card-btn">
           <div className='div-card-top'>Que esperas</div>
-            
+
 
           <button onClick={handleClickBtnView}>Continuar</button>
         {isExploding && (
@@ -163,15 +163,15 @@ const handleClickBtnView =()=>{
           )}
           <div className='div-card-button'>Para empezar</div>
         </div>
-      
- 
+
+
 
       </section>
 
 
 
-  
-      
+
+
     </div>
   )
 }

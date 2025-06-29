@@ -205,5 +205,3 @@ export const AnimationNavbar: React.FC<GooeyNavProps> = ({
     </div>
   );
 };
-
-

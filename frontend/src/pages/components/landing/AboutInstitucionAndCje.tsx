@@ -19,7 +19,7 @@ export default function AboutInstitucionAndCje() {
       duration: 1000,
       once: false, // solo una vez
     });
-  
+
     setTimeout(() => {
       AOS.refresh(); // recalcula los elementos visibles
     }, 100);
@@ -72,9 +72,9 @@ const itemsIer = [
         </div>
       </div>
 
-      
+
     </div>
-    
+
   )
-  
+
 }

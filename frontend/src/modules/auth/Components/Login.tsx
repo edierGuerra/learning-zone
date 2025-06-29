@@ -9,7 +9,7 @@ export default function Login() {
       setEmail,
       password,
       setPassword,
-      showPassword, 
+      showPassword,
       handleBtnNavigate,
       /* togglePasswordVisibility, */
       handleSubmitLogin, errors} = useFormLogin()

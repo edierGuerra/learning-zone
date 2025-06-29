@@ -25,6 +25,6 @@ export default function LeftPanel() {
           <span>📍</span> Medellín, Colombia
         </div>
       </div>
-   
+
   );
 }

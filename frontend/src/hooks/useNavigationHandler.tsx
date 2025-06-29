@@ -8,6 +8,5 @@ export const useNavigationHandler = () => {
     }
 
   return handleBtnNavigate
-    
-}
 
+}

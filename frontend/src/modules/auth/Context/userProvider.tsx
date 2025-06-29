@@ -29,7 +29,7 @@ export const StudentProvider = ({ children }: Props) => {
       const infoStudent = async ()=>{
         // Accediendo al backend y obteniendo la info
         const dataStudent = await GetStudentAPI();
-        // Conversion de sintaxis 
+        // Conversion de sintaxis
         const dataStudentLocalStorage:TStudentProfile ={
           id:dataStudent.id,
           numIdentification:dataStudent.identification_number,
@@ -39,7 +39,7 @@ export const StudentProvider = ({ children }: Props) => {
           prefixProfile: dataStudent.prefix_profile
         }
         // Almacenando la informacion del estudiante en el localStorage
-        authStorage.setStudent(dataStudentLocalStorage) 
+        authStorage.setStudent(dataStudentLocalStorage)
       }
       infoStudent()
     }

@@ -8,9 +8,9 @@ export default function AuthLayout() {
   return (
     <div className="private-layout">
       <Header isPublic ={false}/>
-       <Outlet/> 
+       <Outlet/>
       <Footer/>
-      
+
     </div>
   )
 }

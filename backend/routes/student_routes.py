@@ -10,10 +10,9 @@ from fastapi.responses import JSONResponse
 
 # Modulos internos
 from models.student_model import Student
-from schemas.student_schemas import StudentRegister
+from schemas.student_schemas import StudentRegister, StudentResponse, StudentLogin
 from dependencies.student_dependencie import get_student_services
 from services.student_services import StudentService
-from schemas.student_schemas import StudentResponse
 from core.security import encode_access_token, get_current_student
 
 router = APIRouter(prefix='/api/v1/student', tags=['Students'])
@@ -96,3 +95,69 @@ async def get_student(student:Student = Depends(get_current_student)):
         return student
     except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Error inesperado en el servidor :(')
+
+@router.post('/login')
+async def login_student(student_login:StudentLogin,services:StudentService = Depends(get_student_services)):
+    """
+    ## Iniciar Sesión de Estudiante
+
+    Permite a un estudiante autenticarse en el sistema utilizando su correo electrónico y contraseña.
+    Si las credenciales son válidas, se genera y retorna un token de acceso JWT.
+
+    ### Parámetros:
+    - `student_login (schemas.student_schemas.StudentLogin)`: Objeto que contiene las credenciales del estudiante (`email` y `password`) para el inicio de sesión.
+    - `services (services.student_services.StudentService)`: Instancia del servicio de estudiantes inyectada para manejar la lógica de negocio.
+
+    ### Respuestas:
+    - **`200 OK`**: `application/json` - Inicio de sesión exitoso.
+        Retorna un objeto JSON con el token de acceso JWT y su tipo.
+        ```json
+        {
+          "access_token": "eyJ...",
+          "token_type": "bearer",
+          "message": "Inicio de sesión exitoso"
+        }
+        ```
+    - **`401 Unauthorized`**: `application/json` - Credenciales inválidas.
+        Se lanza si el correo electrónico o la contraseña proporcionados son incorrectos.
+        ```json
+        {
+          "detail": "Correo o contraseña incorrectos"
+        }
+        ```
+    - **`500 Internal Server Error`**: `application/json` - Errores internos del servidor.
+        Puede ocurrir en dos escenarios:
+        1.  **Error al generar el token:** Si el servidor no puede crear el token JWT por alguna razón interna.
+            ```json
+            {
+              "detail": "Error al generar el token"
+            }
+            ```
+        2.  **Error desconocido:** Cualquier otra excepción inesperada durante el proceso de login.
+            ```json
+            {
+              "detail": "Error desconocido"
+            }
+            ```
+    """
+    try:
+        student = await services.valid_student(password=student_login.password, email=student_login.email)
+        if student is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Correo o contraseña incorrectos")
+        elif student is not None:
+            to_encode = {
+                'sub':str(student.id)
+            }
+            access_token = encode_access_token(payload=to_encode)
+            if not access_token:
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Error al generar el token')
+            return JSONResponse(
+                content={
+                    'access_token': access_token,
+                    'token_type': 'bearer',
+                    'message':'Inicio de sesión exitoso'
+                },
+                status_code=status.HTTP_200_OK
+            )
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Error desconosido")

@@ -76,3 +76,18 @@ class StudentService:
         student = await self.repository.get_student_by_id(id)
         if student is not None:
             return  student
+    
+    async def valid_student(self, email:str, password:str) -> Optional[Student]:
+        '''
+        ## Validar correo del estudiante
+        
+        Valida que el correo del estudiante se encuentre en la base de datos.
+        
+        ### Parámentros:
+        - `email(str)`: Correo del estudiante con el que sera validado.
+        
+        ### Retornos:
+        - `Optional[Student]`: Objeto de tipo estudiante, en caso de error None
+        '''
+        student = await self.repository.valid_student(user_email=email, user_password=password)
+        return student

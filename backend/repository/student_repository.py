@@ -13,7 +13,7 @@ import logging
 # Modulos internos
 from schemas.student_schemas import StudentRegister
 from models.student_model import Student
-from .utils import hash_password
+from .utils import hash_password, valid_password
 
 logger = logging.getLogger(__name__)# Objeto para tirar logs
 
@@ -110,3 +110,43 @@ class StudentRepository:
         student_by_id = await self.db.execute(select(Student).where(Student.id == id))
         student = student_by_id.scalar_one_or_none()
         return student
+    
+    async def valid_student(self, user_email:str, user_password:str) -> Optional[Student]:
+        '''
+        ## Validar correo del estudiante
+        
+        Busca un estudiante en la base de datos por medio de su correo y valida su contraseña.
+        
+        ### Parámentros:
+        - `email(str)`: Correo del estudiante con el que sera validado.
+        - `password(str)`: Contraseña ingresada por el estudiante.
+        
+        ### Retornos:
+        - `Optional[Student]`: Objeto de tipo estudiante, en caso de error None
+        '''
+        try:
+            # Buscar el estudiane por medio de su correo
+            result = await self.db.execute(select(Student).where(Student.email == user_email))
+            student = result.scalar_one_or_none()
+            
+            # Lanzar error y retornar None en caso de no encontrar el estudiante por medio del correo
+            if not student:
+                logger.warning('⚠️ Correo de estudiante no encontrado: %s',  user_email)
+                return None
+            
+            # Validar la contraseña
+            validate_password = valid_password(password=user_password,hash_password=student.password)
+            
+            if validate_password is False:
+                logger.warning('⚠️ La contraseña ingresada no coincide ⚠️')
+                return None
+            elif student.is_verified is True:
+                logger.warning('⚠️ La cuenta del usuario no se encuentra activa ⚠️')
+                return None
+            elif validate_password:
+                logger.info('✅Se ha validado correcatemente al usuario✅')
+                return student
+            
+        except Exception as e:
+            logger.error('⛔ Error al validar el correo del estudiante ⛔ ', exc_info=e) 
+            return None

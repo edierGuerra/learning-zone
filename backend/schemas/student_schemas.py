@@ -17,6 +17,9 @@ class StudentRegister(BaseModel):
     identification_id:int = Field(..., title='Id del número de Identificación', description='Clave foranea del numero de identificación.')
 
 class StudentLogin(BaseModel):
+    '''
+    Esquema para validar los datos del login del estudiante.
+    '''
     email:str = Field(..., title='Correo Electronico', description='Correo electronico del usuario ya registrado.')
     password:str = Field(..., title='Contraseña', description='Contraseña del estudiante ya registrado')
 class StudentResponse(BaseModel):

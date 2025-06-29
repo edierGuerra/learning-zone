@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import type { TStudent } from "../../types/User";
-/* import verifyAPI from "../Services/Verify.server"; */ 
+import verifyAPI from "../Services/Verify.server"; 
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
+import { registerAPI } from "../Services/Register.server";
+import { authStorage } from "../../../shared/Utils/authStorage";
 
 export default function useFormRegister() {
   // --- Tipos de datos usados en el formulario ---
-  type RegisterForm =Omit<TStudent, 'id'> & {
+  type RegisterForm =TStudent & {
       confirmPassword: string;
   };
 
@@ -17,6 +19,8 @@ export default function useFormRegister() {
   
   const handleBtnNavigate = useNavigationHandler();
   const [loading,setLoading] = useState(false);
+
+  const [idAutoIncrement, setIdAutoIncrement] = useState<TStudent['id']>()
   const [nIdentification, setNIdentification] = useState<TStudent['numIdentification']>()
   const [name, setName] = useState<TStudent['name']>(''); // Inicializa con cadena vacía
   const [lastNames, setLastNames] = useState<TStudent['lastNames']>(''); // Inicializa con cadena vacía
@@ -24,7 +28,7 @@ export default function useFormRegister() {
   const [password, setPassword] = useState<TStudent['password']>(''); // Inicializa con cadena vacía
   const [confirmPassword, setConfirmPassword] = useState<TStudent['password']>(''); // Inicializa con cadena vacía
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<FormErrors>({}); // Estado que controla y alamcena los errores en caso de que existan
+  const [errors, setErrors] = useState<FormErrors>({}); // Estado que controla y almacena los errores en caso de que existan
   
   
   const [formVerify, setFormVerify] = useState(true);
@@ -104,14 +108,21 @@ const validateForm = (form: RegisterForm): FormErrors => {
     
     setLoading(true)
     try{
-      if(!nIdentification || nIdentification?.toString().length <= 10){
+      if(!nIdentification || nIdentification?.toString().length <10){
         alert('Ingresa un N Identificación Valido')
         return
       }
-      /* await verifyAPI(nIdentification); */
+      const response = await verifyAPI(nIdentification); 
+      if(!response?.can_register){
+        alert(response.message)
+        return
+      }
+      console.log(response)
+      //Almacenar el id autoincrementable para enviarlo en el register
+      setIdAutoIncrement(response?.id_autoIncrement)
+      alert(response.message)
       /* Cambiar el estado del formulario se verify para que se muestre el de register */
       setFormVerify(false)
-      alert('Goof')
 
     }catch{
       alert('No se pudo verificar el numero de identificación')
@@ -125,6 +136,7 @@ const validateForm = (form: RegisterForm): FormErrors => {
   const handleSubmitRegister =async(e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     const formData:RegisterForm ={
+      id : idAutoIncrement!,
       numIdentification:nIdentification!,
       name,
       lastNames,
@@ -141,22 +153,27 @@ const validateForm = (form: RegisterForm): FormErrors => {
     }
     setLoading(true)
     try{
-      // ***  DESCOMENTAR ESTO
       /* Llamada a la api para registrar los datos */
-      /* const res = await registerAPI(formData) */
+      const res = await registerAPI(formData) 
+      if(!res){
+        alert('Ups! hubo un error')
+        return
+      }
       // Obteniendo el id (primary key) del student
       /* console.log('Primary key user: ', res.student_id) */
-      localStorage.setItem('idStudent', '1000')
+
+      // Guardando el email en el localStorage
+      authStorage.setEmail(res.email)
+      // Guardando el numero en el localStorage
+      authStorage.setIdAutoIncrementStudent(res.id)
 
       console.log('enviando correo')
       alert('Registrado exitosamente')
 
       // Redirigir al page confirmar email
       handleBtnNavigate('/confirmEmail')
-
     }catch{
       alert('No se pudo registrar tu cuenta.')
-
 
     }finally{
       setLoading(false)

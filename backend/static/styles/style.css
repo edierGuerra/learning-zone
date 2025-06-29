@@ -24,7 +24,7 @@ header{
     font-family: 'VT323', monospace;
     font-weight: 600;
     font-style: normal;
-    font-size: 50px;
+    font-size: 60px;
 }
 header > a{
     display: flex;

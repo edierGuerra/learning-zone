@@ -3,44 +3,40 @@
 Este modulo permite enviar un correo de confirmación al estudiante
 '''
 
-# Modulos externos
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from dotenv import load_dotenv
-import os
+# Módulos externos
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from datetime import datetime
 
-# Modulos internos
-
-# Cargar variables de entorno
-load_dotenv()
-
-# Constantenes con información para mandar el correo
-SMTP_SERVER = 'smtp.gmail.com'
-SMTP_PORT = 587
-SMTP_USER = 'cjetechnologies.tech@gmail.com'
-SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
+# Módulos internos
+from config import settings
 
 
-# Enviar correo
-def send_verification_email(to_email:str, link:str):
+# Constantes
+SENDGRID_API_KEY = settings.sendgrid_api_key
+EMAIL_FROM = 'no-reply@cjetechnology.org'
+TEMPLATE_ID = settings.sendgrid_template_id
+
+def send_verification_email(to_email: str, verification_link: str, student_name='Estudiante'):
     try:
-        subject = 'Verificación de correo'
-        body = f'Confirma tu correo haciendo clic aquí: {link}'
+        message = Mail(
+            from_email=EMAIL_FROM,
+            to_emails=to_email
+        )
+        date_now = datetime.now()
+        year = date_now.year
+        message.template_id = TEMPLATE_ID
 
-        msg = MIMEMultipart()
-        msg['From'] = SMTP_USER
-        msg['To'] = to_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
+        message.dynamic_template_data = {
+            'student_name': student_name,
+            'verification_link': verification_link,
+            'current_year': year
+        }
 
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.sendmail(SMTP_USER, to_email, msg.as_string())
-        
-        print(f'📤 Correo de verificación enviado a {to_email}')
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        response = sg.send(message)
+
+        print(f'📨 Email enviado a {to_email} (Status: {response.status_code})')
 
     except Exception as e:
         print(f'❌ Error al enviar correo: {e}')
-

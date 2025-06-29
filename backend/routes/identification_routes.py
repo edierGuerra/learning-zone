@@ -21,8 +21,7 @@ async def verify_identification(
     #Cuando se llame este endpoint, crea una nueva sesión de base de datos asíncrona y pásamela como session”.
     #el AsyncSession genera una conexion a base de datos de forma asincrona, permite a FastAPI y SQLAlchemy no bloquear el server
 ):
-    '''
-    ## Verificar código de identificación
+    '''## Verificar código de identificación
 
     Valida si un número de identificación proporcionado existe en la base de datos.  
     Este endpoint es útil para procesos de registro u operaciones donde se necesite confirmar la existencia de un código previamente emitido.

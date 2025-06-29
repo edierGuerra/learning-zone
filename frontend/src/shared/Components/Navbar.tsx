@@ -6,7 +6,7 @@ export default function Navbar() {
   { label: "Login", href: "login" },
 ];
   return (
-  <div >
+  <>
     <AnimationNavbar
       items={items}
       particleCount={35}
@@ -17,7 +17,7 @@ export default function Navbar() {
       timeVariance={300}
       colors={[1, 2, 3, 1, 2, 3, 1, 4]}
     />
-</div>
+</>
   )
 }
 

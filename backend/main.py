@@ -28,6 +28,7 @@ async def lifespan(app: FastAPI):
     Ejecutado al iniciar la app. Crea las tablas en la base de datos si no existen.
     '''
     async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all) #esto revisa los modelos ORM existentes y crea las tablas si no existen
     print('✅ Base de datos inicializada correctamente')
     yield

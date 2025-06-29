@@ -23,6 +23,15 @@ class Settings(BaseSettings): #clase de configuracion heredando BaseSettings
     database_url: str = Field(..., env='DATABASE_URL') # 'env' especifica el nombre de la variable de entorno
     #el ... especifica que el campo es obligatorio
     #env el env sera el la variable de entorno que estara en el .env
+    
+
+    
+    sendgrid_api_key:str = Field(..., env="SENDGRID_API_KEY")
+    sendgrid_template_id:str = Field(..., env="SENDGRID_TEMPLATE_ID")
+
+    # Token
+    token_key: str = Field(..., env="TOKEN_KEY") #variable añadida para el token key
+    token_algorithm: str = Field(default="HS256", env="TOKEN_ALGORITHM")
 
 # Instancia de la configuración que se usará en toda la aplicación
 settings = Settings()

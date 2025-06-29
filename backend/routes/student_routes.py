@@ -20,8 +20,7 @@ router = APIRouter(prefix='/api/v1/student', tags=['Students'])
 
 @router.post('/', response_model=StudentResponse)
 async def create_student(student_data:StudentRegister, services:StudentService = Depends(get_student_services)):
-    '''
-    ## Registrar un nuevo estudiante
+    '''## Registrar un nuevo estudiante
 
     Registra un estudiante en el sistema a partir de los datos proporcionados.  
     La información recibida se valida usando el esquema `StudentRegister`.  
@@ -48,7 +47,7 @@ async def create_student(student_data:StudentRegister, services:StudentService =
     status_code=201)
     
 @router.get('/verify_email')
-async def verify_email_token(email_token:str,id_user:int, service:StudentService = Depends(get_student_services)):
+async def verify_email_token(email_token:str,id_student:int, service:StudentService = Depends(get_student_services)):
     ''' 
     ## Verificación de correo electrónico de un estudiante.
 
@@ -57,7 +56,7 @@ async def verify_email_token(email_token:str,id_user:int, service:StudentService
 
     ### Parámetros:
     - `email_token(str)`: Token enviado al correo del usuario para validación.
-    - `id_user(int)`: ID del usuario en la base de datos.
+    - `id_student(int)`: ID del usuario en la base de datos.
 
     ### Respuesta:
     - `200 OK` con un token de acceso y los datos básicos del estudiante si todo es válido.
@@ -65,7 +64,7 @@ async def verify_email_token(email_token:str,id_user:int, service:StudentService
     '''
     token_valid = await service.verify_email(token=email_token)
     if token_valid:
-        student = await service.get_student_by_id(id_user)
+        student = await service.get_student_by_id(id_student)
         if student:
             student_pyload = {
                 'sub':str(student.id)
@@ -84,20 +83,16 @@ async def verify_email_token(email_token:str,id_user:int, service:StudentService
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Ha ocurrido un error en el servidor.')
 
 @router.get('/', response_model=StudentResponse)
-async def get_user(user:Student = Depends(get_current_student)):
+async def get_student(student:Student = Depends(get_current_student)):
     ''' 
     ## Obtener estudiante
     
     Ruta que permite obtener los datos del estudiante por medio de su token.
     
     ### Parámetros:
-    - `user(Student)`: Objeto de tipo estudiante obtenido al validar el `token`
+    - `student(Student)`: Objeto de tipo estudiante obtenido al validar el `token`
     '''
     try:
-        return user
+        return student
     except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Error inesperado en el servidor :(')
-
-@router.post('/login')
-async def login_user():
-    pass

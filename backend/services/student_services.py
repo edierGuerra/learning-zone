@@ -41,8 +41,9 @@ class StudentService:
         
         if new_student:
             send_verification_email(
+                student_name=new_student.names,
                 to_email=student_schemas.email,
-                link=f'http://localhost:5173/confirmEmai'
+                verification_link=f'http://localhost:5173/confirmEmail?token={token}'
             )
         return new_student
 

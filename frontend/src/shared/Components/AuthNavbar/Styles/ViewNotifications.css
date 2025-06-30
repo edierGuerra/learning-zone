@@ -1,0 +1,10 @@
+.container-view-notifications{
+    position: absolute;
+    top: 150px;
+    right: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color:#fe1 ;
+    padding: 2rem;
+}

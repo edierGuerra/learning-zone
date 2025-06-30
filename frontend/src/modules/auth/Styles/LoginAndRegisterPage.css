@@ -1,0 +1,150 @@
+/* Hoja de estilos para la page */
+.container-login-register{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    height: 110vh;
+    max-height:auto;
+    background-image: linear-gradient(
+    90deg,
+    #FFC600 10%,
+    #ADEFD1 40%,
+    #1D6FA3 70%,
+    #00203F 100%
+    );
+}
+.btn-back{
+    align-self: first baseline;
+    background-color: transparent;
+    border: none;
+    font-size: 46px;
+    color: var( --color-text);
+    cursor: pointer;
+
+}
+.container-auth{
+    width:65%;
+    display: flex;
+    align-content: center;
+
+
+
+}
+
+/* Contenedor para las secciones deslizantes, define el área visible */
+.section-slider-container {
+  position: relative;      /* Permite posicionar los hijos absolutamente dentro */
+  width: 540px;            /* Ancho fijo igual al de las secciones */
+  min-height: 350px;       /* Altura mínima para evitar saltos */
+  overflow: hidden;        /* Oculta el contenido que se desliza fuera del área */
+  display: flex;           /* Flex para alineación interna si se requiere */
+
+}
+
+/* Estilos base para ambas secciones, las posiciona una sobre otra */
+.section-information-login,
+.section-information-register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;      /* Se superponen en el mismo espacio */
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 350px;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4,0.2,0.2,1), opacity 0.6s cubic-bezier(0.4,0.2,0.2,1); /* Animación suave */
+    opacity: 0;              /* Ocultas por defecto */
+    z-index: 1;              /* Detrás de la activa */
+    pointer-events: none;    /* No interactuables cuando están ocultas */
+    background-image: radial-gradient( circle farthest-corner at 16.5% 28.1%,  rgba(15, 27, 49, 0.419) 0%, #0071da24 90% );
+    backdrop-filter: blur(2px);
+    text-align: center;
+}
+.section-information-login{
+    background-image: url('../../../assets/auth/background-auth.png');
+    background-position: right;
+    background-repeat: no-repeat;
+
+}
+.section-information-register{
+    background-image: url('../../../assets/auth/background-auth.png');
+    background-position: left;
+    background-repeat: no-repeat;
+}
+
+.container-info-register,
+.container-info-login{
+    padding: 3rem;
+    background-color: rgba(24, 36, 24, 0.4);
+    background-position: center center;
+    backdrop-filter: blur(2px);
+
+}
+.container-info-register h2,
+.container-info-login h2{
+    color: var(--color-text-light-alt);
+}
+
+.container-info-register p ,
+.container-info-login p{
+    color: var(--color-text-light);
+}
+
+/* Sección login activa: visible y en su lugar */
+.section-information-login.active {
+  transform: translateX(0%);
+  opacity: 1;
+  z-index: 2;              /* Por encima de la otra */
+  pointer-events: auto;    /* Interactuable */
+}
+
+/* Sección login inactiva: se desliza a la izquierda y se oculta */
+.section-information-login.inactive {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* Sección register activa: visible y en su lugar */
+.section-information-register.active {
+  transform: translateX(0%);
+  opacity: 1;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+/* Sección register inactiva: se desliza a la derecha y se oculta */
+.section-information-register.inactive {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.section-auth-all{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+ /*    background-color: wheat; */
+    padding: 5rem 6rem;
+
+
+}
+
+.container-opc-register-login{
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+}
+.container-opc-register-login button{
+    padding: .4rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+.container-opc-register-login button:active{
+    background-color: var(--color-accent-orange);
+}

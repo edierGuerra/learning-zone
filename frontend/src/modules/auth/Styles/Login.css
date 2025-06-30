@@ -1,0 +1,136 @@
+/* Hoja de estilos del css */
+.form-login{
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+
+
+.title-login{
+    color: var(--color-mint-green);
+}
+
+
+
+/* --- ESTILOS PARA EL FLOATING LABEL --- */
+
+.container-label-input-l {
+  position: relative; /* Es el contenedor del input y label */
+  margin-top: 30px; /* Deja espacio para cuando el label suba */
+}
+
+.container-label-input-l input {
+    width: 120%;
+    padding: 15px 10px 5px 10px; /* Padding para el texto del input */
+    border: none;
+    border-radius: 10px;
+    border-bottom: 2px solid #ccc; /* Borde inferior para un diseño limpio */
+    border: 2px solid #ccc; /* Borde inferior para un diseño limpio */
+    background-color: transparent; /* Fondo transparente */
+    font-size: 1rem;
+    color: #b7b3b3;
+    transition: border-color 0.3s ease;
+    width: 250px;
+}
+
+.container-label-input-l input:focus {
+    outline: none; /* Quita el outline predeterminado */
+    border-color: #f2f7fc; /* Color del borde al enfocar */
+}
+
+.container-label-input-l label {
+    letter-spacing: 1.4px;
+    position: absolute;
+    top: 12px; /* Posición inicial, al mismo nivel que el texto del input */
+    left: 10px; /* Alineado con el padding del input */
+    color: var(--color-text-light);
+    font-size: 16px;
+    pointer-events: none; /* Permite hacer clic a través del label hacia el input */
+    transition: transform 0.3s ease, font-size 0.3s ease, color 0.3s ease; /* Transiciones suaves */
+    transform-origin: left top; /* Punto de origen para la transformación */
+}
+
+/* Estado del label cuando el input está enfocado O tiene contenido */
+.container-label-input-l input:focus + label, /* Cuando el input está enfocado */
+.container-label-input-l input.has-content + label /* Cuando el input tiene contenido (gracias a React) */
+{
+    color: var(--color-text-light);
+    padding: 0 .7rem;
+    background-color: var(--color-dark-blue);
+    transform: translateY(-26px) scale(0.85); /* Sube y reduce el tamaño */
+    font-size: 20px;
+}
+
+/* Estilos para el ícono de ver/ocultar contraseña */
+.icon-show {cursor: pointer;
+  color: #fefeff;
+  font-size: 22px;
+  font-weight: bold;
+  z-index: 10;
+}
+.icon-show:hover {
+  color: #0c80ec;
+}
+
+
+
+
+.paragraph-forgot-a{
+    cursor: pointer;
+    color: #fff;
+    align-self: flex-end;
+    font-size: 12px;
+    margin-top: -10px;
+}
+.paragraph-forgot-a:hover{
+    color:var(--color-mint-green);
+}
+
+
+
+.btn-login {background-image: linear-gradient(to right, #1D976C 0%, #93F9B9  51%, #1D976C  100%)}
+.btn-login {
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 10px;
+    display: block;
+    cursor: pointer;
+    width: 100%;
+    padding: .4rem;
+    color: #101011;
+    font-size: 20px;
+ }
+
+.btn-login:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+
+
+.paragraph-create-account{
+    color: var(--color-mint-green);
+}
+
+.paragraph-create-account a{
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+}
+.paragraph-policies-login{
+    cursor: pointer;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    background: linear-gradient(transparent, var(--color-mint-green));
+}

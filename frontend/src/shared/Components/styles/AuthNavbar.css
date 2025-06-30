@@ -1,0 +1,96 @@
+
+.auth-navbar{
+    padding: .6rem;
+    align-items: center;
+
+
+}
+.opc-auth-navbar{
+    display: flex;
+    gap: 43px;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+
+}
+/* .opc-auth-navbar{
+
+}
+.icon-auth-navBar{
+    color: red;
+    background-color: transparent;
+    border: none;
+    cursor: pointer
+    ;
+    } */
+.opc-auth-navbar {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    list-style: none;
+}
+
+    /* Estilo base para todos los botones */
+.icon-auth-navBar {
+    font-size: 42px;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos por función con colores diferenciados */
+.icon-home {
+  color: #80bdfe;
+}
+.icon-home:hover {
+  color: #1a83f4;
+}
+
+.icon-categories {
+  color: #75fb94;
+}
+.icon-categories:hover {
+  color: #28b647;
+}
+
+.icon-help {
+  color: #fca863;
+}
+.icon-help:hover {
+  color: #ff6f02;
+}
+
+.icon-notifications {
+  color: #edcd6e;
+}
+.icon-notifications:hover {
+  color: #dfab10;
+}
+
+.icon-exit {
+  color: #fc7683 ;
+}
+.icon-exit:hover {
+  color: #f8263b;
+}
+
+/* Responsive opcional */
+@media (max-width: 600px) {
+  .opc-auth-navbar {
+    gap: 8rem;
+    padding: 81px 10px;
+  }
+
+  .icon-auth-navBar {
+    font-size: 10rem;
+    padding: 38px;
+  }
+}

@@ -1,0 +1,7 @@
+.container-home-user{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem;
+    flex: 1;
+}

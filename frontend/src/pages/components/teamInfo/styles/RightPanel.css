@@ -1,0 +1,63 @@
+/* Estilos componente principal */
+.panel-content.right {
+  width: 400px;
+  height: 100%;
+  background-color: #081431;
+  color: #ffffff;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  animation: slideInRight 0.4s ease-out;
+
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.panel-content.right h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #4dd0e1;
+}
+
+.panel-content.right p {
+  font-size: 22px;
+  line-height: 1.6;
+  color: #dddddd;
+  margin-bottom: 10rem;
+
+}
+
+.panel-content.right h3 {
+  font-size: 25px;
+  font-weight: 600;
+  color: #4dd0e1;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.panel-content.right ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #dddddd;
+}
+
+.panel-content.right li {
+  margin-bottom: 0.9rem;
+}

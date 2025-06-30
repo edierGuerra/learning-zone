@@ -1,0 +1,30 @@
+/* Contenedor general */
+.main-terms {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+/* Titulo */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+/* Parrafo */
+.text-terms {
+  text-align: justify;
+  white-space: pre-line;
+}
+/* Contenedor donde esta el parrafo */
+.content-box {
+  background-color: #ffffff; /* color de hoja */
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.525);
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: 'Georgia', serif;
+  line-height: 1.7;
+  color: #333;
+  border: 1px solid #ddd;
+}

@@ -1,0 +1,85 @@
+/*Estilos generales*/
+body{
+    color: #6e6969;
+    background-color: #1e2129;
+    padding: 0;
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+p{
+    color: #9d9898;
+    margin-bottom: 0;
+}
+/*Estilos para el header*/
+header{
+    display: flex;
+    text-align: center;
+    max-width: 100%;
+    background-color: #009485;
+    padding: 16px;
+}
+.header-title{
+    margin: 0 auto;
+    color: #ffffff;
+    font-family: 'VT323', monospace;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 60px;
+}
+header > a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/*Estilos para el about Learning Zone API*/
+.about-app{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.about-app > h1, h2, h3{
+    margin-top: 20px;
+    color: #e0d9d9;
+}
+.about-app > p{
+    margin: 0;
+    max-width: 560px;
+}
+.about-app-button{
+    margin-top: 20px;
+    background: #009485;
+    border-radius: 15px;
+    padding: 10px;
+    color: #ffffff;
+    font-weight: bolder;
+    border: none;
+    font-size: large;
+    cursor: pointer;
+    transition: opacity 1s, box-shadow .5s;
+}
+.about-app-button:hover{
+    opacity: 0.7;
+    box-shadow: 0 4px 8px 0 rgb(236, 229, 229), 0 6px 20px 0 rgb(255, 255, 255);
+}
+p > a{
+    color: #beb9b9;
+}
+p > a:hover{
+    color: #a19a9a;
+}
+/*Caracteristicas*/
+.characteristics-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+}
+article{
+    max-width: 400px;
+}
+svg {
+    color: white;
+}

@@ -9,10 +9,13 @@ import { useState } from "react";
 import ViewCategories from "./AuthNavbar/ViewCategories";
 import ViewNotifications from "./AuthNavbar/ViewNotifications";
 import './styles/AuthNavbar.css'
+import { useUser } from "../../modules/auth/Hooks/useAuth";
 export default function AuthNavbar() {
   const handleBtnNavigate = useNavigationHandler()
   const [viewCategories, setViewCategories] = useState(false);
   const [viewNotifications, setViewNotifications] = useState(false);
+
+  const {logout} = useUser()
 
 
   return (
@@ -29,7 +32,7 @@ export default function AuthNavbar() {
           {/* Btn user Page */}
           <button className="icon-auth-navBar icon-prefix" onClick={()=>handleBtnNavigate('/userPage')}><IconPrefixProfile /></button>
           {/* Btn salir */}
-          <button className="icon-auth-navBar icon-exit" onClick={()=>handleBtnNavigate('/')}><IoLogOutOutline /></button>
+          <button className="icon-auth-navBar icon-exit" onClick={()=>logout()}><IoLogOutOutline /></button>
         </ul>
         {viewCategories && <ViewCategories/>}
         {viewNotifications && <ViewNotifications/>}

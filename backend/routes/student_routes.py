@@ -46,7 +46,7 @@ async def create_student(
     student = await services.register_student(student_data)
     if not student:
         raise HTTPException(status_code=500, detail="Error al registrar el usuario")
-    return JSONResponse(content={"email": student.email}, status_code=201)
+    return JSONResponse(content={"email": student.email, 'id':student.id}, status_code=201)
 
 
 @router.get("/verify_email")
@@ -80,7 +80,6 @@ async def verify_email_token(
                     "access_token": token,
                     "token_type": "bearer",
                     "is_active": student.is_verified,
-                    "names_student": student.names,
                 },
                 status_code=200,
             )
@@ -104,7 +103,13 @@ async def get_student(student: Student = Depends(get_current_student)):
     try:
         return JSONResponse(
             content={
-                "user_data": student,
+                "user_data": {
+                    "id": student.id,
+                    "identification_number": student.identification_number,
+                    "names": student.names,
+                    "last_names": student.last_names,
+                    "email": student.email,
+                    },
                 "prefix_profile": generate_profile_prefix(
                     name=student.names, last_name=student.last_names
                 ),

@@ -28,7 +28,6 @@ export default function useConfirmEmail() {
                 setSuccess(false);
                 return;
             }
-
             try {
                 // EN caso de que exista el token, realizar peticion al backend
                 const responseConfirm = await confirmEmailAPI({ token, idAutoIncrementStudent });
@@ -38,9 +37,6 @@ export default function useConfirmEmail() {
                     setMessage('Ups! hubo un error');
                     return;
                 }
-
-                alert(responseConfirm.access_token)
-                alert(responseConfirm.is_active)
                 if(responseConfirm.is_active){
                     // Almacenando en el localStorage
                     authStorage.setToken(responseConfirm.access_token)

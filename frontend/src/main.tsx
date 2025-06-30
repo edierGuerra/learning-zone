@@ -1,10 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import './index.css'
-import './shared/theme/Index.css'
-import App from './App.tsx'
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { StudentProvider } from './modules/auth/Context/userProvider';
+import AppRouter from './routers';
 
-createRoot(document.getElementById('root')!).render(
-
-   <App />
-)
+ReactDOM.createRoot(document.getElementById('root')!).render(
+    <BrowserRouter>
+      <StudentProvider> {/* 👈 Esto es obligatorio */}
+        <AppRouter />
+      </StudentProvider>
+    </BrowserRouter>
+);

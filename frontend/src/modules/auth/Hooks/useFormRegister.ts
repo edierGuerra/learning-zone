@@ -119,7 +119,7 @@ const validateForm = (form: RegisterForm): FormErrors => {
       }
       console.log(response)
       //Almacenar el id autoincrementable para enviarlo en el register
-      setIdAutoIncrement(response?.id_autoIncrement)
+      setIdAutoIncrement(response?.identification_id)
       alert(response.message)
       /* Cambiar el estado del formulario se verify para que se muestre el de register */
       setFormVerify(false)
@@ -135,6 +135,7 @@ const validateForm = (form: RegisterForm): FormErrors => {
   }
   const handleSubmitRegister =async(e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
+    alert(idAutoIncrement)
     const formData:RegisterForm ={
       id : idAutoIncrement!,
       numIdentification:nIdentification!,
@@ -164,7 +165,6 @@ const validateForm = (form: RegisterForm): FormErrors => {
 
       // Guardando el email en el localStorage
       authStorage.setEmail(res.email)
-      // Guardando el numero en el localStorage
       authStorage.setIdAutoIncrementStudent(res.id)
 
       console.log('enviando correo')

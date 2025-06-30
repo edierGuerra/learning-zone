@@ -11,3 +11,5 @@ Animation Scroll --> npm install aos --save
 Explosion confeti --> npm install react-confetti-explosion
 
 npm install react-icons --save ---> react icons
+
+npm install three @react-three/fiber @react-three/drei

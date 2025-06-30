@@ -1,11 +1,15 @@
-// Componente que agrupa public y private
-import React from 'react'
+import { useUser } from "../modules/auth/Hooks/useAuth";
+import RoutersPrivates from "./private";
+import RoutersPublic from "./public";
 
 export default function AppRouter() {
-  return (
-    <div>
+  const { isLoggedIn, isReady } = useUser(); // ✅ Traes ambos valores del contexto
 
+  // 🧠 Esperar a que la sesión esté cargada
+  if (!isReady) {
+    return <p>Cargando sesión...</p>; // También puedes poner un spinner si lo deseas
+  }
 
-    </div>
-  )
+  // 👇 Cuando ya esté todo listo, decide si mostrar rutas públicas o privadas
+  return isLoggedIn ? <RoutersPrivates /> : <RoutersPublic />;
 }

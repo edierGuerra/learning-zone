@@ -49,14 +49,14 @@ export const authStorage = {
 
   removeIdAutoIncrementStudent: () =>
     localStorage.removeItem("idAutoIncrementStudent"),
-
+/*   
   setNameStudent:(name:TStudent['name'])=>
     localStorage.setItem('name', name),
 
   getNameStudent:(): TStudent['name'] | null =>
     localStorage.getItem('name'),
 
-  removeNameStudent :()=> localStorage.removeItem('name'),
-
-
+  removeNameStudent :()=> localStorage.removeItem('name'), */
+  
+    
 };

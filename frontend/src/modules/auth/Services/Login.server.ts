@@ -3,10 +3,28 @@ const LOGIN_ENDPOINT = import.meta.env.VITE_AUTH_ENDPOINT; */
 
 import axios from "../../../api/axiosInstance";
 
-import type { TStudent } from '../../types/User';
+import type { TStudent, TStudentProfileToken } from '../../types/User';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const VITE_LOGIN_ENDPOINT = import.meta.env.VITE_LOGIN_ENDPOINT;
 
-export const loginAPI = (email: TStudent['email'], password: TStudent['password']) => {
-  return axios.post(`${API_URL}/login`, { email, password });
+type TLoginAPIProps ={
+  email: TStudent['email'],
+  password:TStudent['password']
+}
+
+type TLoginAPIResponse ={
+  access_token: TStudentProfileToken['token'],
+  message: string
+}
+
+export const loginAPI = async({email, password}:TLoginAPIProps):Promise<TLoginAPIResponse> => {
+  try{
+    const response = await axios.post(VITE_LOGIN_ENDPOINT, {email,password})
+    return response.data
+
+  }catch(error){
+    console.log('Error en loginAPI', error)
+    throw error
+
+  }
 };

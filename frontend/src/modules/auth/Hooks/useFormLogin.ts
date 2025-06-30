@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import type { TStudent } from "../../types/User";
+import { loginAPI } from "../Services/Login.server";
+import { authStorage } from "../../../shared/Utils/authStorage";
 
 export default function useFormLogin() {
   // --- Tipos de datos usados ---
@@ -62,8 +64,17 @@ export default function useFormLogin() {
     setLoading(true);
     try {
       // Aquí deberías llamar a tu servicio loginAPI(formData)
-      console.log("Iniciando sesión con:", formData);
-      // handleBtnNavigate('/dashboard');
+      const response = await loginAPI(formData)
+      if(!response){
+        /* Mostrar mensaje en caso de que no se encuentre: Credenciales incorrectas */
+        /* alert(response.message) */
+        return
+      }
+      alert(response.message)
+      /* Guardar token en el localStorage */
+      authStorage.setToken(response.access_token)
+      /* Redirigir a hoome en caso de que exista */
+      handleBtnNavigate('/home');
     } catch{
       alert("No se pudo iniciar sesión.");
     } finally {

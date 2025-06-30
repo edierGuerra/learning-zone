@@ -19,7 +19,8 @@ export default function ConfirmEmail() {
         if(success){
             // Almacenar en el localstorage
             const timeOuth = setTimeout(()=>{
-                handleBtnNavigate('/home')
+                window.location.href = '/home'; // forzar el render
+
             },2000)
 
             return () => clearTimeout(timeOuth);
@@ -37,8 +38,9 @@ export default function ConfirmEmail() {
                         <h2 className='title-container-confim-email'>Confirmacion De cuenta</h2>
                         <p className='paragraph-description-confirm'>Hemos enviado un mensaje a tu correo electrónico <span>{email}</span>.
                         Por favor, dirígete a tu bandeja de entrada y haz clic en el enlace de confirmación para activar tu cuenta.</p>
-                        {success && <p>{message}</p>} {/* En caso se muestra lo que dice el backend */}
-                        {success && <p>Redirigiendo al Login</p> } {/* En caso se muestra redirijiendo al login si es true */}
+                        {success && <p className='success-message'>{message}</p>}
+                        {success && <p className='redirect-message'>Redirigiendo a tu cuenta...</p>}
+
                         {!success &&  message && <p>{message}</p>} {/* Mostrar error generico */}
                     </div>
                 </DecayCard>

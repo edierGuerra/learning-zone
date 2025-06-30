@@ -1,0 +1,12 @@
+// SharedRouters.tsx
+
+import { Route } from "react-router-dom";
+import InstitutionPage from "../pages/about/Institution";
+import { AboutUs } from "../pages/about/TeamInfo";
+import { SitePolicies } from "../pages/info/SitePolicies";
+
+export const sharedRoutes = [
+  <Route key="aboutInstitution" path="/aboutInstitution" element={<InstitutionPage />} />,
+  <Route key="aboutUs" path="/aboutUs" element={<AboutUs />} />,
+  <Route key="sitePolicies" path="/sitePolicies" element={<SitePolicies />} />,
+];

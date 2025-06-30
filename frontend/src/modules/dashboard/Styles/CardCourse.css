@@ -1,0 +1,62 @@
+/* Contenedor principal de la tarjeta del curso */
+.container-card-course {
+  width: 320px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+
+  /* Transiciones suaves al hacer hover */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+  /* Sombra base sutil para dar profundidad */
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+
+  /* Perspectiva para efecto 3D */
+  perspective: 1000px;
+
+  /* Necesario para que la imagen pueda sobresalir */
+  position: relative;
+  overflow: visible; /* 👈 CAMBIO importante */
+}
+
+/* Hover: efecto 3D sutil */
+.container-card-course:hover {
+  transform: scale(1.03) rotateY(3deg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Imagen del curso */
+.image-course-card {
+  height: 247px;
+  transition: transform 0.6s ease;
+  will-change: transform;
+  position: relative;
+  z-index: 10;
+}
+
+/* Efecto al hacer hover: desplazamiento a la derecha con sombra */
+.container-card-course:hover .image-course-card {
+  transform: rotateY(8deg) translateY(-20px) translateZ(30px) scale(1.07);
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.129)) hue-rotate(10deg) brightness(.9);
+}
+
+/* Título del curso */
+.title-course-card {
+  color: var(--color-text-light);
+  align-self: self-start;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+/* Descripción del curso */
+.description-course-card {
+  color: var(--color-text-light);
+  max-width: 400px;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}

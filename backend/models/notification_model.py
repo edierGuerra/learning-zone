@@ -4,20 +4,22 @@ Este módulo define el modelo de datos para las notificaciones generales,
 incluyendo el título, mensaje y fecha de la notificación.
 """
 
-# Módulos internos
-from database.config_db import Base
 
 # Módulos externos
-from sqlalchemy import DateTime, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Integer, String, Text, DateTime
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import List
+
+# Módulos internos
+from database.config_db import Base
+from .student_notification_model import student_notification
+
+# Módulos externos
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .datetime_model import DateTime
-    from .mapped_model import Mapped
-    from .int_model import int
-    from .str_model import str
+    from .student_model import Student
 
 
 class Notification(Base):
@@ -26,3 +28,8 @@ class Notification(Base):
     title: Mapped[str] = mapped_column(String(200))  # titulo
     message: Mapped[str] = mapped_column(Text)  # mensaje
     date: Mapped[DateTime] = mapped_column(DateTime)  # fecha
+
+    # Relaciones
+    students: Mapped[List["Student"]] = relationship(
+        secondary=student_notification, back_populates="notifications"
+    )

@@ -6,12 +6,14 @@ incluyendo su nombre y descripción.
 from typing import List
 
 # Módulos internos
+# Módulo: LessonModel
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database.config_db import Base
 from .progress_model import progress_model
 
 # Módulos externos
-from sqlalchemy import ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey
 
 from typing import TYPE_CHECKING
 
@@ -19,6 +21,7 @@ if TYPE_CHECKING:
     from .course_model import Course
     from .student_model import Student
     from .content_model import Content
+    from .evaluation_model import Evaluation
 
 
 class Lesson(Base):
@@ -37,3 +40,9 @@ class Lesson(Base):
         back_populates="lessons", secondary=progress_model
     )
     contents: Mapped[List["Content"]] = relationship(back_populates="lesson")
+    name: Mapped[str] = mapped_column(String(50))  # nombre
+    description: Mapped[str] = mapped_column(String(100))  # descripcion
+    course_id: Mapped[int] = mapped_column(Integer)  # id_curso (foreign key)
+
+    # relaciones
+    evaluation: Mapped["Evaluation"] = relationship(back_populates="lesson")

@@ -8,15 +8,15 @@ incluyendo las preguntas, opciones y la respuesta correcta.
 from database.config_db import Base
 
 # Módulos externos
-from sqlalchemy import Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Integer, String, Text, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .mapped_model import Mapped
-    from .int_model import int
-    from .str_model import str
+    from .lesson_model import Lesson
+
+# Módulos internos
 
 
 class Evaluation(Base):
@@ -27,3 +27,11 @@ class Evaluation(Base):
     options: Mapped[str] = mapped_column(Text)  # opciones
     correct_answer: Mapped[str] = mapped_column(Text)  # respuesta_correcta
     lesson_id: Mapped[int] = mapped_column(Integer)  # id_leccion (foreign key)
+
+    # claves foraneas
+    id_leccion: Mapped[int] = mapped_column(
+        ForeignKey("lessons.id"), unique=True, nullable=False
+    )
+
+    # relaciones
+    lesson: Mapped["Lesson"] = relationship(back_populates="evaluation")

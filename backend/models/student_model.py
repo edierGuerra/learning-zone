@@ -8,6 +8,8 @@ garantizando una representación coherente y optimizada de la información.
 from typing import List
 
 # Modulos internos
+from .student_notification_model import student_notification
+from .student_answer_model import student_answer
 from database.config_db import Base
 from sqlalchemy import Boolean, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -21,6 +23,8 @@ if TYPE_CHECKING:
     from .comment_model import Comment
     from .course_model import Course
     from .lesson_model import Lesson
+    from .notification_model import Notification
+    from .evaluation_model import Evaluation
 
 
 class Student(Base):
@@ -50,6 +54,26 @@ class Student(Base):
     lessons: Mapped[List["Lesson"]] = relationship(
         back_populates="students", secondary=progress_model
     )
+
+    # Validación de correo
+    email_token: Mapped[str] = mapped_column(
+        String(255),
+        nullable=True,
+        unique=True,
+        comment="Token único para verificación de correo",
+    )
+    is_verified: Mapped[bool] = mapped_column(
+        Boolean, default=False, comment="Indica si el correo fue verificado"
+    )
+    identification: Mapped["Identification"] = relationship(
+        back_populates="student", uselist=False
+    )
+    notifications: Mapped[List["Notification"]] = relationship(
+        secondary=student_notification, back_populates="students"
+    )  # Relacion con student_notfication hacia notification_Model
+    evaluations: Mapped[List["Evaluation"]] = relationship(
+        secondary=student_answer, back_populates="students"
+    )  # relacion con student_answer_model hacia evaluation_model
 
     # Validación de correo
     email_token: Mapped[str] = mapped_column(

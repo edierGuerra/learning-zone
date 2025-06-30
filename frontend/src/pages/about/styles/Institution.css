@@ -6,7 +6,7 @@
   background: linear-gradient(135deg, #d7c7adcb, #c9b798, #e0d6bd);
   padding: 3rem;
   position: relative;
-  justify-content: center; 
+  justify-content: center;
 }
 .button-container,
 .panel-container {
@@ -15,7 +15,7 @@
 }
 .slide {
     margin: auto;
-    position: absolute; 
+    position: absolute;
     max-width: 1200px;
     height: 100%;
 

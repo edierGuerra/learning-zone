@@ -15,15 +15,18 @@ h11==0.16.0
 idna==3.10
 Jinja2==3.1.6
 MarkupSafe==3.0.2
+numpy==2.3.1
 pyasn1==0.6.1
 pycparser==2.22
 pydantic==2.11.5
 pydantic-settings==2.9.1
 pydantic_core==2.33.2
 PyMySQL==1.1.1
+python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
 python-http-client==3.3.7
 python-jose==3.5.0
+pytz==2025.2
 rsa==4.9.1
 sendgrid==6.12.4
 six==1.17.0
@@ -32,5 +35,6 @@ SQLAlchemy==2.0.41
 starlette==0.46.2
 typing-inspection==0.4.1
 typing_extensions==4.14.0
+tzdata==2025.2
 uvicorn==0.34.3
 Werkzeug==3.1.3

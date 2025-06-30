@@ -15,6 +15,7 @@ from fastapi.responses import JSONResponse
 from models.student_model import Student
 from schemas.student_schemas import StudentLogin, StudentRegister, StudentResponse
 from services.student_services import StudentService
+from .utils import generate_profile_prefix
 
 router = APIRouter(prefix="/api/v1/student", tags=["Students"])
 
@@ -90,7 +91,7 @@ async def verify_email_token(
         )
 
 
-@router.get("/", response_model=StudentResponse)
+@router.get("/")
 async def get_student(student: Student = Depends(get_current_student)):
     """
     ## Obtener estudiante
@@ -101,7 +102,14 @@ async def get_student(student: Student = Depends(get_current_student)):
     - `student(Student)`: Objeto de tipo estudiante obtenido al validar el `token`
     """
     try:
-        return student
+        return JSONResponse(
+            content={
+                "user_data": student,
+                "prefix_profile": generate_profile_prefix(
+                    name=student.names, last_name=student.last_names
+                ),
+            }
+        )
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

@@ -1,17 +1,20 @@
 import './App.css'
-import Help from './pages/Help';
-/* import Home from './modules/dashboard/pages/Home'; */
+import { SitePolicies } from './pages/info/SitePolicies';
 import RoutersPrivates from './routers/private';
+/* import Help from './pages/Help'; */
+/* import Home from './modules/dashboard/pages/Home'; */
+/* import RoutersPrivates from './routers/private';
+ */import RoutersPublic from './routers/public';
 /* import RoutersPrivates from './routers/private';
 import PrivateRouters from './routers/PrivateRouters'; */
 /* import UserProfilePage from './modules/users/pages/UserProfilePage' */
-/* import RoutersPublic from './routers/public'
- *//* import PublicLayout from './shared/Layouts/PublicLayout' */
+
+/* import PublicLayout from './shared/Layouts/PublicLayout'  */
 
 function App() {
   return (
     <div>
-      <RoutersPrivates/>
+      <RoutersPublic/>
     </div>
   );
 }

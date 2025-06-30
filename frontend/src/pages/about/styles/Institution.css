@@ -5,15 +5,17 @@
   height: 100vh ;
   background: linear-gradient(135deg, #d7c7adcb, #c9b798, #e0d6bd);
   padding: 3rem;
+  position: relative;
+  justify-content: center; 
 }
 .button-container,
 .panel-container {
-  position: relative;
+  position: absolute;
   z-index: 1;
 }
 .slide {
     margin: auto;
-    position: relative; 
+    position: absolute; 
     max-width: 1200px;
     height: 100%;
 
@@ -63,7 +65,6 @@
     border-radius: 10px;
     text-align: center;
     font-size: 1.5rem;
-
     z-index: 1;
     padding-bottom: 50px; 
     

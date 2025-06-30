@@ -1,7 +1,8 @@
 # Learning Zone API - Standar
 
 
-> ⚠️ No mezcles capas (nada de lógica en los controladores, ni queries en los routers). Cada archivo con su propósito.
+> ⚠️ No mezcles capas (nada de lógica en los controladores, ni siquiera en los routers). Cada archivo con su propósito.
+Ruerda separar el servicio del repositorio de la manera correcta.
 
 ---
 
@@ -9,7 +10,7 @@
 
 - **pylint/black** (Python).
 - Sangría: 2 espacios.
-- Comillas: `'simples'` (mantén la consistencia).
+- Comillas: `'dobles'` (mantén la consistencia).
 - Variables en inglés y en **snake_case** (`student_data`, `total_price`).
 - Constantes en **UPPER_CASE_SNAKE**.
 - Nombres claros y descriptivos. No más `data1`, `res2`, ni cosas que ni tu mamá entiende.
@@ -33,21 +34,12 @@ Organizamos las rutas por dominio funcional usando `APIRouter` con **prefijos cl
 from fastapi import APIRouter
 
 router = APIRouter(
-<<<<<<< HEAD
-    prefix='/api/v1/users',
-    tags=['Users']
-)
-
-@router.get('/profile')
-def get_user_profile():
-=======
     prefix='/api/v1/students',
     tags=['students']
 )
 
 @router.get('/profile')
 def get_student_profile():
->>>>>>> 2f0aecf88cef1587a3d393fa5070bbe384d0813e
     return {'msg': 'Perfil de usuario'}
 ```
 
@@ -91,11 +83,7 @@ Breve descripción del endpoint.
 
 ```python
 @router.post('/login')
-<<<<<<< HEAD
-def login_user(username: str, password: str):
-=======
 def login_student(studentname: str, password: str):
->>>>>>> 2f0aecf88cef1587a3d393fa5070bbe384d0813e
     '''
     # Validar usuario
 
@@ -131,11 +119,7 @@ class LoginRequest(BaseModel):
 
 ```python
 @router.post('/login', response_model=TokenResponse, status_code=200)
-<<<<<<< HEAD
-def login_user(payload: LoginRequest):
-=======
 def login_student(payload: LoginRequest):
->>>>>>> 2f0aecf88cef1587a3d393fa5070bbe384d0813e
     '''
     Autenticación de usuario.
 

@@ -5,8 +5,8 @@ import { CircleLoader } from 'react-spinners';
 import useFormRegister from '../Hooks/useFormRegister';
 
 export default function Register() {
-   
-  const { 
+
+  const {
   nIdentification,
   setNIdentification,
   handleSubmitRegisterVerify,
@@ -34,9 +34,9 @@ errors
         <h2 className='title-register'>Sign Up</h2>
 
         <div className="container-label-input-r">
-          <input 
-            type="text" 
-            id='nIdentification' 
+          <input
+            type="text"
+            id='nIdentification'
             className={nIdentification? 'has-content':''}
             onChange={(e)=>{setNIdentification(Number(e.target.value))}}/>
             <label htmlFor="nIdentification">N Identificacion</label>
@@ -48,9 +48,9 @@ errors
       <form onSubmit={(e)=>handleSubmitRegister(e)} className="form-register">
         <h2 className='title-register'>Sign Up</h2>
         <div className="container-label-input-r">
-          <input 
-            type="text" 
-            id="name" 
+          <input
+            type="text"
+            id="name"
             value={name}
             className={name? 'has-content':''}
             onChange={(e)=>setName(e.target.value)}/>
@@ -58,9 +58,9 @@ errors
           {errors.name && <span className="error">{errors.name}</span>}
         </div>
         <div className="container-label-input-r">
-          <input 
+          <input
             type="text"
-            id="lastName" 
+            id="lastName"
             value={lastNames} // Controla el valor
             className={lastNames? 'has-content':''}
             onChange={(e)=>setLastNames(e.target.value)}/>
@@ -68,7 +68,7 @@ errors
           {errors.lastNames && <span className="error">{errors.lastNames}</span>}
         </div>
         <div className="container-label-input-r">
-          <input 
+          <input
             type="email"
             id="email"
             className={email ? 'has-content' : ''} // Añade clase si tiene contenido
@@ -106,11 +106,11 @@ errors
         </div>
         <input type="submit" value={'Register'} className='btn-verify-register' />
       </form>
-      
+
     }
-    
+
     </>
 
- 
+
   )
 }

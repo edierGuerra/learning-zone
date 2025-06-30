@@ -1,5 +1,5 @@
-// Hook que contiene la logica general de confirmacion, se debe de extraer el token de la url, 
-// controlar los estados de mensaje, que es dependiendo de lo que el backend envia ,  
+// Hook que contiene la logica general de confirmacion, se debe de extraer el token de la url,
+// controlar los estados de mensaje, que es dependiendo de lo que el backend envia ,
 // y el estado del acceso para dirijir al login o no
 
 import { useEffect, useRef, useState } from 'react'

@@ -5,11 +5,11 @@ import { useNavigationHandler } from '../hooks/useNavigationHandler';
 
 export default function Help() {
   const [index, setIndex] = useState(0);
-  const handleBtnNavigate = useNavigationHandler(); 
+  const handleBtnNavigate = useNavigationHandler();
 
   const handleSkip = () => {
     console.log('Finalizó o saltó la ayuda');
-    handleBtnNavigate('/home'); 
+    handleBtnNavigate('/home');
   };
 
   return (

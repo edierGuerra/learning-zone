@@ -1,0 +1,46 @@
+repos:
+  - repo: local
+    hooks:
+      - id: install-deps
+        name: Instalar dependencias antes del commit
+        entry: python backend/tools/install_deps.py
+        language: system
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: update-requirements
+        name: Actualizar requirements.txt con pip freeze
+        entry: python backend/tools/freeze_requirements.py
+        language: system
+        types: [python]
+        always_run: true
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: check-requirements
+        name: Validar requirements.txt
+        entry: python backend/tools/check_requirements.py
+        language: system
+        types: [text]
+
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        files: ^backend/
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.1
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: ^backend/
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files

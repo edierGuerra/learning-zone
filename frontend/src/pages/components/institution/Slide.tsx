@@ -14,13 +14,13 @@ import { useNavigationHandler } from '../../../hooks/useNavigationHandler';
 
 type SlideProps = {
   index: number;
-  setIndex: (newIndex: number) => void; 
+  setIndex: (newIndex: number) => void;
 };
 
 export default function InstitutionSlide({ index, setIndex }: SlideProps) {
   const handleBtnNavigate =useNavigationHandler()
 
-  const staticBackgroundImages = [img2, img3, img1, img4]; 
+  const staticBackgroundImages = [img2, img3, img1, img4];
 
   const content = [
     {
@@ -31,7 +31,7 @@ export default function InstitutionSlide({ index, setIndex }: SlideProps) {
         </>
       ),
 
-      images: [img1, img2, img3, img4], 
+      images: [img1, img2, img3, img4],
     },
     {
       title: "",
@@ -62,16 +62,16 @@ export default function InstitutionSlide({ index, setIndex }: SlideProps) {
     },
   ];
 
-  const { title, text } = content[index]; 
+  const { title, text } = content[index];
 
   return (
     <div className="slide">
       <button className="btn-back-confirm" onClick={()=>handleBtnNavigate('/back')}>{<IoArrowBackCircleSharp/>}</button>
 
-        
+
       <div className="slide-images">
-        
-        {staticBackgroundImages.map((img, i) => ( 
+
+        {staticBackgroundImages.map((img, i) => (
           <img key={i} src={img} alt={`Imagen ${i + 1}`} className="slide-img" />
         ))}
       </div>
@@ -81,7 +81,7 @@ export default function InstitutionSlide({ index, setIndex }: SlideProps) {
         <p className="slide-text">{text}</p>
 
         <div className="dots">
-          {[0, 1, 2].map((i) => ( 
+          {[0, 1, 2].map((i) => (
             <Boton
               key={i}
               isActive={index === i}

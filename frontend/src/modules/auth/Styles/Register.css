@@ -14,7 +14,7 @@
 
 .container-label-input-r{
     position: relative; /* Es el contenedor del input y label */
-    margin-top: 30px; /* Deja espacio para cuando el label suba */ 
+    margin-top: 30px; /* Deja espacio para cuando el label suba */
 }
 .container-label-input-r input {
     width: 120%;
@@ -26,7 +26,7 @@
     background-color: transparent; /* Fondo transparente */
     font-size: 1rem;
     color: #b7b3b3;
-    transition: border-color 0.3s ease; 
+    transition: border-color 0.3s ease;
     width: 250px;
 }
 
@@ -49,8 +49,8 @@
 .error {
   color: red;
   font-size: 0.85rem;
-  margin-top: 0; 
-  line-height: 1.2; 
+  margin-top: 0;
+  line-height: 1.2;
   display: block;
 }
 /* Estado del label cuando el input está enfocado O tiene contenido */
@@ -71,9 +71,9 @@
     text-align: right;
     cursor: pointer;
     color: #1f1fff;
-    font-size: 22px; 
+    font-size: 22px;
     font-weight: bold;
-    z-index: 10; 
+    z-index: 10;
 }
 .icon-show-r:hover {
   color: #0c80ec;
@@ -89,7 +89,7 @@
     text-transform: uppercase;
     transition: 0.5s;
     background-size: 200% auto;
-    color: white;            
+    color: white;
     border-radius: 10px;
     display: block;
     cursor: pointer;
@@ -104,4 +104,3 @@
   color: #fff;
   text-decoration: none;
 }
-         

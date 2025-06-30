@@ -21,11 +21,11 @@
     max-width:1310px;
     height: 84%;
     overflow: hidden;
-    
+
 }
 
 .container-carrusel ul{
-    
+
 
     display: flex;
     padding: 0;
@@ -58,7 +58,7 @@
     visibility:visible ;
     transition: opacity 1s ease-in-out;
 }
-.texto h2{  
+.texto h2{
     font-size: 45px;
     margin-bottom: 35px;
     /*    background:linear-gradient(to top, #047774,#cce1f6 );
@@ -86,7 +86,7 @@
     transition: .3s ease-in-out;
     border-radius: 15px;
 
-}   
+}
 .container-carrusel img:hover{
     cursor: pointer;
     filter: brightness(70%);
@@ -108,4 +108,4 @@
 
     75% {margin-left: -300%;}
     100% {margin-left: -300%;}
-}  
+}

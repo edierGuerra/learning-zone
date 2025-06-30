@@ -33,7 +33,7 @@ export default function AuthNavbar() {
         </ul>
         {viewCategories && <ViewCategories/>}
         {viewNotifications && <ViewNotifications/>}
-      
+
     </div>
   )
 }

@@ -8,10 +8,10 @@
     max-height:auto;
     background-image: linear-gradient(
     90deg,
-    #FFC600 10%,     
-    #ADEFD1 40%,    
-    #1D6FA3 70%,     
-    #00203F 100%    
+    #FFC600 10%,
+    #ADEFD1 40%,
+    #1D6FA3 70%,
+    #00203F 100%
     );
 }
 .btn-back{
@@ -28,7 +28,7 @@
     display: flex;
     align-content: center;
 
-    
+
 
 }
 
@@ -61,13 +61,13 @@
     pointer-events: none;    /* No interactuables cuando están ocultas */
     background-image: radial-gradient( circle farthest-corner at 16.5% 28.1%,  rgba(15, 27, 49, 0.419) 0%, #0071da24 90% );
     backdrop-filter: blur(2px);
-    text-align: center;    
+    text-align: center;
 }
 .section-information-login{
     background-image: url('../../../assets/auth/background-auth.png');
     background-position: right;
     background-repeat: no-repeat;
-    
+
 }
 .section-information-register{
     background-image: url('../../../assets/auth/background-auth.png');
@@ -75,15 +75,15 @@
     background-repeat: no-repeat;
 }
 
-.container-info-register, 
+.container-info-register,
 .container-info-login{
     padding: 3rem;
     background-color: rgba(24, 36, 24, 0.4);
     background-position: center center;
     backdrop-filter: blur(2px);
-    
+
 }
-.container-info-register h2, 
+.container-info-register h2,
 .container-info-login h2{
     color: var(--color-text-light-alt);
 }
@@ -127,7 +127,7 @@
     align-items: center;
  /*    background-color: wheat; */
     padding: 5rem 6rem;
-    
+
 
 }
 

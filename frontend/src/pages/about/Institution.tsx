@@ -1,6 +1,6 @@
 
 import  { useState } from "react";
-import InstitutionSlide from "..//components/institution/Slide"; 
+import InstitutionSlide from "..//components/institution/Slide";
 import './styles/Institution.css'
 
 export default function InstitutionPage() {

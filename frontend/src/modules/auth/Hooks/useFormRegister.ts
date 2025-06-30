@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { TStudent } from "../../types/User";
-import verifyAPI from "../Services/Verify.server"; 
+import verifyAPI from "../Services/Verify.server";
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import { registerAPI } from "../Services/Register.server";
 import { authStorage } from "../../../shared/Utils/authStorage";
@@ -15,8 +15,8 @@ export default function useFormRegister() {
 
   // permite tener un error por cada campo (o ninguno)
   type FormErrors = Partial<Record<keyof RegisterForm, string>>;
-  
-  
+
+
   const handleBtnNavigate = useNavigationHandler();
   const [loading,setLoading] = useState(false);
 
@@ -29,13 +29,13 @@ export default function useFormRegister() {
   const [confirmPassword, setConfirmPassword] = useState<TStudent['password']>(''); // Inicializa con cadena vacía
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({}); // Estado que controla y almacena los errores en caso de que existan
-  
-  
+
+
   const [formVerify, setFormVerify] = useState(true);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  
+
 
   // --- Constantes de validación ---
   const MIN_PASSWORD_LENGTH = 6;
@@ -99,20 +99,20 @@ const validateForm = (form: RegisterForm): FormErrors => {
   return errors;
 };
 
-  
+
 
 
   const handleSubmitRegisterVerify = async(e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
-    
-    
+
+
     setLoading(true)
     try{
       if(!nIdentification || nIdentification?.toString().length <10){
         alert('Ingresa un N Identificación Valido')
         return
       }
-      const response = await verifyAPI(nIdentification); 
+      const response = await verifyAPI(nIdentification);
       if(!response?.can_register){
         alert(response.message)
         return
@@ -154,7 +154,7 @@ const validateForm = (form: RegisterForm): FormErrors => {
     setLoading(true)
     try{
       /* Llamada a la api para registrar los datos */
-      const res = await registerAPI(formData) 
+      const res = await registerAPI(formData)
       if(!res){
         alert('Ups! hubo un error')
         return
@@ -208,5 +208,5 @@ const validateForm = (form: RegisterForm): FormErrors => {
     // Variables de animaciones
     loading,
     errors,
-  } 
+  }
 }

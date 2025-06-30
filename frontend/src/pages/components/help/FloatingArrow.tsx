@@ -13,7 +13,7 @@ export default function FloatingArrow({
   top,
   left,
   right,
-  zIndex = 9999, 
+  zIndex = 9999,
   rotation
 }: ArrowProps) {
   return (
@@ -33,4 +33,3 @@ export default function FloatingArrow({
     />
   );
 }
-

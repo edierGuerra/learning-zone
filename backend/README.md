@@ -33,12 +33,21 @@ Organizamos las rutas por dominio funcional usando `APIRouter` con **prefijos cl
 from fastapi import APIRouter
 
 router = APIRouter(
+<<<<<<< HEAD
+    prefix='/api/v1/users',
+    tags=['Users']
+)
+
+@router.get('/profile')
+def get_user_profile():
+=======
     prefix='/api/v1/students',
     tags=['students']
 )
 
 @router.get('/profile')
 def get_student_profile():
+>>>>>>> 2f0aecf88cef1587a3d393fa5070bbe384d0813e
     return {'msg': 'Perfil de usuario'}
 ```
 
@@ -82,7 +91,11 @@ Breve descripción del endpoint.
 
 ```python
 @router.post('/login')
+<<<<<<< HEAD
+def login_user(username: str, password: str):
+=======
 def login_student(studentname: str, password: str):
+>>>>>>> 2f0aecf88cef1587a3d393fa5070bbe384d0813e
     '''
     # Validar usuario
 
@@ -118,7 +131,11 @@ class LoginRequest(BaseModel):
 
 ```python
 @router.post('/login', response_model=TokenResponse, status_code=200)
+<<<<<<< HEAD
+def login_user(payload: LoginRequest):
+=======
 def login_student(payload: LoginRequest):
+>>>>>>> 2f0aecf88cef1587a3d393fa5070bbe384d0813e
     '''
     Autenticación de usuario.
 
@@ -201,4 +218,3 @@ def login_student(payload: LoginRequest):
 ---
 
 ¿Listo para hacer backend como un verdadero ninja del código? 🥷 Entonces sigue estas reglas y evita caos, bugs y mal karma.
-

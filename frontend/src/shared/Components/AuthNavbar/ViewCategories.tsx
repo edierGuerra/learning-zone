@@ -11,7 +11,7 @@ export default function ViewCategories() {
         <button className='btn-powerPoint' onClick={()=> handleBtnNavigate('/powerPoint')}>Power Point</button>
         <button className='btn-excel' onClick={()=> handleBtnNavigate('/excel')}>Excel</button>
         <button className='btn-word' onClick={()=> handleBtnNavigate('/word')}>Word</button>
-      
+
     </div>
   )
 }

@@ -15,15 +15,15 @@ export default function LoginAndRegister({opcAuth}:TPropsLoginAndregister) {
   console.log(opcAuth)
   const handleBtnNavigate = useNavigationHandler()
 
-  
-  
+
+
   const [clickOptionAuth, setClickOptionAuth] = useState(opcAuth);
   useEffect(() => {
     AOS.init({
       duration: 1000,
-      once: false, 
+      once: false,
     });
-  
+
     setTimeout(() => {
       AOS.refresh(); // recalcula los elementos visibles
     }, 100);
@@ -32,12 +32,12 @@ export default function LoginAndRegister({opcAuth}:TPropsLoginAndregister) {
   useEffect(()=>{
     setClickOptionAuth(opcAuth)
   }, [opcAuth])
-  
+
   const handleClickOptionAuth =(click:boolean)=>{
     if(click){
       handleBtnNavigate('/login')
-      
-      
+
+
     }else if(!click){
       handleBtnNavigate('/register')
     }
@@ -64,12 +64,12 @@ export default function LoginAndRegister({opcAuth}:TPropsLoginAndregister) {
               <h2>Que esperas para registrate?</h2>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid numquam possimus est eveniet ex expedita</p>
             </div>
-            
+
           </section>
         </div>
         {/* Sección de autenticación y botones */}
         <section data-aos={clickOptionAuth? 'fade-right': 'fade-left'} style={{'backgroundColor': clickOptionAuth? 'var(--color-dark-blue)':'var(--color-dark-gray-brown)'}} className="section-auth-all">
- 
+
           <div className="container-opc-register-login">
             {/* Botón para mostrar el registro */}
             <button
@@ -87,16 +87,16 @@ export default function LoginAndRegister({opcAuth}:TPropsLoginAndregister) {
             >
               Sign In
             </button>
-          </div> 
+          </div>
           {/* Renderiza el formulario correspondiente */}
           {clickOptionAuth ? <Login/>:<Register/>}
         </section>
       </div>
 
-    
 
-   
-      
+
+
+
     </div>
   )
 }

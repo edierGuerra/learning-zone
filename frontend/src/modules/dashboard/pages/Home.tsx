@@ -9,7 +9,7 @@ export default function Home() {
       <div className="container-courses">
         CURSOS
       </div>
-      
+
     </div>
   )
 }

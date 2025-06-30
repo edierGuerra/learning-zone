@@ -23,8 +23,8 @@ export default function RoutersPrivates() {
                   <Route path="/powerPoint" element={<PowerPointHomePage/>}/>
               </Route>
         </Routes>
-    
+
     </BrowserRouter>
-      
+
   )
 }

@@ -34,8 +34,8 @@ export default function RoutersPublic() {
 
             </Route>
         </Routes>
-    
+
     </BrowserRouter>
-      
+
   )
 }

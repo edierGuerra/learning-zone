@@ -4,7 +4,7 @@ import iconLz from '../../assets/learningZone/icon-learning-zone.jpg'
 import './styles/Header.css'
 import { useNavigationHandler } from "../../hooks/useNavigationHandler";
 import AuthNavbar from "./AuthNavbar";
-// Componente que renderiza el header comun 
+// Componente que renderiza el header comun
 type THeaderProps ={
   isPublic:boolean
 }
@@ -18,7 +18,7 @@ export default function Header({isPublic}:THeaderProps) {
       <h1 className="name-app">Learning <span>Zone</span></h1>
       {/* Condicion si esta autenticado mostrar AuthNavbar o Navbar comun */}
       {isPublic?  <Navbar/>: <AuthNavbar/>}
-     
+
     </header>
   )
 }

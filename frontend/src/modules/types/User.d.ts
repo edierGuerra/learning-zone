@@ -1,7 +1,7 @@
 export type TStudent ={
-    id:number 
+    id:number
     numIdentification: number
-    name: string 
+    name: string
     lastNames: string
     email:string
     password: string
@@ -31,4 +31,3 @@ export type StudentContextType = {
   setStudent?: React.Dispatch<React.SetStateAction<TStudentProfile | null>>; // Opcional: útil si lo usas desde hooks
   setToken?: React.Dispatch<React.SetStateAction<string | null>>; // Opcional: igual que arriba
 };
-

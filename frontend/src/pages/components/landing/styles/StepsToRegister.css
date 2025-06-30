@@ -22,9 +22,9 @@
     border-left: 1px solid #fff;
     padding: .5rem;
     border-radius: 10px;
-    
-    
-    
+
+
+
 }
 .title-section-steps p{
     font-size: 24px;
@@ -36,16 +36,16 @@
     padding: 1.4rem;
     border-radius:0 0 10px 10px;
     transition: .3s ease-in-out;
-    
-    
+
+
 }
 .title-section-steps p:hover{
     color: #fff;
     font-size: 26px;
     transform: translateY(-4px);
     background-color: rgb(3, 49, 117);
-    
-    
+
+
 }
 
 
@@ -53,4 +53,4 @@
     font-weight: 300;
     letter-spacing: 1.4px;
     color: rgba(212, 210, 212, 0.933);
-} 
+}

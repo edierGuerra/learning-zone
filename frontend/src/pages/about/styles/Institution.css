@@ -23,8 +23,8 @@
 
 /* Estilos para el las imagenes del background*/
 .slide-images img {
-  width: 120%; 
-  height: 330px; 
+  width: 120%;
+  height: 330px;
   border-radius: 8px;
   box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.841);
   border: 5px solid #eee8e8;
@@ -34,13 +34,13 @@
 
 /* Estilos para el contenedor de la cuadrícula de imágenes */
 .slide-images {
-  width: 99%; 
+  width: 99%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 43px; 
+  grid-template-columns: repeat(2, 1fr);
+  gap: 43px;
   padding: 30px;
   height: 23%;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .slide-images img:hover {
@@ -52,12 +52,12 @@
 /* Contenedor oscuro */
 
 .slide-overlay {
-    position: absolute; 
-    top: 49%;           
-    left: 50%;        
-    transform: translate(-50%, -50%); 
-    width: 70%; 
-    height: 46%; 
+    position: absolute;
+    top: 49%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 46%;
     min-height: 120px;
     background: rgba(0, 0, 0, 0.64);
     color: white;
@@ -66,41 +66,41 @@
     text-align: center;
     font-size: 1.5rem;
     z-index: 1;
-    padding-bottom: 50px; 
-    
+    padding-bottom: 50px;
+
 }
 
 .redes {
   list-style: none;
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   gap: 1rem;
   padding: 0;
-  margin: 0 auto; 
+  margin: 0 auto;
   text-align: center;
 }
 
 
 /* Para un icono específico */
-.red-social-facebook  { 
+.red-social-facebook  {
 color: #568bff;
 font-size: 30px;
- transition: transform 0.2s ease-in-out; 
+ transition: transform 0.2s ease-in-out;
 
 }
 
 .red-social-facebook:hover {
-  transform: scale(1.5); 
+  transform: scale(1.5);
 }
 
 .red-social-whatssap {
   color: #25d366;
   font-size:30px;
-   transition: transform 0.2s ease-in-out; 
+   transition: transform 0.2s ease-in-out;
 }
 
 .red-social-whatssap:hover {
-  transform: scale(1.5); 
+  transform: scale(1.5);
 }
 
 .red-social-instagram {
@@ -110,7 +110,7 @@ font-size: 30px;
 }
 
 .red-social-instagram:hover {
-  transform: scale(1.5); 
+  transform: scale(1.5);
 }
 
 .numero {
@@ -119,36 +119,36 @@ font-size: 30px;
   justify-content: center;
   gap: 1rem;
   padding: 0;
-  margin: 0 auto; 
+  margin: 0 auto;
   text-align: center;
 }
 
 /* Estilos para el contenedor de los puntos (los botones) */
 
 .dots {
-    position: absolute; 
-    bottom: 20px; 
-    right: 20px;   
-    display: flex; 
-    gap: 10px; 
-    z-index: 10; 
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
 
 }
 
 /* Estilos para cada punto individual (el componente Boton) */
 .dot {
-    height: 30px; 
-    width: 30px; 
-    background-color: #bbb; 
-    border-radius: 50%; 
-    cursor: pointer; 
-    transition: background-color 0.3s ease; 
-    border: 1px solid #999; 
+    height: 30px;
+    width: 30px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: 1px solid #999;
 }
 
 /* Estilos para el punto activo (amarillo) */
 .dot.active {
-    background-color: #FFD700; 
+    background-color: #FFD700;
     border-color: #FFA500;
 }
 
@@ -160,4 +160,3 @@ font-size: 30px;
 .dot.active:hover {
     background-color: #FFC400;
 }
-

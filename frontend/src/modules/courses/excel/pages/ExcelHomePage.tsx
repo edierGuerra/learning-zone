@@ -4,7 +4,7 @@ export default function ExcelHomePage() {
   return (
     <div>
         Home Excel
-      
+
     </div>
   )
 }

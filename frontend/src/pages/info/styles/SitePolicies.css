@@ -11,7 +11,7 @@
   flex: 1;
   padding: 60px 80px;
   overflow-y: auto;
-  
+
 }
 
 /* Sidebar izquierdo */
@@ -46,7 +46,7 @@
 
 
 .icon-back:hover {
-  color: #34bb19; 
+  color: #34bb19;
 }
 
 /* Botones de Terms y Privacy*/
@@ -71,7 +71,7 @@
 
 .section-nav li {
   margin-bottom: 50px;
-  
+
 }
 
 /* Todo lo de Contacto */
@@ -84,7 +84,7 @@
   font-size: 22px;
 }
 .section-contact button:hover {
-  color: #1541ba; 
+  color: #1541ba;
 }
 
 .contacts-number li {
@@ -100,7 +100,7 @@
   font-weight: 800;
   margin-bottom: 12px;
   text-align: center;
-  
+
 }
 
 /* Párrafos del contenido */
@@ -109,13 +109,13 @@
   line-height: 1.7;
   text-align: justify;
   color: #333;
-  
+
 }
 
 /* Imagen */
 .politicas {
-  width: 210px;        
-  height: auto;            
-  margin: 1rem auto;  
+  width: 210px;
+  height: auto;
+  margin: 1rem auto;
 
 }

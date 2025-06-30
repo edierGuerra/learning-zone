@@ -23,10 +23,9 @@ export const GetStudentAPI =async():Promise<TStudentResponseAPI>=>{
     }catch(err){
         console.log('Error', err)
         throw err
-        
+
 
     }
-        
+
 
 }
-

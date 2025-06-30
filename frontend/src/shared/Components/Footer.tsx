@@ -27,7 +27,7 @@ export default function Footer() {
             {<IoLocationOutline className='icon iconUbi'/>}
             <p>Alfonso L</p>
           </div>
-          
+
         </section>
         <section className="contenedor-2">
             <div className="contenedor-terminos-condiciones">

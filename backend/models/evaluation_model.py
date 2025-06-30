@@ -10,11 +10,13 @@ from database.config_db import Base
 # Módulos externos
 from sqlalchemy import Integer, String, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from .student_answer_model import student_answer
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .lesson_model import Lesson
+    from .student_model import Student
 
 # Módulos internos
 
@@ -35,3 +37,6 @@ class Evaluation(Base):
 
     # relaciones
     lesson: Mapped["Lesson"] = relationship(back_populates="evaluation")
+    students: Mapped["Student"] = relationship(
+        back_populates="evaluations", secondary=student_answer
+    )

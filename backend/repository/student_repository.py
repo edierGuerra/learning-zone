@@ -6,6 +6,7 @@ Este modulo contiene todas las operaciones que se le pueden atribuir a un estudi
 
 import logging
 from typing import Optional
+from datetime import datetime
 
 from models.student_model import Student
 
@@ -161,7 +162,7 @@ class StudentRepository:
             if validate_password is False:
                 logger.warning("⚠️ La contraseña ingresada no coincide ⚠️")
                 return None
-            elif student.is_verified is True:
+            elif student.is_verified is False:
                 logger.warning("⚠️ La cuenta del usuario no se encuentra activa ⚠️")
                 return None
             elif validate_password:
@@ -170,4 +171,44 @@ class StudentRepository:
 
         except Exception as e:
             logger.error("⛔ Error al validar el correo del estudiante ⛔ ", exc_info=e)
+            return None
+
+    async def recovery_password(
+        self, email: str, password_token: str, expire_password_token: datetime
+    ) -> Optional[Student]:
+        """
+        ## Recuperar contraseña
+
+        Este metodo permite acualizar los atributos del estudiante agregando el password_token y el expire_password_token.
+
+        ### Parámentros:
+
+        - `email(str)`: Correo del estudiante que desea recuperar su contraseña.
+        - `password_token(str)`: Token que le permitira al usuario cambiar su contraseña.
+        - `expire_password_token(str)`: Tiempo en el que expira el token para cambiar contraseña.
+
+        ### Returnos:
+
+        - `Optional[Student]`: Objeto de tipo estudiante o None en caso de error.
+        """
+        try:
+            # Obtener estudiante por medio del correo
+            query = await self.db.execute(select(Student).where(Student.email == email))
+            student = query.scalar_one_or_none()
+
+            # Ejecutar en caso de que el correo del estudiante sea valido
+            if student:
+                # Acutalizar los datos del estudiante con el token de recuperación de contraseña y su tiempo de expiración
+                student.password_token = password_token
+                student.expire_password_token = expire_password_token
+                await self.db.commit()
+                await self.db.refresh(student)
+                return student
+            # Ejecutar en caso de que el correo no sea valido
+            elif student is None:
+                logger.warning("⚠️ Error al validar al usuario ⚠️")
+                return None
+        # Exepción en caso de que halla un error
+        except Exception as e:
+            logger.error("⛔ Error al intentar recuperar la contraseña ⛔ ", exc_info=e)
             return None

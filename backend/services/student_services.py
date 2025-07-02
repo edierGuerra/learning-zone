@@ -130,6 +130,7 @@ class StudentService:
         # En caso de que el usuario no sea None lo retornamos
         if student is not None:
             send_password_reset_email(
+                to_email=student.email,
                 student_name=student.names,
                 reset_link=f"http://localhost:5173/recovery-password?token={password_token}",
             )

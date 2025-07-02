@@ -26,9 +26,10 @@ class Settings(BaseSettings):  # clase de configuracion heredando BaseSettings
     )  # 'env' especifica el nombre de la variable de entorno
     # el ... especifica que el campo es obligatorio
     # env el env sera el la variable de entorno que estara en el .env
-
+    email_from: str = Field(..., env="EMAIL_FROM")
     sendgrid_api_key: str = Field(..., env="SENDGRID_API_KEY")
-    sendgrid_template_id: str = Field(..., env="SENDGRID_TEMPLATE_ID")
+    sendgrid_template_register_id: str = Field(..., env="SENDGRID_TEMPLATE_REGISTER_ID")
+    sendgrid_template_password_id: str = Field(..., env="SENDGRID_TEMPLATE_PASSWORD_ID")
 
     # Token
     token_key: str = Field(..., env="TOKEN_KEY")  # variable añadida para el token key

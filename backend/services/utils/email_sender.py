@@ -14,7 +14,7 @@ from sendgrid.helpers.mail import Mail
 
 # Constantes
 SENDGRID_API_KEY = settings.sendgrid_api_key
-EMAIL_FROM = "no-reply@cjetechnology.org"
+EMAIL_FROM = settings.email_from
 TEMPLATE_ID_REGISTER = settings.sendgrid_template_register_id
 TEMPLATE_ID_PASSWORD = settings.sendgrid_template_password_id
 
@@ -55,7 +55,9 @@ def send_password_reset_email(
     - `student_name (str)`: Nombre del estudiante (opcional).
     """
     try:
-        message = Mail(from_email=EMAIL_FROM, to_emails=to_email)
+        message = Mail(
+            from_email=EMAIL_FROM, to_emails=to_email, subject="Recuperar Contraseña"
+        )
         date_now = datetime.now()
         year = date_now.year
 

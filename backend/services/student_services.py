@@ -5,6 +5,7 @@ Este módulo encapsula la lógica de negocio asociada a la gestión de estudiant
 
 # Modulos externos
 from typing import Optional
+from datetime import datetime, timedelta
 
 from fastapi import HTTPException
 from models.student_model import Student
@@ -13,7 +14,7 @@ from models.student_model import Student
 from repository.student_repository import StudentRepository
 from schemas.student_schemas import StudentRegister
 
-from .utils.email_sender import send_verification_email
+from .utils.email_sender import send_verification_email, send_password_reset_email
 from .utils.email_validator import EmailValidator
 from .utils.token_generator import generate_verification_token
 
@@ -94,3 +95,42 @@ class StudentService:
             user_email=email, user_password=password
         )
         return student
+
+    async def recovery_password(self, email: str) -> Optional[Student]:
+        """
+        ## Recuperar contraseña
+
+        Permite recuperar la contraseña de un estudiante enviando un token de recuperación por correo.
+
+        ### Parámetros:
+
+        - `email (str)`: Correo del estudiante que desea recuperar su contraseña.
+
+        ### Retorna:
+
+        - `Optional[Student]`: Objeto del estudiante actualizado si el correo existe, `None` si no se encontró.
+        """
+
+        # Hora actual
+        now = datetime.now()
+
+        # Hora límite 30 minutos después
+        expire_password_token = now + timedelta(minutes=30)
+
+        # Token para validar la contraseña
+        password_token = generate_verification_token()
+
+        # Validar correo y actualizar datos del estudiante
+        student = await self.repository.recovery_password(
+            email=email,
+            password_token=password_token,
+            expire_password_token=expire_password_token,
+        )
+
+        # En caso de que el usuario no sea None lo retornamos
+        if student is not None:
+            send_password_reset_email(
+                student_name=student.names,
+                reset_link=f"http://localhost:5173/recovery-password?token={password_token}",
+            )
+            return student

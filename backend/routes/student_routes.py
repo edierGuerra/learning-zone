@@ -168,12 +168,7 @@ async def login_student(
         student = await services.valid_student(
             password=student_login.password, email=student_login.email
         )
-        if student is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Correo o contraseña incorrectos",
-            )
-        elif student is not None:
+        if student is not None:
             to_encode = {"sub": str(student.id)}
             access_token = encode_access_token(payload=to_encode)
             if not access_token:
@@ -181,6 +176,11 @@ async def login_student(
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="Error al generar el token",
                 )
+        if student is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Correo o contraseña incorrectos",
+            )
             return JSONResponse(
                 content={
                     "access_token": access_token,

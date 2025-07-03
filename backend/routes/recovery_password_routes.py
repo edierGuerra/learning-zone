@@ -1,5 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+# router.recovery_password_router.py
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
+from schemas.student_schemas import StudentNewPassword
 from services.utils.email_validator import EmailValidator
 from services.student_services import StudentService
 from dependencies.student_dependencie import get_student_services
@@ -7,7 +10,7 @@ from dependencies.student_dependencie import get_student_services
 router = APIRouter(prefix="/api/v1/student/password", tags=["Password"])
 
 
-@router.get("/forgot")
+@router.get("/forgot")  # CAMIAR A RUTA POST
 async def forgot_password(
     email_student: str, services: StudentService = Depends(get_student_services)
 ):
@@ -58,8 +61,38 @@ async def forgot_password(
         )
 
 
-@router.post("/reset")
-async def reset_password(
-    new_password: str, services: StudentService = Depends(get_student_services)
+@router.post("/reset")  # se usa post para acciones que modifican datos
+async def reset_password_confirm(
+    new_pass_data: StudentNewPassword,
+    services: StudentService = Depends(get_student_services),
 ):
-    pass
+    """
+    ## Restablecer Contraseña (Confirmación)
+
+    Esta ruta permite a un estudiante establecer una nueva contraseña utilizando un token
+    de recuperación previamente enviado a su correo electrónico.
+
+    ### Parámetros:
+    - **new_pass_data** (`StudentNewPassword`): Objeto Pydantic que contiene el token de recuperación
+      y la nueva contraseña.
+    - **services** (`StudentService`): Servicio de lógica de negocio para la gestión del estudiante (inyectado con `Depends`).
+
+    ### Respuesta:
+    - **200 OK**: Contraseña restablecida exitosamente.
+        ```json
+        {
+          "message": "Contraseña restablecida exitosamente."
+        }
+        ```
+    - **400 Bad Request**: Token inválido, expirado o nueva contraseña no cumple los requisitos.
+        ```json
+        {
+          "detail": "Token inválido o expirado."
+        }
+        ```
+    - **500 Internal Server Error**: Si ocurre un error inesperado al actualizar la contraseña.
+    """
+    response = await services.reset_student_password(new_pass_data)
+
+    # si el servicio no lanzo una excepcion, significa que fue exitoso
+    return JSONResponse(content=response, status_code=status.HTTP_200_OK)

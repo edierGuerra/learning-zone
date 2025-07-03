@@ -7,12 +7,13 @@ Este módulo encapsula la lógica de negocio asociada a la gestión de estudiant
 from typing import Optional
 from datetime import datetime, timedelta
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from models.student_model import Student
 
 # Modulos internos
 from repository.student_repository import StudentRepository
-from schemas.student_schemas import StudentRegister
+from schemas.student_schemas import StudentRegister, StudentNewPassword
+from repository.utils import hash_password
 
 from .utils.email_sender import send_verification_email, send_password_reset_email
 from .utils.email_validator import EmailValidator
@@ -135,3 +136,34 @@ class StudentService:
                 reset_link=f"http://localhost:5173/recovery-password?token={password_token}",
             )
             return student
+
+    async def reset_student_password(self, new_pass_data: StudentNewPassword) -> dict:
+        """
+        Permite a un estudiante restablecer su contraseña usando un token de recuperación.
+        """
+        obtain_data_student = await self.repository.verify_token_recovery_password(
+            new_pass_data.token
+        )
+        if obtain_data_student is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Token inválido o expirado",
+            )
+
+        # Hashear la nueva contraseña
+        hashed_new_password = hash_password(new_pass_data.new_password).decode("utf-8")
+
+        # Actualizar la contraseña del estudiante e invalidar el token en la base de datos
+        # llamar al metodo uptate_password_and_invalidate_token del repositorio
+        updated_student = await self.repository.uptate_password_and_invalidate_token(
+            student_id=obtain_data_student.id, hashed_password=hashed_new_password
+        )
+
+        if updated_student is None:
+            # en caso de que ocurra un error inesperado en la base de datos
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="No se pudo restablecer la contraseña. Intente de nuevo.",
+            )
+
+        return {"message": "Contraseña restablecida exitosamente."}

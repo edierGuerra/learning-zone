@@ -179,7 +179,7 @@ class StudentRepository:
         """
         ## Recuperar contraseña
 
-        Este metodo permite acualizar los atributos del estudiante agregando el password_token y el expire_password_token.
+        Este metodo permite actualizar los atributos del estudiante agregando el password_token y el expire_password_token.
 
         ### Parámentros:
 
@@ -211,4 +211,98 @@ class StudentRepository:
         # Exepción en caso de que halla un error
         except Exception as e:
             logger.error("⛔ Error al intentar recuperar la contraseña ⛔ ", exc_info=e)
+            return None
+
+    async def verify_token_recovery_password(self, token: str) -> Optional[Student]:
+        """
+        Verifica el token de recuperacion de contraseña en la base
+        de datos y comprueba su expiración.
+
+        Args:
+            token (str): Token de recuperacion recibido.
+
+        Returns:
+            Optional[Student]: El objeto Student si el token es válido y no ha expirado,
+            o None en caso contrario.
+        """
+        try:
+            result = await self.db.execute(
+                select(Student).where(
+                    Student.password_token == token
+                )  # Buscar coincidencia con el token
+            )
+            student = result.scalar_one_or_none()
+
+            if not student:  # verificar si el estudiante fue encontrado con el token
+                logger.warning("Token de verificación inválido: %s", token)
+                return None  # retorna none si el token ingresado no coincide con la base de datos
+
+            now = datetime.now()  # toma la fecha y hora actual
+
+            if (
+                student.expire_password_token is None
+                or now > student.expire_password_token
+            ):
+                logger.warning(
+                    "Token de recuperacion expirado para el estudiante: %s",
+                    student.email,
+                )
+                student.password_token = None
+                student.expire_password_token = None
+                await self.db.commit()
+                return None  # El token esta expirado, no es valido
+
+            return student
+
+        except Exception as e:
+            logger.error(
+                "Error al verificar token de correo para reestrablecimiento", exc_info=e
+            )
+            await self.db.rollback()
+            return None
+
+    async def uptate_password_and_invalidate_token(
+        self, student_id: int, hashed_password: str
+    ) -> Optional[Student]:
+        """
+        Actualiza la contraseña de un estudiante y limpia su token de recuperación.
+        """
+        try:
+            # Buscar al estudiante por su ID
+            result = await self.db.execute(
+                select(Student).where(Student.id == student_id)
+            )
+
+            student = result.scalar_one_or_none()
+
+            if not student:
+                logger.error(
+                    "Estudiante no encontrado para actualizar contraseña (ID: %s)",
+                    student_id,
+                )
+                return None
+
+            # Actualizar la contraseña y limpiar los campos del token de recuperacion
+            student.password = hashed_password
+            student.password_token = None
+            student.expire_password_token = None
+
+            await self.db.commit()
+            await self.db.refresh(
+                student
+            )  # recarga el objeto para reflejar los cambios
+
+            logger.info(
+                "Contraseña restablecida y token invalidado para el estudiante: %s",
+                student.email,
+            )
+            return student
+
+        except Exception as e:
+            logger.error(
+                "Error al actualizar contraseña y invalidar token para el estudiante (ID: %s)",
+                student_id,
+                exc_info=e,
+            )
+            await self.db.rollback()
             return None

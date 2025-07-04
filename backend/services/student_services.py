@@ -12,7 +12,7 @@ from models.student_model import Student
 
 # Modulos internos
 from repository.student_repository import StudentRepository
-from schemas.student_schemas import StudentRegister, StudentNewPassword
+from schemas.student_schemas import StudentRegister
 from repository.utils import hash_password
 
 from .utils.email_sender import send_verification_email, send_password_reset_email
@@ -137,12 +137,12 @@ class StudentService:
             )
             return student
 
-    async def reset_student_password(self, new_pass_data: StudentNewPassword) -> dict:
+    async def reset_student_password(self, token: str, new_password: str) -> dict:
         """
         Permite a un estudiante restablecer su contraseña usando un token de recuperación.
         """
         obtain_data_student = await self.repository.verify_token_recovery_password(
-            new_pass_data.token
+            token
         )
         if obtain_data_student is None:
             raise HTTPException(
@@ -151,7 +151,7 @@ class StudentService:
             )
 
         # Hashear la nueva contraseña
-        hashed_new_password = hash_password(new_pass_data.new_password).decode("utf-8")
+        hashed_new_password = hash_password(new_password).decode("utf-8")
 
         # Actualizar la contraseña del estudiante e invalidar el token en la base de datos
         # llamar al metodo uptate_password_and_invalidate_token del repositorio

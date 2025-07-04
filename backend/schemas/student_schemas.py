@@ -81,19 +81,3 @@ class StudentResponse(BaseModel):
 # Esquema de respuesta simple para verificación o confirmaciones
 class MessageResponse(BaseModel):
     message: str
-
-
-class StudentNewPassword(BaseModel):
-    """
-    Esquema que toma el token y la nueva contraseña para actualizarla en la base de datos
-    """
-
-    token: str = Field(
-        ..., title="Token", description="Token del estudiante para cambiar contraseña"
-    )
-    new_password: str = Field(
-        ...,
-        title="Contraseña",
-        description="Nueva contraseña del estudiante",
-        min_length=6,
-    )

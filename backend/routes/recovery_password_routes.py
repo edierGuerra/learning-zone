@@ -2,7 +2,6 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from fastapi.responses import JSONResponse
-from schemas.student_schemas import StudentNewPassword
 from services.utils.email_validator import EmailValidator
 from services.student_services import StudentService
 from dependencies.student_dependencie import get_student_services
@@ -64,7 +63,8 @@ async def forgot_password(
 
 @router.post("/reset")  # se usa post para acciones que modifican datos
 async def reset_password_confirm(
-    new_pass_data: StudentNewPassword,
+    token: str = Header(),
+    new_password: str = Header(),
     services: StudentService = Depends(get_student_services),
 ):
     """
@@ -93,7 +93,7 @@ async def reset_password_confirm(
         ```
     - **500 Internal Server Error**: Si ocurre un error inesperado al actualizar la contraseña.
     """
-    response = await services.reset_student_password(new_pass_data)
+    response = await services.reset_student_password(token, new_password)
 
     # si el servicio no lanzo una excepcion, significa que fue exitoso
     return JSONResponse(content=response, status_code=status.HTTP_200_OK)

@@ -1,6 +1,6 @@
 # router.recovery_password_router.py
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from fastapi.responses import JSONResponse
 from schemas.student_schemas import StudentNewPassword
 from services.utils.email_validator import EmailValidator
@@ -10,9 +10,10 @@ from dependencies.student_dependencie import get_student_services
 router = APIRouter(prefix="/api/v1/student/password", tags=["Password"])
 
 
-@router.get("/forgot")  # CAMIAR A RUTA POST
+@router.post("/forgot")
 async def forgot_password(
-    email_student: str, services: StudentService = Depends(get_student_services)
+    email_student: str = Header(),
+    services: StudentService = Depends(get_student_services),
 ):
     """
     ## Recuperar contraseña (solicitud de restablecimiento)

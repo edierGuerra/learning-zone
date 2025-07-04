@@ -181,14 +181,14 @@ async def login_student(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Correo o contraseña incorrectos",
             )
-        return JSONResponse(
-            content={
-                "access_token": access_token,
-                "token_type": "bearer",
-                "message": "Inicio de sesión exitoso",
-            },
-            status_code=status.HTTP_200_OK,
-        )
+            return JSONResponse(
+                content={
+                    "access_token": access_token,
+                    "token_type": "bearer",
+                    "message": "Inicio de sesión exitoso",
+                },
+                status_code=status.HTTP_200_OK,
+            )
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

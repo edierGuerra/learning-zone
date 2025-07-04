@@ -10,7 +10,7 @@ Ruerda separar el servicio del repositorio de la manera correcta.
 
 - **pylint/black** (Python).
 - Sangría: 2 espacios.
-- Comillas: `'dobles'` (mantén la consistencia).
+- Comillas: `"dobles"` (mantén la consistencia).
 - Variables en inglés y en **snake_case** (`student_data`, `total_price`).
 - Constantes en **UPPER_CASE_SNAKE**.
 - Nombres claros y descriptivos. No más `data1`, `res2`, ni cosas que ni tu mamá entiende.
@@ -34,13 +34,13 @@ Organizamos las rutas por dominio funcional usando `APIRouter` con **prefijos cl
 from fastapi import APIRouter
 
 router = APIRouter(
-    prefix='/api/v1/students',
-    tags=['students']
+    prefix="/api/v1/students",
+    tags=["students"]
 )
 
-@router.get('/profile')
+@router.get("/profile")
 def get_student_profile():
-    return {'msg': 'Perfil de usuario'}
+    return {"msg": "Perfil de usuario"}
 ```
 
 ```python
@@ -65,7 +65,7 @@ Cada endpoint debe tener un **docstring descriptivo**. FastAPI usa esto para gen
 **Formato estándar del docstring:**
 
 ```python
-'''
+"
 ## Titulo
 
 Breve descripción del endpoint.
@@ -76,15 +76,15 @@ Breve descripción del endpoint.
 
 ### Respuesta:
 - `Retorna(tipo)`: descripción del objeto/respuesta.
-'''
+"
 ```
 
 **Ejemplo real:**
 
 ```python
-@router.post('/login')
+@router.post("/login")
 def login_student(studentname: str, password: str):
-    '''
+    "
     # Validar usuario
 
     Inicia sesión de un usuario.
@@ -92,7 +92,7 @@ def login_student(studentname: str, password: str):
     - `studentname()`: str — Nombre de usuario.
     - `password()`: str — Contraseña del usuario.
     - `Retorna`: dict con token de autenticación y datos del usuario.
-    '''
+    "
     ...
 ```
 
@@ -118,15 +118,15 @@ class LoginRequest(BaseModel):
 ```
 
 ```python
-@router.post('/login', response_model=TokenResponse, status_code=200)
+@router.post("/login", response_model=TokenResponse, status_code=200)
 def login_student(payload: LoginRequest):
-    '''
+    "
     Autenticación de usuario.
 
     - `payload.studentname(str)`: Nombre de usuario
     - `payload.password(str)`: Contraseña
     - `Retorna`: token JWT y datos del usuario
-    '''
+    "
     ...
 ```
 

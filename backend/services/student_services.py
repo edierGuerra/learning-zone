@@ -47,7 +47,7 @@ class StudentService:
             send_verification_email(
                 student_name=new_student.names,
                 to_email=student_schemas.email,
-                verification_link=f"http://localhost:5173/confirmEmail?token={token}",
+                verification_link=f"http://localhost:5173/confirmEmailRegister?token={token}",
             )
         return new_student
 
@@ -133,7 +133,7 @@ class StudentService:
             send_password_reset_email(
                 to_email=student.email,
                 student_name=student.names,
-                reset_link=f"http://localhost:5173/recovery-password?token={password_token}",
+                reset_link=f"http://localhost:5173/confirmEmailRequest?token={password_token}",
             )
             return student
 
@@ -167,3 +167,20 @@ class StudentService:
             )
 
         return {"message": "Contraseña restablecida exitosamente."}
+
+    async def validate_password_token(self, password_token: str) -> Optional[Student]:
+        """
+        ## Validar token de contraseña
+        Permite validar si el token de recuperación de contraseña es valido
+
+        ### Parámentros:
+            password_token (str): Token que valida si el estudiante puede pasar a recuperar la contraseña.
+
+        Returns:
+            Optional[Student]: Objeto de tipo estudiante o None en caso de error.
+        """
+        student = await self.repository.verify_token_recovery_password(
+            token=password_token
+        )
+        print(student)
+        return student

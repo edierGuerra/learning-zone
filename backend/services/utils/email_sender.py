@@ -3,7 +3,7 @@
 Este modulo permite enviar un correo de confirmación al estudiante
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Módulos internos
 from config import settings
@@ -44,7 +44,10 @@ def send_verification_email(
 
 
 def send_password_reset_email(
-    to_email: str, reset_link: str, student_name="Estudiante"
+    to_email: str,
+    reset_link: str,
+    student_name="Estudiante",
+    expire_token: int = 30,
 ):
     """
     Envía un correo al estudiante con el enlace para restablecer su contraseña.
@@ -55,6 +58,12 @@ def send_password_reset_email(
     - `student_name (str)`: Nombre del estudiante (opcional).
     """
     try:
+        now = datetime.now()
+
+        hour = now + timedelta(minutes=expire_token)
+
+        expiration_time = hour.strftime("%H:%M:%p")
+
         message = Mail(
             from_email=EMAIL_FROM, to_emails=to_email, subject="Recuperar Contraseña"
         )
@@ -67,6 +76,8 @@ def send_password_reset_email(
             "student_name": student_name,
             "reset_link": reset_link,
             "current_year": year,
+            "expiracion_hora_amigable": expiration_time,
+            "expiracion_tiempo_minutos": expire_token,
         }
 
         sg = SendGridAPIClient(SENDGRID_API_KEY)

@@ -55,13 +55,14 @@ async def forgot_password(
     student = await services.recovery_password(email=email_student)
     if student:
         return JSONResponse(
+            status_code=200,
             content={
                 "message": "Si tu correo esta registrado, recibiras un enlace para restablecer tu contraseña"
-            }
+            },
         )
 
 
-@router.post("/reset")  # se usa post para acciones que modifican datos
+@router.put("/reset")  # se usa post para acciones que modifican datos
 async def reset_password_confirm(
     token: str = Header(),
     new_password: str = Header(),
@@ -97,3 +98,17 @@ async def reset_password_confirm(
 
     # si el servicio no lanzo una excepcion, significa que fue exitoso
     return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+
+
+@router.get("/validate-token-password")
+async def validate_token_password(
+    token: str, services: StudentService = Depends(get_student_services)
+):
+    student = await services.validate_password_token(password_token=token)
+    if student is not None:
+        return student
+    if student is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="El token enviado no ha sido encontrado",
+        )

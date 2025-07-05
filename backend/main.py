@@ -19,6 +19,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from routes.identification_routes import router as identification_router  # ruta modular
 from routes.student_routes import router as student_router
+from routes.recovery_password_routes import router as recobery_password_router
 
 
 # --- Lifespan moderno (reemplaza on_event) ---
@@ -46,7 +47,7 @@ app = FastAPI(
     lifespan=lifespan,  # ✅ Aquí enlazamos la función
     contact={
         "Authors": [
-            "Edier Andres Guerra",
+            "Edier Andrés Guerra Vargas",
             "Camilo Andres Ospina Villa",
             "Junior Herrera Agudelo",
             "Charift Tatiana Giraldo",
@@ -72,7 +73,7 @@ templates = Jinja2Templates(directory="templates")
 
 
 # Ruta principal del backend
-@app.get("/", response_class=HTMLResponse, tags=["root"])
+@app.get("/", response_class=HTMLResponse, tags=["Root"])
 async def root(request: Request):
     """
     Esta ruta devuelve una página HTML de bienvenida a la documentación del backend,
@@ -86,3 +87,4 @@ async def root(request: Request):
 # --- Routers ----
 app.include_router(identification_router)
 app.include_router(student_router)
+app.include_router(recobery_password_router)

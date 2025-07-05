@@ -6,12 +6,13 @@ garantizando una representación coherente y optimizada de la información.
 
 # Modulos externos
 from typing import List
+from datetime import datetime
 
 # Modulos internos
 from .student_notification_model import student_notification
 from .student_answer_model import student_answer
 from database.config_db import Base
-from sqlalchemy import Boolean, ForeignKey, Integer, String
+from sqlalchemy import Boolean, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .course_student_model import course_student
@@ -84,4 +85,18 @@ class Student(Base):
     )
     is_verified: Mapped[bool] = mapped_column(
         Boolean, default=False, comment="Indica si el correo fue verificado"
+    )
+
+    # Validación de contraseña
+    password_token: Mapped[str] = mapped_column(
+        String(250),
+        unique=True,
+        nullable=True,
+        comment="Token para validar el cambio de contraseña",
+    )
+    expire_password_token: Mapped[datetime] = mapped_column(
+        DateTime,
+        unique=True,
+        nullable=True,
+        comment="Tiempo de expiración del token de recuperación de contraseña",
     )

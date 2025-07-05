@@ -5,15 +5,17 @@ Este módulo encapsula la lógica de negocio asociada a la gestión de estudiant
 
 # Modulos externos
 from typing import Optional
+from datetime import datetime, timedelta
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from models.student_model import Student
 
 # Modulos internos
 from repository.student_repository import StudentRepository
 from schemas.student_schemas import StudentRegister
+from repository.utils import hash_password
 
-from .utils.email_sender import send_verification_email
+from .utils.email_sender import send_verification_email, send_password_reset_email
 from .utils.email_validator import EmailValidator
 from .utils.token_generator import generate_verification_token
 
@@ -45,7 +47,7 @@ class StudentService:
             send_verification_email(
                 student_name=new_student.names,
                 to_email=student_schemas.email,
-                verification_link=f"http://localhost:5173/confirmEmail?token={token}",
+                verification_link=f"http://localhost:5173/confirmEmailRegister?token={token}",
             )
         return new_student
 
@@ -93,4 +95,92 @@ class StudentService:
         student = await self.repository.valid_student(
             user_email=email, user_password=password
         )
+        return student
+
+    async def recovery_password(self, email: str) -> Optional[Student]:
+        """
+        ## Recuperar contraseña
+
+        Permite recuperar la contraseña de un estudiante enviando un token de recuperación por correo.
+
+        ### Parámetros:
+
+        - `email (str)`: Correo del estudiante que desea recuperar su contraseña.
+
+        ### Retorna:
+
+        - `Optional[Student]`: Objeto del estudiante actualizado si el correo existe, `None` si no se encontró.
+        """
+
+        # Hora actual
+        now = datetime.now()
+
+        # Hora límite 30 minutos después
+        expire_password_token = now + timedelta(minutes=30)
+
+        # Token para validar la contraseña
+        password_token = generate_verification_token()
+
+        # Validar correo y actualizar datos del estudiante
+        student = await self.repository.recovery_password(
+            email=email,
+            password_token=password_token,
+            expire_password_token=expire_password_token,
+        )
+
+        # En caso de que el usuario no sea None lo retornamos
+        if student is not None:
+            send_password_reset_email(
+                to_email=student.email,
+                student_name=student.names,
+                reset_link=f"http://localhost:5173/confirmEmailRequest?token={password_token}",
+            )
+            return student
+
+    async def reset_student_password(self, token: str, new_password: str) -> dict:
+        """
+        Permite a un estudiante restablecer su contraseña usando un token de recuperación.
+        """
+        obtain_data_student = await self.repository.verify_token_recovery_password(
+            token
+        )
+        if obtain_data_student is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Token inválido o expirado",
+            )
+
+        # Hashear la nueva contraseña
+        hashed_new_password = hash_password(new_password).decode("utf-8")
+
+        # Actualizar la contraseña del estudiante e invalidar el token en la base de datos
+        # llamar al metodo uptate_password_and_invalidate_token del repositorio
+        updated_student = await self.repository.uptate_password_and_invalidate_token(
+            student_id=obtain_data_student.id, hashed_password=hashed_new_password
+        )
+
+        if updated_student is None:
+            # en caso de que ocurra un error inesperado en la base de datos
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="No se pudo restablecer la contraseña. Intente de nuevo.",
+            )
+
+        return {"message": "Contraseña restablecida exitosamente."}
+
+    async def validate_password_token(self, password_token: str) -> Optional[Student]:
+        """
+        ## Validar token de contraseña
+        Permite validar si el token de recuperación de contraseña es valido
+
+        ### Parámentros:
+            password_token (str): Token que valida si el estudiante puede pasar a recuperar la contraseña.
+
+        Returns:
+            Optional[Student]: Objeto de tipo estudiante o None en caso de error.
+        """
+        student = await self.repository.verify_token_recovery_password(
+            token=password_token
+        )
+        print(student)
         return student

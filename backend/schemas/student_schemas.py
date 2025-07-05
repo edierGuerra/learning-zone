@@ -81,3 +81,7 @@ class StudentResponse(BaseModel):
 # Esquema de respuesta simple para verificación o confirmaciones
 class MessageResponse(BaseModel):
     message: str
+
+
+class Email(BaseModel):
+    email: EmailStr

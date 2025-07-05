@@ -3,6 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from fastapi.responses import JSONResponse
 from services.utils.email_validator import EmailValidator
+from schemas.student_schemas import Email
 from services.student_services import StudentService
 from dependencies.student_dependencie import get_student_services
 
@@ -11,7 +12,7 @@ router = APIRouter(prefix="/api/v1/student/password", tags=["Password"])
 
 @router.post("/forgot")
 async def forgot_password(
-    email_student: str = Header(),
+    email_student: Email,
     services: StudentService = Depends(get_student_services),
 ):
     """
@@ -104,6 +105,19 @@ async def reset_password_confirm(
 async def validate_token_password(
     token: str, services: StudentService = Depends(get_student_services)
 ):
+    """
+    ## Validar token de recuperación de contraseña.
+
+    ### Paramentros:
+        `token (str)`: Token de inicio de session
+        `services (StudentService, optional)`: Servicio con las operaciones del estudiante. Defaults to Depends(get_student_services).
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
     student = await services.validate_password_token(password_token=token)
     if student is not None:
         return student

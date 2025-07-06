@@ -85,3 +85,22 @@ class MessageResponse(BaseModel):
 
 class Email(BaseModel):
     email: EmailStr
+
+
+class ResetPassword(BaseModel):
+    token: str = Field(
+        ...,
+        title="Token de recuperación de contraseña",
+        description="Token con el que el estudiante puede restablecer la contraseña",
+    )
+    new_password: str = Field(
+        ..., title="Nueva contraseña", description="Nueva contraseña del estudianten"
+    )
+
+
+class TokenPassword(BaseModel):
+    token: str = Field(
+        ...,
+        title="Token de recuperación de contraseña",
+        description="Token para validar al estudiante que desea cambiar la contraseña",
+    )

@@ -1,9 +1,9 @@
 # router.recovery_password_router.py
 
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from services.utils.email_validator import EmailValidator
-from schemas.student_schemas import Email
+from schemas.student_schemas import Email, ResetPassword, TokenPassword
 from services.student_services import StudentService
 from dependencies.student_dependencie import get_student_services
 
@@ -65,8 +65,7 @@ async def forgot_password(
 
 @router.put("/reset")  # se usa post para acciones que modifican datos
 async def reset_password_confirm(
-    token: str = Header(),
-    new_password: str = Header(),
+    data: ResetPassword,
     services: StudentService = Depends(get_student_services),
 ):
     """
@@ -76,7 +75,7 @@ async def reset_password_confirm(
     de recuperación previamente enviado a su correo electrónico.
 
     ### Parámetros:
-    - **new_pass_data** (`StudentNewPassword`): Objeto Pydantic que contiene el token de recuperación
+    - **data** (`ResetPassword`): Objeto Pydantic que contiene el token de recuperación
       y la nueva contraseña.
     - **services** (`StudentService`): Servicio de lógica de negocio para la gestión del estudiante (inyectado con `Depends`).
 
@@ -95,7 +94,7 @@ async def reset_password_confirm(
         ```
     - **500 Internal Server Error**: Si ocurre un error inesperado al actualizar la contraseña.
     """
-    response = await services.reset_student_password(token, new_password)
+    response = await services.reset_student_password(data.token, data.new_password)
 
     # si el servicio no lanzo una excepcion, significa que fue exitoso
     return JSONResponse(content=response, status_code=status.HTTP_200_OK)
@@ -103,24 +102,27 @@ async def reset_password_confirm(
 
 @router.get("/validate-token-password")
 async def validate_token_password(
-    token: str, services: StudentService = Depends(get_student_services)
+    token: TokenPassword, services: StudentService = Depends(get_student_services)
 ):
     """
     ## Validar token de recuperación de contraseña.
 
     ### Paramentros:
-        `token (str)`: Token de inicio de session
+        `token (TokePassword)`: Token de inicio de session
         `services (StudentService, optional)`: Servicio con las operaciones del estudiante. Defaults to Depends(get_student_services).
 
     Raises:
-        HTTPException: _description_
+        HTTPException: Codigo de estado en caso no validar el token
 
     Returns:
-        _type_: _description_
+        JSONResponse: Mensaje de exito en caso de que el token sea valido
     """
-    student = await services.validate_password_token(password_token=token)
+    student = await services.validate_password_token(password_token=token.token)
     if student is not None:
-        return student
+        return JSONResponse(
+            status_code=200,
+            content={"message": "El token ha sido validado correctamente."},
+        )
     if student is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

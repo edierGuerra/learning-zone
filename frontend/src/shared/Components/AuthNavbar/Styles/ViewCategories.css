@@ -8,6 +8,7 @@
     background-color:#f6f2ee ;
     padding: 4rem;
     border-radius: 20px;
+    z-index: 100;
 }
 .container-view-categories button{
     cursor: pointer;

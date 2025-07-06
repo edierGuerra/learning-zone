@@ -1,10 +1,13 @@
+import { useUser } from "../auth/Hooks/useAuth";
 import UpdateInformation from "./Components/UpdateInformation";
 import './Styles/UserPage.css'
 export default function UserPage() {
+  const {student} = useUser()
+
   return (
     /* Reemplazar campos por lo del backend */
     <div className="container-profile-user">
-        <h2 className="title-profile-user">Que te trae por aqui Junior Herrera</h2>
+        <h2 className="title-profile-user">Que te trae por aqui {student?.name}</h2>
         <div className="container-about-user">
             <section className="section-process">
               <h2 className="title-process">Proceso</h2>

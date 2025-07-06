@@ -3,6 +3,8 @@ import '../Styles/Register.css'
 /* import { GrFormViewHide, GrView } from 'react-icons/gr'; */
 import { CircleLoader } from 'react-spinners';
 import useFormRegister from '../Hooks/useFormRegister';
+import SucessMessage from './SucessMessage';
+import { useEffect } from 'react';
 
 export default function Register() {
 
@@ -20,13 +22,25 @@ export default function Register() {
   password,
   setPassword,
   confirmPassword,
-  showPassword,
   setConfirmPassword,
-/*   togglePasswordVisibility, */
   handleSubmitRegister,
   loading,
-errors
+  errors,
+  viewSucessMessage,
+
 } = useFormRegister()
+
+
+useEffect(() => {
+  if (viewSucessMessage) {
+    const timeout = setTimeout(() => {
+      window.location.href = '/confirmEmailRegister';
+    }, 3000);
+
+    return () => clearTimeout(timeout); // limpieza si desmonta antes
+  }
+}, [viewSucessMessage]);
+
   return (
     <>
       {formVerify ?
@@ -44,73 +58,78 @@ errors
         <input type="submit" value={'Verify'}  className='btn-verify-register'/>
         <CircleLoader color="#fff" loading={loading}/>
       </form>:
-      /* Form Register */
-      <form onSubmit={(e)=>handleSubmitRegister(e)} className="form-register">
-        <h2 className='title-register'>Sign Up</h2>
-        <div className="container-label-input-r">
-          <input
-            type="text"
-            id="name"
-            value={name}
-            className={name? 'has-content':''}
-            onChange={(e)=>setName(e.target.value)}/>
-          <label htmlFor="name">Name</label>
-          {errors.name && <span className="error">{errors.name}</span>}
-        </div>
-        <div className="container-label-input-r">
-          <input
-            type="text"
-            id="lastName"
-            value={lastNames} // Controla el valor
-            className={lastNames? 'has-content':''}
-            onChange={(e)=>setLastNames(e.target.value)}/>
-          <label htmlFor="lastName">LastName</label>
-          {errors.lastNames && <span className="error">{errors.lastNames}</span>}
-        </div>
-        <div className="container-label-input-r">
-          <input
-            type="email"
-            id="email"
-            className={email ? 'has-content' : ''} // Añade clase si tiene contenido
-            value={email} // Controla el valor
-            onChange={(e) => setEmail(e.target.value)} />
-          <label htmlFor="email">Email</label>
-          {errors.email && <span className="error">{errors.email}</span>}
-        </div>
+      <>
+        <div style={{ position: 'relative' }}>
+          {/* form Register  */}
+          <form onSubmit={(e)=>handleSubmitRegister(e)} className="form-register">
+            <h2 className='title-register'>Sign Up</h2>
+            <div className="container-label-input-r">
+              <input
+                type="text"
+                id="name"
+                value={name}
+                className={name? 'has-content':''}
+                onChange={(e)=>setName(e.target.value)}/>
+              <label htmlFor="name">Name</label>
+              {errors.name && <span className="error">{errors.name}</span>}
+            </div>
+            <div className="container-label-input-r">
+              <input
+                type="text"
+                id="lastName"
+                value={lastNames} // Controla el valor
+                className={lastNames? 'has-content':''}
+                onChange={(e)=>setLastNames(e.target.value)}/>
+              <label htmlFor="lastName">LastName</label>
+              {errors.lastNames && <span className="error">{errors.lastNames}</span>}
+            </div>
+            <div className="container-label-input-r">
+              <input
+                type="email"
+                id="email"
+                className={email ? 'has-content' : ''} // Añade clase si tiene contenido
+                value={email} // Controla el valor
+                onChange={(e) => setEmail(e.target.value)} />
+              <label htmlFor="email">Email</label>
+              {errors.email && <span className="error">{errors.email}</span>}
+            </div>
 
-        <div className="container-label-input-r">
-          <input
-            type={showPassword ? 'text' : 'password'}
-            id='password'
-            className={password? 'has-content':''}
-            value={password} // Controla el valor
-            onChange={(e) => setPassword(e.target.value)} />
-          <label htmlFor="password">Password</label>
-          {errors.password && <span className="error">{errors.password}</span>}
+            <div className="container-label-input-r">
+              <input
+                type={'password'}
+                id='password'
+                className={password? 'has-content':''}
+                value={password} // Controla el valor
+                onChange={(e) => setPassword(e.target.value)} />
+              <label htmlFor="password">Password</label>
+              {errors.password && <span className="error">{errors.password}</span>}
+            </div>
+
+
+            <div className="container-label-input-r">
+              <input
+                type={'password'}
+                id='confirmpassword'
+                className={confirmPassword? 'has-content':''}
+                value={confirmPassword} // Controla el valor
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              <label htmlFor="confirmpassword">Confirm Password</label>
+              {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+              {/* <span className='icon-show' onClick={togglePasswordVisibility}>
+                {showPassword ? <GrView /> : <GrFormViewHide />}
+              </span> */}
+            </div>
+            <input type="submit" value={'Register'} className='btn-verify-register' />
+          </form>
+          {viewSucessMessage && (
+          <SucessMessage name='Registro'/>
+          )}
         </div>
-
-
-        <div className="container-label-input-r">
-          <input
-            type={showPassword ? 'text' : 'password'}
-            id='confirmpassword'
-            className={confirmPassword? 'has-content':''}
-            value={confirmPassword} // Controla el valor
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          <label htmlFor="confirmpassword">Confirm Password</label>
-          {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
-          {/* <span className='icon-show' onClick={togglePasswordVisibility}>
-            {showPassword ? <GrView /> : <GrFormViewHide />}
-          </span> */}
-        </div>
-        <input type="submit" value={'Register'} className='btn-verify-register' />
-      </form>
-
+        
+       
+      </>
     }
-
     </>
-
-
   )
 }

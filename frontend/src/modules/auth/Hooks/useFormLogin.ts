@@ -15,6 +15,8 @@ export default function useFormLogin() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
 
+  const [viewSucessMessage, setViewSucessMessage] = useState(false)
+
   const handleBtnNavigate = useNavigationHandler();
 
   const togglePasswordVisibility = () => {
@@ -70,11 +72,12 @@ export default function useFormLogin() {
         /* alert(response.message) */
         return
       }
-      alert(response.message)
+      /* alert(response.message) */
       /* Guardar token en el localStorage */
       authStorage.setToken(response.access_token)
-      /* Redirigir a hoome en caso de que exista */
-      handleBtnNavigate('/home');
+      /* Cambiar estado para que se renderice el SucessMessage*/
+      setViewSucessMessage(true)
+
     } catch{
       alert("No se pudo iniciar sesión.");
     } finally {
@@ -93,6 +96,7 @@ export default function useFormLogin() {
     togglePasswordVisibility,
     handleSubmitLogin,
     loading,
-    errors
+    errors,
+    viewSucessMessage
   };
 }

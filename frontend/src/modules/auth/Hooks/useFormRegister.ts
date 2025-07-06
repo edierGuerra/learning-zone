@@ -3,7 +3,6 @@
 import { useState } from "react";
 import type { TStudent } from "../../types/User";
 import verifyAPI from "../Services/Verify.server";
-import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import { registerAPI } from "../Services/Register.server";
 import { authStorage } from "../../../shared/Utils/authStorage";
 
@@ -17,7 +16,6 @@ export default function useFormRegister() {
   type FormErrors = Partial<Record<keyof RegisterForm, string>>;
 
 
-  const handleBtnNavigate = useNavigationHandler();
   const [loading,setLoading] = useState(false);
 
   const [idAutoIncrement, setIdAutoIncrement] = useState<TStudent['id']>()
@@ -30,8 +28,12 @@ export default function useFormRegister() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({}); // Estado que controla y almacena los errores en caso de que existan
 
+  const [viewSucessMessage, setViewSucessMessage] = useState(false)
+
+
 
   const [formVerify, setFormVerify] = useState(true);
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -117,12 +119,11 @@ const validateForm = (form: RegisterForm): FormErrors => {
         alert(response.message)
         return
       }
-      console.log(response)
       //Almacenar el id autoincrementable para enviarlo en el register
       setIdAutoIncrement(response?.identification_id)
-      alert(response.message)
       /* Cambiar el estado del formulario se verify para que se muestre el de register */
       setFormVerify(false)
+
 
     }catch{
       alert('No se pudo verificar el numero de identificación')
@@ -135,7 +136,6 @@ const validateForm = (form: RegisterForm): FormErrors => {
   }
   const handleSubmitRegister =async(e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
-    alert(idAutoIncrement)
     const formData:RegisterForm ={
       id : idAutoIncrement!,
       numIdentification:nIdentification!,
@@ -166,12 +166,7 @@ const validateForm = (form: RegisterForm): FormErrors => {
       // Guardando el email en el localStorage
       authStorage.setEmail(res.email)
       authStorage.setIdAutoIncrementStudent(res.id)
-
-      console.log('enviando correo')
-      alert('Registrado exitosamente')
-
-      // Redirigir al page confirmar email
-      handleBtnNavigate('/confirmEmail')
+      setViewSucessMessage(true)
     }catch{
       alert('No se pudo registrar tu cuenta.')
 
@@ -208,5 +203,6 @@ const validateForm = (form: RegisterForm): FormErrors => {
     // Variables de animaciones
     loading,
     errors,
+    viewSucessMessage,
   }
 }

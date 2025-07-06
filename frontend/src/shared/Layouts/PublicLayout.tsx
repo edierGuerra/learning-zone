@@ -10,7 +10,6 @@ export default function PublicLayout() {
     <div className="public-layout">
       <Header isPublic ={true}/>
        <Outlet/>
-      <SplashCursor/>
       <Footer/>
 
     </div>

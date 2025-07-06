@@ -29,6 +29,15 @@ export const authStorage = {
   getToken: (): string | null => localStorage.getItem("token"),
 
   removeToken: () => localStorage.removeItem("token"),
+  
+  // Token de request email
+  setRequestEmailToken: (token: TStudentProfileToken['token']) =>
+    localStorage.setItem("RequestEmailToken", token),
+
+  getRequestEmailToken: (): string | null => localStorage.getItem("RequestEmailToken"),
+
+  removeRequestEmailToken: () => localStorage.removeItem("RequestEmailToken"),
+
 
   // Email
   setEmail: (email: TStudentProfile["email"]) =>

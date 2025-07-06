@@ -11,26 +11,55 @@ import ViewNotifications from "./AuthNavbar/ViewNotifications";
 import './styles/AuthNavbar.css'
 import { useUser } from "../../modules/auth/Hooks/useAuth";
 export default function AuthNavbar() {
-  const handleBtnNavigate = useNavigationHandler()
+  const handleBtnNavigate = useNavigationHandler();
   const [viewCategories, setViewCategories] = useState(false);
   const [viewNotifications, setViewNotifications] = useState(false);
-
-  const {logout} = useUser()
-
+  const {logout} = useUser();
 
   return (
     <div className="auth-navbar">
         <ul className="opc-auth-navbar">
           {/* Categorias (word, powerPoint, Excel) */}
-          <button className="icon-auth-navBar icon-home" onClick={()=>handleBtnNavigate('/home')}><AiFillHome/></button>
+          <button className="icon-auth-navBar icon-home" onClick={()=>{
+            handleBtnNavigate('/home')
+            setViewNotifications(false);
+            setViewCategories(false);
+
+          }}><AiFillHome/></button>
           {/* Categorias (word, powerPoint, Excel) */}
-          <button className="icon-auth-navBar icon-categories" onClick={()=>  setViewCategories(!viewCategories)}><IoBook/></button>
+          <button className="icon-auth-navBar icon-categories" onClick={()=>  {
+            setViewCategories(!viewCategories)
+          if(viewNotifications){
+            setViewNotifications(!viewNotifications)
+          }}
+            
+            }><IoBook/></button>
           {/* Ayuda */}
-          <button className="icon-auth-navBar icon-help" onClick={()=> handleBtnNavigate('/help')}><BiSolidHelpCircle/></button>
+          <button className="icon-auth-navBar icon-help" onClick={()=>{ 
+            
+            handleBtnNavigate('/help')
+            setViewNotifications(false);
+            setViewCategories(false);
+
+          }}><BiSolidHelpCircle/></button>
           {/* Bandeja de entrada de notificaciones */}
-          <button className="icon-auth-navBar icon-notifications" onClick={()=> setViewNotifications(!viewNotifications)}><IoMdNotifications/></button>
+          <button className="icon-auth-navBar icon-notifications" onClick={()=> 
+          {setViewNotifications(!viewNotifications)
+            if(viewCategories){
+              setViewCategories(!viewCategories)
+            } 
+          }
+
+
+          }><IoMdNotifications/></button>
           {/* Btn user Page */}
-          <button className="icon-auth-navBar icon-prefix" onClick={()=>handleBtnNavigate('/userPage')}><IconPrefixProfile /></button>
+          <button className="icon-auth-navBar icon-prefix" onClick={()=>{
+            handleBtnNavigate('/userPage')
+            setViewNotifications(false);
+            setViewCategories(false);
+
+
+          }}><IconPrefixProfile /></button>
           {/* Btn salir */}
           <button className="icon-auth-navBar icon-exit" onClick={()=>logout()}><IoLogOutOutline /></button>
         </ul>

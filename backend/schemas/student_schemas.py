@@ -96,11 +96,3 @@ class ResetPassword(BaseModel):
     new_password: str = Field(
         ..., title="Nueva contraseña", description="Nueva contraseña del estudianten"
     )
-
-
-class TokenPassword(BaseModel):
-    token: str = Field(
-        ...,
-        title="Token de recuperación de contraseña",
-        description="Token para validar al estudiante que desea cambiar la contraseña",
-    )

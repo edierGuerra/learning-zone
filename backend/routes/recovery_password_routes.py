@@ -1,6 +1,6 @@
 # router.recovery_password_router.py
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from fastapi.responses import JSONResponse
 from services.utils.email_validator import EmailValidator
 from schemas.student_schemas import Email, ResetPassword
@@ -102,7 +102,7 @@ async def reset_password_confirm(
 
 @router.get("/validate-token-password")
 async def validate_token_password(
-    token: str, services: StudentService = Depends(get_student_services)
+    token: str = Header(), services: StudentService = Depends(get_student_services)
 ):
     """
     ## Validar token de recuperación de contraseña.

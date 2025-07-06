@@ -1,4 +1,4 @@
-// Conexion al backend y envio de el numero de identificacion
+/* Servicio que envia el numero de identificación al backend */
 import type { TStudent } from "../../types/User";
 import axios from "../../../api/axiosInstance";
 type VerifyResponse = {

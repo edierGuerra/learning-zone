@@ -1,5 +1,4 @@
-/* const API_URL = import.meta.url.VITE_API_URL;
-const LOGIN_ENDPOINT = import.meta.env.VITE_AUTH_ENDPOINT; */
+/* Servicio que envia los datos del formulario del login al backend  */
 
 import axios from "../../../api/axiosInstance";
 

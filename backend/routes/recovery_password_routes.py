@@ -9,12 +9,12 @@ from dependencies.student_dependencie import get_student_services
 
 router = APIRouter(prefix="/api/v1/student/password", tags=["Password"])
 
-
 @router.post("/forgot")
 async def forgot_password(
     email_student: Email,
     services: StudentService = Depends(get_student_services),
-):
+    ):
+    
     """
     ## Recuperar contraseña (solicitud de restablecimiento)
 
@@ -50,15 +50,18 @@ async def forgot_password(
     ### Nota:
     Esta ruta **no envía directamente** el enlace de restablecimiento, sino que delega esta tarea al servicio `recovery_password`.
     """
-    is_valid, msg = EmailValidator.validate_email(email_student)
+    is_valid, msg = EmailValidator.validate_email(email_student.email)
     if not is_valid:
         raise HTTPException(status_code=400, detail=msg)
-    student = await services.recovery_password(email=email_student)
+
+    student = await services.recovery_password(email=email_student.email)
+
     if student:
         return JSONResponse(
             status_code=200,
             content={
-                "message": "Si tu correo esta registrado, recibiras un enlace para restablecer tu contraseña"
+                "message": "Si tu correo esta registrado, recibiras un enlace para restablecer tu contraseña",
+                "email": email_student.email
             },
         )
 
@@ -119,10 +122,7 @@ async def validate_token_password(
     """
     student = await services.validate_password_token(password_token=token)
     if student is not None:
-        return JSONResponse(
-            status_code=200,
-            content={"message": "El token ha sido validado correctamente."},
-        )
+        return {"password_token": student.password_token} 
     if student is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

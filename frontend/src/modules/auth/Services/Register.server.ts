@@ -1,3 +1,4 @@
+/* Servicio que envia los datos del register al backend  */
 import axios from "../../../api/axiosInstance";
 import type { TStudent } from "../../types/User";
 

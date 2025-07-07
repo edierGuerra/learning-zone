@@ -184,3 +184,8 @@ class StudentService:
         )
         print(student)
         return student
+
+    async def delete_notifications(self, id_student: int, id_notification: int = None):
+        return await self.repository.delete_notifications(
+            id_student=id_student, id_notification=id_notification
+        )

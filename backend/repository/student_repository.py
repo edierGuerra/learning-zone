@@ -306,3 +306,27 @@ class StudentRepository:
             )
             await self.db.rollback()
             return None
+
+    async def delete_notifications(self, id_student: int, id_notification: int = None):
+        try:
+            query = await self.db.execute(
+                select(Student).where(Student.id == id_student)
+            )
+            student = query.scalar_one_or_none()
+            if student:
+                if id_notification is not None:
+                    for notification in student.notifications:
+                        if notification.id == id_notification:
+                            student.notifications.remove(notification)
+                elif id_notification is None:
+                    student.notifications.clear()
+                await self.db.commit()
+                await self.db.refresh(student)
+                return student
+            if student is None:
+                logger.info("⚠️ No se ha podido encontrar con el estudiante ⚠️")
+                await self.db.rollback()
+        except Exception as e:
+            logger.error("⛔ Error al intentar registrar el estudiante ⛔", exc_info=e)
+            await self.db.rollback()
+            return None

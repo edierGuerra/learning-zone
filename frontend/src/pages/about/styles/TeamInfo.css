@@ -119,3 +119,18 @@
 .info-toggle-button.rotated .icon {
   transform: rotate(180deg);
 }
+
+
+.btn-back {
+  position: absolute;
+  top: 22px;
+  left: 270px;
+  cursor: pointer;
+  z-index: 10; 
+  transition: z-index 0.3s ease;
+}
+
+/* Si el panel izquierdo está abierto, envía el botón atrás */
+.left-panel-open .btn-back {
+  z-index: 0;
+}

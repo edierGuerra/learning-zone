@@ -22,11 +22,16 @@ export const useNavigationHandler = () => {
 
   const handleBtnNavigate = (route: AppRoutes) => {
     if (route === "/back") {
-      navigate(-1);
+      if (window.history.length > 2) {
+        navigate(-1); // Ir una página atrás
+      } else {
+        navigate("/", { replace: true }); 
+      }
     } else {
-      navigate(route, { replace: true }); // ✅ ESTE ES EL CAMBIO CLAVE
+      navigate(route); 
     }
   };
 
   return handleBtnNavigate;
 };
+

@@ -30,31 +30,30 @@
 .panel-content.right h2 {
   font-size: 36px;
   font-weight: bold;
-  margin-bottom: 1rem;
   color: #4dd0e1;
 }
 
 .panel-content.right p {
-  font-size: 22px;
+  font-size: 15px;
   line-height: 1.6;
   color: #dddddd;
-  margin-bottom: 10rem;
+  margin-bottom: 5rem;
 
 }
 
 .panel-content.right h3 {
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 600;
   color: #4dd0e1;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+
+
 }
 
 .panel-content.right ul {
   list-style: none;
-  padding-left: 0;
+
   font-size: 20px;
-  line-height: 1.6;
+
   color: #dddddd;
 }
 

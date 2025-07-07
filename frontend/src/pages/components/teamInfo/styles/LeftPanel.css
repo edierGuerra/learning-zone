@@ -42,14 +42,14 @@
 }
 
 .panel-description {
-  font-size: 22px;
+  font-size: 15px;
   line-height: 1.6;
   color: #dddddd;
-  margin-bottom: 9rem;
+  margin-bottom: 1rem;
 }
 
 .panel-section h3 {
-  font-size: 29px;
+  font-size: 25px;
   font-weight: 600;
   color: #4dd0e1;
   margin-bottom: 0.5rem;
@@ -58,7 +58,7 @@
 .panel-list {
   list-style: none;
   padding-left: 0;
-  font-size: 25px;
+  font-size: 18px;
   line-height: 1.6;
   color: #dddddd;
 }

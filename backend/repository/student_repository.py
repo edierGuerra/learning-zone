@@ -83,7 +83,7 @@ class StudentRepository:
             await self.db.rollback()
             return None
 
-    async def verify_email_token(self, token: str) -> bool:
+    async def verify_email_token(self, id_student: int, token: str) -> bool:
         """
         Verifica el token del correo y activa la cuenta del estudiante.
 
@@ -100,14 +100,18 @@ class StudentRepository:
             student = result.scalar_one_or_none()
 
             if not student:
-                logger.warning("Token de verificación inválido: %s", token)
+                logger.warning("⚠️Token de verificación inválido: %s⚠️", token)
                 return False
 
-            student.is_verified = True
-            student.email_token = None  # Evita que se reutilice el token
+            if id_student == student.id:
+                student.is_verified = True
+                student.email_token = None  # Evita que se reutilice el token
 
-            await self.db.commit()
-            return True
+                await self.db.commit()
+                return True
+            elif id_student != student.id:
+                logger.warning("⚠️Error al validar el id del estudiante⚠️")
+                return False
 
         except Exception as e:
             logger.error("Error al verificar token de correo", exc_info=e)

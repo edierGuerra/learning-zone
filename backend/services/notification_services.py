@@ -7,7 +7,7 @@ from fastapi import HTTPException, status
 # Modulos internos
 from repository.notification_repository import NotificationRepository
 from schemas.notification_schemas import NotificationCreate
-from utils.email_sender import send_notification_email
+from .utils.email_sender import send_notification_email
 
 logger = logging.getLogger(__name__)
 

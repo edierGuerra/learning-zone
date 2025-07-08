@@ -16,14 +16,15 @@ class NotificationService:
     def __init__(self, notification_repo: NotificationRepository):
         self.notification_repo = notification_repo
 
-    async def send_email_to_students(self, tittle_email: str, message_email: str):
+    async def send_email_to_students(self, title_email: str, message_email: str):
         students = await self.notification_repo.get_all_students()
+
         for student in students:
             send_notification_email(
                 to_email=student.email,
                 student_name=student.names,
                 notification_message=message_email,
-                notification_title=tittle_email,
+                notification_title=title_email,
             )
 
     async def create_and_distribuite_notification_to_all(
@@ -49,7 +50,7 @@ class NotificationService:
 
                 # Enviar notificación por correo electrónico a cada estudiante
                 await self.send_email_to_students(
-                    tittle_email=notification_data.title,
+                    title_email=notification_data.title,
                     message_email=notification_data.message,
                 )
             else:

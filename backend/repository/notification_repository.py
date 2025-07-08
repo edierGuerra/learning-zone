@@ -109,5 +109,11 @@ class NotificationRepository:
             raise  # Relanza la excepcion para que el servicio la maneje
 
     async def get_all_students(self) -> Tuple[Student]:
+        """
+        Permite tomar todos los estudiantes para mandarles notificaciones.
+        """
+        result = await self.db.execute(select(Student))
 
-        return await self.db.execute(select(Student))
+        students = result.scalars().all()
+
+        return tuple(students)

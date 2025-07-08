@@ -6,7 +6,7 @@ Este modulo contiene todas las operaciones que se le pueden atribuir las notific
 """
 
 import logging
-from typing import List
+from typing import List, Tuple
 from datetime import datetime
 
 # Modulos externos
@@ -107,3 +107,7 @@ class NotificationRepository:
                 exc_info=e,
             )
             raise  # Relanza la excepcion para que el servicio la maneje
+
+    async def get_all_students(self) -> Tuple[Student]:
+
+        return await self.db.execute(select(Student))

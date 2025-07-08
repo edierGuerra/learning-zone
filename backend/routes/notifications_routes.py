@@ -5,17 +5,35 @@ Incluye funcionalidades para obtener y eliminar notificaciones individuales o to
 """
 
 # Módulos internos
+from repository.notification_repository import NotificationRepository
+from schemas.notification_schemas import NotificationCreate
+from services.notification_services import NotificationService
 from core.security import get_current_student
 from models.student_model import Student
 from services.student_services import StudentService
 from dependencies.student_dependencie import get_student_services
 
 # Módulos externos
+from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 
+# Importa tu configuración de base de datos para la dependencia de sesión
+from database.config_db import get_session
+
+
 # Creación del router con prefijo y tag correspondiente
 router = APIRouter(prefix="/api/v1/student/notifications", tags=["Notifications"])
+
+
+# --- Dependencia para obtener el servicio de notificaciones ---
+async def get_notification_services(
+    db: AsyncSession = Depends(get_session),
+) -> NotificationService:
+    """Proporciona una instancia de NotificationService."""
+    # El NotificationService ahora solo necesita el NotificationRepository
+    notification_repo = NotificationRepository(db)
+    return NotificationService(notification_repo)
 
 
 @router.get("/")
@@ -94,3 +112,39 @@ async def delete_notifications(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Ha ocurrido un error en el servidor",
         )
+
+
+@router.post("/")
+async def create_notifications(
+    notification_data: NotificationCreate,
+    services: NotificationService = Depends(get_notification_services),
+) -> JSONResponse:
+    # Aquí deberías añadir una dependencia de seguridad para administradores, ej:
+    # current_admin: AdminUser = Depends(get_current_admin_user)
+    """
+    ## Crear y distribuir nueva  otificación a todos los estudiantes
+
+    Permite crear una nueva notificación y la asocia directamente a todos los estudiantes
+    registrados en la plataforma.
+
+    ### Parámetros:
+    - **notification_data** (`NotificationCreate`): Objeto Pydantic con el título y mensaje de la notificación.
+
+    ### Respuesta:
+    - **200 OK**: Notificación creada y distribuida exitosamente a todos los estudiantes.
+        ```json
+        {
+          "message": "Notificación creada y distribuida a todos los estudiantes.",
+          "notification_id": 123
+        }
+        ```
+    - **500 Internal Server Error**: Si ocurre un error inesperado al crear o distribuir la notificación.
+
+    ### Seguridad:
+    - **IMPORTANTE**: Esta ruta debería estar protegida para que solo administradores o usuarios autorizados puedan usarla.
+      Añade una dependencia de autenticación/autorización aquí (ej. `Depends(get_current_admin_user)`).
+    """
+    response = await services.create_and_distribuite_notification_to_all(
+        notification_data
+    )
+    return JSONResponse(content=response, status_code=status.HTTP_200_OK)

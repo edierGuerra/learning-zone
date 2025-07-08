@@ -199,5 +199,5 @@ async def login_student(
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error desconosido",
+            detail="Error desconocido",
         )

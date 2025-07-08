@@ -26,7 +26,7 @@ router = APIRouter(prefix="/api/v1/student/password", tags=["Password"])
 async def forgot_password(
     email_student: Email,
     services: StudentService = Depends(get_student_services),
-):
+) -> JSONResponse:
     """
     ## Recuperar contraseña (solicitud de restablecimiento)
 
@@ -82,7 +82,7 @@ async def forgot_password(
 async def reset_password_confirm(
     data: ResetPassword,
     services: StudentService = Depends(get_student_services),
-):
+) -> JSONResponse:
     """
     ## Restablecer Contraseña (Confirmación)
 
@@ -112,7 +112,9 @@ async def reset_password_confirm(
     response = await services.reset_student_password(data.token, data.new_password)
 
     # si el servicio no lanzo una excepcion, significa que fue exitoso
-    return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+    return JSONResponse(
+        content=response, status_code=status.HTTP_200_OK
+    )  # retorna el dict con el mensaje de exito en restablecer la contraseña y un 200
 
 
 @router.get("/validate-token-password")

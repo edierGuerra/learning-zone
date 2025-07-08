@@ -8,10 +8,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from services.student_services import StudentService
 from schemas.student_schemas import StudentRegister
 from models.student_model import Student
-from backend.services.utils.email_sender import send_verification_email
-from backend.services.utils.email_validator import EmailValidator
-from backend.services.utils.token_generator import generate_verification_token
-from backend.services.identification_service import IdentificationService
+from services.utils.email_sender import send_verification_email
+from services.utils.email_validator import EmailValidator
+from services.utils.token_generator import generate_verification_token
+from services.identification_services import IdentificationService
 from schemas.validation_schemas import RegistrationResponse
 
 # --------------------- MOCKS Y FIXTURES ---------------------

@@ -1,5 +1,17 @@
 # router.recovery_password_router.py
 
+"""
+Este módulo contiene las rutas relacionadas con la recuperación y restablecimiento de contraseñas de estudiantes.
+
+Incluye:
+- Solicitud de restablecimiento de contraseña (envío de enlace al correo si el correo es válido).
+- Confirmación del restablecimiento (establecer nueva contraseña con un token).
+- Validación del token de recuperación de contraseña.
+
+Estas rutas están pensadas para ser utilizadas sin que el usuario esté autenticado, y están protegidas con respuestas genéricas
+para evitar revelar si un correo está registrado o no, siguiendo buenas prácticas de seguridad.
+"""
+
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from fastapi.responses import JSONResponse
 from services.utils.email_validator import EmailValidator
@@ -9,12 +21,12 @@ from dependencies.student_dependencie import get_student_services
 
 router = APIRouter(prefix="/api/v1/student/password", tags=["Password"])
 
+
 @router.post("/forgot")
 async def forgot_password(
     email_student: Email,
     services: StudentService = Depends(get_student_services),
-    ):
-    
+) -> JSONResponse:
     """
     ## Recuperar contraseña (solicitud de restablecimiento)
 
@@ -61,7 +73,7 @@ async def forgot_password(
             status_code=200,
             content={
                 "message": "Si tu correo esta registrado, recibiras un enlace para restablecer tu contraseña",
-                "email": email_student.email
+                "email": email_student.email,
             },
         )
 
@@ -70,7 +82,7 @@ async def forgot_password(
 async def reset_password_confirm(
     data: ResetPassword,
     services: StudentService = Depends(get_student_services),
-):
+) -> JSONResponse:
     """
     ## Restablecer Contraseña (Confirmación)
 
@@ -100,7 +112,9 @@ async def reset_password_confirm(
     response = await services.reset_student_password(data.token, data.new_password)
 
     # si el servicio no lanzo una excepcion, significa que fue exitoso
-    return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+    return JSONResponse(
+        content=response, status_code=status.HTTP_200_OK
+    )  # retorna el dict con el mensaje de exito en restablecer la contraseña y un 200
 
 
 @router.get("/validate-token-password")
@@ -122,7 +136,7 @@ async def validate_token_password(
     """
     student = await services.validate_password_token(password_token=token)
     if student is not None:
-        return {"password_token": student.password_token} 
+        return {"password_token": student.password_token}
     if student is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

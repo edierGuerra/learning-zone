@@ -46,7 +46,9 @@ async def create_student(
     student = await services.register_student(student_data)
     if not student:
         raise HTTPException(status_code=500, detail="Error al registrar el usuario")
-    return JSONResponse(content={"email": student.email, 'id':student.id}, status_code=201)
+    return JSONResponse(
+        content={"email": student.email, "id": student.id}, status_code=201
+    )
 
 
 @router.get("/verify_email")
@@ -69,7 +71,7 @@ async def verify_email_token(
     - `200 OK` con un token de acceso y los datos básicos del estudiante si todo es válido.
     - Otro código de estado si ocurre algún fallo en la verificación o búsqueda del usuario.
     """
-    token_valid = await service.verify_email(token=email_token)
+    token_valid = await service.verify_email(id_student=id_student, token=email_token)
     if token_valid:
         student = await service.get_student_by_id(id_student)
         if student:
@@ -109,7 +111,7 @@ async def get_student(student: Student = Depends(get_current_student)):
                     "names": student.names,
                     "last_names": student.last_names,
                     "email": student.email,
-                    },
+                },
                 "prefix_profile": generate_profile_prefix(
                     name=student.names, last_name=student.last_names
                 ),
@@ -197,5 +199,5 @@ async def login_student(
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error desconosido",
+            detail="Error desconocido",
         )

@@ -51,7 +51,7 @@ class StudentService:
             )
         return new_student
 
-    async def verify_email(self, token: str) -> dict:
+    async def verify_email(self, id_student: int, token: str) -> dict:
         """
         Verifica el correo del estudiante usando un token único.
 
@@ -61,7 +61,9 @@ class StudentService:
         Returns:
             dict: Mensaje de éxito o error.
         """
-        verified = await self.repository.verify_email_token(token)
+        verified = await self.repository.verify_email_token(
+            id_student=id_student, token=token
+        )
         if not verified:
             raise HTTPException(status_code=400, detail="Token inválido o expirado")
 
@@ -184,3 +186,8 @@ class StudentService:
         )
         print(student)
         return student
+
+    async def delete_notifications(self, id_student: int, id_notification: int = None):
+        return await self.repository.delete_notifications(
+            id_student=id_student, id_notification=id_notification
+        )

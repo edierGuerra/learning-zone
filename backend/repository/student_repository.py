@@ -83,7 +83,7 @@ class StudentRepository:
             await self.db.rollback()
             return None
 
-    async def verify_email_token(self, token: str) -> bool:
+    async def verify_email_token(self, id_student: int, token: str) -> bool:
         """
         Verifica el token del correo y activa la cuenta del estudiante.
 
@@ -100,14 +100,18 @@ class StudentRepository:
             student = result.scalar_one_or_none()
 
             if not student:
-                logger.warning("Token de verificación inválido: %s", token)
+                logger.warning("⚠️Token de verificación inválido: %s⚠️", token)
                 return False
 
-            student.is_verified = True
-            student.email_token = None  # Evita que se reutilice el token
+            if id_student == student.id:
+                student.is_verified = True
+                student.email_token = None  # Evita que se reutilice el token
 
-            await self.db.commit()
-            return True
+                await self.db.commit()
+                return True
+            elif id_student != student.id:
+                logger.warning("⚠️Error al validar el id del estudiante⚠️")
+                return False
 
         except Exception as e:
             logger.error("Error al verificar token de correo", exc_info=e)
@@ -304,5 +308,29 @@ class StudentRepository:
                 student_id,
                 exc_info=e,
             )
+            await self.db.rollback()
+            return None
+
+    async def delete_notifications(self, id_student: int, id_notification: int = None):
+        try:
+            query = await self.db.execute(
+                select(Student).where(Student.id == id_student)
+            )
+            student = query.scalar_one_or_none()
+            if student:
+                if id_notification is not None:
+                    for notification in student.notifications:
+                        if notification.id == id_notification:
+                            student.notifications.remove(notification)
+                elif id_notification is None:
+                    student.notifications.clear()
+                await self.db.commit()
+                await self.db.refresh(student)
+                return student
+            if student is None:
+                logger.info("⚠️ No se ha podido encontrar con el estudiante ⚠️")
+                await self.db.rollback()
+        except Exception as e:
+            logger.error("⛔ Error al intentar registrar el estudiante ⛔", exc_info=e)
             await self.db.rollback()
             return None

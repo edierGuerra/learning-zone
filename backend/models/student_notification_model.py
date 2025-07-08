@@ -15,7 +15,7 @@ student_notification = Table(
     "student_notifications",
     Base.metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("student_id", Integer, ForeignKey("notifications.id"), nullable=False),
-    Column("notification_id", Integer, ForeignKey("students.id"), nullable=False),
-    Column("is_read", Boolean, nullable=False),
+    Column("student_id", Integer, ForeignKey("students.id"), nullable=False),
+    Column("notification_id", Integer, ForeignKey("notifications.id"), nullable=False),
+    Column("is_read", Boolean, default=False, nullable=False),
 )

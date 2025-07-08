@@ -30,6 +30,9 @@ class Settings(BaseSettings):  # clase de configuracion heredando BaseSettings
     sendgrid_api_key: str = Field(..., env="SENDGRID_API_KEY")
     sendgrid_template_register_id: str = Field(..., env="SENDGRID_TEMPLATE_REGISTER_ID")
     sendgrid_template_password_id: str = Field(..., env="SENDGRID_TEMPLATE_PASSWORD_ID")
+    sendgrid_template_notification_id: str = Field(
+        ..., env="SENDGRID_TEMPLATE_NOTIFICATION_ID"
+    )
 
     # Token
     token_key: str = Field(..., env="TOKEN_KEY")  # variable añadida para el token key

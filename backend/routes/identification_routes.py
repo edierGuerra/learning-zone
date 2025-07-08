@@ -8,7 +8,7 @@ de códigos de identificación para el proceso de validacion de usuarios.
 from database.config_db import get_session
 from fastapi import APIRouter, Depends, status
 from schemas.validation_schemas import IdentificationCodeCheck, RegistrationResponse
-from services.identification_service import IdentificationService
+from services.identification_services import IdentificationService
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Crear el router específico para esta sección del sistema

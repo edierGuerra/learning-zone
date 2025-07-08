@@ -20,9 +20,7 @@ export default function Home() {
 
         <CardCourse name='powerpoint' description='Curso basico de Power Point 
         para crear presentaciones.' image={powerpoint}/>
-       
       </div>
-
     </div>
   )
 }

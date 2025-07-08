@@ -25,7 +25,7 @@ export default function FloatingArrow({
         left,
         right,
         transform: `rotate(${rotation})`,
-        fontSize: "8rem",
+        fontSize: "4.4rem",
         color: "",
         zIndex,
         pointerEvents: "none",

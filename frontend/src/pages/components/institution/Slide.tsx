@@ -35,7 +35,7 @@ export default function InstitutionSlide({ index, setIndex }: SlideProps) {
     },
     {
       title: "",
-      text: "Lormnis maxime nam amet qui odit sint adipisci consequuntur dolorum quo, sunt soluta excepturi doloribus deleniti, natus distinctio!",
+      text: "La I.E.R. Juan Tamayo es una institución pública de Ciudad Bolívar (Antioquia) que ofrece educación desde preescolar hasta media académica, con programas para jóvenes en extraedad y adultos. Tiene un enfoque técnico–agrícola articulado con el SENA y atiende a más de 450 estudiantes en varias sedes rurales. Su rector es Yonny Cetre Rodríguez.",
       images: [img2, img4, img1, img3],
     },
 

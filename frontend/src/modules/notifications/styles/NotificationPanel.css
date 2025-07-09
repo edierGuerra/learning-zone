@@ -1,0 +1,45 @@
+.container-panel-notifications{
+    right: 260px;
+    top: 150px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color:var( --color-text-light) ;
+    padding: 4rem;
+    border-radius: 20px;
+    max-height: 70dvh;
+    overflow-y: auto;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--color-primary-blue) var(--color-neutral-light-gray);
+}
+.title-container-notifications{
+    
+}
+/* Establece el ancho de la barra de desplazamiento vertical */
+.container-panel-notifications::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Estilo del fondo (track) de la barra de desplazamiento */
+.container-panel-notifications::-webkit-scrollbar-track {
+  background: var(--color-neutral-light-gray); /* Fondo gris claro */
+  border-radius: 10px; /* Bordes redondeados para un diseño más suave */
+}
+
+/* Estilo del "thumb" (la parte que se mueve al hacer scroll) */
+.container-panel-notifications::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-blue); /* Color del pulgar */
+  border-radius: 10px; /* Bordes redondeados para coherencia visual */
+  border: 2px solid var(--color-neutral-light-gray); /* Borde para separarlo visualmente del track */
+}
+.btn-delete-all{
+    background-color: var(--color-vibrant-red-orange);
+    color: var(--color-text-light);
+    padding: .4rem;
+    z-index: 100;
+    margin-top: -
+    30px;
+    border-radius: 12px;
+
+}

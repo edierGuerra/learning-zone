@@ -1,0 +1,85 @@
+.container-notification {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: .6rem auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.container-notification:hover {
+  transform: translateY(-4px);
+}
+
+/* Encabezado con título y fecha */
+.header-notification {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+  gap: 16px;
+}
+
+.title-notification {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+}
+
+.date-notification {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Cuerpo con mensaje e ícono */
+.body-notification {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.message-notification {
+  flex: 1;
+  max-width: 200px;
+  font-size: 0.95rem;
+  color: #444;
+  margin-right: 10px;
+  line-height: 1.4;
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 3px;
+  word-wrap: break-word; /* 🔸 Evita que textos largos desborden */
+
+}
+
+/* Botón de eliminación */
+.btn-delete-notification {
+  background-color: transparent;
+  border: none;
+  font-size: 1.6rem;
+  color: #e74c3c;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-delete-notification:hover {
+  transform: scale(1.2);
+  color: #c0392b;
+}
+
+
+.btn-toggle-message{
+  
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  margin-top: 4px;
+  align-self: flex-start;
+
+}

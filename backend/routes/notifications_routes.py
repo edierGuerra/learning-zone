@@ -104,7 +104,7 @@ async def delete_notifications(
     )
     if student:
         return JSONResponse(
-            status_code=status.HTTP_204_NO_CONTENT,
+            status_code=status.HTTP_200_OK,
             content={"message": "Se han eliminado las notificaciones correctamente"},
         )
     elif student is None:

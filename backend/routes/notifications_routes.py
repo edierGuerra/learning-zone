@@ -37,7 +37,10 @@ async def get_notification_services(
 
 
 @router.get("/")
-async def get_notifications(student: Student = Depends(get_current_student)):
+async def get_notifications(
+    student: Student = Depends(get_current_student),
+    services: StudentService = Depends(get_student_services),
+):
     """
     ## Obtener notificaciones del estudiante
 
@@ -62,7 +65,9 @@ async def get_notifications(student: Student = Depends(get_current_student)):
     ### Seguridad:
     - Requiere autenticación mediante token.
     """
-    return await student.notifications
+    data_student = await services.get_student_by_id(student.id)
+    notifications = data_student.notifications
+    return notifications
 
 
 @router.delete("/")

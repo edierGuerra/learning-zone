@@ -15,6 +15,7 @@ from schemas.student_schemas import StudentRegister
 
 # Modulos externos
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .utils import hash_password, valid_password
@@ -127,8 +128,13 @@ class StudentRepository:
         Returns:
             Optional[Student]: Objeto de tipo usuario o None en caso de error.
         """
-        student_by_id = await self.db.execute(select(Student).where(Student.id == id))
-        student = student_by_id.scalar_one_or_none()
+        stmt = (
+            select(Student)
+            .options(selectinload(Student.notifications))
+            .where(Student.id == id)
+        )
+        result = await self.db.execute(stmt)
+        student = result.scalar_one_or_none()
         return student
 
     async def valid_student(

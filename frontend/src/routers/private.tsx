@@ -1,6 +1,6 @@
 // Componente que agrupa las rutas privadas
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AuthLayout from "../shared/Layouts/AuthLayout";
 import Home from "../modules/dashboard/pages/Home";
 
@@ -11,6 +11,7 @@ import { sharedRoutes } from "./SharedRouters";
 import WordHomePage from "../modules/courses/word/pages/WordHomePage";
 import ExcelHomePage from "../modules/courses/excel/pages/ExcelHomePage";
 import PowerPointHomePage from "../modules/courses/powerpoint/pages/PowerPointHomePage";
+import LandingPage from "../pages/LandingPage";
 
 
 export default function RoutersPrivates() {
@@ -27,7 +28,7 @@ export default function RoutersPrivates() {
                   <Route path="/powerPoint" element={<PowerPointHomePage/>}/>
                   {sharedRoutes}
                   {/*Redirigir / a /home si está logueado */}
-                  <Route path="/" element={<Navigate to="/home" replace />} />
+                  <Route path="/" element={ <LandingPage/>} />
 
               </Route>
             </Route>

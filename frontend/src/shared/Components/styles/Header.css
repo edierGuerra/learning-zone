@@ -1,9 +1,11 @@
 .header{
     display: flex;
     justify-content: space-between;
-    padding: 10px 30px;
+    padding: 20px 30px;
     align-items: center;
-    box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.933);
+    box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.933);
+    z-index: 10;
+
 }
 
 .icon-lz{
@@ -11,15 +13,49 @@
     height: auto;
     border-radius: 50%;
 }
-
-.name-app{
-
+.name-app {
+    position: relative;
     margin-left: 160px;
-    color: rgb(34, 37, 43);
+    font-size: 48px;
+    font-weight: 700;
+    padding: 6px 20px;
     letter-spacing: 1.2px;
-    font-size: 44px;
-
+    color: transparent;
+    background-image: linear-gradient(
+        920deg,
+        var(--color-vibrant-red-orange),
+        var(--color-accent-orange)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    display: inline-block;
+    line-height: 1.2;
+    border-radius: 30px;
+    text-shadow: -6px 2px 0px rgba(255, 178, 78, 0.529);
+    border-top: 4px solid  rgba(165, 61, 51, 0.386);        
+    border-left: 4px solid   rgba(250, 203, 149, 0.477) ;        
 }
-.name-app span{
-    color: rgb(159, 157, 152);
+
+.word-zone {
+    text-shadow: none;
+    position: absolute;
+    top: 36px;
+    left: 210px;
+    font-size: 42px;
+    font-weight: 600;
+    padding: 6px 20px;
+    background-image: linear-gradient(
+        620deg,
+        var(--color-primary-blue),
+        var(--color-accent-blue-light)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    text-shadow: -6px 2px 0px rgba(104, 167, 226, 0.4);
+    transform: rotate(-1deg);
+    z-index: -1500;
+    border-radius: 30px;
+
+    border-bottom: 4px solid rgba(66, 123, 255, 0.45);     /* azul medio semitransparente */
+    border-right: 4px solid rgba(137, 207, 240, 0.45);     /* azul claro */
 }

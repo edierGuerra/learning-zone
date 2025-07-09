@@ -4,6 +4,8 @@
     flex-direction: column;
     align-items: center;
     padding: 60px 20px;
+    width: 100%;
+
 }
 .section-features-title{
     display: flex;

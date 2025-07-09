@@ -3,8 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import type { TStudent, TStudentProfile } from '../../types/User';
 import { authStorage } from '../../../shared/Utils/authStorage';
+import UpdateStudentAPI from '../UpdateStudent.server';
+import { GetStudentAPI } from '../../auth/Services/GetInformationStudent.server';
+import { useUser } from '../../auth/Hooks/useAuth';
 
 export default function useFormUpdate() {
+  const {setStudent}= useUser()
   // --- Tipos usados para validación ---
   type UpdateForm = {
     numIdentification: TStudent['numIdentification'];
@@ -68,8 +72,17 @@ export default function useFormUpdate() {
   const [errors, setErrors] = useState<FormErrors>({}); // Almacena errores del formulario
 
   // --- Efecto que carga los datos desde el localStorage una vez ---
+  const dataUser: TStudentProfile | null = authStorage.getUser();
+  const infoBackUser= {
+    numIdentification: dataUser?.numIdentification,
+    name: dataUser?.name,
+    lastNames : dataUser?.lastNames,
+    email:dataUser?.email
+
+
+
+  }
   useEffect(() => {
-    const dataUser: TStudentProfile | null = authStorage.getUser();
 
     if (dataUser !== null) {
 
@@ -86,14 +99,14 @@ export default function useFormUpdate() {
   const handleSubmitUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData: UpdateForm = {
+    const student: UpdateForm = {
       numIdentification: newNIdentification!,
       name: newName,
       lastNames: newLastNames,
       email: newEmail,
     };
 
-    const validationErrors = validateForm(formData);
+    const validationErrors = validateForm(student);
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors); // Si hay errores → los muestra
@@ -102,15 +115,37 @@ export default function useFormUpdate() {
 
     // Aquí iría la lógica para enviar los datos a la API
     // Aqui se valida que si halla cambiado algo
-    if(formData === formData){
-        alert('Parece que no has actualizado nada')
-        return
-    }
-    else{
-        //Envio de datos al backend
-    }
 
-    alert('Formulario actualizado correctamente');
+    if (JSON.stringify(student) === JSON.stringify(infoBackUser)) {
+        alert('Parece que no has actualizado nada');
+        return;
+    }
+    try{
+      const response = await UpdateStudentAPI({student});
+      if(response.statusCode ===200){
+        const updateStudent = await GetStudentAPI()
+        const dataStudentLocalStorage:TStudentProfile ={
+          id:updateStudent.user_data.id,
+          numIdentification:updateStudent.user_data.identification_number,
+          name:updateStudent.user_data.names,
+          lastNames:updateStudent.user_data.last_names,
+          email: updateStudent.user_data.email,
+          prefixProfile: updateStudent.prefix_profile
+        }
+        setStudent(dataStudentLocalStorage)
+        authStorage.setStudent(dataStudentLocalStorage)
+
+      }else{
+        alert(response.message)
+      }
+
+
+    }catch{
+      alert("Hubo un error al procesar la solicitud. Inténtalo más tarde.");
+
+    }
+      
+
   };
 
   return {

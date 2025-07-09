@@ -35,7 +35,7 @@ export const AboutUs = () => {
   return (
     <div className={`about-us-container ${leftPanel ? "left-panel-open" : ""}`}>
       {/* Botón de retroceso */}
-      <button className="btn-back" onClick={() => handleBtnNavigate('/back')}>
+      <button className="btn-back-team" onClick={() => handleBtnNavigate('/back')}>
         <IoArrowBackCircleSharp />
       </button>
 

@@ -13,3 +13,7 @@ Explosion confeti --> npm install react-confetti-explosion
 npm install react-icons --save ---> react icons
 
 npm install three @react-three/fiber @react-three/drei
+
+$ npm add react-hot-toast
+
+npm i styled-components --> para estilos de loading notifications

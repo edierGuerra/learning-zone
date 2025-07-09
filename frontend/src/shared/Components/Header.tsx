@@ -15,7 +15,7 @@ export default function Header({isPublic}:THeaderProps) {
       <section className="section-name-img">
         <img onClick={()=>handleBtnNavigate('/')} className="icon-lz" src={iconLz} alt="Logo learning Zone" />
       </section>
-      <h1 className="name-app">Learning <span>Zone</span></h1>
+      <h1 className="name-app">Learning <span className="word-zone">Zone</span></h1>
       {/* Condicion si esta autenticado mostrar AuthNavbar o Navbar comun */}
       {isPublic?  <Navbar/>: <AuthNavbar/>}
 

@@ -9,7 +9,8 @@ export default function PublicLayout() {
   return (
     <div className="public-layout">
       <Header isPublic ={true}/>
-       <Outlet/>
+        <Outlet/>
+     {/*  <SplashCursor/> */}
       <Footer/>
 
     </div>

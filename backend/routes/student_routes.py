@@ -46,9 +46,7 @@ async def create_student(
     student = await services.register_student(student_data)
     if not student:
         raise HTTPException(status_code=500, detail="Error al registrar el usuario")
-    return JSONResponse(
-        content={"email": student.email, "id": student.id}, status_code=201
-    )
+    return JSONResponse(content={"email": student.email, 'id':student.id}, status_code=201)
 
 
 @router.get("/verify_email")
@@ -111,7 +109,7 @@ async def get_student(student: Student = Depends(get_current_student)):
                     "names": student.names,
                     "last_names": student.last_names,
                     "email": student.email,
-                },
+                    },
                 "prefix_profile": generate_profile_prefix(
                     name=student.names, last_name=student.last_names
                 ),
@@ -199,5 +197,5 @@ async def login_student(
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error desconocido",
+            detail="Error desconosido",
         )

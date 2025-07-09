@@ -1,43 +1,106 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+
+/* Estilo base para todos los toasts de "Quantum Notification" */
+.quantum-notification-toast {
+  /* Fondo principal: utiliza tu variable de color principal oscura con transparencia */
+  background: rgba(var(--color-primary-dark-bg), 0.85);
+  
+  /* **Efecto de cristal esmerilado (Glassmorphism):** Clave para el toque futurista */
+  backdrop-filter: blur(10px) brightness(1.2); /* Desenfoca más y da un brillo s
+  util */
+  -webkit-backdrop-filter: blur(10px) brightness(1.2); /* Compatibilidad con navegadores WebKit (Safari) */
+
+  /* Borde con un degradado dinámico, creando un efecto de "energía" o "circuito" */
+  border-image: linear-gradient(
+    45deg,
+    var(--color-primary-blue),       /* Azul principal vibrante */
+    var(--color-accent-blue-light),   /* Azul claro para un degradado suave */
+    var(--color-mint-green)           /* Verde menta para un toque de brillo holográfico */
+  ) 1; /* Esto aplica el degradado al borde del elemento */
+  
+  /* Bordes ligeramente redondeados para un aspecto moderno y pulido */
+  border-radius: 8px;
+  
+  /* Sombra compleja para darle profundidad y un "resplandor" característico */
+  box-shadow: 
+    0px 4px 20px rgba(0, 0, 0, 0.5),     /* Sombra principal más oscura y difusa */
+    0px 0px 15px var(--color-primary-blue), /* Resplandor sutil en tono azul principal */
+    0px 0px 8px rgba(var(--color-mint-green), 0.3); /* Un toque de resplandor en verde menta */
+
+  /* Color del texto: asegura alto contraste y legibilidad sobre el fondo oscuro */
+  color: var(--color-text-light-alt); /* Blanco puro */
+  
+  /* Tipografía: limpia, moderna y legible, ideal para un contexto educativo */
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  font-size: 16px;
+  font-weight: 500; /* Peso medio para que el texto resalte */
+  line-height: 1.4; /* Espaciado entre líneas para mejor lectura */
+
+  /* Dimensiones del toast: ajustadas para ser visibles sin ser intrusivas */
+  padding: 14px 22px; /* Espaciado interno generoso */
+  max-width: 420px;   /* Ancho máximo para evitar que se estire demasiado en pantallas grandes */
+  width: auto;        /* Permite que el ancho se ajuste al contenido cuando sea necesario */
+  min-width: 280px;   /* Asegura que no se haga demasiado pequeño en pantallas muy chicas */
+
+  /* Animación de entrada: crea un efecto de "aparición cuántica" */
+  animation: quantumEntry 0.4s ease-out alternate-reverse; /* Rápida y fluida */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Estilos para el contenedor del ícono dentro del toast */
+/* react-hot-toast envuelve el ícono en un div.
+   Puedes apuntar a él de forma más precisa si conoces su clase interna (ej. .go2520661214)
+   o de forma más genérica así: */
+.quantum-notification-toast > div:first-child[style*="min-width: 20px"] {
+  margin-right: 12px; /* Espacio entre el ícono y el texto */
+  display: flex; /* Asegura que el ícono esté bien alineado si es SVG o componente */
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes logo-spin {
+/* --- Estilos específicos para diferentes tipos de notificación --- */
+/* Estas clases se aplicarán junto con 'quantum-notification-toast'
+   para cambiar el color del borde y el brillo según el tipo de mensaje. */
+
+/* Estilo para toasts de éxito */
+.quantum-notification-toast.toast--success {
+  border-image: linear-gradient(45deg, var(--color-main-excel), var(--color-mint-green), var(--color-main-excel)) 1;
+}
+
+/* Estilo para toasts de error */
+.quantum-notification-toast.toast--error {
+  border-image: linear-gradient(45deg, var(--color-action-red), var(--color-vibrant-red-orange), var(--color-action-red)) 1;
+}
+
+/* Estilo para toasts de información (tipo 'blank' o 'custom' en react-hot-toast) */
+.quantum-notification-toast.toast--blank,
+.quantum-notification-toast.toast--custom {
+  border-image: linear-gradient(45deg, var(--color-primary-blue), var(--color-accent-blue-light), var(--color-primary-blue)) 1;
+}
+
+/* Estilo para toasts de carga (loading) */
+.quantum-notification-toast.toast--loading {
+  border-image: linear-gradient(45deg, var(--color-accent-orange), var(--color-accent-yellow), var(--color-accent-orange)) 1;
+}
+
+
+/* --- Keyframes para las animaciones --- */
+
+/* Animación de entrada: crea un efecto de "aparición cuántica" */
+@keyframes quantumEntry {
   from {
-    transform: rotate(0deg);
+    opacity: 0;                          /* Empieza invisible */
+    transform: translateY(-30px) scale(0.95); /* Desliza desde arriba y ligeramente más pequeño */
+    filter: brightness(0.7);             /* Ligeramente más oscuro al inicio para un efecto de encendido */
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;                          /* Termina completamente visible */
+    transform: translateY(0) scale(1);   /* Se mueve a su posición final y tamaño normal */
+    filter: brightness(1);               /* Brillo normal */
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
- */
+/*
+  Nota: react-hot-toast maneja sus propias animaciones de salida por defecto.
+  Si quisieras personalizar la animación de salida a fondo, tendrías que
+  investigar cómo la librería permite sobrescribir `exit` en su API,
+  o usar el componente `ToastBar` personalizado.
+*/

@@ -1,5 +1,4 @@
 import { BiSolidHelpCircle } from "react-icons/bi";
-import { IoMdNotifications } from "react-icons/io";
 import { IoBook } from "react-icons/io5";
 import { AiFillHome } from "react-icons/ai";
 import IconPrefixProfile from "./IconPrefixProfile";
@@ -7,9 +6,10 @@ import { IoLogOutOutline } from 'react-icons/io5';
 import { useNavigationHandler } from "../../hooks/useNavigationHandler";
 import { useState } from "react";
 import ViewCategories from "./AuthNavbar/ViewCategories";
-import ViewNotifications from "./AuthNavbar/ViewNotifications";
 import './styles/AuthNavbar.css'
 import { useUser } from "../../modules/auth/Hooks/useAuth";
+import IconNotifications from "./AuthNavbar/IconNotifications";
+import NotificationPanel from "../../modules/notifications/components/NotificationPanel";
 export default function AuthNavbar() {
   const handleBtnNavigate = useNavigationHandler();
   const [viewCategories, setViewCategories] = useState(false);
@@ -49,9 +49,9 @@ export default function AuthNavbar() {
               setViewCategories(!viewCategories)
             } 
           }
+           
 
-
-          }><IoMdNotifications/></button>
+          }>{<IconNotifications/>}</button>
           {/* Btn user Page */}
           <button className="icon-auth-navBar icon-prefix" onClick={()=>{
             handleBtnNavigate('/userPage')
@@ -64,7 +64,7 @@ export default function AuthNavbar() {
           <button className="icon-auth-navBar icon-exit" onClick={()=>logout()}><IoLogOutOutline /></button>
         </ul>
         {viewCategories && <ViewCategories/>}
-        {viewNotifications && <ViewNotifications/>}
+        {viewNotifications && <NotificationPanel />}
 
     </div>
   )

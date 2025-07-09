@@ -69,7 +69,9 @@
 }
 
 .icon-notifications {
+  display: flex;
   color: #edcd6e;
+  align-items: center;
 }
 .icon-notifications:hover {
   color: #dfab10;

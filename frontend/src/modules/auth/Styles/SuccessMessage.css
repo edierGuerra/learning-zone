@@ -1,28 +1,7 @@
-.container-SuccessMessage {
-  display:  flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fffffff9;
-  color: #101;
-  z-index: 1000;
-  text-align: center;
-  border-radius: 10px;
-  width: 50%;
-  height: 35%;
-}
 
 .success-message {
   font-size: 24px;
   letter-spacing: 1.4px;
   background-color: #fff;
   color: #101;
-}
-
-.icon-verifed {
-  width: 70px;
-  border-radius: 50%;
 }

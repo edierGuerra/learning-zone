@@ -1,3 +1,5 @@
+import type { TNotifications } from "../notifications/types/Notifications";
+
 // Representa el modelo base de un estudiante (estructura completa, usada para registro o autenticación).
 export type TStudent = {
   id: number;
@@ -36,6 +38,10 @@ export type StudentContextType = {
   isLoggedIn: boolean; // Indica si el usuario está autenticado
   logout: () => void; // Función para cerrar sesión
   isReady: boolean; 
-  setStudent?: React.Dispatch<React.SetStateAction<TStudentProfile | null>>; // Setter para actualizar el perfil
-  setToken?: React.Dispatch<React.SetStateAction<string | null>>; // Setter para actualizar el token
+  setStudent: React.Dispatch<React.SetStateAction<TStudentProfile | null>>; // Setter para actualizar el perfil
+  setToken: React.Dispatch<React.SetStateAction<string | null>>; // Setter para actualizar el token
+  notifications:TNotifications;
+  setNotifications:React.Dispatch<React.SetStateAction<TNotifications>>;
+  numberNotifications:number
+
 };

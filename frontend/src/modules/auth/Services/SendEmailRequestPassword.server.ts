@@ -6,6 +6,7 @@ const VITE_CONFIRMEMAILREQUEST_ENDPOINT = import.meta.env.VITE_CONFIRMEMAILREQUE
 
 type RequestEmailResponse ={
   email: TStudent['email'],
+  message:string
 }
 export const SendEmailRequestAPI = async (
  email:TStudent['email']

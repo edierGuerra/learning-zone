@@ -5,7 +5,7 @@ import type { TStudent } from "../../types/User";
 import verifyAPI from "../Services/Verify.server";
 import { registerAPI } from "../Services/Register.server";
 import { authStorage } from "../../../shared/Utils/authStorage";
-
+import {toast} from "react-hot-toast";
 export default function useFormRegister() {
   // --- Tipos de datos usados en el formulario ---
   type RegisterForm =TStudent & {
@@ -116,17 +116,18 @@ const validateForm = (form: RegisterForm): FormErrors => {
       }
       const response = await verifyAPI(nIdentification);
       if(!response?.can_register){
-        alert(response.message)
+        toast.error(response.message)
         return
       }
       //Almacenar el id autoincrementable para enviarlo en el register
+      toast.success('Verificación exitosa', { duration: 3000 });
       setIdAutoIncrement(response?.identification_id)
       /* Cambiar el estado del formulario se verify para que se muestre el de register */
       setFormVerify(false)
 
 
     }catch{
-      alert('No se pudo verificar el numero de identificación')
+      toast.error('No se pudo verificar el numero de identificación')
 
     }finally{
       setLoading(false)
@@ -164,12 +165,12 @@ const validateForm = (form: RegisterForm): FormErrors => {
       /* console.log('Primary key user: ', res.student_id) */
 
       // Guardando el email en el localStorage
+      toast.success('Registrado exitosamente', { duration: 3000 });
+      setViewSucessMessage(true)
       authStorage.setEmail(res.email)
       authStorage.setIdAutoIncrementStudent(res.id)
-      setViewSucessMessage(true)
     }catch{
-      alert('No se pudo registrar tu cuenta.')
-
+      toast.error('No se pudo registrar tu cuenta')
     }finally{
       setLoading(false)
 

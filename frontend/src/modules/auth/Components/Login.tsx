@@ -3,7 +3,6 @@ import '../Styles/Login.css'; // Asegúrate de que este archivo exista
 /* import { GrView } from 'react-icons/gr';
 import { GrFormViewHide } from 'react-icons/gr'; */
 import useFormLogin from '../Hooks/useFormLogin';
-import SucessMessage from './SucessMessage';
 import { useEffect } from 'react';
 
 export default function Login() {
@@ -32,7 +31,6 @@ export default function Login() {
     <>
     {viewSucessMessage? (
       <> 
-        <SucessMessage name='Login'/>
         <form className='form-login' onSubmit={(e) => handleSubmitLogin(e)}>
           <h2 className='title-login'>Sign In</h2>
 

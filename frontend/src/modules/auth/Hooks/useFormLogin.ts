@@ -3,6 +3,7 @@ import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import type { TStudent } from "../../types/User";
 import { loginAPI } from "../Services/Login.server";
 import { authStorage } from "../../../shared/Utils/authStorage";
+import toast from "react-hot-toast";
 
 export default function useFormLogin() {
   // --- Tipos de datos usados ---
@@ -75,6 +76,7 @@ export default function useFormLogin() {
       /* alert(response.message) */
       /* Guardar token en el localStorage */
       authStorage.setToken(response.access_token)
+      toast.success('login correcto')
       /* Cambiar estado para que se renderice el SucessMessage*/
       setViewSucessMessage(true)
 

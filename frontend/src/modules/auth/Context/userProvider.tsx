@@ -4,6 +4,8 @@ import { authStorage } from "../../../shared/Utils/authStorage"; // Módulo que 
 import type { TStudentProfile } from "../../types/User";
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler"; // Hook personalizado para manejar navegación sin usar useNavigate directo
 import { GetStudentAPI } from "../Services/GetInformationStudent.server";
+import GetNotificationsAPI from "../../notifications/services/GetNotifications.server";
+import type { TNotifications } from "../../notifications/types/Notifications";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -17,6 +19,7 @@ export const StudentProvider = ({ children }: Props) => {
   // Estado para guardar el token y el usuario actual
   const [token, setToken] = useState<string | null>(null);
   const [student, setStudent] = useState<TStudentProfile | null>(null);
+  const [notifications, setNotifications] = useState<TNotifications>([]);
 
   // Estado para confirmar que ya se cargó la sesión al iniciar la app
   const [isReady, setIsReady] = useState(false);
@@ -27,6 +30,7 @@ export const StudentProvider = ({ children }: Props) => {
   useEffect(() => {
     const storedToken = authStorage.getToken();  // Trae el token guardado si existe
     const storedStudent = authStorage.getUser(); // Trae el usuario guardado si existe
+    const storedNotifications = authStorage.getNotifications(); // Trae el usuario guardado si existe
     if(storedToken && !storedStudent){
       // SI existe un token ejeuctar el services que envia el token al backen y obtiene la info del estudiante
       const infoStudent = async ()=>{
@@ -41,6 +45,11 @@ export const StudentProvider = ({ children }: Props) => {
           email: dataStudent.user_data.email,
           prefixProfile: dataStudent.prefix_profile
         }
+
+        const dataNotifications = await GetNotificationsAPI();
+        authStorage.setNotifications(dataNotifications)
+        setNotifications(dataNotifications)
+
         // Almacenando la informacion del estudiante en el localStorage
         authStorage.setStudent(dataStudentLocalStorage)
         setStudent(dataStudentLocalStorage)
@@ -49,9 +58,10 @@ export const StudentProvider = ({ children }: Props) => {
     }
     // Recuperar la informacion del usuario
     // Si hay sesión guardada, se setean los valores
-    if (storedStudent && storedToken) {
+    if (storedStudent && storedToken && storedNotifications) {
       setStudent(storedStudent);
       setToken(storedToken);
+      setNotifications(storedNotifications)
     }
 
     // Marca que ya terminó la validación de la sesión inicial
@@ -68,8 +78,11 @@ export const StudentProvider = ({ children }: Props) => {
     authStorage.removeUser();      // Elimina usuario del almacenamiento
     setStudent(null);              // Limpia usuario en estado global
     setToken(null);                // Limpia token en estado global
+    authStorage.removeNotifications()
+    setNotifications([])
     handleBtnNavigate("/");        // Redirige al inicio (se podrias usar replace si deseas evitar retroceder),
   };
+  const numberNotifications:number = notifications.length
 
   return (
     // El Provider envuelve toda la app y expone el contexto con los valores globales
@@ -79,7 +92,10 @@ export const StudentProvider = ({ children }: Props) => {
     isLoggedIn,
     isReady,
     setStudent,
-    setToken }}>
+    setToken,
+    setNotifications,
+    notifications,
+    numberNotifications }}>
       {/* Solo renderiza la app si ya se hizo la validación inicial de sesión */}
       {isReady ? children : null}
     </UserContext.Provider>

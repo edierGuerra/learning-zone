@@ -46,7 +46,7 @@ export default function LoginAndRegister({opcAuth}:TPropsLoginAndregister) {
 
   return (
     <div className="container-login-register" >
-        <button className="btn-back" onClick={()=>handleBtnNavigate('/')}>{<IoArrowBackCircleSharp/>}</button>
+      <button className="btn-back" onClick={()=>handleBtnNavigate('/')}>{<IoArrowBackCircleSharp/>}</button>
 
       <div className="container-auth" style={{'flexDirection':clickOptionAuth? 'row': "row-reverse"}}>
         {/* Contenedor que permite el efecto de deslizamiento */}

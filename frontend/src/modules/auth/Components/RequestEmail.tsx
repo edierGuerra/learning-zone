@@ -1,7 +1,6 @@
 /* Componente que solicita el email */
 import '../Styles/RequestEmail.css'
 import  { useEffect } from 'react'
-import SucessMessage from '../Components/SucessMessage';
 import useRecoverPassword from '../Hooks/useRecoverPassword';
 
 export default function RequestEmail() {
@@ -41,9 +40,7 @@ export default function RequestEmail() {
             {errors.email && <span className="error">{errors.email}</span>}
         </div>
         <input className='btn-email-verify' type="submit" value={'Verificar'} />
-        {viewSucessMessage && (
-        <SucessMessage name='Verificacion'/>
-        )}
+
     </form>
   )
 }

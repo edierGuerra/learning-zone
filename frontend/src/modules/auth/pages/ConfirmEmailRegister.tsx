@@ -34,7 +34,7 @@ export default function ConfirmEmailRegister() {
     <div className='container-confirm-email'>
                 <DecayCard  width={1000} height={600} image="">
                     <div className="container-information-confirm">
-                        <button className="btn-back-confirm" onClick={()=>handleBtnNavigate('/back')}>{<IoArrowBackCircleSharp/>}</button>
+                        <button className="btn-back-confirm" onClick={()=>handleBtnNavigate('/register')}>{<IoArrowBackCircleSharp/>}</button>
                         <h2 className='title-container-confim-email'>Confirmacion De cuenta</h2>
                         <p className='paragraph-description-confirm'>Hemos enviado un mensaje a tu correo electrónico <span>{email}</span>.
                         Por favor, dirígete a tu bandeja de entrada y haz clic en el enlace de confirmación para activar tu cuenta.</p>

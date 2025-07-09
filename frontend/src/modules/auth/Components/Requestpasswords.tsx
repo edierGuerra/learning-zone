@@ -3,7 +3,6 @@ import { useNavigationHandler } from '../../../hooks/useNavigationHandler';
 import { authStorage } from '../../../shared/Utils/authStorage';
 import useRecoverPassword from '../Hooks/useRecoverPassword';
 import '../Styles/RequestPassword.css'
-import SucessMessage from './SucessMessage';
 
 export default function Requestpasswords() {
   const {
@@ -12,7 +11,6 @@ export default function Requestpasswords() {
     setPassword,
     setConfirmPassword,
     errors,
-    viewSucessMessage,
     handleSubmitRequestPasswords,
   } = useRecoverPassword();
 
@@ -54,7 +52,6 @@ useEffect(() => {
       </div>
 
       <input type="submit" value="Confirmar" className="btn-confirm-request" />
-      {viewSucessMessage && <SucessMessage name="Verificacion" />}
     </form>
   );
 }

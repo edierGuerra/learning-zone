@@ -5,6 +5,7 @@ import type { TStudent, TStudentProfileToken } from "../../types/User"
 import { SendEmailRequestAPI } from "../Services/SendEmailRequestPassword.server";
 import { authStorage } from "../../../shared/Utils/authStorage";
 import { SendPasswordRequestAPI } from "../Services/NewPassword.server";
+import toast from "react-hot-toast";
 
 export default function useRecoverPassword() {
 
@@ -89,11 +90,16 @@ export default function useRecoverPassword() {
         setLoading(true)
         try{
             const response = await SendEmailRequestAPI(email!);
+            if(!response.email){
+                toast.error(response.message)
+                return 
+            }
             // Guardando el email en el localStorage
+            toast.success('Correo verificado')
             authStorage.setEmail(response.email)
             setViewSucessMessage(true) /* Esto permite mostrar una 'advertencia' que muestre que se va direccionar a una parte, y ademas redirijir con el useEffect*/
         }catch{
-            alert('No se pudo encontrar tu cuenta')
+            toast.error('No se pudo encontrar tu cuenta')
         }finally{
             setLoading(false)
         } 
@@ -123,6 +129,7 @@ export default function useRecoverPassword() {
         try{
             const response = await SendPasswordRequestAPI({tokenRequestEmail,password});
             if(response?.success){
+                toast.success('Contraseña restablecida')
                 setViewSucessMessage(true)
                 setTimeout(() => {
                     authStorage.removeEmail();

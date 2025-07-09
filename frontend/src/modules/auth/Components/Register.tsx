@@ -3,8 +3,8 @@ import '../Styles/Register.css'
 /* import { GrFormViewHide, GrView } from 'react-icons/gr'; */
 import { CircleLoader } from 'react-spinners';
 import useFormRegister from '../Hooks/useFormRegister';
-import SucessMessage from './SucessMessage';
 import { useEffect } from 'react';
+
 
 export default function Register() {
 
@@ -57,7 +57,8 @@ useEffect(() => {
         </div>
         <input type="submit" value={'Verify'}  className='btn-verify-register'/>
         <CircleLoader color="#fff" loading={loading}/>
-      </form>:
+      </form>
+      :
       <>
         <div style={{ position: 'relative' }}>
           {/* form Register  */}
@@ -122,9 +123,7 @@ useEffect(() => {
             </div>
             <input type="submit" value={'Register'} className='btn-verify-register' />
           </form>
-          {viewSucessMessage && (
-          <SucessMessage name='Registro'/>
-          )}
+
         </div>
         
        

@@ -1,5 +1,6 @@
 // PARA MAYOR SEGURIDAD MIGRAR ESTO A COOKIES
 // Importa los tipos de datos definidos para el usuario y su token
+import type { TNotifications } from "../../modules/notifications/types/Notifications";
 import type { TStudent, TStudentProfile, TStudentProfileToken } from "../../modules/types/User";
 
 // Objeto que encapsula el acceso al almacenamiento local (localStorage)
@@ -66,6 +67,25 @@ export const authStorage = {
     localStorage.getItem('name'),
 
   removeNameStudent :()=> localStorage.removeItem('name'), */
+
+  setNotifications: (notifications: TNotifications) => {
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+  },
+
+  getNotifications: (): TNotifications => {
+    try {
+      const raw = localStorage.getItem("notifications");
+      return raw ? (JSON.parse(raw) as TNotifications) : [];
+    } catch (e) {
+      console.error("El JSON está mal formado:", e);
+      return [];
+    }
+  },
+
+  removeNotifications: () => {
+    localStorage.removeItem('notifications');
+  }
+    
   
     
 };

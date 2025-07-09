@@ -3,6 +3,7 @@
 Este módulo define esquemas de validación y respuesta para la gestión de datos de estudiantes utilizando la biblioteca pydantic.
 """
 
+from typing import Optional
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -96,3 +97,13 @@ class ResetPassword(BaseModel):
     new_password: str = Field(
         ..., title="Nueva contraseña", description="Nueva contraseña del estudianten"
     )
+
+
+class UpdateProfile(BaseModel):
+    """Esquema para la actualización de nombres y apellidos del estudiante."""
+
+    names: Optional[str] = Field(None, min_length=2, max_length=100)
+    last_names: Optional[str] = Field(None, min_length=2, max_length=100)
+
+    class Config:
+        from_attributes = True  # Pydantic v2: equivalent to orm_mode = True

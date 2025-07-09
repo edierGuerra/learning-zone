@@ -12,7 +12,7 @@ from models.student_model import Student
 
 # Modulos internos
 from repository.student_repository import StudentRepository
-from schemas.student_schemas import StudentRegister
+from schemas.student_schemas import StudentRegister, StudentResponse, UpdateProfile
 from repository.utils import hash_password
 
 from .utils.email_sender import send_verification_email, send_password_reset_email
@@ -191,3 +191,23 @@ class StudentService:
         return await self.repository.delete_notifications(
             id_student=id_student, id_notification=id_notification
         )
+
+    async def update_names_lastnames(
+        self, student_id: int, update_data: UpdateProfile
+    ) -> StudentResponse:
+        """
+        Permite a los estudiantes actualizar sus nombres y apellidos en el perfil.
+        """
+        student_to_update = await self.repository.get_student_by_id(student_id)
+
+        if not student_to_update:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Estudiante no entontrado.",
+            )
+
+        updated_student = await self.repository.update_student_profile(
+            student_to_update, update_data
+        )
+
+        return StudentResponse.model_validate(updated_student)

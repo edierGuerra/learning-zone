@@ -12,6 +12,7 @@ from models.student_model import Student
 
 # Modulos internos
 from schemas.student_schemas import StudentRegister
+from schemas.student_schemas import UpdateProfile
 
 # Modulos externos
 from sqlalchemy import select
@@ -340,3 +341,22 @@ class StudentRepository:
             logger.error("⛔ Error al intentar registrar el estudiante ⛔", exc_info=e)
             await self.db.rollback()
             return None
+
+    async def update_student_profile(
+        self, student: Student, update_data: UpdateProfile
+    ) -> Student:
+        """
+        Actualiza solo los nombres y apellidos del estudiante.
+        """
+        if update_data.names is not None:
+            student.names = update_data.names
+        if update_data.last_names is not None:
+            student.last_names = update_data.last_names
+
+        self.db.add(student)
+        await self.db.commit()
+        await self.db.refresh(
+            student
+        )  # Recarga el objeto para obtener los datos actualizados
+
+        return student

@@ -8,12 +8,17 @@ from core.security import encode_access_token, get_current_student
 from dependencies.student_dependencie import get_student_services
 
 # Modulos externos
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Body
 from fastapi.responses import JSONResponse
 
 # Modulos internos
 from models.student_model import Student
-from schemas.student_schemas import StudentLogin, StudentRegister, StudentResponse
+from schemas.student_schemas import (
+    StudentLogin,
+    StudentRegister,
+    StudentResponse,
+    UpdateProfile,
+)
 from services.student_services import StudentService
 from .utils import generate_profile_prefix
 
@@ -46,7 +51,9 @@ async def create_student(
     student = await services.register_student(student_data)
     if not student:
         raise HTTPException(status_code=500, detail="Error al registrar el usuario")
-    return JSONResponse(content={"email": student.email, 'id':student.id}, status_code=201)
+    return JSONResponse(
+        content={"email": student.email, "id": student.id}, status_code=201
+    )
 
 
 @router.get("/verify_email")
@@ -109,7 +116,7 @@ async def get_student(student: Student = Depends(get_current_student)):
                     "names": student.names,
                     "last_names": student.last_names,
                     "email": student.email,
-                    },
+                },
                 "prefix_profile": generate_profile_prefix(
                     name=student.names, last_name=student.last_names
                 ),
@@ -198,4 +205,93 @@ async def login_student(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error desconosido",
+        )
+
+
+@router.put("/update-profile", status_code=status.HTTP_200_OK)
+async def update_student_profile(
+    update_data: UpdateProfile = Body(...),
+    student: int = Depends(get_current_student),
+    student_service: StudentService = Depends(get_student_services),
+) -> JSONResponse:
+    """
+    ## Actualizar Nombres y Apellidos del Perfil del Estudiante
+
+    Permite al estudiante autenticado actualizar sus nombres y/o apellidos.
+    Esta ruta requiere un token de acceso válido en el encabezado de autorización.
+    Los campos `names` y `last_names` son opcionales en el cuerpo de la solicitud;
+    solo los campos proporcionados se actualizarán.
+
+    ### Parámetros:
+    - `update_data (schemas.student_schemas.UpdateProfile)`: Objeto JSON con los datos a actualizar.
+      Puede incluir:
+        - `names (str, opcional)`: Los nuevos nombres del estudiante.
+        - `last_names (str, opcional)`: Los nuevos apellidos del estudiante.
+    - `student (models.student_model.Student)`: Objeto `Student` inyectado, obtenido a partir de la validación
+      del token de acceso (`Authorization: Bearer <token>`). Este objeto ya representa al estudiante actual.
+    - `student_service (services.student_services.StudentService)`: Servicio de negocio
+      encargado de la lógica de actualización del perfil (inyectado con Depends).
+
+    ### Encabezados Requeridos:
+    - `Authorization: Bearer <access-token>`: Token JWT válido del estudiante autenticado.
+
+    ### Cuerpo de la Solicitud (Ejemplo):
+    ```json
+    {
+      "names": "Nuevo Nombre",
+      "last_names": "Nuevo Apellido"
+    }
+    ```
+    O bien, solo uno de los campos:
+    ```json
+    {
+      "names": "Solo el Nombre Cambiado"
+    }
+    ```
+
+    ### Respuestas:
+    - **`200 OK`**: `application/json` - Actualización exitosa.
+        Retorna un mensaje de confirmación. El frontend deberá realizar una
+        llamada separada para obtener los datos actualizados del perfil.
+        ```json
+        {
+          "message": "Perfil actualizado exitosamente."
+        }
+        ```
+    - **`401 Unauthorized`**: `application/json` - Si el token de acceso es inválido o no se proporciona.
+        ```json
+        {
+          "detail": "No autenticado"
+        }
+        ```
+    - **`404 Not Found`**: `application/json` - Si el estudiante autenticado no se encuentra en la base de datos (caso inusual si el token es válido).
+        ```json
+        {
+          "detail": "Student not found."
+        }
+        ```
+    - **`500 Internal Server Error`**: `application/json` - Si ocurre un error inesperado en el servidor durante la actualización.
+        ```json
+        {
+          "detail": "Ha ocurrido un error inesperado al momento de actualizar el perfil"
+        }
+        ```
+    """
+    try:
+        # Pase el ID del estudiante al servicio
+        await student_service.update_names_lastnames(student.id, update_data)
+
+        # Devuelvo mensaje de exito
+        return JSONResponse(
+            content={"message": "Perfil actualizado exitosamente."},
+            status_code=status.HTTP_200_OK,
+        )
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        # Log del error para depuración
+        print(f"Error inesperado al actualizar perfil: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Ha ocurrido un error inesperado al momento de actualizar el perfil",
         )

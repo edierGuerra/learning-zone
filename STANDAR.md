@@ -57,10 +57,14 @@
 
 ---
 
-## ⏳ Pendiente por definir:
+## ⏳ Datos que se modificaran:
 
-* ¿Qué **datos del estudiante** pueden actualizarse?
-* ¿Qué campos **no** se deben modificar?
+* **Nombres**
+* **Apellidos**
+
+## ⏳ Datos que no se modificaran:
+* **correo**
+* **n° identificación**
 ---
 ## 🛠️ Notificaciones
 

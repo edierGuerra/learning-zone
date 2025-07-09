@@ -62,7 +62,7 @@ async def get_notifications(student: Student = Depends(get_current_student)):
     ### Seguridad:
     - Requiere autenticación mediante token.
     """
-    return student.notifications
+    return await student.notifications
 
 
 @router.delete("/")

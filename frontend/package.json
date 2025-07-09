@@ -31,6 +31,7 @@
     "react-router-dom": "^7.6.2",
     "react-spinners": "^0.17.0",
     "react-use-measure": "^2.1.7",
+    "styled-components": "^6.1.19",
     "three": "^0.177.0"
   },
   "devDependencies": {

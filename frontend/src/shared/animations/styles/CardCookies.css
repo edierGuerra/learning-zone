@@ -1,0 +1,90 @@
+.card-privacy {
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+    background-color: rgba(94, 65, 47, 0.803);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4rem 2rem;
+    color: var(--color-text-light);
+    gap: 1rem;
+    flex-wrap: wrap;
+    z-index: 200;
+}
+
+.card-left {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-center {
+  flex: 1 1 50%;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-light-alt);
+}
+
+.card-text-cookie {
+  line-height: 1.5;
+  color: var(--color-text-light);
+}
+
+.card-link {
+  font-weight: 600;
+  color: var(--color-accent-blue-light);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.card-link:hover {
+  color: var(--color-primary-blue);
+}
+
+.card-right {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.card-more-options,
+.card-accept {
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  border: none;
+  transition: .3s ease-in-out;
+  white-space: nowrap;
+}
+
+.card-more-options {
+  background-color: transparent;
+  color: var(--color-text-light);
+  text-decoration: underline;
+}
+
+.card-more-options:hover {
+  color: var(--color-accent-yellow);
+}
+
+.card-accept {
+  background-color: var(--color-orange-accent); /* #F2AA4C */
+  color: var(--color-dark-gray-brown);          /* #2D2926 */
+}
+
+.card-accept:hover {
+  background-color: var(--color-dark-gray-brown);
+  color: var(--color-orange-accent);
+}

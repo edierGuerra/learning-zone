@@ -1,10 +1,23 @@
 // PARA MAYOR SEGURIDAD MIGRAR ESTO A COOKIES
 // Importa los tipos de datos definidos para el usuario y su token
 import type { TNotifications } from "../../modules/notifications/types/Notifications";
-import type { TStudent, TStudentProfile, TStudentProfileToken } from "../../modules/types/User";
+import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken } from "../../modules/types/User";
 
 // Objeto que encapsula el acceso al almacenamiento local (localStorage)
 export const authStorage = {
+  setCookieConsentGiven :(consentObject:TStudentConsent)=>
+    localStorage.setItem('cookieConsentGiven',JSON.stringify(consentObject)),
+
+  getCookieConsentGiven:():TStudentConsent | null =>{
+    try {
+      const raw = localStorage.getItem("cookieConsentGiven");
+      return raw ? (JSON.parse(raw) as TStudentConsent) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado :", e);
+      return null;
+    }
+  },
+  removeCookieConsentGiven:()=>localStorage.removeItem('CookieConsentGiven'),
   // Guarda el objeto de usuario en localStorage bajo la clave "student"
   setStudent: (student: TStudentProfile) =>
     localStorage.setItem("student", JSON.stringify(student)),

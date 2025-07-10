@@ -24,8 +24,6 @@ export const StudentProvider = ({ children }: Props) => {
   // Estado para confirmar que ya se cargó la sesión al iniciar la app
   const [isReady, setIsReady] = useState(false);
 
-  
-
   // Carga inicial: verifica si hay token y usuario guardados en localStorage
   useEffect(() => {
     const storedToken = authStorage.getToken();  // Trae el token guardado si existe

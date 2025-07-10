@@ -1,5 +1,10 @@
 import type { TNotifications } from "../notifications/types/Notifications";
-
+/* Representa el modelo donde esta consentimiento  */
+export type TStudentConsent ={
+    accepted: boolean;
+    timestamp: string;
+    version: '1.0'
+}
 // Representa el modelo base de un estudiante (estructura completa, usada para registro o autenticación).
 export type TStudent = {
   id: number;

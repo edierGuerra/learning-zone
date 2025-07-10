@@ -6,6 +6,7 @@ import { authStorage } from '../../../shared/Utils/authStorage';
 import UpdateStudentAPI from '../services/UpdateStudent.server';
 import { GetStudentAPI } from '../../auth/Services/GetInformationStudent.server';
 import { useUser } from '../../auth/Hooks/useAuth';
+import toast from 'react-hot-toast';
 
 export default function useFormUpdate() {
   const {setStudent}= useUser()
@@ -53,10 +54,8 @@ export default function useFormUpdate() {
   // --- Efecto que carga los datos desde el localStorage una vez ---
   const dataUser: TStudentProfile | null = authStorage.getUser();
   const infoBackUser= {
-    numIdentification: dataUser?.numIdentification,
     name: dataUser?.name,
     lastNames : dataUser?.lastNames,
-    email:dataUser?.email
 
   }
   useEffect(() => {
@@ -89,12 +88,13 @@ export default function useFormUpdate() {
     // Aqui se valida que si halla cambiado algo
 
     if (JSON.stringify(student) === JSON.stringify(infoBackUser)) {
-        alert('Parece que no has actualizado nada');
+        toast.error('Parece que no has actualizado nada');
         return;
     }
     try{
       const response = await UpdateStudentAPI({student});
       if(response.statusCode ===200){
+        toast.success('Actualizacion exitosa')
         const updateStudent = await GetStudentAPI()
         const dataStudentLocalStorage:TStudentProfile ={
           id:updateStudent.user_data.id,
@@ -116,7 +116,7 @@ export default function useFormUpdate() {
       alert("Hubo un error al procesar la solicitud. Inténtalo más tarde.");
 
     }
-      
+
 
   };
 

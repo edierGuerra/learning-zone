@@ -1,7 +1,7 @@
 import useFormUpdate from "../Hooks/useFormUpdate"
 import '../Styles/UpdateInformation.css'
 export default function UpdateInformation() {
-    const { newNIdentification,newName,newLastNames,newEmail,setNewNIdentification,setNewName,setNewLastNames,setNewEmail,handleSubmitUpdate,errors} = useFormUpdate()
+    const { numIdentification,email, newName,newLastNames,setNewName,setNewLastNames,handleSubmitUpdate,errors} = useFormUpdate()
   return (
      <form className='form-update' onSubmit={(e)=>handleSubmitUpdate(e)}>
         <h3 className="title-form-update">Actualizate Aqui!</h3>
@@ -11,10 +11,10 @@ export default function UpdateInformation() {
           <input
             type="text"
             id="nIdentification"
-            value={newNIdentification}
-            className={newNIdentification? 'has-content':''}
-            onChange={(e)=>setNewNIdentification(Number(e.target.value))}/>
-          {errors.numIdentification && <span className="error">{errors.numIdentification}</span>}
+            value={numIdentification}
+            className={numIdentification? 'has-content':''}
+            readOnly
+          />
         </div>
 
        <div className="container-label-input-u">
@@ -43,10 +43,10 @@ export default function UpdateInformation() {
           <input
             type="email"
             id="email"
-            value={newEmail}
-            className={newEmail? 'has-content':''}
-            onChange={(e)=>setNewEmail(e.target.value)}/>
-          {errors.email && <span className="error">{errors.email}</span>}
+            value={email}
+            className={email? 'has-content':''}
+            readOnly
+          />
         </div>
         <input className="btn-update" type="submit" value={'Update'} />
 

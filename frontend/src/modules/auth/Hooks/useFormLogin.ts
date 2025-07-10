@@ -81,7 +81,7 @@ export default function useFormLogin() {
       setViewSucessMessage(true)
 
     } catch{
-      alert("No se pudo iniciar sesión.");
+      toast.error("No se pudo iniciar sesión.");
     } finally {
       setLoading(false);
     }

@@ -1,10 +1,10 @@
-import axios from '../../api/axiosInstance'
+import axios from '../../../api/axiosInstance'
 
-import type { TStudent } from '../types/User'
+import type { TStudent } from '../../types/User'
 
 
 type TUpdateStudentAPIProps ={
-    student : Omit<TStudent, 'id' | 'password'> 
+    student : Omit<TStudent, 'id' | 'password' | 'email' | 'numIdentification'> 
 }
 type TUpdateStudentResponse = {
   statusCode: number;
@@ -17,14 +17,15 @@ const VITE_UPDATESTUDENT_ENDPOINT = import.meta.env.VITE_UPDATESTUDENT_ENDPOINT;
 export default async function UpdateStudentAPI({student}:TUpdateStudentAPIProps):Promise<TUpdateStudentResponse> {
     try{
         const infoSudent = {
-            num_identification:student.numIdentification,
             names: student.name,
             last_names: student.lastNames,
-            email:student.email
         
         }
         const response = await axios.put(VITE_UPDATESTUDENT_ENDPOINT,infoSudent)
-        return response.data
+        return {
+            statusCode:response.status,
+            message:response.data?.message
+        }
 
     }catch(error){
         console.error(error)

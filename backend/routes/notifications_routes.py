@@ -57,6 +57,7 @@ async def get_notifications(
             "id": 1,
             "title": "Nueva tarea",
             "message": "Tienes una nueva tarea pendiente"
+            "date": "2025-07-10 06:30 PM"
           },
           ...
         ]
@@ -67,7 +68,16 @@ async def get_notifications(
     """
     data_student = await services.get_student_by_id(student.id)
     notifications = data_student.notifications
-    return notifications
+    # return notifications
+    return [
+        {
+            "id": n.id,
+            "title": n.title,
+            "message": n.message,
+            "date": n.date.strftime("%Y-%m-%d %I:%M %p") if n.date else None,
+        }
+        for n in notifications
+    ]
 
 
 @router.delete("/")

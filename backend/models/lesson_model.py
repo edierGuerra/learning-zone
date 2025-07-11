@@ -29,7 +29,7 @@ class Lesson(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(50))  # nombre
     description: Mapped[str] = mapped_column(String(100))  # descripcion
-    course_id: Mapped[int] = mapped_column(Integer)  # id_curso (foreign key)
+    # course_id: Mapped[int] = mapped_column(Integer)  # id_curso (foreign key)
 
     # Claves Foraneas
     id_course: Mapped[int] = mapped_column(ForeignKey("courses.id"))
@@ -40,9 +40,6 @@ class Lesson(Base):
         back_populates="lessons", secondary=progress_model
     )
     contents: Mapped[List["Content"]] = relationship(back_populates="lesson")
-    name: Mapped[str] = mapped_column(String(50))  # nombre
-    description: Mapped[str] = mapped_column(String(100))  # descripcion
-    course_id: Mapped[int] = mapped_column(Integer)  # id_curso (foreign key)
 
     # relaciones
     evaluation: Mapped["Evaluation"] = relationship(back_populates="lesson")

@@ -28,7 +28,7 @@ class Evaluation(Base):
     question_type: Mapped[str] = mapped_column(String(50))  # tipo
     options: Mapped[str] = mapped_column(Text)  # opciones
     correct_answer: Mapped[str] = mapped_column(Text)  # respuesta_correcta
-    lesson_id: Mapped[int] = mapped_column(Integer)  # id_leccion (foreign key)
+    # lesson_id: Mapped[int] = mapped_column(Integer)  # id_leccion (foreign key)
 
     # claves foraneas
     id_leccion: Mapped[int] = mapped_column(

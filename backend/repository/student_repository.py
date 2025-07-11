@@ -131,7 +131,7 @@ class StudentRepository:
         """
         stmt = (
             select(Student)
-            .options(selectinload(Student.notifications))
+            .options(selectinload(Student.notifications), selectinload(Student.course))
             .where(Student.id == id)
         )
         result = await self.db.execute(stmt)

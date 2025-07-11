@@ -21,6 +21,7 @@ from routes.identification_routes import router as identification_router  # ruta
 from routes.student_routes import router as student_router
 from routes.recovery_password_routes import router as recovery_password_router
 from routes.notifications_routes import router as notification_router
+from routes.course_routes import router as course_router
 
 
 # --- Lifespan moderno (reemplaza on_event) ---
@@ -90,3 +91,4 @@ app.include_router(identification_router)
 app.include_router(student_router)
 app.include_router(recovery_password_router)
 app.include_router(notification_router)
+app.include_router(course_router)

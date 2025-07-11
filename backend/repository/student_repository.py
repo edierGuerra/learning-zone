@@ -8,6 +8,7 @@ import logging
 from typing import Optional
 from datetime import datetime
 
+from models.course_model import Course
 from models.student_model import Student
 
 # Modulos internos
@@ -71,6 +72,15 @@ class StudentRepository:
 
             # Agregar el usuario a la base de datos
             self.db.add(new_student)  # Agregar el estudiante a la session
+            await self.db.flush()  # Necesario para obtener el ID antes de relacionar
+
+            # Obtener los cursos base existentes
+            result = await self.db.execute(select(Course))
+            base_courses = result.scalars().all()
+
+            # Asignar cursos al estudiante
+            new_student.course.extend(base_courses)
+
             await self.db.commit()  # Mandar los datos del usuario a la base de datos
             await self.db.refresh(
                 new_student

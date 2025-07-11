@@ -22,6 +22,8 @@ from routes.student_routes import router as student_router
 from routes.recovery_password_routes import router as recovery_password_router
 from routes.notifications_routes import router as notification_router
 from routes.course_routes import router as course_router
+from core.initial_data import create_initial_courses
+from database.config_db import async_session
 
 
 # --- Lifespan moderno (reemplaza on_event) ---
@@ -29,13 +31,19 @@ from routes.course_routes import router as course_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Ejecutado al iniciar la app. Crea las tablas en la base de datos si no existen.
+    Ejecutado al iniciar la app. Crea las tablas y cursos base.
     """
+    # Crear tablas
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
-        await conn.run_sync(
-            Base.metadata.create_all
-        )  # esto revisa los modelos ORM existentes y crea las tablas si no existen
+        await conn.run_sync(Base.metadata.create_all)
+        print("✅ Tablas creadas")
+
+    # Crear cursos, lecciones y evaluaciónes
+    async with async_session() as session:
+        await create_initial_courses(session)
+        print("✅ Cursos base creados")
+
     print("✅ Base de datos inicializada correctamente")
     yield
     print("🛑 Servidor detenido")

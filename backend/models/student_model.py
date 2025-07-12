@@ -49,7 +49,7 @@ class Student(Base):
         back_populates="student", uselist=False
     )
     comments: Mapped[List["Comment"]] = relationship(back_populates="student")
-    course: Mapped[List["Course"]] = relationship(
+    courses: Mapped[List["Course"]] = relationship(
         back_populates="students", secondary=course_student
     )
     lessons: Mapped[List["Lesson"]] = relationship(
@@ -66,26 +66,13 @@ class Student(Base):
     is_verified: Mapped[bool] = mapped_column(
         Boolean, default=False, comment="Indica si el correo fue verificado"
     )
-    identification: Mapped["Identification"] = relationship(
-        back_populates="student", uselist=False
-    )
+
     notifications: Mapped[List["Notification"]] = relationship(
         secondary=student_notification, back_populates="students"
     )  # Relacion con student_notfication hacia notification_Model
     evaluations: Mapped[List["Evaluation"]] = relationship(
         secondary=student_answer, back_populates="students"
     )  # relacion con student_answer_model hacia evaluation_model
-
-    # Validación de correo
-    email_token: Mapped[str] = mapped_column(
-        String(255),
-        nullable=True,
-        unique=True,
-        comment="Token único para verificación de correo",
-    )
-    is_verified: Mapped[bool] = mapped_column(
-        Boolean, default=False, comment="Indica si el correo fue verificado"
-    )
 
     # Validación de contraseña
     password_token: Mapped[str] = mapped_column(
@@ -96,7 +83,7 @@ class Student(Base):
     )
     expire_password_token: Mapped[datetime] = mapped_column(
         DateTime,
-        unique=True,
+        unique=False,
         nullable=True,
         comment="Tiempo de expiración del token de recuperación de contraseña",
     )

@@ -14,9 +14,10 @@ from models.student_model import Student
 # Modulos internos
 from schemas.student_schemas import StudentRegister
 from schemas.student_schemas import UpdateProfile
+from models.course_student_model import course_student
 
 # Modulos externos
-from sqlalchemy import select
+from sqlalchemy import insert, select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -72,14 +73,24 @@ class StudentRepository:
 
             # Agregar el usuario a la base de datos
             self.db.add(new_student)  # Agregar el estudiante a la session
-            await self.db.flush()  # Necesario para obtener el ID antes de relacionar
+            await self.db.flush()  # Necesario para obtener el ID antes de relacionar (new_student ya tiene su ID aquí)
 
             # Obtener los cursos base existentes
-            result = await self.db.execute(select(Course))
-            base_courses = result.scalars().all()
+            result = await self.db.execute(select(Course.id))
+            base_course_ids = result.scalars().all()
+
+            # Insertar directamente en la tabla de asociación
+            if base_course_ids:
+                association_records = [
+                    {"student_id": new_student.id, "course_id": course_id}
+                    for course_id in base_course_ids
+                ]
+                await self.db.execute(
+                    insert(course_student).values(association_records)
+                )  # Insertando las asociaciones directamente
 
             # Asignar cursos al estudiante
-            new_student.course.extend(base_courses)
+            # new_student.course.extend(base_course_ids)
 
             await self.db.commit()  # Mandar los datos del usuario a la base de datos
             await self.db.refresh(

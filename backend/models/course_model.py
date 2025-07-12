@@ -31,6 +31,6 @@ class Course(Base):
     # Relaciones
     comments: Mapped[List["Comment"]] = relationship(back_populates="course")
     students: Mapped[List["Student"]] = relationship(
-        back_populates="course", secondary=course_student
+        back_populates="courses", secondary=course_student
     )
     lessons: Mapped[List["Lesson"]] = relationship(back_populates="course")

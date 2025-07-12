@@ -7,12 +7,11 @@ que relaciona a los estudiantes con los cursos en los que están inscritos.
 from database.config_db import Base
 
 # Módulos externo
-from sqlalchemy import Column, ForeignKey, Integer, Table
+from sqlalchemy import Column, ForeignKey, Table
 
 course_student = Table(
     "course_students",
     Base.metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
     Column("student_id", ForeignKey("students.id"), primary_key=True),
     Column("course_id", ForeignKey("courses.id"), primary_key=True),
 )

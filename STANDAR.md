@@ -237,7 +237,7 @@ lessons {
 3. **En caso de error**:
 
    * El backend responde con un código de estado acorde al tipo de error.
-   * **No se retornan los cursos.**
+   * **No se retorna el contenido de la leccion**
 
 4. **Respuesta del Frontend**:
 
@@ -267,7 +267,7 @@ lessons {
 content {
    id_content,
    content_type,
-   url
+   content
 }
 
 ---

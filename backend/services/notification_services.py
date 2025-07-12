@@ -1,5 +1,10 @@
 # services/notification_service.py
 
+"""
+Este modulo encapsula la lógica de necogio asociada a la gestion de las notificaciones de los estudiantes y sus operaciones relacionadas
+"""
+
+
 # Modulos externos
 import logging
 from fastapi import HTTPException, status

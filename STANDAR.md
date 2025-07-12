@@ -180,13 +180,13 @@
 2. **Backend**:
 
    * **Valida el token** recibido.
-   * Si el token es **válido** y el id del curso tambien, 
+   * Si el token es **válido** y el id del curso tambien,
    * Retorna un **código de estado HTTP**, un **mensaje** según el resultado de la operación y las **lecciones** de dicho curso..
 
 3. **En caso de error**:
 
    * El backend responde con un código de estado acorde al tipo de error.
-   * **No se retornan los cursos.**
+   * **No se retornan las lecciones del curso.**
 
 4. **Respuesta del Frontend**:
 
@@ -231,7 +231,7 @@ lessons {
 2. **Backend**:
 
    * **Valida el token** recibido.
-   * Si el token es **válido** y el id del curso y de leccion tambien, 
+   * Si el token es **válido** y el id del curso y de leccion tambien,
    * Retorna un **código de estado HTTP**, un **mensaje** según el resultado de la operación y el **contenido** de dicha leccion..
 
 3. **En caso de error**:
@@ -286,7 +286,7 @@ content {
 2. **Backend**:
 
    * **Valida el token** recibido.
-   * Si el token es **válido** y el id del curso y de leccion tambien, 
+   * Si el token es **válido** y el id del curso y de leccion tambien,
    * Retorna un **código de estado HTTP**, un **mensaje** según el resultado de la operación y la **evaluacion** de dicha leccion..
 
 3. **En caso de error**:

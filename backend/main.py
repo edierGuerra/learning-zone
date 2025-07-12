@@ -21,9 +21,11 @@ from routes.identification_routes import router as identification_router  # ruta
 from routes.student_routes import router as student_router
 from routes.recovery_password_routes import router as recovery_password_router
 from routes.notifications_routes import router as notification_router
+from routes.lesson_routes import router as lesson_router
 from routes.course_routes import router as course_router
 from core.initial_data import create_initial_courses
 from database.config_db import async_session
+from core.initial_lessons import create_initial_lessons
 
 
 # --- Lifespan moderno (reemplaza on_event) ---
@@ -43,6 +45,8 @@ async def lifespan(app: FastAPI):
     async with async_session() as session:
         await create_initial_courses(session)
         print("✅ Cursos base creados")
+        await create_initial_lessons(session)
+        print("✅ Lecciones base creadas")
 
     print("✅ Base de datos inicializada correctamente")
     yield
@@ -99,4 +103,5 @@ app.include_router(identification_router)
 app.include_router(student_router)
 app.include_router(recovery_password_router)
 app.include_router(notification_router)
+app.include_router(lesson_router)
 app.include_router(course_router)

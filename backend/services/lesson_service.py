@@ -97,6 +97,7 @@ class LessonService:
 
                 info_of_lessons_by_course.append(
                     {
+                        "id_course": course.id,
                         "name_course": course.name,
                         "completed_lessons": completed,
                         "all_lessons": total,

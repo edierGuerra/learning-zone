@@ -23,6 +23,7 @@ class LessonResponse(BaseModel):
 
 
 class LessonProgressResponse(BaseModel):
+    id_course: int
     name_course: str
     completed_lessons: int
     all_lessons: int

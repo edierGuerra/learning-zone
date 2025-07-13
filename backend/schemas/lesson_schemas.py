@@ -20,3 +20,9 @@ class LessonResponse(BaseModel):
 
     class config:
         from_attributes = True
+
+
+class LessonProgressResponse(BaseModel):
+    name_course: str
+    completed_lessons: int
+    all_lessons: int

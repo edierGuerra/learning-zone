@@ -126,3 +126,22 @@ async def get_course_lessons(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Ha ocurrido un error inesperado al obtener las lecciones.",
         )
+
+
+@router.get("/lessons")
+async def get_count_lessons_complete(
+    student: Student = Depends(get_current_student),
+    lesson_service: LessonService = Depends(get_lesson_service),
+):
+    """
+    ## Obtener cantidad de lecciones por curso
+
+    Retorna una lista con el nombre de cada curso, el total de lecciones y cuántas ha completado un estudiante.
+
+    ### Parámetros:
+    - `student` (Student): Objeto de tipo estudiante extraido en base al token del mismo.
+
+    ### Retorna:
+    - Lista de diccionarios con las claves: `name_course`, `completed_lessons` y `all_lessons`.
+    """
+    return await lesson_service.get_count_complete_lessons(id_student=student.id)

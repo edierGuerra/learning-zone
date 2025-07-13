@@ -17,8 +17,8 @@ from repository.lesson_repository import LessonRepository
 from schemas.lesson_schemas import (
     LessonResponse,
 )  # Importamos el esquemna de respuesta de la leccion
-
-# from models.progress_model import StateProgress #para usar el enum
+from models.progress_model import StateProgress  # Para el enum
+from models.course_model import Course
 
 logger = logging.getLogger(__name__)
 
@@ -63,3 +63,51 @@ class LessonService:
             response_lessons.append(LessonResponse.model_validate(lesson_data))
 
         return response_lessons
+
+    async def get_count_complete_lessons(self, id_student: int = 1) -> list[dict]:
+        """
+        ## Obtener conteo de lecciones
+        Retorna una lista de dicionarios que contienen el nombre del curso, número de lecciones completadas
+        y total de lecciones por curso para un estudiante.
+        """
+        try:
+            info_of_lessons_by_course = []
+
+            courses: list[Course] = await self.lesson_repo.get_courses_by_student_id(
+                id_student
+            )
+
+            if not courses:
+                logger.warning(
+                    f"No se han encontrado los cursos del estudiante con ID {id_student}"
+                )
+                return []
+
+            for course in courses:
+                lessons_with_progress = await self.get_course_lessons_with_progress(
+                    course_id=course.id, student_id=id_student
+                )
+
+                completed = sum(
+                    1
+                    for lesson in lessons_with_progress
+                    if lesson.progress_state == StateProgress.COMPLETE
+                )
+                total = len(lessons_with_progress)
+
+                info_of_lessons_by_course.append(
+                    {
+                        "name_course": course.name,
+                        "completed_lessons": completed,
+                        "all_lessons": total,
+                    }
+                )
+
+            logger.info("Operación realizada con exito")
+            return info_of_lessons_by_course
+        except Exception as e:
+            logger.error(
+                f"Ha ocurrido un error al obtener las lecciones de los cursos: {e}",
+                exc_info=True,
+            )
+            return []

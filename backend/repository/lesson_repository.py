@@ -10,9 +10,11 @@ from typing import List, Optional, Tuple  # importamos Tuple para el resultado d
 
 # Modulos externos
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Modulos internos
+from models.student_model import Student
 from models.lesson_model import Lesson
 from models.course_model import Course
 from models.progress_model import (
@@ -73,8 +75,42 @@ class LessonRepository:
         Necesario para validar el id_course antes de buscar lecciones.
         """
         try:
-            result = await self.db.execute(select(Course).where(course_id == course_id))
+            result = await self.db.execute(select(Course).where(Course.id == course_id))
             return result.scalar_one_or_none()
         except Exception as e:
             logger.error(f"Error al obtener curso por ID {course_id}: {e}", exc_info=e)
             raise
+
+    async def get_courses_by_student_id(self, id_student: int = 1) -> List[Course]:
+        """
+        ## Selecionar cursos
+
+        Selecciona una lista de cursos en base a el id del estudiante.
+
+        ### Parámetros:
+
+        - `id_student(int)`: ID del estudiante.
+
+        ### Retorna:
+        - `List[Course]`: Lista de cursos del estudiante, o lista vacía.
+        """
+        try:
+            query = await self.db.execute(
+                select(Student)
+                .options(selectinload(Student.courses).selectinload(Course.lessons))
+                .where(Student.id == id_student)
+            )
+
+            student = query.scalar_one_or_none()
+
+            if not student:
+                logger.warning(
+                    f"[WARNING]: No se ha encontrado el estudiante con ID {id_student}."
+                )
+                return []
+            return student.courses
+        except Exception as e:
+            logger.error(
+                f"[ERROR]: A ocurrido un error al obtener los cursos: {e}",
+                exc_info=True,
+            )

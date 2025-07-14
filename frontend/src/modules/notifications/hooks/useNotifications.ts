@@ -6,7 +6,7 @@ import GetNotificationsAPI from "../services/GetNotifications.server"
 
 /* Logica de las notificaciones */
 export default function useNotifications(pollingInterval=4000 ) {
-    const {setNotifications, isReady } = useUser()
+    const {setNotifications } = useUser()
     const [loadingNot, setLoadingNot] = useState(false)
 
     const refreshNotifications = useCallback(async () => {
@@ -16,9 +16,11 @@ export default function useNotifications(pollingInterval=4000 ) {
     }, [setNotifications]); // Solo cambia si cambia `setNotifications`
 
     // Activar polling (peticion automatica) automático con useEffect
+    const token = authStorage.getToken();
+    
+    useEffect(() => {
 
-     useEffect(() => {
-        if(isReady){
+        if(token ){
             // Llama al cargar
             refreshNotifications();
             const timer = setInterval(refreshNotifications, pollingInterval);
@@ -27,7 +29,7 @@ export default function useNotifications(pollingInterval=4000 ) {
 
     }
 
-    }, [refreshNotifications,pollingInterval,isReady]);
+    }, []);
  
     const deleteItemNotification= async(idItemNotification:number)=>{
         try{

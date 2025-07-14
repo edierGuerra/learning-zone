@@ -4,43 +4,106 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
-    gap: 20px;
-    border-radius: 12px;
-
+    padding: 3rem;
+    gap: 25px;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .title-Request-email{
     color: #fff;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
-/* 
-{
-    padding: .6rem;
-    border: none;
-    width: 30%;
-    border-radius: 12px;
-    margin-top: 20px;
-    color: #101011;
-    background-color: var( --color-accent-yellow);
-} */
-.btn-email-verify {background-image: linear-gradient(to right, #e52d27 0%, #b31217  51%, #e52d27  100%)}
 .btn-email-verify {
+    background-image: linear-gradient(to right, #e52d27 0%, #b31217  51%, #e52d27  100%);
     border: none;
-  margin: 10px;
-  padding: 15px 45px;
-  text-align: center;
-  text-transform: uppercase;
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;            
-  border-radius: 10px;
-  display: block;
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    border-radius: 10px;
+    display: block;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100%;
+    max-width: 300px;
 }
 
 .btn-email-verify:hover {
-  background-position: right center; /* change the direction of the change here */
-  color: #fff;
-  text-decoration: none;
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet (768px y menor) */
+@media (max-width: 768px) {
+    .form-email-request {
+        padding: 2.5rem;
+        gap: 20px;
+        max-width: 450px;
+    }
+    
+    .title-Request-email {
+        font-size: 1.8rem;
+    }
+    
+    .btn-email-verify {
+        font-size: 16px;
+        padding: 12px 35px;
+        max-width: 280px;
+    }
+}
+
+/* Mobile (480px y menor) */
+@media (max-width: 480px) {
+    .form-email-request {
+        padding: 2rem;
+        gap: 18px;
+        max-width: 400px;
+    }
+    
+    .title-Request-email {
+        font-size: 1.5rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .btn-email-verify {
+        font-size: 15px;
+        padding: 10px 30px;
+        max-width: 260px;
+    }
+}
+
+/* Mobile muy pequeño (360px y menor) */
+@media (max-width: 360px) {
+    .form-email-request {
+        padding: 1.5rem;
+        gap: 15px;
+        max-width: 320px;
+    }
+    
+    .title-Request-email {
+        font-size: 1.3rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .btn-email-verify {
+        font-size: 14px;
+        padding: 8px 25px;
+        max-width: 240px;
+    }
 }
          

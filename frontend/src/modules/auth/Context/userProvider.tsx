@@ -6,6 +6,7 @@ import { useNavigationHandler } from "../../../hooks/useNavigationHandler"; // H
 import { GetStudentAPI } from "../Services/GetInformationStudent.server";
 import GetNotificationsAPI from "../../notifications/services/GetNotifications.server";
 import type { TNotifications } from "../../notifications/types/Notifications";
+import toast from "react-hot-toast";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -76,9 +77,11 @@ export const StudentProvider = ({ children }: Props) => {
     authStorage.removeUser();      // Elimina usuario del almacenamiento
     setStudent(null);              // Limpia usuario en estado global
     setToken(null);                // Limpia token en estado global
+    toast.success('seccion cerrada')
     authStorage.removeNotifications()
     setNotifications([])
     handleBtnNavigate("/");        // Redirige al inicio (se podrias usar replace si deseas evitar retroceder),
+    authStorage.removeCourses()
   };
   const numberNotifications:number = notifications.length
 

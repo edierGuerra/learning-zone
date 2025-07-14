@@ -5,65 +5,76 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
 }
+
 .title-register{
     color: var(--color-vibrant-red-orange);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
 }
 
 .container-label-input-r{
-    position: relative; /* Es el contenedor del input y label */
-    margin-top: 30px; /* Deja espacio para cuando el label suba */
+    position: relative;
+    margin-top: 30px;
+    width: 100%;
 }
+
 .container-label-input-r input {
-    width: 120%;
-    padding: 15px 10px 5px 10px; /* Padding para el texto del input */
+    width: 100%;
+    padding: 15px 10px 5px 10px;
     border: none;
     border-radius: 10px;
-    border-bottom: 2px solid #ccc; /* Borde inferior para un diseño limpio */
-    border: 2px solid #ccc; /* Borde inferior para un diseño limpio */
-    background-color: transparent; /* Fondo transparente */
+    border: 2px solid #ccc;
+    background-color: transparent;
     font-size: 1rem;
     color: #b7b3b3;
     transition: border-color 0.3s ease;
-    width: 250px;
+    box-sizing: border-box;
 }
 
 .container-label-input-r input:focus {
-    outline: none; /* Quita el outline predeterminado */
-    border-color: #f2f7fc; /* Color del borde al enfocar */
+    outline: none;
+    border-color: #f2f7fc;
 }
 
 .container-label-input-r label {
     letter-spacing: 1.4px;
     position: absolute;
-    top: 12px; /* Posición inicial, al mismo nivel que el texto del input */
-    left: 10px; /* Alineado con el padding del input */
+    top: 12px;
+    left: 10px;
     color: var(--color-text-light);
     font-size: 16px;
-    pointer-events: none; /* Permite hacer clic a través del label hacia el input */
-    transition: transform 0.3s ease, font-size 0.3s ease, color 0.3s ease; /* Transiciones suaves */
-    transform-origin: left top; /* Punto de origen para la transformación */
+    pointer-events: none;
+    transition: transform 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+    transform-origin: left top;
 }
+
 .error {
-  color: red;
-  font-size: 0.85rem;
-  margin-top: 0;
-  line-height: 1.2;
-  display: block;
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 0;
+    line-height: 1.2;
+    display: block;
 }
+
 /* Estado del label cuando el input está enfocado O tiene contenido */
-.container-label-input-r input:focus + label, /* Cuando el input está enfocado */
-.container-label-input-r input.has-content + label /* Cuando el input tiene contenido (gracias a React) */
-{
+.container-label-input-r input:focus + label,
+.container-label-input-r input.has-content + label {
     color: var(--color-text-light);
     padding: 0 .7rem;
     background-color: var(--color-dark-gray-brown);
-    transform: translateY(-26px) scale(0.85); /* Sube y reduce el tamaño */
+    transform: translateY(-26px) scale(0.85);
     font-size: 20px;
+    width: auto;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-
 
 /* Estilos para el ícono de ver/ocultar contraseña */
 .icon-show-r {
@@ -75,14 +86,13 @@
     font-weight: bold;
     z-index: 10;
 }
+
 .icon-show-r:hover {
-  color: #0c80ec;
+    color: #0c80ec;
 }
 
-
-
-.btn-verify-register{background-image:       linear-gradient(to right, #fe8c00 0%, #f83600  51%, #fe8c00  100%)}
-.btn-verify-register {
+.btn-verify-register{
+    background-image: linear-gradient(to right, #fe8c00 0%, #f83600  51%, #fe8c00  100%);
     margin: 10px;
     padding: 15px 45px;
     text-align: center;
@@ -94,13 +104,151 @@
     display: block;
     cursor: pointer;
     width: 100%;
-    padding: .4rem;
+    padding: 1rem;
     color: #101011;
     font-size: 20px;
- }
+    border: none;
+    font-weight: 600;
+}
 
 .btn-verify-register:hover {
-  background-position: right center; /* change the direction of the change here */
-  color: #fff;
-  text-decoration: none;
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet (768px y menor) */
+@media (max-width: 768px) {
+    .form-register {
+        padding: 2rem;
+        gap: 12px;
+        max-width: 350px;
+    }
+    
+    .title-register {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .container-label-input-r {
+        margin-top: 25px;
+    }
+    
+    .container-label-input-r input {
+        padding: 14px 8px 4px 8px;
+        font-size: 0.95rem;
+    }
+    
+    .container-label-input-r label {
+        font-size: 15px;
+        top: 11px;
+        left: 8px;
+    }
+    
+    .container-label-input-r input:focus + label,
+    .container-label-input-r input.has-content + label {
+        font-size: 18px;
+        transform: translateY(-24px) scale(0.85);
+    }
+    
+    .btn-verify-register {
+        font-size: 18px;
+        padding: 0.9rem;
+    }
+    
+    .error {
+        font-size: 0.8rem;
+    }
+}
+
+/* Mobile (480px y menor) */
+@media (max-width: 480px) {
+    .form-register {
+        padding: 1.5rem;
+        gap: 10px;
+        max-width: 300px;
+    }
+    
+    .title-register {
+        font-size: 1.5rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .container-label-input-r {
+        margin-top: 20px;
+    }
+    
+    .container-label-input-r input {
+        padding: 12px 6px 3px 6px;
+        font-size: 0.9rem;
+    }
+    
+    .container-label-input-r label {
+        font-size: 14px;
+        top: 10px;
+        left: 6px;
+    }
+    
+    .container-label-input-r input:focus + label,
+    .container-label-input-r input.has-content + label {
+        font-size: 16px;
+        transform: translateY(-22px) scale(0.85);
+    }
+    
+    .btn-verify-register {
+        font-size: 16px;
+        padding: 0.8rem;
+    }
+    
+    .error {
+        font-size: 0.75rem;
+    }
+}
+
+/* Mobile muy pequeño (360px y menor) */
+@media (max-width: 360px) {
+    .form-register {
+        padding: 1rem;
+        gap: 8px;
+        max-width: 280px;
+    }
+    
+    .title-register {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .container-label-input-r {
+        margin-top: 15px;
+    }
+    
+    .container-label-input-r input {
+        padding: 10px 5px 2px 5px;
+        font-size: 0.85rem;
+    }
+    
+    .container-label-input-r label {
+        font-size: 13px;
+        top: 8px;
+        left: 5px;
+    }
+    
+    .container-label-input-r input:focus + label,
+    .container-label-input-r input.has-content + label {
+        font-size: 15px;
+        transform: translateY(-20px) scale(0.85);
+    }
+    
+    .btn-verify-register {
+        font-size: 14px;
+        padding: 0.7rem;
+    }
+    
+    .error {
+        font-size: 0.7rem;
+    }
 }

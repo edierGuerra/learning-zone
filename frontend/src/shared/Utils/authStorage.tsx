@@ -1,5 +1,6 @@
 // PARA MAYOR SEGURIDAD MIGRAR ESTO A COOKIES
 // Importa los tipos de datos definidos para el usuario y su token
+import type { TCourses, TLessons } from "../../modules/courses/types/Course";
 import type { TNotifications } from "../../modules/notifications/types/Notifications";
 import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken } from "../../modules/types/User";
 
@@ -95,10 +96,35 @@ export const authStorage = {
     }
   },
 
-  removeNotifications: () => {
-    localStorage.removeItem('notifications');
-  }
-    
-  
-    
+  removeNotifications: () => localStorage.removeItem('notifications'),
+
+  setCourse:(courses:TCourses)=>{
+    localStorage.setItem('courses',JSON.stringify(courses))
+  },
+  getCourses:():TCourses =>{
+    try {
+      const raw = localStorage.getItem("courses");
+      return raw ? (JSON.parse(raw) as TCourses) : [];
+    } catch (e) {
+      console.error("El JSON está mal formado:", e);
+      return [];
+    }
+
+  },
+  removeCourses:()=>localStorage.removeItem('courses'),
+
+
+  setLessons:(lessons:TLessons)=>{
+    localStorage.setItem('lessons',JSON.stringify(lessons))
+  },
+  getLessons:():TLessons =>{
+    try {
+      const raw = localStorage.getItem("lessons");
+      return raw ? (JSON.parse(raw) as TLessons) : [];
+    } catch (e) {
+      console.error("El JSON está mal formado:", e);
+      return [];
+    }
+  },
+  removeLessons:()=>localStorage.removeItem('lessons'),
 };

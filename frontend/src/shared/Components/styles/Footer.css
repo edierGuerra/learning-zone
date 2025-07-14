@@ -1,96 +1,275 @@
-*{
+/* ===== RESET BÁSICO ===== */
+* {
     margin: 0;
     padding: 0;
-    box-sizing: 0;
+    box-sizing: border-box; /* Corregido: era '0' en lugar de 'border-box' */
 }
-footer{
-    padding: 20px 0px;
+
+/* ===== FOOTER PRINCIPAL ===== */
+footer {
+    /* Estilos base (mobile) */
+    padding: var(--spacing-md) 0; /* 24px arriba/abajo, 0 izquierda/derecha */
     background-color: var(--color-primary-dark-bg);
     display: flex;
-    flex-direction: column;
-    color: var( --color-text-light);
-
+    flex-direction: column; /* Elementos apilados verticalmente */
+    color: var(--color-text-light);
 }
-.contenedor-1{
-    padding: 8px 25px;
 
+/* ===== CONTENEDOR 1: LOGO + UBICACIÓN ===== */
+.contenedor-1 {
+    /* Estilos base (mobile) */
+    padding: var(--spacing-sm) var(--spacing-md); /* 16px arriba/abajo, 24px izquierda/derecha */
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* En mobile: logo arriba, ubicación abajo */
+    justify-content: center;
     align-items: center;
+    gap: var(--spacing-sm); /* Espacio entre elementos */
     border-bottom: 1px solid #fff;
 }
-.container-nombre{
+
+/* Contenedor del nombre/logo */
+.container-nombre {
     font-family: 'Clash Display';
     color: var(--color-primary-blue-medium);
-
     display: flex;
     align-items: center;
-    gap: 15px;
-    font-size: 32px;
+    gap: var(--spacing-sm); /* 16px entre logo y texto */
+    font-size: var(--font-size-2xl); /* 24px en mobile */
 }
-.container-nombre img{
-    width: 80px;
+
+.container-nombre img {
+    width: 60px; /* Logo más pequeño en mobile */
     height: auto;
     border-radius: 50%;
-
 }
-.contendor-ubi{
+
+/* Contenedor de ubicación */
+.contendor-ubi {
     display: flex;
-    gap: 12px;
-    padding: 6px 15px;
+    gap: var(--spacing-xs); /* 8px entre icono y texto */
+    padding: var(--spacing-xs) var(--spacing-sm); /* 8px arriba/abajo, 16px izquierda/derecha */
     border-radius: 20px;
     border: 1px solid #fff;
     align-items: center;
+    font-size: var(--font-size-sm); /* 14px en mobile */
+}
 
+.icon {
+    font-size: var(--font-size-xl); /* 20px en mobile */
 }
-.icon{
-    font-size: 32px;
-}
-.iconUbi{
+
+.iconUbi {
     color: #fff;
 }
 
-
-
-
-
-.contenedor-2{
-    padding: 16px ;
+/* ===== CONTENEDOR 2: COPYRIGHT + INSTITUCIÓN + REDES ===== */
+.contenedor-2 {
+    /* Estilos base (mobile) */
+    padding: var(--spacing-sm); /* 16px en todos los lados */
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* En mobile: elementos apilados */
+    justify-content: center;
     align-items: center;
+    gap: var(--spacing-sm); /* Espacio entre elementos */
 }
 
-.subtitle-copyright{
-    font-size: 22px;
+/* Copyright */
+.subtitle-copyright {
+    font-size: var(--font-size-base); /* 16px en mobile */
     font-weight: 400;
+    text-align: center; /* Centrado en mobile */
 }
-.container-all-t-p{
+
+.container-all-t-p {
     cursor: pointer;
+    text-align: center;
 }
-.contenedor-institucion{
+
+/* Contenedor de institución */
+.contenedor-institucion {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap:12px;
-}
-.contenedor-institucion h3{
-    color: var( --color-accent-orange);
+    gap: var(--spacing-xs); /* 8px entre logo y texto */
 }
 
-.contenedor-institucion img{
-    width: 60px;
-}
-.contenedor-redes{
-    padding-right: 40px;
-
+.contenedor-institucion h3 {
+    color: var(--color-accent-orange);
+    font-size: var(--font-size-base); /* 16px en mobile */
 }
 
-.contenedor-redes ul{
+.contenedor-institucion img {
+    width: 40px; /* Logo más pequeño en mobile */
+}
+
+/* Contenedor de redes sociales */
+.contenedor-redes {
+    /* En mobile: sin padding especial */
+    padding-right: 0;
+}
+
+.contenedor-redes ul {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 18px;
+    gap: var(--spacing-sm); /* 16px entre iconos */
     list-style: none;
+}
 
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet (768px y superior) */
+@media (min-width: 768px) {
+    .contenedor-1 {
+        flex-direction: row; /* Logo y ubicación en la misma fila */
+        justify-content: space-between; /* Logo a la izquierda, ubicación a la derecha */
+        align-items: center;
+        padding: var(--spacing-md) var(--spacing-lg); /* Más padding */
+    }
+    
+    .container-nombre {
+        font-size: var(--font-size-3xl); /* 30px en tablet */
+    }
+    
+    .container-nombre img {
+        width: 70px; /* Logo más grande */
+    }
+    
+    .contendor-ubi {
+        font-size: var(--font-size-base); /* 16px en tablet */
+        padding: var(--spacing-sm) var(--spacing-md); /* Más padding */
+    }
+    
+    .icon {
+        font-size: var(--font-size-2xl); /* 24px en tablet */
+    }
+    
+    .contenedor-2 {
+        flex-direction: row; /* Elementos en la misma fila */
+        justify-content: space-between; /* Distribuidos */
+        align-items: center;
+        padding: var(--spacing-md) var(--spacing-lg); /* Más padding */
+    }
+    
+    .subtitle-copyright {
+        font-size: var(--font-size-lg); /* 18px en tablet */
+        text-align: left; /* Alineado a la izquierda */
+    }
+    
+    .container-all-t-p {
+        cursor: pointer;
+        text-align: left;
+    }
+    .contenedor-institucion h3 {
+        font-size: var(--font-size-lg); /* 18px en tablet */
+    }
+    
+    .contenedor-institucion img {
+        width: 50px; /* Logo más grande */
+    }
+    
+    .contenedor-redes {
+        padding-right: var(--spacing-lg); /* 32px de padding derecho */
+    }
+    
+    .contenedor-redes ul {
+        gap: var(--spacing-md); /* 24px entre iconos */
+    }
+}
+
+/* Desktop (1024px y superior) */
+@media (min-width: 1024px) {
+    footer {
+        padding: var(--spacing-lg) 0; /* 32px arriba/abajo */
+    }
+    
+    .contenedor-1 {
+        padding: var(--spacing-lg) var(--spacing-xl); /* 32px arriba/abajo, 48px izquierda/derecha */
+    }
+    
+    .container-nombre {
+        font-size: var(--font-size-4xl); /* 36px en desktop */
+    }
+    
+    .container-nombre img {
+        width: 80px; /* Logo original */
+    }
+    
+    .contendor-ubi {
+        font-size: var(--font-size-lg); /* 18px en desktop */
+        padding: var(--spacing-sm) var(--spacing-lg); /* Más padding */
+    }
+    
+    .icon {
+        font-size: var(--font-size-3xl); /* 30px en desktop */
+    }
+    
+    .contenedor-2 {
+        padding: var(--spacing-lg) var(--spacing-xl); /* Más padding */
+    }
+    
+    .subtitle-copyright {
+        font-size: var(--font-size-xl); /* 20px en desktop */
+    }
+    
+    .contenedor-institucion h3 {
+        font-size: var(--font-size-xl); /* 20px en desktop */
+    }
+    
+    .contenedor-institucion img {
+        width: 60px; /* Logo original */
+    }
+    
+    .contenedor-redes ul {
+        gap: var(--spacing-lg); /* 32px entre iconos */
+    }
+}
+
+/* Mobile pequeño (480px y menor) */
+@media (max-width: 480px) {
+    .contenedor-1 {
+        padding: var(--spacing-xs) var(--spacing-sm); /* Menos padding */
+    }
+    
+    .container-nombre {
+        font-size: var(--font-size-xl); /* 20px en mobile pequeño */
+        flex-direction: column; /* Logo arriba, texto abajo */
+        text-align: center;
+    }
+    
+    .container-nombre img {
+        width: 50px; /* Logo más pequeño */
+    }
+    
+    .contendor-ubi {
+        font-size: var(--font-size-xs); /* 12px en mobile pequeño */
+        padding: var(--spacing-xs) var(--spacing-md); /* Menos padding */
+        flex-direction: column; /* Icono arriba, texto abajo */
+        text-align: center;
+    }
+    
+    .icon {
+        font-size: var(--font-size-lg); /* 18px en mobile pequeño */
+    }
+    
+    .contenedor-2 {
+        padding: var(--spacing-xs); /* Menos padding */
+        gap: var(--spacing-xs); /* Menos espacio entre elementos */
+    }
+    
+    .subtitle-copyright {
+        font-size: var(--font-size-sm); /* 14px en mobile pequeño */
+    }
+    
+    .contenedor-institucion h3 {
+        font-size: var(--font-size-sm); /* 14px en mobile pequeño */
+    }
+    
+    .contenedor-institucion img {
+        width: 35px; /* Logo más pequeño */
+    }
+    
+    .contenedor-redes ul {
+        gap: var(--spacing-xs); /* 8px entre iconos */
+    }
 }

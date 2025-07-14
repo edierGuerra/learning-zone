@@ -38,15 +38,15 @@ export default function Footer() {
             </div>
 
             <div className="contenedor-institucion">
-              <h3>I.E.R Juan Tamayo</h3>
+              <h3> <a href="https://www.facebook.com/photo/?fbid=122096209268225816&set=a.122096209292225816&__tn__=%3C" target='_blank'>I.E.R Juan Tamayo</a></h3>
               <img src={iconIER} alt="" />
             </div>
             <div className="contenedor-redes">
               <ul>
-                <li className="tikTok">{<FaTiktok className='icon' />}</li>
-                <li className="facebook">{<FaFacebookF className='icon' />}</li>
-                <li className="instagram">{<FaInstagram className='icon' />}</li>
-                <li className="gitHub">{<FiGithub className='icon' />}</li>
+                <a className="tikTok">{<FaTiktok className='icon' />}</a>
+                <a className="facebook">{<FaFacebookF className='icon' />}</a>
+                <a className="instagram">{<FaInstagram className='icon' />}</a>
+                <a className="gitHub"  href='https://github.com/edierGuerra/learning-zone' target='_blank'>{<FiGithub className='icon'/>}</a>
               </ul>
             </div>
         </section>

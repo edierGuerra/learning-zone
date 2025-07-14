@@ -1,41 +1,30 @@
-
-.auth-navbar{
-    padding: .6rem;
+/* ===== AUTH NAVBAR PRINCIPAL ===== */
+.auth-navbar {
+    /* Estilos base (mobile) */
+    padding: var(--spacing-sm); /* 16px en todos los lados */
     align-items: center;
-
-
-}
-.opc-auth-navbar{
     display: flex;
-    gap: 43px;
-    align-items: center;
-    align-content: center;
     justify-content: center;
-
 }
-/* .opc-auth-navbar{
 
-}
-.icon-auth-navBar{
-    color: red;
-    background-color: transparent;
-    border: none;
-    cursor: pointer
-    ;
-    } */
+/* ===== OPCIONES DEL NAVBAR ===== */
 .opc-auth-navbar {
+    /* Estilos base (mobile) */
     display: flex;
-    gap: 1.2rem;
+    gap: var(--spacing-md); /* 24px entre iconos */
     align-items: center;
-    padding: 10px 20px;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md); /* 16px arriba/abajo, 24px izquierda/derecha */
     border-radius: 8px;
     list-style: none;
+    flex-wrap: wrap; /* Permite que los iconos se envuelvan en mobile */
 }
 
-    /* Estilo base para todos los botones */
+/* ===== ICONOS BASE ===== */
 .icon-auth-navBar {
-    font-size: 42px;
-    padding: 10px;
+    /* Estilos base (mobile) */
+    font-size: var(--font-size-3xl); /* 30px en mobile */
+    padding: var(--spacing-sm); /* 16px de padding */
     border: none;
     border-radius: 50%;
     background-color: transparent;
@@ -44,55 +33,195 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 50px; /* Ancho mínimo para touch */
+    min-height: 50px; /* Alto mínimo para touch */
 }
 
-/* Estilos por función con colores diferenciados */
+/* ===== ESTILOS POR FUNCIÓN CON COLORES DIFERENCIADOS ===== */
+
+/* Icono Home */
 .icon-home {
-  color: #80bdfe;
+    color: #80bdfe;
 }
+
 .icon-home:hover {
-  color: #1a83f4;
+    color: #1a83f4;
+    transform: scale(1.1); /* Efecto de escala en hover */
 }
 
+/* Icono Categories */
 .icon-categories {
-  color: #75fb94;
+    color: #75fb94;
 }
+
 .icon-categories:hover {
-  color: #28b647;
+    color: #28b647;
+    transform: scale(1.1);
 }
 
+/* Icono Help */
 .icon-help {
-  color: #fca863;
+    color: #fca863;
 }
+
 .icon-help:hover {
-  color: #ff6f02;
+    color: #ff6f02;
+    transform: scale(1.1);
 }
 
+/* Icono Notifications */
 .icon-notifications {
-  display: flex;
-  color: #edcd6e;
-  align-items: center;
+    display: flex;
+    color: #edcd6e;
+    align-items: center;
 }
+
 .icon-notifications:hover {
-  color: #dfab10;
+    color: #dfab10;
+    transform: scale(1.1);
 }
 
+/* Icono Exit */
 .icon-exit {
-  color: #fc7683 ;
+    color: #fc7683;
 }
+
 .icon-exit:hover {
-  color: #f8263b;
+    color: #f8263b;
+    transform: scale(1.1);
 }
 
-/* Responsive opcional */
-@media (max-width: 600px) {
-  .opc-auth-navbar {
-    gap: 8rem;
-    padding: 81px 10px;
-  }
+/* ===== RESPONSIVE BREAKPOINTS ===== */
 
-  .icon-auth-navBar {
-    font-size: 10rem;
-    padding: 38px;
-  }
+/* Tablet (768px y superior) */
+@media (min-width: 768px) {
+    .auth-navbar {
+        padding: var(--spacing-md); /* 24px en todos los lados */
+        justify-content: flex-end; /* Alineado a la derecha en tablet */
+    }
+    
+    .opc-auth-navbar {
+        gap: var(--spacing-lg); /* 32px entre iconos */
+        padding: var(--spacing-md) var(--spacing-lg); /* 24px arriba/abajo, 32px izquierda/derecha */
+        flex-wrap: nowrap; /* No se envuelven en tablet */
+    }
+    
+    .icon-auth-navBar {
+        font-size: var(--font-size-4xl); /* 36px en tablet */
+        padding: var(--spacing-md); /* 24px de padding */
+        min-width: 60px; /* Ancho mínimo más grande */
+        min-height: 60px; /* Alto mínimo más grande */
+    }
+}
+
+/* Desktop (1024px y superior) */
+@media (min-width: 1024px) {
+    .auth-navbar {
+        padding: var(--spacing-xs); 
+    }
+    
+    .opc-auth-navbar {
+        gap: var(--spacing-xl); /* 48px entre iconos */
+        padding: var(--spacing-xs) var(--spacing-xl); /* 32px arriba/abajo, 48px izquierda/derecha */
+    }
+    
+    .icon-auth-navBar {
+        font-size: 42px; /* Tamaño original */
+        padding: 10px; /* Padding original */
+        min-width: 50px; /* Ancho mínimo original */
+        min-height: 50px; /* Alto mínimo original */
+    }
+}
+
+/* Mobile pequeño (480px y menor) */
+@media (max-width: 480px) {
+    .auth-navbar {
+        padding: var(--spacing-xs); /* 8px en todos los lados */
+    }
+    
+    .opc-auth-navbar {
+        gap: var(--spacing-sm); /* 16px entre iconos */
+        padding: var(--spacing-xs) var(--spacing-sm); /* 8px arriba/abajo, 16px izquierda/derecha */
+        flex-wrap: wrap; /* Se envuelven en mobile pequeño */
+        justify-content: space-around; /* Distribuidos uniformemente */
+    }
+    
+    .icon-auth-navBar {
+        font-size: var(--font-size-2xl); /* 24px en mobile pequeño */
+        padding: var(--spacing-xs); /* 8px de padding */
+        min-width: 45px; /* Ancho mínimo más pequeño */
+        min-height: 45px; /* Alto mínimo más pequeño */
+    }
+}
+
+/* Mobile muy pequeño (360px y menor) */
+@media (max-width: 360px) {
+    .auth-navbar {
+        padding: var(--spacing-xs); /* 8px en todos los lados */
+    }
+    
+    .opc-auth-navbar {
+        gap: var(--spacing-xs); /* 8px entre iconos */
+        padding: var(--spacing-xs); /* 8px en todos los lados */
+        flex-direction: column; /* Iconos apilados verticalmente */
+        align-items: center;
+    }
+    
+    .icon-auth-navBar {
+        font-size: var(--font-size-xl); /* 20px en mobile muy pequeño */
+        padding: var(--spacing-xs); /* 8px de padding */
+        min-width: 40px; /* Ancho mínimo más pequeño */
+        min-height: 40px; /* Alto mínimo más pequeño */
+    }
+}
+
+/* ===== MEJORAS PARA DISPOSITIVOS TÁCTILES ===== */
+
+/* Dispositivos sin hover (touch) */
+@media (hover: none) {
+    .icon-auth-navBar:hover {
+        transform: none; /* Sin efectos de escala en touch */
+    }
+    
+    .icon-auth-navBar:active {
+        transform: scale(0.95); /* Efecto de presión en touch */
+    }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+
+/* Focus visible para navegación por teclado */
+.icon-auth-navBar:focus {
+    outline: 2px solid var(--color-primary-blue);
+    outline-offset: 2px;
+}
+
+/* ===== ANIMACIONES SUAVES ===== */
+
+/* Transición suave para todos los iconos */
+.icon-auth-navBar {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efecto de pulso para notificaciones */
+.icon-notifications {
+    position: relative;
+}
+
+.icon-notifications::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: #f8263b;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Mostrar indicador de notificación si hay notificaciones */
+.icon-notifications.has-notifications::after {
+    opacity: 1;
 }

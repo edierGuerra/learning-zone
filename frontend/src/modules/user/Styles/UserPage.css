@@ -23,7 +23,7 @@
     padding: 3rem;
 }
 
-.section-process{
+.section-progress{
     display: flex;
     flex-direction: column;
     gap: 22px;
@@ -36,36 +36,39 @@
     border-radius: 12px;
     padding: 50px;
 }
-.title-process{
+.title-progress{
     color: #fff;
 }
-.process-course-PowerPoint{
+.progress-course-powerpoint{
+    cursor: pointer;
     background-color:var(--color-main-powerPoint) ;
     padding: .6rem;
     border-radius: 10px;
     color: #fff;
-    width: 90%;
+    width: 100%;
     text-align: center;
 }
-.process-course-excel{
+.progress-course-excel{
+    cursor: pointer;
     background-color:var(--color-main-excel);
     padding: .6rem;
     border-radius: 10px;
     color: #fff;
-    width: 90%;
-
+    width: 100%;
+    
     text-align: center;
 }
-.process-course-word{
+.progress-course-word{
+    cursor: pointer;
     background-color:var(--color-main-word);
     padding: .6rem;
     border-radius: 10px;
     color: #fff;
-    width: 90%;
+    width: 100%;
 
     text-align: center;
 }
-.process-main{
+.progress-main{
 
     background-color: var(    --color-accent-orange);
     justify-self: center;
@@ -75,6 +78,7 @@
     margin: 0px 4px;
     border-radius: 12px;
     color: #fff;
+    text-align: center;
 }
 .section-info-user{
     padding: .8rem;

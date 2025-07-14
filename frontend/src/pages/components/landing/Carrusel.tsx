@@ -1,43 +1,89 @@
-import './Styles/Carrusel.css'
-import imgIcon from '../../assets/Carrusel/img-ier.jpg'
+import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import imgIcon from "../../assets/Carrusel/img-ier.jpg";
+import imgIcon2 from "../../assets/Carrusel/img-ier-2.jpg";
+import imgIcon3 from "../../assets/Carrusel/img-ier-3.jpg";
+import imgIcon4 from "../../assets/Carrusel/img-ier-4.jpg";
+import "./styles/Carrusel.css";
 
-    export default function Carrusel() {
+const items = [
+  {
+    img: imgIcon,
+    title: "¡Estudiantes brillantes!",
+    description:
+      "Los estudiantes de hoy son curiosos, creativos y aprenden rápido. Este aplicativo fue creado pensando en ustedes.",
+  },
+  {
+    img: imgIcon2,
+    title: "Dominan la tecnología",
+    description:
+      "Con herramientas como Word, Excel y PowerPoint, muestran su potencial y crean proyectos increíbles.",
+  },
+  {
+    img: imgIcon3,
+    title: "Organizados y capaces",
+    description:
+      "Excel te permite planear, analizar y tomar decisiones de forma lógica. Una habilidad valiosa en cualquier área.",
+  },
+  {
+    img: imgIcon4,
+    title: "El futuro es de ustedes",
+    description:
+      "Tienen talento, energía y grandes sueños. Este aplicativo es solo una herramienta más en su camino al éxito.",
+  },
+];
+
+export default function Carrusel() {
+  const [current, setCurrent] = useState(0);
+  const total = items.length;
+  const listRef = useRef<HTMLUListElement>(null);
+
+  const goTo = (idx: number) => {
+    const newIndex = (idx + total) % total;
+    setCurrent(newIndex);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      goTo(current + 1);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [current]);
 
   return (
-  <section className='section-carrusel'>
+    <section className="section-carrusel">
+      <div className="container-carrusel">
+        <ul
+          ref={listRef}
+          style={{ transform: `translateX(-${current * 100}%)` }}
+          className="carrusel-list"
+        >
+          {items.map((item, i) => (
+            <li key={i} className="carrusel-item">
+              <img src={item.img} alt={item.title} />
+              <div className="texto">
+                <h2>{item.title}</h2>
+                <p>{item.description}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
 
-            <div className='container-carrusel'>
-                <ul>
-                    <li>
-                        <img src={imgIcon} alt="" />
-                        <div className="texto">
-                            <h2>¡Estudiantes brillantes!</h2>
-                            <p>Hoy más que nunca, los estudiantes tienen habilidades únicas: son curiosos, creativos y aprenden rápido. Este aplicativo fue creado pensando en ustedes, que no temen a los retos y buscan siempre superarse</p>
-                        </div>
-                    </li>
-                    <li>
-                        <img src={imgIcon} alt="" />
-                        <div className="texto">
-                            <h2>Dominan la tecnología</h2>
-                            <p>Ustedes han crecido en un mundo digital, y eso los convierte en expertos en adaptarse. Con herramientas como Word, Excel y PowerPoint, podrán mostrar todo su potencial y crear proyectos increíbles.</p>
-                        </div>
-                    </li>
-                    <li>
-                        <img src={imgIcon} alt="" />
-                        <div className="texto">
-                            <h2>Organizados y capaces</h2>
-                            <p>Excel no es solo para matemáticas, ¡es para mentes organizadas como la tuya! Te permitirá planear, analizar y tomar decisiones de forma lógica y estructurada. Una habilidad valiosa en cualquier área</p>
-                        </div>
-                    </li>
-                    <li>
-                        <img src={imgIcon} alt="" />
-                        <div className="texto">
-                            <h2>El futuro es de ustedes</h2>
-                            <p>Sabemos que tienen talento, energía y grandes sueños. Este aplicativo es solo una herramienta más en su camino al éxito. ¡Sigan aprendiendo, porque ustedes ya están marcando la diferencia!.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </section>
-  )
+        <button
+          aria-label="Anterior"
+          className="slider-nav prev"
+          onClick={() => goTo(current - 1)}
+        >
+          <ChevronLeft />
+        </button>
+        <button
+          aria-label="Siguiente"
+          className="slider-nav next"
+          onClick={() => goTo(current + 1)}
+        >
+          <ChevronRight />
+        </button>
+      </div>
+    </section>
+  );
 }

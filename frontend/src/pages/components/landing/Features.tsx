@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, /* useState */ } from 'react';
 import TiltedCard from '../../../shared/animations/AnimationCard'
 import './styles/Features.css'
-import ConfettiExplosion from "react-confetti-explosion";
+/* import ConfettiExplosion from "react-confetti-explosion"; */
+import img1 from '../../assets/Features/img-1.jpg'
 import '../../../../node_modules/aos/dist/aos.css'
 import AOS from 'aos';
-import { useNavigationHandler } from '../../../hooks/useNavigationHandler';
+/* import { useNavigationHandler } from '../../../hooks/useNavigationHandler'; */
 export default function Features() {
-  const [isExploding, setIsExploding] = useState(false);
+/*   const [isExploding, setIsExploding] = useState(false);
 
-  const handleBtnNavigate = useNavigationHandler()
+  const handleBtnNavigate = useNavigationHandler() */
 
 useEffect(() => {
   AOS.init({
@@ -22,14 +23,14 @@ useEffect(() => {
 }, []);
 
 
-const handleClickBtnView =()=>{
+/* const handleClickBtnView =()=>{
   setIsExploding(true)
   setTimeout(() => setIsExploding(false), 1000);
   handleBtnNavigate('/home')
   
 
 
-}
+} */
   return (
     <div data-aos="fade-up" className='section-feaures'>
       <section className='section-features-title'>
@@ -42,9 +43,17 @@ const handleClickBtnView =()=>{
         <div className="feature-card">
           <h2 className='title-feature'>prepara para mundo laboral - universitario</h2>
           <TiltedCard
+          imageSrc={img1}
+          containerWidth="300px"
+          imageHeight="300px"
+          imageWidth="300px"
+          />
+        </div>
+        <div className="feature-card">
+          <h2 className='title-feature'>Organización de la información</h2>
+          <TiltedCard
           imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
           altText="Kendrick Lamar - GNX Album Cover"
-          captionText="Kendrick Lamar - GNX"
           containerHeight="300px"
           containerWidth="300px"
           imageHeight="300px"
@@ -52,7 +61,6 @@ const handleClickBtnView =()=>{
           rotateAmplitude={12}
           scaleOnHover={1.1}
           showMobileWarning={false}
-          showTooltip={true}
           displayOverlayContent={false}
           overlayContent={
             <p className="tilted-card-demo-text">
@@ -66,7 +74,6 @@ const handleClickBtnView =()=>{
           <TiltedCard
           imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
           altText="Kendrick Lamar - GNX Album Cover"
-          captionText="Kendrick Lamar - GNX"
           containerHeight="300px"
           containerWidth="300px"
           imageHeight="300px"
@@ -74,7 +81,6 @@ const handleClickBtnView =()=>{
           rotateAmplitude={12}
           scaleOnHover={1.1}
           showMobileWarning={false}
-          showTooltip={true}
           displayOverlayContent={false}
           overlayContent={
             <p className="tilted-card-demo-text">
@@ -88,7 +94,6 @@ const handleClickBtnView =()=>{
           <TiltedCard
           imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
           altText="Kendrick Lamar - GNX Album Cover"
-          captionText="Kendrick Lamar - GNX"
           containerHeight="300px"
           containerWidth="300px"
           imageHeight="300px"
@@ -96,29 +101,6 @@ const handleClickBtnView =()=>{
           rotateAmplitude={12}
           scaleOnHover={1.1}
           showMobileWarning={false}
-          showTooltip={true}
-          displayOverlayContent={false}
-          overlayContent={
-            <p className="tilted-card-demo-text">
-              Kendrick Lamar - GNX
-            </p>
-          }
-          />
-        </div>
-        <div className="feature-card">
-          <h2 className='title-feature'>Organización de la información</h2>
-          <TiltedCard
-          imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
-          altText="Kendrick Lamar - GNX Album Cover"
-          captionText="Kendrick Lamar - GNX"
-          containerHeight="300px"
-          containerWidth="300px"
-          imageHeight="300px"
-          imageWidth="300px"
-          rotateAmplitude={12}
-          scaleOnHover={1.1}
-          showMobileWarning={false}
-          showTooltip={true}
           displayOverlayContent={false}
           overlayContent={
             <p className="tilted-card-demo-text">
@@ -133,7 +115,6 @@ const handleClickBtnView =()=>{
           <TiltedCard
           imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
           altText="Kendrick Lamar - GNX Album Cover"
-          captionText="Kendrick Lamar - GNX"
           containerHeight="300px"
           containerWidth="300px"
           imageHeight="300px"
@@ -141,7 +122,6 @@ const handleClickBtnView =()=>{
           rotateAmplitude={12}
           scaleOnHover={1.1}
           showMobileWarning={false}
-          showTooltip={true}
           displayOverlayContent={false}
           overlayContent={
             <p className="tilted-card-demo-text">
@@ -150,28 +130,26 @@ const handleClickBtnView =()=>{
           }
           />
         </div>
-        <div className="feature-card-btn">
-          <div className='div-card-top'>Que esperas</div>
-
-
-          <button onClick={handleClickBtnView}>Continuar</button>
-        {isExploding && (
-            <div style={{ position: "relative", top: "-10%", left: "94%", transform: "translateX(-50%)" }}>
-              <ConfettiExplosion
-                particleCount={350}
-                duration={8000}
-                force={.4}
-                width={2000}
-                zIndex={2000}
-                colors={["#D4AF37", "#f49c2a", "#ffffff"]}
-              />
-            </div>
-          )}
-          <div className='div-card-button'>Para empezar</div>
+        <div className="feature-card">
+          <h2 className='title-feature'>Trabajo colaborativo en documentos compartidos</h2>
+          <TiltedCard
+          imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
+          altText="Kendrick Lamar - GNX Album Cover"
+          containerHeight="300px"
+          containerWidth="300px"
+          imageHeight="300px"
+          imageWidth="270px"
+          rotateAmplitude={12}
+          scaleOnHover={1.1}
+          showMobileWarning={false}
+          displayOverlayContent={false}
+          overlayContent={
+            <p className="tilted-card-demo-text">
+              Kendrick Lamar - GNX
+            </p>
+          }
+          />
         </div>
-
-
-
       </section>
 
 

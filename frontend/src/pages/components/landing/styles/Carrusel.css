@@ -1,56 +1,77 @@
 .section-carrusel {
-  background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* degradado azul moderno */
-  background-image: url('../../../assets/Carrusel/img-background.png');
+  width: 100%;
+  min-height: 80vh;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  background-image: url('../../../assets/Carrusel/img-background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  width: 100%;
-  height: auto;
-}
-
-.titulo {
-  cursor: pointer;
-  font-size: 45px;
-  font-weight: bold;
-  letter-spacing: 1.5px;
-  color: #f59e0b; /* Naranja PowerPoint */
-  text-align: center;
-  transition: .4s ease-in-out;
-  padding: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-sm);
+  position: relative;
+  overflow-x: hidden;
 }
 
 .container-carrusel {
-  max-width: 1310px;
-  height: 84%;
-  overflow: hidden;
-}
-
-.container-carrusel ul {
-  display: flex;
-  padding: 0;
-  width: 400%;
-  animation: slide 20s infinite alternate-reverse ease-in-out;
-}
-
-.container-carrusel li {
   width: 100%;
-  list-style: none;
+  max-width: 900px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.carrusel-list {
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carrusel-item {
+  width: 100%;
+  flex: 0 0 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  box-sizing: border-box;
   position: relative;
 }
 
+/* Imagen con texto encima */
+.carrusel-item img {
+  width: 76%;
+  height: 70%;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.carrusel-item img:hover {
+  transform: scale(1.1);
+  filter: brightness(70%) contrast(90%);
+  transition: .3s ease-in-out;
+}
+
+/* Contenedor de texto sobre la imagen */
 .texto {
-  cursor: pointer;
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  padding: 0 10px;
-  top: 250px;
-  gap: 70px;
-  color: #ffffff;
-  left: 505px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  max-width: 80%;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.9s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Mostrar texto con hover sobre item completo */
+.carrusel-item:hover .texto {
+  opacity: 1;
+  visibility: visible;
 }
 
 .texto:hover {
@@ -59,52 +80,126 @@
 }
 
 .texto h2 {
-    font-size: 45px;
-    margin-bottom: 35px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: #f59e0b;
+  font-size: var(--font-size-4xl);
+  margin-bottom: 85px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #f59e0b;
 }
 
 .texto p {
-    color: #f4f4f4;
-    letter-spacing: 1.2px;
-    text-wrap: balance;
-    width: 400px;
-    background-color: rgba(0, 55, 90, 0.65); /* Azul petróleo transparente */
-    padding: 20px;
-    border-radius: 10px;
-    backdrop-filter: blur(4px);
+  color: #f4f4f4;
+  letter-spacing: 1.2px;
+  text-wrap: balance;
+  width: 400px;
+  background-color: rgba(0, 55, 90, 0.65);
+  padding: var(--spacing-md);
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+  font-size: var(--font-size-lg);
 }
 
-.container-carrusel img {
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
-  width: 45%;
-  height: 65%;
-  margin: 75px 475px;
-  transition: .3s ease-in-out;
-  border-radius: 15px;
-}
-
-.container-carrusel img:hover {
+/* Botones de navegación */
+.slider-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(203, 148, 21, 0.696);
+  border: none;
+  color: white;
   cursor: pointer;
-  filter: brightness(70%) contrast(90%);
-  transform: scale(1.02);
+  padding: var(--spacing-xs);
+  border-radius: 50%;
+  font-size: 44px;
+  font-weight: bold;
+  z-index: 5;
 }
 
-.container-carrusel img:hover + .texto {
-  opacity: 1;
-  visibility: visible;
+.slider-nav.prev {
+  left: var(--spacing-xs);
 }
 
-/* Animación intacta */
-@keyframes slide {
-  0% {margin-left: 0%;}
-  20% {margin-left: 0%;}
-  25% {margin-left: -100%;}
-  45% {margin-left: -100%;}
-  50% {margin-left: -200%;}
-  70% {margin-left: -200%;}
-  75% {margin-left: -300%;}
-  100% {margin-left: -300%;}
+.slider-nav.next {
+  right: var(--spacing-xs);
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .section-carrusel {
+    min-height: 70vh;
+    padding: var(--spacing-sm);
+  }
+  
+  .carrusel-item img {
+    width: 90%;
+    height: 60%;
+  }
+
+  .texto h2 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: 60px;
+  }
+
+  .texto p {
+    font-size: var(--font-size-base);
+    width: 300px;
+    padding: var(--spacing-sm);
+  }
+
+  .slider-nav {
+    font-size: 32px;
+    padding: var(--spacing-xs);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .section-carrusel {
+    min-height: 60vh;
+    padding: var(--spacing-xs);
+  }
+  
+  .carrusel-item img {
+    width: 95%;
+    height: 50%;
+  }
+
+  .texto h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: 40px;
+  }
+
+  .texto p {
+    font-size: var(--font-size-sm);
+    width: 250px;
+    padding: var(--spacing-xs);
+  }
+
+  .slider-nav {
+    font-size: 24px;
+    padding: 0.25rem;
+  }
+  
+  .slider-nav.prev {
+    left: 0.25rem;
+  }
+  
+  .slider-nav.next {
+    right: 0.25rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 360px) {
+  .texto h2 {
+    font-size: var(--font-size-lg);
+    margin-bottom: 30px;
+  }
+
+  .texto p {
+    font-size: var(--font-size-xs);
+    width: 200px;
+  }
 }

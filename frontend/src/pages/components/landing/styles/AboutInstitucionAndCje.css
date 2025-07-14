@@ -1,119 +1,344 @@
-.container-about-institucion-and-cje{
-  padding: 60px 20px ;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--color-primary-blue-dark); /* azul oscuro por ejemplo */
-
-
-  }
-.title-about-landing{
-  font-size: 46px;
-  font-weight: bold;
-  font-family:'Clash Display' ;
-  color: #fff;
-
-
-  }
-
-.container-all-about{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8rem;
-    align-content: center;
-
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.container-about-institucion-and-cje {
+    /* Estilos base (mobile) */
+    padding: var(--spacing-xl) var(--spacing-md); /* 48px arriba/abajo, 24px izquierda/derecha */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--color-primary-blue-dark);
+    gap: var(--spacing-lg); /* 32px entre elementos */
 }
 
-
-.container-landing-team {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-  border-radius: 1rem;
-  overflow: hidden;
-}
-.title-landing-team, .title-landing-institution{
+/* ===== TÍTULO PRINCIPAL ===== */
+.title-about-landing {
+    font-size: var(--font-size-4xl); /* 36px en mobile */
+    font-weight: bold;
     font-family: 'Clash Display';
-    color: var();
-    font-size: 36px;
-    letter-spacing: 1.8px;
-}
-
-.title-landing-team{
-  color: var(--color-primary-blue-medium);
-
-}
-.title-landing-institution{
-  color: var(--color-accent-orange)
-}
-.gallery-wrapper {
-  flex: 1;
-  width: 800px;
-  max-width: 800px;
-  position: relative;
-}
-.btn-view-about-team, .btn-view-about-institution{
-  border: none;
-  padding: 1rem;
-  text-align: center;
-  width: 100%;
-  font-size: 22px;
-  color: #fff;
-  font-family:'Satoshi';
-  transition: .3s ease-in-out;
-  cursor: pointer;
-}
-
-
-.btn-view-about-team {background-image: linear-gradient(to right, #000428 0%, #004e92  51%, #000428  100%)}
-.btn-view-about-team {
-   margin: 10px;
-   padding: 15px 45px;
-   text-align: center;
-   text-transform: uppercase;
-   transition: 0.5s;
-   background-size: 200% auto;
-   color: white;
-   border-radius: 10px;
-   display: block;
- }
-
- .btn-view-about-team:hover {
-   background-position: right center; /* change the direction of the change here */
-   text-decoration: none;
- }
-
-
-
-
-
-.container-landing-institution {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-  border-radius: 1rem;
-  overflow: hidden;
-}
-
-
-
-
-.btn-view-about-institution{background-image: linear-gradient(to right, #ffb347 0%, #f9e29b  51%, #ffb347  100%)}
-.btn-view-about-institution {
-    margin: 10px;
-    padding: 15px 45px;
+    color: #fff;
     text-align: center;
-    text-transform: uppercase;
-    transition: 0.5s;
-    background-size: 200% auto;
-    color: white;
-    border-radius: 10px;
-    display: block;
-  }
+    margin-bottom: var(--spacing-md); /* 24px de margen inferior */
+}
 
-.btn-view-about-institution:hover{
-    background-position: right center; /* change the direction of the change here */
+/* ===== CONTENEDOR DE AMBAS SECCIONES ===== */
+.container-all-about {
+    /* Estilos base (mobile) */
+    display: grid;
+    grid-template-columns: 1fr; /* 1 columna en mobile */
+    gap: var(--spacing-xl); /* 48px entre secciones */
+    align-content: center;
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo para pantallas grandes */
+}
+
+/* ===== CONTENEDOR DEL EQUIPO ===== */
+.container-landing-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-md); /* 24px de padding */
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.05); /* Fondo sutil */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+}
+
+/* ===== TÍTULOS ===== */
+.title-landing-team,
+.title-landing-institution {
+    font-family: 'Clash Display';
+    font-size: var(--font-size-3xl); /* 30px en mobile */
+    letter-spacing: 1.8px;
+    text-align: center;
+    margin-bottom: var(--spacing-md); /* 24px de margen inferior */
+}
+
+.title-landing-team {
+    color: var(--color-primary-blue-medium);
+}
+
+.title-landing-institution {
+    color: var(--color-accent-orange);
+}
+
+/* ===== GALERÍA ===== */
+.gallery-wrapper {
+    flex: 1;
+    width: 100%; /* Ancho completo en mobile */
+    max-width: 100%; /* Sin ancho máximo fijo */
+    position: relative;
+    margin-bottom: var(--spacing-md); /* 24px de margen inferior */
+}
+
+/* ===== BOTONES ===== */
+.btn-view-about-team,
+.btn-view-about-institution {
+    border: none;
+    padding: var(--spacing-md); /* 24px de padding */
+    text-align: center;
+    width: 100%;
+    font-size: var(--font-size-lg); /* 18px en mobile */
+    color: #fff;
+    font-family: 'Satoshi';
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* ===== BOTÓN DEL EQUIPO ===== */
+.btn-view-about-team {
+    background-image: linear-gradient(to right, #000428 0%, #004e92 51%, #000428 100%);
+    margin: var(--spacing-sm); /* 16px de margen */
+    padding: var(--spacing-md) var(--spacing-lg); /* 24px arriba/abajo, 32px izquierda/derecha */
+    background-size: 200% auto;
+    display: block;
+}
+
+.btn-view-about-team:hover {
+    background-position: right center;
     text-decoration: none;
-  }
+    transform: translateY(-2px); /* Elevación sutil */
+    box-shadow: 0 8px 20px rgba(0, 78, 146, 0.4); /* Sombra azul */
+}
+
+/* ===== CONTENEDOR DE LA INSTITUCIÓN ===== */
+.container-landing-institution {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-md); /* 24px de padding */
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.05); /* Fondo sutil */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+}
+
+/* ===== BOTÓN DE LA INSTITUCIÓN ===== */
+.btn-view-about-institution {
+    background-image: linear-gradient(to right, #ffb347 0%, #f9e29b 51%, #ffb347 100%);
+    margin: var(--spacing-sm); /* 16px de margen */
+    padding: var(--spacing-md) var(--spacing-lg); /* 24px arriba/abajo, 32px izquierda/derecha */
+    background-size: 200% auto;
+    display: block;
+}
+
+.btn-view-about-institution:hover {
+    background-position: right center;
+    text-decoration: none;
+    transform: translateY(-2px); /* Elevación sutil */
+    box-shadow: 0 8px 20px rgba(255, 179, 71, 0.4); /* Sombra naranja */
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet (768px y superior) */
+@media (min-width: 768px) {
+    .container-about-institucion-and-cje {
+        padding: var(--spacing-xl) var(--spacing-lg); /* 48px arriba/abajo, 32px izquierda/derecha */
+        gap: var(--spacing-xl); /* 48px entre elementos */
+    }
+    
+    .title-about-landing {
+        font-size: var(--font-size-4xl); /* 36px en tablet */
+        margin-bottom: var(--spacing-lg); /* 32px de margen inferior */
+    }
+    
+    .container-all-about {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablet */
+        gap: var(--spacing-xl); /* 48px entre secciones */
+    }
+    
+    .container-landing-team,
+    .container-landing-institution {
+        padding: var(--spacing-lg); /* 32px de padding */
+    }
+    
+    .title-landing-team,
+    .title-landing-institution {
+        font-size: var(--font-size-3xl); /* 30px en tablet */
+        margin-bottom: var(--spacing-lg); /* 32px de margen inferior */
+    }
+    
+    .gallery-wrapper {
+        max-width: 600px; /* Ancho máximo más pequeño en tablet */
+        margin-bottom: var(--spacing-lg); /* 32px de margen inferior */
+    }
+    
+    .btn-view-about-team,
+    .btn-view-about-institution {
+        font-size: var(--font-size-xl); /* 20px en tablet */
+        padding: var(--spacing-lg) var(--spacing-xl); /* 32px arriba/abajo, 48px izquierda/derecha */
+    }
+}
+
+/* Desktop (1024px y superior) */
+@media (min-width: 1024px) {
+    .container-about-institucion-and-cje {
+        padding: var(--spacing-xl) var(--spacing-xl); /* 48px en todos los lados */
+    }
+    
+    .title-about-landing {
+        font-size: 46px; /* Tamaño original */
+        margin-bottom: var(--spacing-xl); /* 48px de margen inferior */
+    }
+    
+    .container-all-about {
+        gap: 8rem; /* Gap original */
+    }
+    
+    .container-landing-team,
+    .container-landing-institution {
+        padding: 1rem; /* Padding original */
+    }
+    
+    .title-landing-team,
+    .title-landing-institution {
+        font-size: 36px; /* Tamaño original */
+        margin-bottom: var(--spacing-md); /* 24px de margen inferior */
+    }
+    
+    .gallery-wrapper {
+        width: 800px; /* Ancho original */
+        max-width: 800px; /* Ancho máximo original */
+        margin-bottom: var(--spacing-md); /* 24px de margen inferior */
+    }
+    
+    .btn-view-about-team,
+    .btn-view-about-institution {
+        font-size: 22px; /* Tamaño original */
+        padding: 15px 45px; /* Padding original */
+        margin: 10px; /* Margen original */
+    }
+}
+
+/* Mobile pequeño (480px y menor) */
+@media (max-width: 480px) {
+    .container-about-institucion-and-cje {
+        padding: var(--spacing-lg) var(--spacing-sm); /* 32px arriba/abajo, 16px izquierda/derecha */
+        gap: var(--spacing-md); /* 24px entre elementos */
+    }
+    
+    .title-about-landing {
+        font-size: var(--font-size-3xl); /* 30px en mobile pequeño */
+        margin-bottom: var(--spacing-sm); /* 16px de margen inferior */
+    }
+    
+    .container-all-about {
+        gap: var(--spacing-lg); /* 32px entre secciones */
+    }
+    
+    .container-landing-team,
+    .container-landing-institution {
+        padding: var(--spacing-sm); /* 16px de padding */
+    }
+    
+    .title-landing-team,
+    .title-landing-institution {
+        font-size: var(--font-size-2xl); /* 24px en mobile pequeño */
+        margin-bottom: var(--spacing-sm); /* 16px de margen inferior */
+        letter-spacing: 1.2px; /* Menos espaciado */
+    }
+    
+    .gallery-wrapper {
+        margin-bottom: var(--spacing-sm); /* 16px de margen inferior */
+    }
+    
+    .btn-view-about-team,
+    .btn-view-about-institution {
+        font-size: var(--font-size-base); /* 16px en mobile pequeño */
+        padding: var(--spacing-sm) var(--spacing-md); /* 16px arriba/abajo, 24px izquierda/derecha */
+        margin: var(--spacing-xs); /* 8px de margen */
+    }
+}
+
+/* Mobile muy pequeño (360px y menor) */
+@media (max-width: 360px) {
+    .container-about-institucion-and-cje {
+        padding: var(--spacing-md) var(--spacing-xs); /* 24px arriba/abajo, 8px izquierda/derecha */
+        gap: var(--spacing-sm); /* 16px entre elementos */
+    }
+    
+    .title-about-landing {
+        font-size: var(--font-size-2xl); /* 24px en mobile muy pequeño */
+        margin-bottom: var(--spacing-xs); /* 8px de margen inferior */
+    }
+    
+    .container-all-about {
+        gap: var(--spacing-md); /* 24px entre secciones */
+    }
+    
+    .container-landing-team,
+    .container-landing-institution {
+        padding: var(--spacing-xs); /* 8px de padding */
+    }
+    
+    .title-landing-team,
+    .title-landing-institution {
+        font-size: var(--font-size-xl); /* 20px en mobile muy pequeño */
+        margin-bottom: var(--spacing-xs); /* 8px de margen inferior */
+        letter-spacing: 1px; /* Menos espaciado */
+    }
+    
+    .btn-view-about-team,
+    .btn-view-about-institution {
+        font-size: var(--font-size-sm); /* 14px en mobile muy pequeño */
+        padding: var(--spacing-xs) var(--spacing-sm); /* 8px arriba/abajo, 16px izquierda/derecha */
+        margin: var(--spacing-xs); /* 8px de margen */
+    }
+}
+
+/* ===== MEJORAS PARA DISPOSITIVOS TÁCTILES ===== */
+
+/* Dispositivos sin hover (touch) */
+@media (hover: none) {
+    .btn-view-about-team:hover,
+    .btn-view-about-institution:hover {
+        transform: none; /* Sin elevación en touch */
+    }
+    
+    .btn-view-about-team:active,
+    .btn-view-about-institution:active {
+        transform: scale(0.98); /* Efecto de presión en touch */
+    }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+
+/* Focus visible para botones */
+.btn-view-about-team:focus,
+.btn-view-about-institution:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+
+/* Reducir animaciones en dispositivos que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+    .btn-view-about-team,
+    .btn-view-about-institution {
+        transition: none;
+    }
+    
+    .btn-view-about-team:hover,
+    .btn-view-about-institution:hover {
+        transform: none;
+    }
+}
+
+/* ===== MEJORAS DE LEGIBILIDAD ===== */
+
+/* Asegurar contraste adecuado */
+.title-about-landing {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Sombra para mejor legibilidad */
+}
+
+/* ===== ANIMACIONES SUAVES ===== */
+
+/* Transición suave para todos los elementos */
+.btn-view-about-team,
+.btn-view-about-institution {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

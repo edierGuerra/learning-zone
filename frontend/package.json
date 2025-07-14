@@ -20,6 +20,7 @@
     "axios": "^1.10.0",
     "framer-motion": "^12.18.1",
     "gsap": "^3.13.0",
+    "lucide-react": "^0.525.0",
     "meshline": "^3.3.1",
     "motion": "^12.18.1",
     "ogl": "^1.0.11",

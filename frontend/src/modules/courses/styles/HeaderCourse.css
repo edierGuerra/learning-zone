@@ -1,0 +1,57 @@
+.header-course{
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.btn-chat-course{
+    background-color: transparent;
+    color: var(--color-text-light);
+    font-size: 42px;
+}
+.title-course{
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.Word{
+    color: rgb(212, 228, 253);
+}
+.Excel{
+    color: rgb(232, 253, 212);
+}
+.Power-point{
+    color: rgb(253, 227, 212);
+}
+
+.container-progress{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 10%;
+    text-align: center;
+    position: relative;
+}
+.progress-course-number{
+    color: var(--color-text-light);
+    font-size: 24px;
+    letter-spacing: 1.4px;
+    font-weight: 600;
+}
+.progress-bar-bg {
+  width: 100%;
+  border-bottom: 12px solid #fff;
+  position: absolute;
+  top: 30px;
+  border-radius: 12px;
+}
+
+.progress-bar-fill {
+  border-bottom: 12px solid #48e;
+  position: absolute;
+  top: 30px;
+  border-radius: 12px;
+  transition: width 0.4s ease;
+  box-shadow: 4px 0px 0px 1px #41aaf059;
+}

@@ -18,15 +18,18 @@ from core.security import get_current_student  # Devuelve el objeto del estudian
 from repository.lesson_repository import LessonRepository
 from services.lesson_service import LessonService
 from models.student_model import Student  # Necesario para el tipo "student" en Depends
+from repository.progress_repository import ProgressRepository
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/student/courses", tags=["Lessons"])
 
 
+# Modifica la funcion de dependencia para obtener LessonService
 def get_lesson_service(db: AsyncSession = Depends(get_session)) -> LessonService:
     lesson_repo = LessonRepository(db)
-    return LessonService(lesson_repo)
+    progress_repo = ProgressRepository(db)  # instancias
+    return LessonService(lesson_repo, progress_repo)  # retorna ambos repos
 
 
 @router.get("/{id_course}/lessons", status_code=status.HTTP_200_OK)
@@ -111,12 +114,16 @@ async def get_course_lessons(
         return JSONResponse(
             content={
                 "message": "Lecciones obtenidas exitosamente.",
-                "lessons": [lesson.model_dump() for lesson in lessons_with_progress],
+                "lessons": [
+                    {
+                        **lesson.model_dump(),
+                        "progress_state": lesson.progress_state.value,  # Convertir Enum a string
+                    }
+                    for lesson in lessons_with_progress
+                ],
             },
             status_code=status.HTTP_200_OK,
         )
-    except Exception as e:
-        raise e
     except Exception as e:
         logger.error(
             f"Error inesperado al obtener lecciones del curso {id_course}: {e}",

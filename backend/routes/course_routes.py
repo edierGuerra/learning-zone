@@ -5,7 +5,7 @@ from core.security import get_current_student
 from models.student_model import Student
 
 
-router = APIRouter(prefix="/api/v1/student/course", tags=["Courses"])
+router = APIRouter(prefix="/api/v1/student/courses", tags=["Courses"])
 
 
 @router.get("/")

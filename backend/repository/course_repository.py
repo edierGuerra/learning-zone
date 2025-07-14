@@ -34,7 +34,7 @@ class CourseRepository:
                 logger.warning("[WARNING] Error al validar el estudiante [WARNING]")
                 return []
 
-            return list(student.course)
+            return list(student.courses)
 
         except Exception:
             logger.warning("[ERROR] Error inesperado [ERROR]", exc_info=True)

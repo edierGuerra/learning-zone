@@ -19,13 +19,17 @@ from schemas.lesson_schemas import (
 )  # Importamos el esquemna de respuesta de la leccion
 from models.progress_model import StateProgress  # Para el enum
 from models.course_model import Course
+from repository.progress_repository import ProgressRepository
 
 logger = logging.getLogger(__name__)
 
 
 class LessonService:
-    def __init__(self, lesson_repo: LessonRepository) -> None:
+    def __init__(
+        self, lesson_repo: LessonRepository, progress_repo: ProgressRepository
+    ) -> None:
         self.lesson_repo = lesson_repo
+        self.progress_repo = progress_repo
 
     async def get_course_lessons_with_progress(
         self, course_id: int, student_id: int
@@ -43,6 +47,19 @@ class LessonService:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Curso no encontrado."
             )
+
+        # Verificar si el estudiante ya tiene progreso para este curso usando ProgressRepository
+        has_progress = await self.progress_repo.has_progress_for_course(
+            student_id, course_id
+        )
+
+        # Si no tiene progreso, inicializarlo usando ProgressRepository
+        if not has_progress:
+            logger.info(
+                f"Inicializando progreso para estudiante {student_id} en curso {course_id}."
+            )
+            await self.progress_repo.initialize_course_progress(student_id, course_id)
+            # el commit ya se hace dentro de initialize_course_progress
 
         # Obtener las lecciones y su progreso del repositorio
         lessons_and_progress = (

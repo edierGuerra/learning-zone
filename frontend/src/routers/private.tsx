@@ -26,6 +26,8 @@ export default function RoutersPrivates() {
                   <Route path="/word" element={<WordHomePage/>}/>
                   <Route path="/excel" element={<ExcelHomePage/>}/>
                   <Route path="/powerPoint" element={<PowerPointHomePage/>}/>
+{/*                   <Route path="/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage />} />
+                  <Route path="/course/:courseId/lesson/:lessonId/evaluation" element={<LessonEvaluationPage />} /> */}
                   {sharedRoutes}
                   {/*Redirigir / a /home si está logueado */}
                   <Route path="/" element={ <LandingPage/>} />

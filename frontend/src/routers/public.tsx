@@ -23,6 +23,7 @@ export default function RoutersPublic() {
                 <Route path="/confirmEmailRequest" element={<ConfirmEmailRequest/>}/>
                 <Route path="/login" element={<LoginAndRegister opcAuth ={true}/>}/>
                 {sharedRoutes}
+
                 
             </Route>
         </Routes>

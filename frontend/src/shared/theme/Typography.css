@@ -1,121 +1,152 @@
-/* ─── Font Definitions ───────────────────────────── */
+/* ─── Titillium Web ─── */
 @font-face {
-  font-family: 'Clash Display';
-  src: url('/fonts/ClashDisplay-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
 }
 @font-face {
-  font-family: 'Clash Display';
-  src: url('/fonts/ClashDisplay-Semibold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-Light.woff2') format('woff2');
+  font-weight: 300;
 }
 @font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/GeneralSans-Regular.woff2') format('woff2');
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-Regular.woff2') format('woff2');
   font-weight: 400;
-  font-style: normal;
 }
 @font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/GeneralSans-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/Satoshi-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/Satoshi-Semibold.woff2') format('woff2');
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-SemiBold.woff2') format('woff2');
   font-weight: 600;
-  font-style: normal;
 }
 @font-face {
-  font-family: 'Be Vietnam Pro';
-  src: url('/fonts/BeVietnamPro-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-Bold.woff2') format('woff2');
+  font-weight: 700;
 }
 @font-face {
-  font-family: 'Be Vietnam Pro';
-  src: url('/fonts/BeVietnamPro-Semibold.woff2') format('woff2');
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-Black.woff2') format('woff2');
+  font-weight: 900;
+}
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-LightItalic.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-ExtraLightItalic.woff2') format('woff2');
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('/fonts/TitilliumWeb-SemiBoldItalic.woff2') format('woff2');
   font-weight: 600;
-  font-style: normal;
+  font-style: italic;
 }
 
-
-/* ─── Headings (h1-h3) ───────────────────────────── */
+/* ─── Space Grotesk ─── */
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-Light.woff2') format('woff2');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-Regular.woff2') format('woff2');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-Medium.woff2') format('woff2');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-Bold.woff2') format('woff2');
+  font-weight: 700;
+}
+/* ─── Titulos ───────────────────────────── */
 h1, h2, h3, .heading-xl, .heading-lg, .heading-md {
-  font-family: 'Clash Display', sans-serif;
+  font-family: 'Titillium Web', sans-serif;
   font-weight: 700;
 }
 
-
-/* ─── Subtitles ──────────────────────────────────── */
 h4, h5, h6, .subtitle, .section-title, .card-title {
-  font-family: 'Clash Display', sans-serif;
+  font-family: 'Titillium Web', sans-serif;
   font-weight: 600;
 }
 
-
-/* ─── Body Text ──────────────────────────────────── */
+/* ─── Texto general ─────────────────────── */
 body, p, span, div, li, td, th, blockquote, q {
-  font-family: 'General Sans', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 400;
 }
+
 .strong-text {
-  font-family: 'General Sans', sans-serif;
   font-weight: 500;
 }
 
-
-/* ─── Buttons & Links ────────────────────────────── */
+/* ─── Botones / Links ───────────────────── */
 a, button, .btn, .link, input[type="submit"], input[type="button"] {
-  font-family: 'Satoshi', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 500;
-  text-decoration: none;
 }
 a.strong, button.strong {
   font-weight: 600;
 }
 
-
-/* ─── UI / Menus / Inputs ────────────────────────── */
+/* ─── Formularios / Inputs ──────────────── */
 nav, .menu-item, .ui-element, label, input, select, textarea {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 500;
 }
 .ui-strong {
   font-weight: 600;
 }
 
-
-/* ─── Placeholders ───────────────────────────────── */
+/* ─── Placeholders ──────────────────────── */
 input::placeholder, textarea::placeholder {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 500;
 }
 
-
-/* ─── Meta, Caption, Aux ─────────────────────────── */
+/* ─── Meta / Captions ───────────────────── */
 .caption, .meta, time, small {
-  font-family: 'General Sans', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 400;
   font-style: italic;
 }
 
+/* ─── Clases utilitarias ────────────────── */
+.font-heading     { font-family: 'Titillium Web', sans-serif; font-weight: 700; }
+.font-subtitle    { font-family: 'Titillium Web', sans-serif; font-weight: 600; }
 
-/* ─── Clases reutilizables ───────────────────────── */
-.font-heading     { font-family: 'Clash Display', sans-serif; font-weight: 700; }
-.font-subtitle    { font-family: 'Clash Display', sans-serif; font-weight: 600; }
-.font-body        { font-family: 'General Sans', sans-serif; font-weight: 400; }
-.font-body-strong { font-family: 'General Sans', sans-serif; font-weight: 500; }
-.font-button      { font-family: 'Satoshi', sans-serif; font-weight: 500; }
-.font-link-strong { font-family: 'Satoshi', sans-serif; font-weight: 600; }
-.font-ui          { font-family: 'Be Vietnam Pro', sans-serif; font-weight: 500; }
-.font-ui-strong   { font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600; }
+.font-body        { font-family: 'Space Grotesk', sans-serif; font-weight: 400; }
+.font-body-strong { font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+
+.font-button      { font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+.font-link-strong { font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
+
+.font-ui          { font-family: 'Space Grotesk', sans-serif; font-weight: 500; }
+.font-ui-strong   { font-family: 'Space Grotesk', sans-serif; font-weight: 600; }

@@ -1,6 +1,9 @@
 // src/components/commentForm.tsx
 import { useState } from 'react';         
 import socket from './socket';            
+import { authStorage } from '../../../shared/Utils/authStorage';
+import type { TCommentSend } from './types';
+import './styles/commentForm.css';
 
 // Definimos las propiedades que recibe el componente CommentForm
 interface CommentFormProps {
@@ -23,14 +26,16 @@ export default function CommentForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();                    // Prevenimos el comportamiento por defecto del formulario (recargar la página)
     if (!text.trim()) return;              // Si el campo está vacío o solo tiene espacios, no se envía
+    const token = authStorage.getToken();
 
     // Creamos el nuevo comentario como objeto
-    const newComment = {
-      user: username,                      // Usuario que comenta
+    const newComment:TCommentSend = {
+      nameStudent: username,                      // Usuario que comenta
       text,                                // Texto del comentario
-      timestamp: new Date().toISOString(),// Fecha y hora actual en formato ISO
-      parent_id: parentId,                 // ID del comentario padre (o null si es principal)
-      course_id: courseId,                 // ID del curso al que pertenece
+      timestamp: new Date().toISOString(), // Fecha y hora actual en formato ISO
+      parentId,                 // ID del comentario padre (o null si es principal)
+      courseId,                 // ID del curso al que pertenece
+      token: token!
     };
 
     console.log(" Enviando comentario:", newComment); // Mostramos en consola el comentario antes de enviarlo

@@ -2,6 +2,7 @@
 
 // Se importa el archivo de estilos que aplica estilos visuales a este componente.
 import '../components/styles/commentPage.css';
+import './styles/userList.css';
 import type { TStudentAllComents } from './types';
 
 // Se define la interfaz para las props que recibe este componente.

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import CommentForm from './commentForm';
 import type { TComment } from './types';
+import './styles/comment.css';
 
 // Definimos la interfaz de propiedades que recibe el componente Comment.
 // Esta interfaz extiende de CommentType e incluye algunas props adicionales.
@@ -13,7 +14,7 @@ interface CommentProps extends TComment {
 
 // Componente principal para mostrar un comentario y sus posibles respuestas.
 export default function Comment({
-  user,
+  nameStudent,
   text,
   timestamp,
   id,
@@ -26,7 +27,7 @@ export default function Comment({
   const [showReplyForm, setShowReplyForm] = useState(false);
 
   // Obtenemos la inicial del nombre del usuario, en mayúscula, para mostrar en el avatar
-  const avatarInitial = user.charAt(0).toUpperCase();
+  const avatarInitial = nameStudent.charAt(0).toUpperCase();
 
   // Filtramos los comentarios que tienen como parent_id el ID del comentario actual
   // Estos son las "respuestas" al comentario actual
@@ -42,7 +43,7 @@ export default function Comment({
       <div className="comment-body">
         {/* Metadatos: usuario y fecha */}
         <div className="meta">
-          <span className="username">{user}</span>
+          <span className="username">{nameStudent}</span>
           <span className="time">{timestamp}</span>
         </div>
 

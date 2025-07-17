@@ -53,7 +53,7 @@ export default function WordHomePage() {
 
   return (
     <div className="container-home word-course">
-      <HeaderCourse title="Word" chatTo="/chatWord" />
+      <HeaderCourse title="Word" chatTo="/commentsWord" />
       <svg
         className="path-svg"
         viewBox="0 0 1400 800"

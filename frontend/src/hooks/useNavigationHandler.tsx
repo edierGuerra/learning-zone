@@ -13,11 +13,11 @@ export type AppRoutes =
   | "/aboutUs"
   | "/aboutInstitution"
   | "/word"
-  | "/chatWord"
   | "/excel"
-  | "/chatExcel"
   | "/powerpoint"
-  | "/chatPowerPoint"
+  | "/commentsPowerPoint"
+  | "/commentsWord"
+  | "/commentsExcel"
   | "/help";
 
 export const useNavigationHandler = () => {

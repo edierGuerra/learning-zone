@@ -3,7 +3,8 @@ import React from 'react'
 export default function ExcelHomePage() {
   return (
     <div>
-        Home Excel
+      <h1>Excel</h1>
+      <p>comments</p>
 
     </div>
   )

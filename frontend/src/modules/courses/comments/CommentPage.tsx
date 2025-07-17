@@ -13,11 +13,12 @@ import type { TStudent } from '../../types/User';
 // Props que recibe el componente CommentPage
 interface CommentPageProps {
   courseId: number;     // ID del curso actual (para filtrar comentarios)
+  nameCourse: string;
 }
 
 
 // Componente principal que renderiza la página de comentarios
-export default function CommentPage({ courseId }: CommentPageProps) {
+export default  function CommentPage({ courseId, nameCourse }: CommentPageProps) {
   const [comments, setComments] = useState<TComment[]>([]); // Lista de comentarios del curso
   const [allStudents, setAllStudents] = useState<TStudentAllComents[]>([]);
   const [listStudentsConnects, setListStudentsConnects] = useState<TStudent['id'][]>([]);
@@ -75,10 +76,10 @@ export default function CommentPage({ courseId }: CommentPageProps) {
     <div className="comment-page">
       {/* Sección izquierda: Comentarios y formulario */}
       <div className="left">
-        <h2>Comentarios</h2>
+        <h2>Comentarios {nameCourse}</h2>
 
         {/* Renderizamos solo los comentarios principales (parent_id === null) */}
-        <div className="comments">
+        <div className={`comments ${nameCourse.toLowerCase()}`}>
           {comments
             .filter((c) => c.parentId === null)  // Esto sí son los comentarios raíz 
             .map((c) => (
@@ -97,7 +98,7 @@ export default function CommentPage({ courseId }: CommentPageProps) {
       </div>
 
       {/* Sección derecha: Lista de usuarios */}
-      <div className="right">
+      <div className={`right ${nameCourse.toLowerCase()}`}>
         <UserList students={allStudents} />
       </div>
     </div>

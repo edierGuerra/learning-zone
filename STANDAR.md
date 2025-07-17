@@ -333,3 +333,54 @@ evaluation {
 } en caso de que sea pregunta abierta
 
 ---
+
+
+
+
+## 🛠️ Comentarios
+
+### 📤 Flujo de comunicación:
+
+1. **Frontend**:
+
+   * Envía un **token de acceso** en el encabezado `Authorization`.
+
+2. **Backend**:
+
+   * **Valida el token** recibido.
+   * Si el token es **válido**, busca las notificaciones asociadas al estudiante.
+   * Retorna un **código de estado HTTP** y todas las notificaciones asociadas.
+
+3. **En caso de error - Backend**:
+
+   * El backend responde con un código de estado acorde al tipo de error y un mensaje.
+
+4. **Respuesta del Frontend**:
+
+   * Espera el código de estado y una lista de notificaciones(array).
+   * Si el resultado es exitoso (`200 OK`), se renderizan todas las notificaciones(asociadas).
+
+5. **En caso de error - Frontend**
+    * Renderiza mensaje segun el error.
+---
+
+## 🧭 Rutas
+
+| Función          | Ruta              | Método          |
+| ---------------- | ----------------- | --------------- |
+| Backend (API)    | `/notifications`  | `get`           |
+| Frontend (vista) | `/notifications`  | `get`           |
+
+---
+
+## 📨 Parámetros Esperados
+
+* **Header:** `Authorization: Bearer <access-token>`
+
+---
+
+## 📥 Respuesta esperada
+* **Código de estado HTTP:** `200`
+* **Lista(Array):** `list_notifications`
+---
+

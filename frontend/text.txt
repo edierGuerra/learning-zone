@@ -17,3 +17,10 @@ npm install three @react-three/fiber @react-three/drei
 $ npm add react-hot-toast
 
 npm i styled-components --> para estilos de loading notifications
+
+
+Para comentarios
+npm install socket.io-client
+npm install --save-dev @types/socket.io-client
+npm install dayjs
+npm install --save-dev eslint prettier

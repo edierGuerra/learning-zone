@@ -15,7 +15,9 @@ class CommentRepo:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def create_comment(self, comment_data: CommentCreate) -> Comment:
+    async def create_comment(
+        self, id_student: int, comment_data: CommentCreate
+    ) -> Comment:
         """
         Crea un nuevo comentario en la base de datos.
 
@@ -28,7 +30,7 @@ class CommentRepo:
         try:
             dict_comment_data = comment_data.model_dump()
 
-            new_comment = Comment(**dict_comment_data)
+            new_comment = Comment(student_id=id_student, **dict_comment_data)
 
             self.db.add(new_comment)
             await self.db.commit()

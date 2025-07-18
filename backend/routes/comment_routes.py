@@ -48,4 +48,7 @@ async def get_comments(
     comment_service: CommentService = Depends(get_comment_services),
 ):
     comments = await comment_service.get_comments_by_course_id(id_course=course_id)
-    return {"comments": comments}
+    list_id_of_students = await comment_service.get_recent_commenter_ids(
+        id_course=course_id
+    )
+    return {"comments": comments, "list_ids_connects": list_id_of_students}

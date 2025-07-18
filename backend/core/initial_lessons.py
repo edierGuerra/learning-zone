@@ -31,65 +31,53 @@ async def create_initial_lessons(db: AsyncSession):
         # Lecciones para Word
         {
             "course_name": "Word",
-            "name": "Introducción a Word",
-            "description": "Conceptos básicos y interfaz.",
+            "name": "Introducción y entorno de trabajo en Word",
         },
         {
             "course_name": "Word",
-            "name": "Formato de Texto",
-            "description": "Fuentes, párrafos y estilos.",
+            "name": "Crear, guardar y abrir documentos",
         },
         {
             "course_name": "Word",
-            "name": "Tablas e Imágenes",
-            "description": "Inserción y edición de elementos visuales.",
+            "name": "Formato de texto",
         },
         {
             "course_name": "Word",
-            "name": "Impresión y Exportación",
-            "description": "Configuración de impresión y guardar en PDF.",
+            "name": "Párrafos y listas",
         },
         # Lecciones para PowerPoint
         {
             "course_name": "PowerPoint",
             "name": "Primeros Pasos en PowerPoint",
-            "description": "Creación de diapositivas y plantillas.",
         },
         {
             "course_name": "PowerPoint",
             "name": "Diseño y Temas",
-            "description": "Personalización de la apariencia de la presentación.",
         },
         {
             "course_name": "PowerPoint",
             "name": "Animaciones y Transiciones",
-            "description": "Añadir movimiento y efectos a las diapositivas.",
         },
         {
             "course_name": "PowerPoint",
             "name": "Presentación Efectiva",
-            "description": "Consejos para una exposición exitosa.",
         },
         # Lecciones para Excel
         {
             "course_name": "Excel",
             "name": "Fundamentos de Excel",
-            "description": "Celdas, rangos y tipos de datos.",
         },
         {
             "course_name": "Excel",
             "name": "Fórmulas y Funciones Básicas",
-            "description": "Suma, promedio, contar, etc.",
         },
         {
             "course_name": "Excel",
             "name": "Gráficos y Análisis de Datos",
-            "description": "Visualización de información y tablas dinámicas.",
         },
         {
             "course_name": "Excel",
             "name": "Automatización con Macros",
-            "description": "Introducción a VBA y tareas repetitivas.",
         },
     ]
 
@@ -118,7 +106,6 @@ async def create_initial_lessons(db: AsyncSession):
 
         lesson = Lesson(
             name=data["name"],
-            description=data["description"],
             id_course=course_id,  # Asignar el ID del curso
         )
         db.add(lesson)

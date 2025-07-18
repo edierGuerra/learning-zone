@@ -67,19 +67,16 @@ async def get_course_lessons(
             {
               "id": 1,
               "name": "Introducción a Excel",
-              "description": "Conceptos básicos de la hoja de cálculo.",
               "progress_state": "in_progress" # Esta es la primera lección
             },
             {
               "id": 2,
               "name": "Fórmulas y Funciones",
-              "description": "Uso de funciones comunes en Excel.",
               "progress_state": "blocked" # Las demás, si no tienen progreso, son bloqueadas
             },
             {
               "id": 3,
               "name": "Tablas Dinámicas",
-              "description": "Análisis de datos con tablas dinámicas.",
               "progress_state": "blocked"
             }
           ]

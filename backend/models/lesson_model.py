@@ -28,7 +28,6 @@ class Lesson(Base):
     __tablename__ = "lessons"  # Comillas simples aquí
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(50))  # nombre
-    description: Mapped[str] = mapped_column(String(100))  # descripcion
 
     # Claves Foraneas
     id_course: Mapped[int] = mapped_column(ForeignKey("courses.id"))

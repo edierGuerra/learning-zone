@@ -4,7 +4,6 @@ Este módulo define esquemas de validacion y respuesta para la gestion de los da
 """
 
 from pydantic import BaseModel
-from typing import Optional
 
 from models.progress_model import (
     StateProgress,
@@ -14,7 +13,6 @@ from models.progress_model import (
 class LessonResponse(BaseModel):
     id: int
     name: str
-    description: Optional[str] = None
     # Campo para el estado de la lección, que viene de la tabla progreso
     progress_state: StateProgress
 

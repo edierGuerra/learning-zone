@@ -74,7 +74,6 @@ class LessonService:
             lesson_data = {
                 "id": lesson_obj.id,
                 "name": lesson_obj.name,
-                "description": lesson_obj.description,
                 "progress_state": progress_state,  # Esto es correcto porque progress_state ya es del tipo StateProgress
             }
             response_lessons.append(LessonResponse.model_validate(lesson_data))

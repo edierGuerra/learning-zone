@@ -64,7 +64,7 @@ class LessonRepository:
 
         except Exception as e:
             logger.error(
-                f"Error al obtener lecciones con progresso para curso {course_id} y estudiante {student_id}: {e}",
+                f"Error al obtener lecciones con progreso para curso {course_id} y estudiante {student_id}: {e}",
                 exc_info=e,
             )
             raise  # Relanza la excepción

@@ -295,3 +295,11 @@ async def update_student_profile(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Ha ocurrido un error inesperado al momento de actualizar el perfil",
         )
+
+
+@router.get("/all")
+async def get_students(
+    student_service: StudentService = Depends(get_student_services),
+    student: Student = Depends(get_current_student),
+):
+    return await student_service.get_students()

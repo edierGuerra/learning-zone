@@ -30,14 +30,14 @@ async def create_comment(
     return {
         "comment": {
             "id": new_comment.id,
-            "nameStudent": new_comment.student.names,
+            "name_student": new_comment.student.names,
             "text": new_comment.text,
             "timestamp": new_comment.timestamp,
-            "parentId": new_comment.parent_id,
-            "courseId": new_comment.course_id,
-            "studentId": new_comment.student_id,
+            "parent_id": new_comment.parent_id,
+            "course_id": new_comment.course_id,
+            "student_id": new_comment.student_id,
         },
-        "listIdsConnects": list_id_of_students,
+        "list_ids_connects": list_id_of_students,
     }
 
 

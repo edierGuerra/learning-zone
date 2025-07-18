@@ -30,12 +30,12 @@ class CommentService:
             list_comments.append(
                 {
                     "id": comment.id,
-                    "nameStudent": comment.student.names,
+                    "name_student": comment.student.names,
                     "text": comment.text,
                     "timestamp": comment.timestamp,
-                    "parentId": comment.parent_id,
-                    "courseId": comment.course_id,
-                    "studentId": comment.student_id,
+                    "parent_id": comment.parent_id,
+                    "course_id": comment.course_id,
+                    "student_id": comment.student_id,
                 }
             )
         return list_comments

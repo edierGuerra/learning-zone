@@ -381,3 +381,10 @@ class StudentRepository:
         )  # Recarga el objeto para obtener los datos actualizados
 
         return student
+
+    async def get_students(self):
+        result = await self.db.execute(select(Student))
+
+        students = result.scalars().all()
+
+        return students

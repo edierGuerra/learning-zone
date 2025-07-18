@@ -22,41 +22,42 @@ class CommentCreate(BaseModel):
 
 class CommentResponse(BaseModel):
     id: int
-    nameStudent: str = Field(
+    name_student: str = Field(
         ..., description="Nombre del estudiante que hizo el comentario"
     )
     text: str = Field(..., description="Texto del comentario")
     timestamp: datetime = Field(
         ..., description="Fecha y hora en que se creó el comentario"
     )
-    parentId: Optional[int] = Field(None, alias="parentId")
-    courseId: int = Field(..., alias="courseId")
-    studentId: int = Field(..., alias="studentId")
+    parent_id: Optional[int] = Field(
+        None, description="ID del comentario padre si es una respuesta"
+    )
+    course_id: int = Field(..., description="ID del curso")
+    student_id: int = Field(..., description="ID del estudiante")
 
     class Config:
-        allow_population_by_field_name = True
         orm_mode = True
 
 
 class CommentResponseFull(BaseModel):
     comment: CommentResponse
-    listIdsConnects: List[int] = Field(
+    list_ids_connects: List[int] = Field(
         ..., description="Lista de IDs de estudiantes conectados"
     )
 
 
 class CommentOut(BaseModel):
     id: int
-    nameStudent: str = Field(
+    name_student: str = Field(
         ..., description="Nombre del estudiante que hizo el comentario"
     )
     text: str = Field(..., description="Texto del comentario")
     timestamp: datetime = Field(..., description="Fecha y hora del comentario")
-    parentId: Optional[int] = Field(
+    parent_id: Optional[int] = Field(
         None, description="ID del comentario padre si es una respuesta"
     )
-    courseId: int = Field(..., description="ID del curso")
-    studentId: int = Field(..., description="ID del estudiante autor")
+    course_id: int = Field(..., description="ID del curso")
+    student_id: int = Field(..., description="ID del estudiante autor")
 
     class Config:
         orm_mode = True

@@ -18,7 +18,24 @@ class CommentService:
         comments = await self.comment_repo.get_comments_by_course_id(id_course)
         list_students_id = []
         for comment in comments:
-            if time_since(comment.timestamp) >= x_minutes:
+            if time_since(comment.timestamp) <= x_minutes:
                 list_students_id.append(comment.student_id)
 
         return list_students_id
+
+    async def get_comments_by_course_id(self, id_course: int) -> list:
+        comments = await self.comment_repo.get_comments_by_course_id(id_course)
+        list_comments = []
+        for comment in comments:
+            list_comments.append(
+                {
+                    "id": comment.id,
+                    "nameStudent": comment.student.names,
+                    "text": comment.text,
+                    "timestamp": comment.timestamp,
+                    "parentId": comment.parent_id,
+                    "courseId": comment.course_id,
+                    "studentId": comment.student_id,
+                }
+            )
+        return list_comments

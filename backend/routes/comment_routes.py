@@ -1,8 +1,12 @@
 from dependencies.comment_dependencies import get_comment_services
-from models.student_model import Student
 from services.comment_services import CommentService
-from schemas.comment_schemas import CommentCreate, CommentResponseFull
+from schemas.comment_schemas import (
+    CommentCreate,
+    CommentListResponse,
+    CommentResponseFull,
+)
 from core.security import get_current_student
+from models import Student
 
 from fastapi import APIRouter, Depends
 
@@ -14,12 +18,12 @@ router = APIRouter(prefix="/api/v1/comments", tags=["Comments"])
 async def create_comment(
     comment_data: CommentCreate,
     student: Student = Depends(get_current_student),
-    comment_services: CommentService = Depends(get_comment_services),
+    comment_service: CommentService = Depends(get_comment_services),
 ):
 
-    new_comment = await comment_services.create_comment(student.id, comment_data)
+    new_comment = await comment_service.create_comment(student.id, comment_data)
 
-    list_id_of_students = await comment_services.get_recent_commenter_ids(
+    list_id_of_students = await comment_service.get_recent_commenter_ids(
         id_course=new_comment.course_id
     )
 
@@ -35,3 +39,13 @@ async def create_comment(
         },
         "listIdsConnects": list_id_of_students,
     }
+
+
+@router.get("/", response_model=CommentListResponse)
+async def get_comments(
+    course_id: int,
+    student: Student = Depends(get_current_student),
+    comment_service: CommentService = Depends(get_comment_services),
+):
+    comments = await comment_service.get_comments_by_course_id(id_course=course_id)
+    return {"comments": comments}

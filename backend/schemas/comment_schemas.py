@@ -43,3 +43,24 @@ class CommentResponseFull(BaseModel):
     listIdsConnects: List[int] = Field(
         ..., description="Lista de IDs de estudiantes conectados"
     )
+
+
+class CommentOut(BaseModel):
+    id: int
+    nameStudent: str = Field(
+        ..., description="Nombre del estudiante que hizo el comentario"
+    )
+    text: str = Field(..., description="Texto del comentario")
+    timestamp: datetime = Field(..., description="Fecha y hora del comentario")
+    parentId: Optional[int] = Field(
+        None, description="ID del comentario padre si es una respuesta"
+    )
+    courseId: int = Field(..., description="ID del curso")
+    studentId: int = Field(..., description="ID del estudiante autor")
+
+    class Config:
+        orm_mode = True
+
+
+class CommentListResponse(BaseModel):
+    comments: List[CommentOut]

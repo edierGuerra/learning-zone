@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 
 class CommentCreate(BaseModel):
@@ -17,4 +17,29 @@ class CommentCreate(BaseModel):
     )
     timestamp: Optional[datetime] = Field(
         default_factory=datetime.utcnow, description="Fecha y hora de creación"
+    )
+
+
+class CommentResponse(BaseModel):
+    id: int
+    nameStudent: str = Field(
+        ..., description="Nombre del estudiante que hizo el comentario"
+    )
+    text: str = Field(..., description="Texto del comentario")
+    timestamp: datetime = Field(
+        ..., description="Fecha y hora en que se creó el comentario"
+    )
+    parentId: Optional[int] = Field(None, alias="parentId")
+    courseId: int = Field(..., alias="courseId")
+    studentId: int = Field(..., alias="studentId")
+
+    class Config:
+        allow_population_by_field_name = True
+        orm_mode = True
+
+
+class CommentResponseFull(BaseModel):
+    comment: CommentResponse
+    listIdsConnects: List[int] = Field(
+        ..., description="Lista de IDs de estudiantes conectados"
     )

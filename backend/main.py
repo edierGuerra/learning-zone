@@ -17,12 +17,15 @@ from fastapi.middleware.cors import CORSMiddleware  # Importa CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
 from routes.identification_routes import router as identification_router  # ruta modular
 from routes.student_routes import router as student_router
 from routes.recovery_password_routes import router as recovery_password_router
 from routes.notifications_routes import router as notification_router
 from routes.lesson_routes import router as lesson_router
 from routes.course_routes import router as course_router
+from routes.comment_routes import router as comment_router
+
 from core.initial_data import create_initial_courses
 from database.config_db import async_session
 from core.initial_lessons import create_initial_lessons
@@ -105,3 +108,4 @@ app.include_router(recovery_password_router)
 app.include_router(notification_router)
 app.include_router(lesson_router)
 app.include_router(course_router)
+app.include_router(comment_router)

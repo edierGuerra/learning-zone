@@ -2,6 +2,8 @@
 
 """Este módulo contiene los procedimientos de base de datos relacionados con comentarios."""
 
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -41,3 +43,16 @@ class CommentRepo:
             logger.error(f"[ERROR]: Ha ocurrido un error interno: {e}", exc_info=True)
             await self.db.rollback()
             raise
+
+    async def get_comments_by_course_id(self, id_course: int) -> list[Comment]:
+        """
+        Retorna una sequencia de comentarios de un curso en especifico.
+        """
+        result = await self.db.execute(
+            select(Comment)
+            .options(selectinload(Comment.student))
+            .where(Comment.course_id == id_course)
+        )
+        comments = result.scalars().all()
+
+        return comments

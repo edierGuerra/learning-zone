@@ -23,7 +23,7 @@ export type AppRoutes =
 export const useNavigationHandler = () => {
   const navigate = useNavigate();
 
-  const handleBtnNavigate = (route: AppRoutes | string) => {
+  const handleBtnNavigate = (route: AppRoutes ) => {
     if (route === "/back") {
       if (window.history.length > 2) {
         navigate(-1); // Ir una página atrás

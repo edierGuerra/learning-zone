@@ -9,7 +9,7 @@ export type TComment = {
 }
 
 // Comentario que se envía al servidor, incluye el token pero no requiere el ID todavía
-export type TCommentSend = Omit<TComment, 'id' | 'studentId'> & {
+export type TCommentSend = Omit<TComment, 'id' | 'studentId' | 'nameStudent' | 'timestamp'> & {
   token: string;
 };
 export type TIStudentsConnect ={

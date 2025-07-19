@@ -15,9 +15,7 @@ class CommentCreate(BaseModel):
     parent_id: Optional[int] = Field(
         default=None, description="ID del comentario padre si es una respuesta"
     )
-    timestamp: Optional[datetime] = Field(
-        default_factory=datetime.utcnow, description="Fecha y hora de creación"
-    )
+    # timestamp se elimina, se genera automáticamente en el backend
 
 
 class CommentResponse(BaseModel):
@@ -65,3 +63,6 @@ class CommentOut(BaseModel):
 
 class CommentListResponse(BaseModel):
     comments: List[CommentOut]
+    list_ids_connects: List[int] = Field(
+        ..., description="Lista de IDs de estudiantes conectados"
+    )

@@ -3,6 +3,7 @@ import { authStorage } from "../../../shared/Utils/authStorage"
 import { useUser } from "../../auth/Hooks/useAuth"
 import DeleteNotificationsAPI from "../services/DeleteNotifications.server"
 import GetNotificationsAPI from "../services/GetNotifications.server"
+import toast from 'react-hot-toast';
 
 /* Logica de las notificaciones */
 export default function useNotifications(pollingInterval=4000 ) {
@@ -42,12 +43,11 @@ export default function useNotifications(pollingInterval=4000 ) {
                 
             }
             else{
-                alert(response.message)
-                
+                toast.error(response.message || '¡Uy! No se pudo eliminar la notificación.');
             }
             
-        }catch(error){
-            alert(error)
+        }catch{
+            toast.error('¡Algo salió mal eliminando la notificación!');
         }
         finally{
             setLoadingNot(false)
@@ -64,12 +64,11 @@ export default function useNotifications(pollingInterval=4000 ) {
                 await refreshNotifications()
             }
             else{
-                alert(response.message)
-
+                toast.error(response.message || 'No se pudieron eliminar todas las notificaciones.');
             }
 
-        }catch(error){
-            alert(error)
+        }catch{
+            toast.error('¡Algo salió mal eliminando todas las notificaciones!');
         }finally{
             setLoadingNot(false)
 

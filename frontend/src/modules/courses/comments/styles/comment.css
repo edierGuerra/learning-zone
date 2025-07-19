@@ -1,4 +1,61 @@
 .comment {
+  position: relative; /* Para que el panel se posicione respecto a este comentario */
+}
+
+/* Panel flotante centrado sobre el comentario */
+.container-information-student {
+  position: absolute;
+  top: 180%; /* Puedes ajustar para que quede justo encima o encima del avatar */
+  left: 50%;
+  transform: translate(-50%, -100%); /* Centra horizontal y lo sube encima */
+  z-index: 500;
+  background:rgba(0,0,0,.6) ;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  padding: 40px;
+  min-width: 220px;
+  max-width: 320px;
+  color: var(--color-text);
+  font-size: 1rem;
+  transition: box-shadow 0.2s;
+  animation: fadeInInfo 0.2s;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+  
+}
+
+@keyframes fadeInInfo {
+  from { opacity: 0; transform: translate(-50%, -120%);}
+  to   { opacity: 1; transform: translate(-50%, -100%);}
+}
+
+.close-info-btn {
+  
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  font-size: 1.2rem;
+  color: #101010;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.prefix-window{
+  align-self: center;
+  color: var(--color-text-light);
+  padding: 1rem;
+  border-radius: 50%;
+  font-size: 28px;
+  
+  
+}
+.close-info-btn:hover {
+  color: #d90429;
+}
+.comment {
   display: flex;
   align-items: flex-start;
   margin-bottom: 1.5rem;
@@ -11,9 +68,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #e0e0e0;
-  color: #333;
   font-weight: bold;
+  color: var(--color-text-light);
   font-size: 1.3rem;
   display: flex;
   align-items: center;
@@ -58,3 +114,6 @@
   border-left: 2px solid #f0f0f0;
   padding-left: 1rem;
 } 
+.text{
+  color: #101010;
+}

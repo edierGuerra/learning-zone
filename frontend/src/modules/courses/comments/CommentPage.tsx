@@ -1,103 +1,99 @@
-// src/pages/CommentPage.tsx
-
-import { useEffect, useState } from 'react';
-import socket from './socket';                
-import Comment from './comment';              
-import CommentForm from './commentForm';     
-import UserList from './userList';          
-import type { TComment,  TStudentAllComents } from './types';  
-import '../components/styles/commentPage.css';
+import { useEffect, useState,  useMemo } from 'react';
+import { getSocket } from './socket';             // YA NO default
+import Comment from './comment';
+import CommentForm from './commentForm';
+import UserList from './userList';
+import type { TComment, TStudentAllComents } from './types';
+import '../comments/styles/commentPage.css';
 import { authStorage } from '../../../shared/Utils/authStorage';
 import type { TStudent } from '../../types/User';
+import toast from 'react-hot-toast';
+import { IoArrowBackCircleSharp } from 'react-icons/io5';
+import { useNavigationHandler } from '../../../hooks/useNavigationHandler';
 
-// Props que recibe el componente CommentPage
 interface CommentPageProps {
-  courseId: number;     // ID del curso actual (para filtrar comentarios)
+  courseId: number;
   nameCourse: string;
 }
 
-
-// Componente principal que renderiza la página de comentarios
-export default  function CommentPage({ courseId, nameCourse }: CommentPageProps) {
-  const [comments, setComments] = useState<TComment[]>([]); // Lista de comentarios del curso
+export default function CommentPage({ courseId, nameCourse }: CommentPageProps) {
+  const [comments, setComments] = useState<TComment[]>([]);
   const [allStudents, setAllStudents] = useState<TStudentAllComents[]>([]);
   const [listStudentsConnects, setListStudentsConnects] = useState<TStudent['id'][]>([]);
+/*   const prevConnectedIds = useRef<TStudent['id'][]>([]); */
+  const student = useMemo(() => authStorage.getUser(), []);
+  const socket = getSocket();  // Usamos la instancia compartida
+
+    const handleBtnNavigate = useNavigationHandler()
 
 
-  // Obtenemos el nombre de usuario desde localStorage o usamos un valor por defecto
-  const student = authStorage.getUser();
-  // useEffect que se ejecuta al montar el componente (y cuando username o courseId cambian)
   useEffect(() => {
-    const allstudentsStorage=authStorage.getAllStudents();
-    setAllStudents(allstudentsStorage!)
-    // Enviamos al servidor que nos unimos al curso con nuestro nombre
-    socket.emit('join', {name:student!.name, courseId });
+    const allstudentsStorage = authStorage.getAllStudents();
+    setAllStudents(allstudentsStorage || []);
 
-    // Escuchamos la lista completa de comentarios enviada por el servidor
-    socket.on('commentList', (data: TComment[]) => {
-      setComments(data); // Guardamos los comentarios en el estado
-    });
-    // Escuchamos la lista de id de usuarios conectados
-    socket.on('listStudentsConnects', (data: TStudent['id'][]) => {
-      setListStudentsConnects(data); // Guardamos los ids de los estudiantes conectados en el estado
+    socket.emit('join', {
+      name: student?.name,
+      courseId,
+      token: authStorage.getToken(),
     });
 
-    // Escuchamos cuando se recibe un nuevo comentario
+    socket.on('commentList', (comments: TComment[]) => {
+      setComments(comments);
+    });
+
+    socket.on('listStudentsConnects', (data: TStudent['id'][] | []) => {
+      setListStudentsConnects(data);
+    });
+
     socket.on('newComment', (comment: TComment) => {
-      // Solo lo añadimos si pertenece al mismo curso
       if (comment.courseId === courseId) {
-        setComments(prev => [...prev, comment]); // Añadimos el nuevo comentario al final de la lista
-        /* Llamar funcion que trae todos los usuarios (getAllStudents) */
+        setComments(prev => [...prev, comment]);
+        if (comment.nameStudent === student?.name) {
+          toast.success('¡Tu comentario fue enviado y ya es visible para todos!');
+        }
       }
     });
-    // Escuchamos actualizaciones de la lista de usuarios conectados
-    // Limpiamos los listeners cuando se desmonta el componente o cambian las dependencias
+
     return () => {
       socket.off('commentList');
       socket.off('newComment');
       socket.off('listStudentsConnects');
     };
-  }, [student, courseId]); // Dependencias: se ejecuta si cambia el nombre de usuario o el ID del curso
-  
+  }, [student?.name, courseId]);
+
   useEffect(() => {
-    if (allStudents.length === 0) return; // Evita ejecución prematura
+    if (allStudents.length === 0 || !Array.isArray(listStudentsConnects)) return;
+    setAllStudents(prev =>
+      prev.map(student => ({
+        ...student,
+        stateConnect: listStudentsConnects.includes(student.id),
+      }))
+    );
+  }, [listStudentsConnects]);
 
-    const updated = allStudents.map((student) => ({
-      ...student,
-      stateConnect: listStudentsConnects.includes(student.id),
-    }));
-    setAllStudents(updated);
-  }, [listStudentsConnects, allStudents]);
 
 
-
-  // Renderizamos la interfaz de comentarios
   return (
-    <div className="comment-page">
-      {/* Sección izquierda: Comentarios y formulario */}
-      <div className="left">
-        <h2>Comentarios {nameCourse}</h2>
+    <div className={`comment-page ${nameCourse.toLowerCase()}`}>
+      <button className="btn-back-comment" onClick={()=>handleBtnNavigate('/back')}>{<IoArrowBackCircleSharp/>}</button>
 
-        {/* Renderizamos solo los comentarios principales (parent_id === null) */}
+      <div className="left">
+        <h2 className='title-comment'>Comentarios {nameCourse}</h2>
         <div className={`comments ${nameCourse.toLowerCase()}`}>
           {comments
-            .filter((c) => c.parentId === null)  // Esto sí son los comentarios raíz 
-            .map((c) => (
+            .filter(c => c.parentId === null)
+            .map(c => (
               <Comment
                 key={c.id}
-                {...c}                           // Pasamos todas las props del comentario
-                allComments={comments}          // Pasamos todos los comentarios para renderizar respuestas
-                username={student!.name}             // Pasamos el nombre de usuario
-                courseId={courseId}             // ID del curso actual
+                {...c}
+                allComments={comments}
+                courseId={courseId}
+                allStudents={allStudents}
               />
             ))}
         </div>
-
-        {/* Formulario para crear nuevo comentario (no respuesta) */}
-        <CommentForm username={student!.name} courseId={courseId} />
+        <CommentForm courseId={courseId} />
       </div>
-
-      {/* Sección derecha: Lista de usuarios */}
       <div className={`right ${nameCourse.toLowerCase()}`}>
         <UserList students={allStudents} />
       </div>

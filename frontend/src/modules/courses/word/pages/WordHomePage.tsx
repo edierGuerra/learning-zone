@@ -2,14 +2,19 @@ import HeaderCourse from "../../components/HeaderCourse";
 import { FaCheck } from "react-icons/fa";
 import { TbLock } from "react-icons/tb";
 import { PiPlayLight } from "react-icons/pi";
-import "../../styles/HomeCourseShares.css";
+import "./styles/WordHomePage.css";
 import { useCourseContext } from "../../hooks/useCourse";
-
-
-
+import { useEffect } from "react";
+import { authStorage } from "../../../../shared/Utils/authStorage";
 
 export default function WordHomePage() {
   const {lessons} = useCourseContext()
+
+  useEffect(() => {
+    return () => {
+      authStorage.removeLessons();
+    };
+  }, []);
   // 🔧 Genera curvas suaves entre los nodos con Bezier
   function generateSmoothPath(points: { left: number; top: number }[]): string {
     if (points.length < 2) return "";
@@ -52,10 +57,10 @@ export default function WordHomePage() {
   const pathD = generateSmoothPath(lessonsPositions);
 
   return (
-    <div className="container-home word-course">
-      <HeaderCourse title="Word" chatTo="/commentsWord" />
+    <div className="container-home-word">
+      <HeaderCourse title="Word" />
       <svg
-        className="path-svg"
+        className="path-svg-word"
         viewBox="0 0 1400 800"
         preserveAspectRatio="xMidYMid meet"
       >
@@ -66,25 +71,22 @@ export default function WordHomePage() {
           fill="none"
           strokeDasharray="22, 22"  // línea discontinua (6px trazo, 4px espacio)
           strokeOpacity={0.8}
-
-
         />
       </svg>
-
 
       <div className="container-lessons-word">
         {visualLessons.map((lesson, i) => (
           <div
             key={lesson.id}
             title={lesson.name}
-            className={`lessons lessons-word state-${lesson.progress_state}`}
+            className={`lessons-word state-word-${lesson.progress_state}`}
             style={{
               top: `${lesson.position.top}px`,
               left: `${lesson.position.left}px`,
               position: "absolute",
             }}
           >
-            <button className={`btn-icon-lesson ${lesson.progress_state}`}>
+            <button className={`btn-icon-lesson-word word-${lesson.progress_state}`}>
               {lesson.progress_state === "complete" ? (
                 <FaCheck />
               ) : lesson.progress_state === "blocked" ? (
@@ -93,7 +95,7 @@ export default function WordHomePage() {
                 <PiPlayLight />
               )}
             </button>
-            <span className="span-lesson">{`lección ${i + 1}`}</span>
+            <span className="span-lesson-word">{`lección ${i + 1}`}</span>
           </div>
         ))}
       </div>

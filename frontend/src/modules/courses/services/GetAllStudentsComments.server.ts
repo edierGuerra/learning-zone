@@ -14,7 +14,7 @@ type TResponseGetAllStudentsAPI ={
 export default async function GetAllStudentsCommentsAPI():Promise<TResponseGetAllStudentsAPI[]> {
     try{
         const response = await axios.get(VITE_ALLSTUDENTS_ENDPOINT)
-        return response.data.students
+        return response.data
 
     }catch(error){
         console.error('Error en getAllStudents')

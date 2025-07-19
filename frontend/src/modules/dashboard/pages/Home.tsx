@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <div className="container-home-user">
-      <h1 className="home-title">Bienvenido {student?.name}</h1>
+      <h1 className="home-title">Bienvenid@ {student?.name}</h1>
       <p>Selecciona un curso para comenzar</p>
 
       <div className="container-courses">

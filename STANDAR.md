@@ -216,7 +216,6 @@
 lessons {
    id_lesson,
    name,
-   description,
    estado
 }
 
@@ -275,112 +274,314 @@ content {
 
 
 
+# Estándar de Evaluación de Lecciones
 
+## **Flujo General – Evaluación de Lección**
 
-## Ruta evaluacion leccion
+1. **Frontend:**
+   - Envía un **token de acceso** en el header `Authorization: Bearer <token>`.
+   - Llama a la ruta `/courses/{id_course}/lessons/{id_lesson}/evaluation`.
+   - Si es **GET**, obtiene la pregunta (para renderizarla).
+   - Si es **POST**, envía la **respuesta del estudiante** y el tipo de pregunta.
 
-1. **Frontend**:
-   * Envía un **token de acceso** en el encabezado `Authorization`.
-   * Envia el id del curso y leccion por parametro de ruta
+2. **Backend (GET – Mostrar Evaluación):**
+   - Valida el token y los IDs (`id_course`, `id_lesson`).
+   - Busca la pregunta de la evaluación en la base de datos.
+   - Retorna:
+     ```json
+     {
+       "status": 200,
+       "message": "Evaluación obtenida con éxito",
+       "evaluation": {
+         "id_evaluation": 12,
+         "question": "¿Qué es una celda en Excel?",
+         "question_type": "open_choice",   // o "multiple_choice"
+         "options": ["Opción A", "Opción B", "Opción C"]  // Solo si es multiple_choice
+       }
+     }
+     ```
 
-2. **Backend**:
+3. **Frontend (Renderiza):**
+   - Si la pregunta es de **opción múltiple**, muestra las opciones.
+   - Si es de **respuesta abierta**, muestra un campo de texto.
+   - Recoge la respuesta y hace un **POST** a la misma ruta con:
+     ```json
+     {
+       "response": "Respuesta del estudiante",
+       "question_type": "open_choice"  // o "multiple_choice"
+     }
+     ```
 
-   * **Valida el token** recibido.
-   * Si el token es **válido** y el id del curso y de leccion tambien,
-   * Retorna un **código de estado HTTP**, un **mensaje** según el resultado de la operación y la **evaluacion** de dicha leccion..
+4. **Backend (POST – Validación de Respuesta):**
+   - Valida el token y los IDs.
+   - Si es:
+     - **Pregunta abierta:**
+       - Consulta la pregunta easn la base de datos.
+       - Envía la pregunta y la respuesta del estudiante a GPT (modelo).
+       - El modelo devuelve algo como:
+         ```json
+         { "score": 82, "is_pass": true }
+         ```
+       - Si `is_pass` es `true`:
+         - Marca la lección actual como `complete` y la siguiente como `in_progress`.
+         - Guarda en `Student_answer`:
+           - `student_id` (del token)
+           - `evaluation_id`
+           - `respuesta del estudiante`
+           - `score` (del modelo)
+           - `fecha actual`.
+         - Retorna `200 OK` con el resultado.
+       - Si `is_pass` es `false`:
+         - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
+     - **Pregunta de opción múltiple:**
+       - Compara la respuesta enviada con la respuesta guardada en la base de datos.
+       - Si es correcta:
+         - Marca progreso (`complete` / `in_progress`).
+         - Guarda en `Student_answer` con `score: 100`.
+         - Retorna `200 OK`.
+       - Si es incorrecta:
+         - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
 
-3. **En caso de error**:
-
-   * El backend responde con un código de estado acorde al tipo de error.
-   * **No se retornan los cursos.**
-
-4. **Respuesta del Frontend**:
-
-   * Espera el código de **estado**, **mensaje***, y la **evaluacion**.
-   * Si recibe un **200 OK**,  renderiza la evalaucion en el apartado del la leccion
 ---
 
-## 🧭 Rutas
+## **Parámetros y Respuestas**
 
-| Función          | Ruta                                                 | Método |
-| ---------------- | -----------------------------------------------------| ------ |
-| Backend (API)    | `/courses/{id_course}/lessons/{id_lesson}/evaluation`| `GET`  |
-| Frontend (vista) | `/courses/{id_course}/lessons/{id_lesson}/evaluation`| -GET   |
+- **Header:** `Authorization: Bearer <token>`
+- **Ruta:** `/courses/{id_course}/lessons/{id_lesson}/evaluation`
+
+### **Respuestas posibles**
+- `200 OK`: Evaluación exitosa (devuelve `evaluation` o resultado de validación).
+- `400 Bad Request`: Respuesta incorrecta.
+- `401 Unauthorized`: Token inválido o no presente.
+- `404 Not Found`: Curso o lección no encontrada.
+
+---
+
+## **Estructura de `evaluation`**
+
+- **Para opción múltiple:**
+  ```json
+  {
+    "id_evaluation": 1,
+    "question": "¿Qué hace Excel?",
+    "question_type": "multiple_choice",
+    "options": ["Calcular datos", "Editar videos", "Enviar correos"]
+  }
+
+
+## 📝 Comentarios (Chat de Cursos)
+
+### 📤 Flujo de comunicación general
+
+1. **Frontend:**
+   - Obtiene el token de acceso del usuario autenticado.
+   - Solicita la lista de todos los estudiantes (REST, `/api/v1/student/all` o similar) para mostrar en el panel de usuarios del chat.
+   - Se conecta al chat-service vía WebSocket (socket.io) y emite el evento `join` con el nombre del estudiante y el `courseId`.
+   - Escucha eventos:
+     - `commentList`: Recibe la lista de comentarios del curso.
+     - `listStudentsConnects`: Recibe la lista de IDs de estudiantes conectados en tiempo real.
+     - `newComment`: Recibe un nuevo comentario en tiempo real.
+   - Envía comentarios usando el evento `newComment` con los datos del comentario y el token.
+
+2. **Chat-Service (Node.js):**
+   - Recibe conexiones WebSocket y maneja los eventos:
+     - `join`: Solicita al backend (FastAPI) la lista de comentarios del curso y la envía al usuario.
+     - `newComment`: Valida el token, reenvía el comentario al backend (FastAPI) vía REST, y si es exitoso, emite el nuevo comentario a todos los clientes conectados y actualiza la lista de conectados.
+   - Mantiene y emite la lista de estudiantes conectados por curso.
+
+3. **Backend (FastAPI):**
+   - Expone endpoints REST para:
+     - Obtener todos los estudiantes (`/api/v1/student/all`)
+     - Obtener comentarios de un curso (`/api/v1/comments?course_id={id}`)
+     - Crear un nuevo comentario (`/api/v1/comments`)
+   - Valida el token recibido en los endpoints protegidos.
+   - Al crear un comentario, retorna el comentario creado y la lista actualizada de IDs de estudiantes conectados.
+
+---
+
+## 🧭 Rutas y Eventos
+
+| Función                | Ruta/Event                | Método/Evento | Descripción |
+|------------------------|--------------------------|---------------|-------------|
+| Obtener estudiantes    | `/api/v1/student/all`    | `GET`         | REST: Lista de todos los estudiantes (para mostrar en el chat) |
+| Obtener comentarios    | `/api/v1/comments?course_id=ID` | `GET`         | REST: Lista de comentarios de un curso |
+| Crear comentario       | `/api/v1/comments`       | `POST`        | REST: Crear un nuevo comentario |
+| Unirse a chat          | `join`                   | socket.io     | WS: Unirse a un curso (envía nombre y courseId) |
+| Enviar comentario      | `newComment`             | socket.io     | WS: Enviar comentario (con token) |
+| Lista comentarios      | `commentList`            | socket.io     | WS: Recibe lista de comentarios |
+| Lista conectados       | `listStudentsConnects`   | socket.io     | WS: Recibe lista de IDs de estudiantes conectados |
+| Nuevo comentario       | `newComment`             | socket.io     | WS: Recibe nuevo comentario en tiempo real |
 
 ---
 
 ## 📨 Parámetros Esperados
 
+### 1. **Obtener estudiantes**
 * **Header:** `Authorization: Bearer <access-token>`
-* **Query parameter** `/courses/{id_course}/lessons/{id_lesson}`
+* **Respuesta:**
+  ```json
+  {
+    "students": [
+      {
+        "id": 1,
+        "num_identification": "12345",
+        "name": "Juan",
+        "last_names": "Pérez",
+        "email": "juan@example.com",
+        "prefix_profile": "JP"
+      },
+      ...
+    ]
+  }
+  ```
 
-## 📥 Respuesta esperada
+### 2. **Obtener comentarios**
+* **Header:** `Authorization: Bearer <access-token>`
+* **Query:** `course_id=<id>`
+* **Respuesta:**
+  ```json
+  {
+    "comments": [
+      {
+        "id": 1,
+        "nameStudent": "Juan",
+        "text": "¡Hola!",
+        "timestamp": "2024-05-01T12:00:00Z",
+        "parentId": null,
+        "courseId": 1,
+        "studentId": 1
+      },
+      ...
+    ]
+  }
+  ```
 
+### 3. **Crear comentario**
+* **Header:** `Authorization: Bearer <access-token>`
+* **Body:**
+  ```json
+  {
+    "text": "Mi comentario",
+    "timestamp": "2024-05-01T12:00:00Z",
+    "parent_id": null, // o id del comentario padre
+    "course_id": 1
+  }
+  ```
+* **Respuesta:**
+  ```json
+  {
+    "comment": {
+      "id": 2,
+      "nameStudent": "Juan",
+      "text": "Mi comentario",
+      "timestamp": "2024-05-01T12:00:00Z",
+      "parentId": null,
+      "courseId": 1,
+      "studentId": 1
+    },
+    "listIdsConnects": [1, 2, 3]
+  }
+  ```
+
+### 4. **Eventos WebSocket**
+* **join**
+  ```js
+  socket.emit('join', { name: 'Juan', courseId: 1 })
+  ```
+* **newComment** (enviar)
+  ```js
+  socket.emit('newComment', {
+    nameStudent: 'Juan',
+    text: 'Mi comentario',
+    timestamp: '2024-05-01T12:00:00Z',
+    parentId: null,
+    courseId: 1,
+    token: '<access-token>'
+  })
+  ```
+* **commentList** (recibir)
+  ```js
+  socket.on('commentList', (comments) => { ... })
+  // comments: array de comentarios (ver formato arriba)
+  ```
+* **listStudentsConnects** (recibir)
+  ```js
+  socket.on('listStudentsConnects', (ids) => { ... })
+  // ids: array de IDs de estudiantes conectados
+  ```
+* **newComment** (recibir)
+  ```js
+  socket.on('newComment', (comment) => { ... })
+  // comment: objeto comentario (ver formato arriba)
+  ```
+
+---
+
+## 📥 Respuestas esperadas
 * **Código de estado HTTP** (`200`, `400`, `401`, etc.)
-* **Mensaje** explicativo del resultado
-* **contenido** (evaluacion)
-evaluation {
-   id_evaluation,
-   question,
-   question_type
-   options
-} en caso de que sea opcion multiple
-
-evaluation {
-   id_evaluation,
-   question,
-   question_type
-} en caso de que sea pregunta abierta
+* **Mensajes** explicativos del resultado
+* **Datos**:
+  - Lista de estudiantes
+  - Lista de comentarios
+  - Comentario creado y lista de conectados
 
 ---
 
+## ⏳ Datos que se envían y reciben
 
+### Comentario enviado (frontend → chat-service → backend):
+```json
+{
+  "nameStudent": "Juan",
+  "text": "Mi comentario",
+  "timestamp": "2024-05-01T12:00:00Z",
+  "parentId": null,
+  "courseId": 1,
+  "token": "<access-token>"
+}
+```
 
+### Comentario recibido (backend → chat-service → frontend):
+```json
+{
+  "id": 2,
+  "nameStudent": "Juan",
+  "text": "Mi comentario",
+  "timestamp": "2024-05-01T12:00:00Z",
+  "parentId": null,
+  "courseId": 1,
+  "studentId": 1
+}
+```
 
-## 🛠️ Comentarios
+### Lista de estudiantes conectados:
+```json
+[1, 2, 3]
+```
 
-### 📤 Flujo de comunicación:
+### Lista de todos los estudiantes (para mostrar en el chat):
+```json
+[
+  {
+    "id": 1,
+    "numIdentification": "12345",
+    "name": "Juan",
+    "lastNames": "Pérez",
+    "email": "juan@example.com",
+    "prefixProfile": "JP",
+    "stateConnect": false
+  },
+  ...
+]
+```
 
-1. **Frontend**:
-
-   * Envía un **token de acceso** en el encabezado `Authorization`.
-
-2. **Backend**:
-
-   * **Valida el token** recibido.
-   * Si el token es **válido**, busca las notificaciones asociadas al estudiante.
-   * Retorna un **código de estado HTTP** y todas las notificaciones asociadas.
-
-3. **En caso de error - Backend**:
-
-   * El backend responde con un código de estado acorde al tipo de error y un mensaje.
-
-4. **Respuesta del Frontend**:
-
-   * Espera el código de estado y una lista de notificaciones(array).
-   * Si el resultado es exitoso (`200 OK`), se renderizan todas las notificaciones(asociadas).
-
-5. **En caso de error - Frontend**
-    * Renderiza mensaje segun el error.
 ---
 
-## 🧭 Rutas
+## 🛡️ Validaciones y errores
+* El token debe ser válido en cada petición protegida.
+* Si el token es inválido, se responde con `401 Unauthorized`.
+* Si falta algún dato requerido, se responde con `400 Bad Request`.
+* Los errores deben incluir un mensaje explicativo.
 
-| Función          | Ruta              | Método          |
-| ---------------- | ----------------- | --------------- |
-| Backend (API)    | `/notifications`  | `get`           |
-| Frontend (vista) | `/notifications`  | `get`           |
-
----
-
-## 📨 Parámetros Esperados
-
-* **Header:** `Authorization: Bearer <access-token>`
-
----
-
-## 📥 Respuesta esperada
-* **Código de estado HTTP:** `200`
-* **Lista(Array):** `list_notifications`
 ---
 

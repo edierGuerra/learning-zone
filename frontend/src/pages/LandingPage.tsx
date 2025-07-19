@@ -1,11 +1,7 @@
-/* import { useEffect } from "react"; */
 import AboutInstitucionAndCje from "./components/landing/AboutInstitucionAndCje";
 import Carrusel from "./components/landing/Carrusel";
 import Features from "./components/landing/Features";
 import StepsToRegister from "./components/landing/StepsToRegister";
-import './styles/Landing.css'
-/* import { useUser } from "../modules/auth/Hooks/useAuth";
-import { useNavigationHandler } from "../hooks/useNavigationHandler"; */
 export default function LandingPage() {
 
 /*   const handleBtnNavigate = useNavigationHandler()

@@ -12,6 +12,7 @@ import WordHomePage from "../modules/courses/word/pages/WordHomePage";
 import ExcelHomePage from "../modules/courses/excel/pages/ExcelHomePage";
 import PowerPointHomePage from "../modules/courses/powerpoint/pages/PowerPointHomePage";
 import LandingPage from "../pages/LandingPage";
+import CommentPageWrapper from "../modules/courses/comments/CommentPageWrapper";
 
 
 export default function RoutersPrivates() {
@@ -26,6 +27,8 @@ export default function RoutersPrivates() {
                   <Route path="/word" element={<WordHomePage/>}/>
                   <Route path="/excel" element={<ExcelHomePage/>}/>
                   <Route path="/powerPoint" element={<PowerPointHomePage/>}/>
+                  
+                  <Route path="/comments/:courseId" element={<CommentPageWrapper />} />
 {/*                   <Route path="/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage />} />
                   <Route path="/course/:courseId/lesson/:lessonId/evaluation" element={<LessonEvaluationPage />} /> */}
                   {sharedRoutes}

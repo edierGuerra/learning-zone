@@ -1,4 +1,4 @@
-.container-home {
+.container-home-word {
     padding: 60px;
     position: relative;
     display: block; /* Mejor que flex para contener elementos absolutos vía altura explícita */
@@ -9,7 +9,7 @@
 }
 
 /* Asegura que el SVG cubra todo el alto posible, por ejemplo hasta 900px */
-.path-svg {
+.path-svg-word {
   position: absolute;
   width: 100%;
   height: 100%; /* Ajusta manualmente al último nodo visible */
@@ -27,14 +27,14 @@
   height: 900px; /* Mismo que el svg. Hazlo dinámico si lo deseas con JS */
 }
 
-.lessons {
+.lessons-word {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: absolute; /* Cada lección va a una coordenada específica */
 }
 
-.btn-icon-lesson {
+.btn-icon-lesson-word {
   background-color: #69b6f1;
   padding: 2rem;
   width: 100%;
@@ -45,11 +45,11 @@
   z-index: 1;
 }
 
-.btn-icon-lesson:hover {
+.btn-icon-lesson-word:hover {
   font-size: 46px;
 }
 
-.span-lesson {
+.span-lesson-word {
   align-self: self-start;
   margin-top: 6px;
   color: var(--color-text-light-alt);

@@ -1,0 +1,31 @@
+.user-list ul {
+  max-height: 300px; /* Puedes ajustar la altura según tu diseño */
+  overflow-y: auto;
+  padding-right: 8px; /* Espacio para la barra de scroll */
+  margin: 0;
+  list-style: none;
+}
+
+.user-list {
+  /* Asegura que el contenedor no crezca indefinidamente */
+  max-width: 100%;
+}
+
+.user-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1.1rem;
+  
+} 

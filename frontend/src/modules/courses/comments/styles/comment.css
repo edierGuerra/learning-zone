@@ -1,0 +1,119 @@
+.comment {
+  position: relative; /* Para que el panel se posicione respecto a este comentario */
+}
+
+/* Panel flotante centrado sobre el comentario */
+.container-information-student {
+  position: absolute;
+  top: 180%; /* Puedes ajustar para que quede justo encima o encima del avatar */
+  left: 50%;
+  transform: translate(-50%, -100%); /* Centra horizontal y lo sube encima */
+  z-index: 500;
+  background:rgba(0,0,0,.6) ;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  padding: 40px;
+  min-width: 220px;
+  max-width: 320px;
+  color: var(--color-text);
+  font-size: 1rem;
+  transition: box-shadow 0.2s;
+  animation: fadeInInfo 0.2s;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+  
+}
+
+@keyframes fadeInInfo {
+  from { opacity: 0; transform: translate(-50%, -120%);}
+  to   { opacity: 1; transform: translate(-50%, -100%);}
+}
+
+.close-info-btn {
+  
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  font-size: 1.2rem;
+  color: #101010;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.prefix-window{
+  align-self: center;
+  color: var(--color-text-light);
+  padding: 1rem;
+  border-radius: 50%;
+  font-size: 28px;
+  
+  
+}
+.close-info-btn:hover {
+  color: #d90429;
+}
+.comment {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1rem;
+}
+.comment .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-weight: bold;
+  color: var(--color-text-light);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+.comment-body {
+  flex: 1;
+}
+.comment .meta {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.3rem;
+}
+.comment .username {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+.comment .time {
+  font-size: 0.85rem;
+}
+.comment .text {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+.comment button {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  transition: background 0.2s;
+}
+.comment button:hover {
+  background: #e0e7ff;
+}
+.replies {
+  margin-left: 2.5rem;
+  margin-top: 0.5rem;
+  border-left: 2px solid #f0f0f0;
+  padding-left: 1rem;
+} 
+.text{
+  color: #101010;
+}

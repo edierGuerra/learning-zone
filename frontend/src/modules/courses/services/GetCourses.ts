@@ -8,7 +8,6 @@ export default async function GetCoursesAPI():Promise<TCourses> {
     try{
 
         const response = await axios.get(VITE_GETCOURSES_ENDPOINT)
-        alert('fffff')
         return response.data.data
 
     }catch(error){

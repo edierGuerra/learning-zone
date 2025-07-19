@@ -1,6 +1,6 @@
 // PARA MAYOR SEGURIDAD MIGRAR ESTO A COOKIES
 // Importa los tipos de datos definidos para el usuario y su token
-import type { TStudentAllComents } from "../../modules/courses/comments/types";
+import type { TComment, TStudentAllComents } from "../../modules/courses/comments/types";
 import type { TCourses, TLessons } from "../../modules/courses/types/Course";
 import type { TNotifications } from "../../modules/notifications/types/Notifications";
 import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken } from "../../modules/types/User";
@@ -51,6 +51,20 @@ export const authStorage = {
 
   },
   removeAllStudents:() => localStorage.removeItem('allStudents'),
+
+  setComments:(comments:TComment[])=>
+    localStorage.setItem('comments',JSON.stringify(comments)),
+  getComments:():TComment[] | null =>{
+    try {
+      const raw = localStorage.getItem("comments");
+      return raw ? (JSON.parse(raw) as TComment[]) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado :", e);
+      return null;
+    }
+
+  },
+  removeComments:() => localStorage.removeItem('comments'),
 
   // Guarda el token de autenticación
   setToken: (token: TStudentProfileToken['token']) =>

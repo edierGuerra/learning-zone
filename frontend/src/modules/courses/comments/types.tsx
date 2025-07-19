@@ -1,14 +1,20 @@
 import type { TStudent } from "../../types/User";
-
-// src/components/types.ts
-export type TComment ={
+// types.tsx
+export type TComment = {
   id: number;
-  user: string;
+  nameStudent: string;
   text: string;
   timestamp: string;
   parentId: number | null;
   courseId: number;
+  studentId: number;
 }
+
+// Comentario que se envía al servidor, incluye el token pero no requiere el ID todavía
+export type TCommentSend = Omit<TComment, 'id' | 'studentId' | 'nameStudent' | 'timestamp'> & {
+  token: string;
+};
+
 
 export type TStudentAllComents ={
     id: TStudent['id'];

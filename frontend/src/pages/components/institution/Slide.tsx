@@ -66,7 +66,8 @@ export default function InstitutionSlide({ index, setIndex }: SlideProps) {
 
   return (
     <div className="slide">
-      <button className="btn-back-confirm" onClick={()=>handleBtnNavigate('/back')}><IoArrowBackCircleSharp/></button>
+      <button className="btn-back-confirm" onClick={()=>handleBtnNavigate('/back')}>{<IoArrowBackCircleSharp/>}</button>
+
 
       <div className="slide-images">
 

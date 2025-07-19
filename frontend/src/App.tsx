@@ -1,8 +1,20 @@
+import { useEffect } from 'react';
 import './App.css' // Asegúrate de que este archivo contenga el CSS de "Quantum Notification"
 import AppRouter from './routers'
 import { Toaster } from 'react-hot-toast'
+import { useLocation } from 'react-router-dom';
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Si NO estamos en una ruta de comentarios, elimina las claves
+    if (!location.pathname.includes("/comments")) {
+      localStorage.removeItem("comment");
+      localStorage.removeItem("allStudents");
+    }
+  }, [location.pathname]);
+
   return (
     <>
       <Toaster

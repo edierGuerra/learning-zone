@@ -11,6 +11,7 @@ from fastapi import HTTPException, status
 from models.student_model import Student
 
 # Modulos internos
+from routes.utils import generate_profile_prefix
 from repository.student_repository import StudentRepository
 from schemas.student_schemas import StudentRegister, StudentResponse, UpdateProfile
 from repository.utils import hash_password
@@ -211,3 +212,24 @@ class StudentService:
         )
 
         return StudentResponse.model_validate(updated_student)
+
+    async def get_students(self):
+        students = await self.repository.get_students()
+
+        list_students = []
+
+        for student in students:
+            list_students.append(
+                {
+                    "id": student.id,
+                    "num_identification": student.identification_number,
+                    "name": student.names,
+                    "last_name": student.last_names,
+                    "email": student.email,
+                    "prefix_profile": generate_profile_prefix(
+                        name=student.names, last_name=student.last_names
+                    ),
+                }
+            )
+
+        return list_students

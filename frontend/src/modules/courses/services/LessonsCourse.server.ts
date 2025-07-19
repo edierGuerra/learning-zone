@@ -6,7 +6,7 @@ const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 export default async function LessonsCourseAPI(idCourse:TCourse['id']):Promise<TLessons> {
     try{
         const id_course = idCourse
-        alert(id_course)
+        // toast('¡ID del curso: ' + id_course + '!'); // Solo para depuración, puedes eliminar esta línea si no es útil
         const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/${id_course}/lessons`)
         console.log(response.data.lessons)
         return response.data.lessons

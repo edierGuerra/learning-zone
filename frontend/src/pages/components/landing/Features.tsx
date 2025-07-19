@@ -2,14 +2,9 @@ import { useEffect, /* useState */ } from 'react';
 import TiltedCard from '../../../shared/animations/AnimationCard'
 import './styles/Features.css'
 /* import ConfettiExplosion from "react-confetti-explosion"; */
-import img1 from '../../assets/Features/img-1.jpg'
 import '../../../../node_modules/aos/dist/aos.css'
 import AOS from 'aos';
-/* import { useNavigationHandler } from '../../../hooks/useNavigationHandler'; */
 export default function Features() {
-/*   const [isExploding, setIsExploding] = useState(false);
-
-  const handleBtnNavigate = useNavigationHandler() */
 
 useEffect(() => {
   AOS.init({
@@ -23,12 +18,10 @@ useEffect(() => {
 }, []);
 
 
-/* const handleClickBtnView =()=>{
-  setIsExploding(true)
-  setTimeout(() => setIsExploding(false), 1000);
-  handleBtnNavigate('/home')
-  
-
+/*   const handleClickBtnView =()=>{
+    setIsExploding(true)
+    setTimeout(() => setIsExploding(false), 1000);
+    handleBtnNavigate('/home')
 
 } */
   return (
@@ -42,15 +35,6 @@ useEffect(() => {
       <section className='features'>
         <div className="feature-card">
           <h2 className='title-feature'>prepara para mundo laboral - universitario</h2>
-          <TiltedCard
-          imageSrc={img1}
-          containerWidth="300px"
-          imageHeight="300px"
-          imageWidth="300px"
-          />
-        </div>
-        <div className="feature-card">
-          <h2 className='title-feature'>Organización de la información</h2>
           <TiltedCard
           imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
           altText="Kendrick Lamar - GNX Album Cover"

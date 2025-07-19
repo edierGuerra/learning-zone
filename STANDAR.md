@@ -216,7 +216,6 @@
 lessons {
    id_lesson,
    name,
-   description,
    estado
 }
 

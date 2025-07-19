@@ -139,7 +139,7 @@ export default function useRecoverPassword() {
 
             }
         }catch{
-            alert('No se pudo Cambiar la contarseña')
+            toast.error('¡No se pudo cambiar la contraseña! Intenta de nuevo.');
         }finally{
             setLoading(false)
         }

@@ -3,6 +3,7 @@ import { useNavigationHandler } from '../../../hooks/useNavigationHandler';
 import { authStorage } from '../../../shared/Utils/authStorage';
 import useRecoverPassword from '../Hooks/useRecoverPassword';
 import '../Styles/RequestPassword.css'
+import toast from 'react-hot-toast';
 
 export default function Requestpasswords() {
   const {
@@ -19,7 +20,7 @@ export default function Requestpasswords() {
 
 useEffect(() => { 
     if (!password_token) {
-      alert('No tienes acceso directo a esta ruta.');
+      toast.error('¡Acceso denegado! Por favor solicita el enlace de recuperación.');
       handleBtnNavigate('/emailNewPassword');
     }
   }, [password_token, handleBtnNavigate]);

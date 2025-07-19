@@ -111,7 +111,7 @@ const validateForm = (form: RegisterForm): FormErrors => {
     setLoading(true)
     try{
       if(!nIdentification || nIdentification?.toString().length <10){
-        alert('Ingresa un N Identificación Valido')
+        toast.error('¡Ups! Ingresa un número de identificación válido.');
         return
       }
       const response = await verifyAPI(nIdentification);
@@ -158,7 +158,7 @@ const validateForm = (form: RegisterForm): FormErrors => {
       /* Llamada a la api para registrar los datos */
       const res = await registerAPI(formData)
       if(!res){
-        alert('Ups! hubo un error')
+        toast.error('¡Algo salió mal! Intenta de nuevo.');
         return
       }
       // Obteniendo el id (primary key) del student

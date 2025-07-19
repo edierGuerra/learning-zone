@@ -64,7 +64,7 @@ export default function useFormUpdate() {
       setNewName(dataUser.name);
       setNewLastNames(dataUser.lastNames);
     } else {
-      alert('Lo sentimos pero no puedes actualizar la información');
+      toast.error('¡Ups! No puedes actualizar la información en este momento.');
     }
   }, []);
 
@@ -108,12 +108,12 @@ export default function useFormUpdate() {
         authStorage.setStudent(dataStudentLocalStorage)
 
       }else{
-        alert(response.message)
+        toast.error(response.message || 'No se pudo actualizar tu información.');
       }
 
 
     }catch{
-      alert("Hubo un error al procesar la solicitud. Inténtalo más tarde.");
+      toast.error('¡Algo salió mal! Intenta de nuevo más tarde.');
 
     }
 

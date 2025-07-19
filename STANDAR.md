@@ -275,116 +275,100 @@ content {
 
 
 
+# Estándar de Evaluación de Lecciones
 
+## **Flujo General – Evaluación de Lección**
 
-## Ruta evaluacion leccion
+1. **Frontend:**
+   - Envía un **token de acceso** en el header `Authorization: Bearer <token>`.
+   - Llama a la ruta `/courses/{id_course}/lessons/{id_lesson}/evaluation`.
+   - Si es **GET**, obtiene la pregunta (para renderizarla).
+   - Si es **POST**, envía la **respuesta del estudiante** y el tipo de pregunta.
 
-1. **Frontend**:
-   * Envía un **token de acceso** en el encabezado `Authorization`.
-   * Envia el id del curso y leccion por parametro de ruta
+2. **Backend (GET – Mostrar Evaluación):**
+   - Valida el token y los IDs (`id_course`, `id_lesson`).
+   - Busca la pregunta de la evaluación en la base de datos.
+   - Retorna:
+     ```json
+     {
+       "status": 200,
+       "message": "Evaluación obtenida con éxito",
+       "evaluation": {
+         "id_evaluation": 12,
+         "question": "¿Qué es una celda en Excel?",
+         "question_type": "open_choice",   // o "multiple_choice"
+         "options": ["Opción A", "Opción B", "Opción C"]  // Solo si es multiple_choice
+       }
+     }
+     ```
 
-2. **Backend**:
+3. **Frontend (Renderiza):**
+   - Si la pregunta es de **opción múltiple**, muestra las opciones.
+   - Si es de **respuesta abierta**, muestra un campo de texto.
+   - Recoge la respuesta y hace un **POST** a la misma ruta con:
+     ```json
+     {
+       "response": "Respuesta del estudiante",
+       "question_type": "open_choice"  // o "multiple_choice"
+     }
+     ```
 
-   * **Valida el token** recibido.
-   * Si el token es **válido** y el id del curso y de leccion tambien,
-   * Retorna un **código de estado HTTP**, un **mensaje** según el resultado de la operación y la **evaluacion** de dicha leccion..
-
-3. **En caso de error**:
-
-   * El backend responde con un código de estado acorde al tipo de error.
-   * **No se retornan los cursos.**
-
-4. **Respuesta del Frontend**:
-
-   * Espera el código de **estado**, **mensaje***, y la **evaluacion**.
-   * Si recibe un **200 OK**,  renderiza la evalaucion en el apartado del la leccion
----
-
-## 🧭 Rutas
-
-| Función          | Ruta                                                 | Método |
-| ---------------- | -----------------------------------------------------| ------ |
-| Backend (API)    | `/courses/{id_course}/lessons/{id_lesson}/evaluation`| `GET`  |
-| Frontend (vista) | `/courses/{id_course}/lessons/{id_lesson}/evaluation`| -GET   |
-
----
-
-## 📨 Parámetros Esperados
-
-* **Header:** `Authorization: Bearer <access-token>`
-* **Query parameter** `/courses/{id_course}/lessons/{id_lesson}`
-
-## 📥 Respuesta esperada
-
-* **Código de estado HTTP** (`200`, `400`, `401`, etc.)
-* **Mensaje** explicativo del resultado
-* **contenido** (evaluacion)
-evaluation {
-   id_evaluation,
-   question,
-   question_type
-   options
-} en caso de que sea opcion multiple
-
-evaluation {
-   id_evaluation,
-   question,
-   question_type
-} en caso de que sea pregunta abierta
-
----
-
-
-
-
-## 🛠️ Comentarios
-
-### 📤 Flujo de comunicación:
-
-1. **Frontend**:
-
-   * Envía un **token de acceso** en el encabezado `Authorization`.
-
-2. **Backend**:
-
-   * **Valida el token** recibido.
-   * Si el token es **válido**, busca las notificaciones asociadas al estudiante.
-   * Retorna un **código de estado HTTP** y todas las notificaciones asociadas.
-
-3. **En caso de error - Backend**:
-
-   * El backend responde con un código de estado acorde al tipo de error y un mensaje.
-
-4. **Respuesta del Frontend**:
-
-   * Espera el código de estado y una lista de notificaciones(array).
-   * Si el resultado es exitoso (`200 OK`), se renderizan todas las notificaciones(asociadas).
-
-5. **En caso de error - Frontend**
-    * Renderiza mensaje segun el error.
----
-
-## 🧭 Rutas
-
-| Función          | Ruta              | Método          |
-| ---------------- | ----------------- | --------------- |
-| Backend (API)    | `/notifications`  | `get`           |
-| Frontend (vista) | `/notifications`  | `get`           |
+4. **Backend (POST – Validación de Respuesta):**
+   - Valida el token y los IDs.
+   - Si es:
+     - **Pregunta abierta:**
+       - Consulta la pregunta easn la base de datos.
+       - Envía la pregunta y la respuesta del estudiante a GPT (modelo).
+       - El modelo devuelve algo como:
+         ```json
+         { "score": 82, "is_pass": true }
+         ```
+       - Si `is_pass` es `true`:
+         - Marca la lección actual como `complete` y la siguiente como `in_progress`.
+         - Guarda en `Student_answer`:
+           - `student_id` (del token)
+           - `evaluation_id`
+           - `respuesta del estudiante`
+           - `score` (del modelo)
+           - `fecha actual`.
+         - Retorna `200 OK` con el resultado.
+       - Si `is_pass` es `false`:
+         - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
+     - **Pregunta de opción múltiple:**
+       - Compara la respuesta enviada con la respuesta guardada en la base de datos.
+       - Si es correcta:
+         - Marca progreso (`complete` / `in_progress`).
+         - Guarda en `Student_answer` con `score: 100`.
+         - Retorna `200 OK`.
+       - Si es incorrecta:
+         - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
 
 ---
 
-## 📨 Parámetros Esperados
+## **Parámetros y Respuestas**
 
-* **Header:** `Authorization: Bearer <access-token>`
+- **Header:** `Authorization: Bearer <token>`
+- **Ruta:** `/courses/{id_course}/lessons/{id_lesson}/evaluation`
+
+### **Respuestas posibles**
+- `200 OK`: Evaluación exitosa (devuelve `evaluation` o resultado de validación).
+- `400 Bad Request`: Respuesta incorrecta.
+- `401 Unauthorized`: Token inválido o no presente.
+- `404 Not Found`: Curso o lección no encontrada.
 
 ---
 
-## 📥 Respuesta esperada
-* **Código de estado HTTP:** `200`
-* **Lista(Array):** `list_notifications`
----
+## **Estructura de `evaluation`**
 
----
+- **Para opción múltiple:**
+  ```json
+  {
+    "id_evaluation": 1,
+    "question": "¿Qué hace Excel?",
+    "question_type": "multiple_choice",
+    "options": ["Calcular datos", "Editar videos", "Enviar correos"]
+  }
+
 
 ## 📝 Comentarios (Chat de Cursos)
 

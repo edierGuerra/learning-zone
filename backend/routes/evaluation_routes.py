@@ -13,7 +13,9 @@ from core.security import get_current_student
 from services.evaluation_service import EvaluationService
 from repository.evaluation_repository import EvaluationRepository
 from repository.lesson_repository import LessonRepository  # Dependencia del servicio
-from schemas.evaluation_schemas import EvaluationResponse  # Esquema de respuesta
+from schemas.evaluation_schemas import (
+    APIEvaluationResponse,
+)  # Esquema de respuesta
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +34,7 @@ def get_evaluation_service(
 @router.get(
     "/{id_course}/lessons/{id_lesson}/evaluation",
     status_code=status.HTTP_200_OK,
-    response_model=EvaluationResponse,  # Define el modelo de respuesta esperado por FastAPI
+    response_model=APIEvaluationResponse,  # Define el modelo de respuesta esperado por FastAPI
 )
 async def get_lesson_evaluation(
     id_course: int,
@@ -83,7 +85,11 @@ async def get_lesson_evaluation(
         )
 
         # FastAPI se encarga de la serialización a JSON
-        return evaluation  # Retorna el objeto Pydantic
+        return APIEvaluationResponse(
+            status=status.HTTP_200_OK,
+            message="Evaluacion obtenida con éxito",
+            evaluation=evaluation,  # Pasamos el objeto EvaluationResponse
+        )
 
     except HTTPException as e:
         raise e  # Propaga las excepciones HTTP controladas

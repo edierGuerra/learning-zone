@@ -4,7 +4,7 @@
 Este módulo define esquemas de validacion y respuesta para la gestion de datos de la evaluacion usando pydantic.
 """
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 
 # Importa el Enum
@@ -34,3 +34,16 @@ class EvaluationResponse(BaseModel):
     class Config:
         from_attributes = True  # Permite crear el modelo desde un objeto ORM
         use_enum_values = True  # Le dice a Pydantic que serialice el Enum a su valor (string) cuando se convierte a JSON.
+
+
+class APIEvaluationResponse(BaseModel):
+    """
+    Esquema de respuesta estándar para las solicitudes de evaluación,
+    incluyendo un status, un mensaje y el objeto de evaluación.
+    """
+
+    status: int = Field(..., description="Código de estado HTTP de la respuesta.")
+    message: str = Field(..., description="Mensaje descriptivo de la respuesta.")
+    evaluation: EvaluationResponse = Field(
+        ..., description="El objeto de evaluación solicitado."
+    )

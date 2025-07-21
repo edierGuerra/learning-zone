@@ -45,22 +45,77 @@ async def create_initial_lessons(db: AsyncSession):
             "course_name": "Word",
             "name": "Párrafos y listas",
         },
-        # Lecciones para PowerPoint
         {
-            "course_name": "PowerPoint",
-            "name": "Primeros Pasos en PowerPoint",
+            "course_name": "Word",
+            "name": "Insertar y dar formato a tablas",
         },
         {
-            "course_name": "PowerPoint",
-            "name": "Diseño y Temas",
+            "course_name": "Word",
+            "name": "Insertar imágenes, formas e iconos",
         },
         {
-            "course_name": "PowerPoint",
-            "name": "Animaciones y Transiciones",
+            "course_name": "Word",
+            "name": "Encabezados, pies de página y numeración",
         },
         {
-            "course_name": "PowerPoint",
-            "name": "Presentación Efectiva",
+            "course_name": "Word",
+            "name": "Bordes y sombreados",
+        },
+        {
+            "course_name": "Word",
+            "name": "Diseño de página: márgenes, tamaño y orientación",
+        },
+        {
+            "course_name": "Word",
+            "name": "Estilos y temas rápidos",
+        },
+        {
+            "course_name": "Word",
+            "name": "Aplicar columnas de texto",
+        },
+        {
+            "course_name": "Word",
+            "name": "Insertar enlaces, notas al pie y marcadores",
+        },
+        {
+            "course_name": "Word",
+            "name": "Uso del panel de navegación y búsqueda",
+        },
+        {
+            "course_name": "Word",
+            "name": "Combinación de correspondencia (mail merge)",
+        },
+        {
+            "course_name": "Word",
+            "name": "Crear índice o tabla de contenido",
+        },
+        {
+            "course_name": "Word",
+            "name": "Revisar ortografía y sinónimos",
+        },
+        {
+            "course_name": "Word",
+            "name": "Control de cambios y comentarios",
+        },
+        {
+            "course_name": "Word",
+            "name": "Protección y restricción del documento",
+        },
+        {
+            "course_name": "Word",
+            "name": "Imprimir y guardar o exportar como PDF ",
+        },
+        {
+            "course_name": "Word",
+            "name": "Atajos de teclado básicos en Word",
+        },
+        {
+            "course_name": "Word",
+            "name": " Uso de plantillas en Word",
+        },
+        {
+            "course_name": "Word",
+            "name": " Insertar gráficos y SmartArt",
         },
         # Lecciones para Excel
         {
@@ -78,6 +133,23 @@ async def create_initial_lessons(db: AsyncSession):
         {
             "course_name": "Excel",
             "name": "Automatización con Macros",
+        },
+        # Lecciones para PowerPoint
+        {
+            "course_name": "PowerPoint",
+            "name": "Primeros Pasos en PowerPoint",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Diseño y Temas",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Animaciones y Transiciones",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Presentación Efectiva",
         },
     ]
 

@@ -10,7 +10,6 @@ from datetime import datetime, timezone
 from sqlalchemy import (
     Integer,
     DateTime,
-    Boolean,
     Table,
     Column,
     ForeignKey,
@@ -31,7 +30,7 @@ student_answer = Table(
         "evaluation_id", Integer, ForeignKey("evaluations.id"), nullable=False
     ),  # id_evaluacion (foreign key)
     Column("student_answer", Text),  # respuesta_usuario
-    Column("is_correct", Boolean),  # es_correcta (TINYINT(1))
+    Column("score", Integer),
     Column(
         "answer_date",
         DateTime(timezone=True),

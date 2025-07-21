@@ -8,9 +8,9 @@ incluyendo las preguntas, opciones y la respuesta correcta.
 from database.config_db import Base
 
 # Módulos externos
-from sqlalchemy import Integer, String, Text, ForeignKey
+from sqlalchemy import Integer, Text, ForeignKey, Enum as SqlEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from .student_answer_model import student_answer
+from enum import Enum
 
 from typing import TYPE_CHECKING
 
@@ -19,16 +19,30 @@ if TYPE_CHECKING:
     from .student_model import Student
 
 # Módulos internos
+from .student_answer_model import student_answer
+
+
+class QuestionType(str, Enum):
+    """
+    Define los tipos posibles para una pregunta de evaluación.
+    """
+
+    MULTIPLE_CHOICE = "multiple_choise"
+    OPEN_QUESTION = "open_question"
 
 
 class Evaluation(Base):
     __tablename__ = "evaluations"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     question: Mapped[str] = mapped_column(Text)  # pregunta
-    question_type: Mapped[str] = mapped_column(String(50))  # tipo
-    options: Mapped[str] = mapped_column(Text)  # opciones
-    correct_answer: Mapped[str] = mapped_column(Text)  # respuesta_correcta
-    # lesson_id: Mapped[int] = mapped_column(Integer)  # id_leccion (foreign key)
+    question_type: Mapped[QuestionType] = mapped_column(
+        SqlEnum(QuestionType, name="question_type_enum", create_type=True),
+        nullable=False,
+    )  # tipo, 'name' es el nombre del tipo de la BD
+    options: Mapped[str] = mapped_column(Text, nullable=True)  # opciones
+    correct_answer: Mapped[str] = mapped_column(
+        Text, nullable=True
+    )  # respuesta_correcta
 
     # claves foraneas
     id_leccion: Mapped[int] = mapped_column(

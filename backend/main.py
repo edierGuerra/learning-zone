@@ -10,6 +10,12 @@ from contextlib import asynccontextmanager  # reemplazo de on_event
 
 from database.config_db import Base, engine, async_session  # Base de datos
 
+# Modulos internos
+from core.initial_lessons import create_initial_lessons
+
+# Importa la nueva función de inicialización de evaluaciones
+from core.initial_evaluations import create_initial_evaluations
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware  # Importa CORSMiddleware
 from fastapi.responses import HTMLResponse
@@ -25,9 +31,9 @@ from routes.course_routes import router as course_router
 from routes.comment_routes import router as comment_router
 from routes.content_routes import router as content_router
 
+from routes.evaluation_routes import router as evaluation_router
 from core.initial_data import create_initial_courses
 from core.initial_content import create_initial_contents
-from core.initial_lessons import create_initial_lessons
 
 
 # --- Lifespan moderno (reemplaza on_event) ---
@@ -51,6 +57,8 @@ async def lifespan(app: FastAPI):
         print("✅ Lecciones base creadas")
         await create_initial_contents(session)
         print("✅ Contenidos base tipo imagen creados")
+        await create_initial_evaluations(session)
+        print("✅ Evaluaciones base creadas")
 
     print("✅ Base de datos inicializada correctamente")
     yield
@@ -116,3 +124,4 @@ app.include_router(lesson_router)
 app.include_router(course_router)
 app.include_router(comment_router)
 app.include_router(content_router)
+app.include_router(evaluation_router)

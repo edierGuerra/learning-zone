@@ -342,6 +342,15 @@ content {
        - Si es incorrecta:
          - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
 
+3. **En caso de error**:
+
+   * El backend responde con un código de estado acorde al tipo de error.
+   * **No se retornan los cursos.**
+
+4. **Respuesta del Frontend**:
+
+   * Espera el código de **estado**, **mensaje**, y la **evaluacion**.
+   * Si recibe un **200 OK**,  renderiza la evaluacion en el apartado del la leccion
 ---
 
 ## **Parámetros y Respuestas**
@@ -584,4 +593,3 @@ content {
 * Los errores deben incluir un mensaje explicativo.
 
 ---
-

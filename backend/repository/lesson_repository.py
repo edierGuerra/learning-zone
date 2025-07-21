@@ -114,3 +114,22 @@ class LessonRepository:
                 f"[ERROR]: A ocurrido un error al obtener los cursos: {e}",
                 exc_info=True,
             )
+
+    async def get_lesson_by_id_and_course_id(
+        self, lesson_id: int, course_id: int
+    ) -> Optional[Lesson]:
+        """
+        Obtiene una lección por su ID, asegurándose de que pertenezca al curso especificado.
+        """
+        try:
+            stmt = select(Lesson).where(
+                Lesson.id == lesson_id, Lesson.id_course == course_id
+            )
+            result = await self.db.execute(stmt)
+            return result.scalar_one_or_none()
+        except Exception as e:
+            logger.error(
+                f"Error al obtener lección {lesson_id} del curso {course_id}: {e}",
+                exc_info=True,
+            )
+            raise

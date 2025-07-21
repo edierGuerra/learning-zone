@@ -8,26 +8,25 @@ facilitando el desarrollo y la personalización de la aplicación.
 
 from contextlib import asynccontextmanager  # reemplazo de on_event
 
-# Modulos internos
-from database.config_db import Base, engine  # Base de datos
+from database.config_db import Base, engine, async_session  # Base de datos
 
-# Modulos externos
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware  # Importa CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from routes.identification_routes import router as identification_router  # ruta modular
+from routes.identification_routes import router as identification_router
 from routes.student_routes import router as student_router
 from routes.recovery_password_routes import router as recovery_password_router
 from routes.notifications_routes import router as notification_router
 from routes.lesson_routes import router as lesson_router
 from routes.course_routes import router as course_router
 from routes.comment_routes import router as comment_router
+from routes.content_routes import router as content_router
 
 from core.initial_data import create_initial_courses
-from database.config_db import async_session
+from core.initial_content import create_initial_contents
 from core.initial_lessons import create_initial_lessons
 
 
@@ -44,12 +43,14 @@ async def lifespan(app: FastAPI):
         await conn.run_sync(Base.metadata.create_all)
         print("✅ Tablas creadas")
 
-    # Crear cursos, lecciones y evaluaciónes
+    # Crear cursos, lecciones y contenidos
     async with async_session() as session:
         await create_initial_courses(session)
         print("✅ Cursos base creados")
         await create_initial_lessons(session)
         print("✅ Lecciones base creadas")
+        await create_initial_contents(session)
+        print("✅ Contenidos base tipo imagen creados")
 
     print("✅ Base de datos inicializada correctamente")
     yield
@@ -114,3 +115,4 @@ app.include_router(notification_router)
 app.include_router(lesson_router)
 app.include_router(course_router)
 app.include_router(comment_router)
+app.include_router(content_router)

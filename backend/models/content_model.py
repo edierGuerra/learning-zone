@@ -8,7 +8,7 @@ como videos o documentos, incluyendo su tipo y URL.
 from database.config_db import Base
 
 # Módulos externos
-from sqlalchemy import ForeignKey, Integer, Enum as SqlEnum, Text
+from sqlalchemy import ForeignKey, Integer, Enum as SqlEnum, Text, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 import enum
 
@@ -32,6 +32,8 @@ class Content(Base):
         SqlEnum(TypeContent), nullable=False, default=TypeContent.TEXT
     )
     content: Mapped[str] = mapped_column(Text, nullable=False)
+
+    text: Mapped[str] = mapped_column(String(1000), nullable=False)
 
     # Claves foraneas
     lesson_id: Mapped[int] = mapped_column(

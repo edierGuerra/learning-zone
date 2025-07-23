@@ -264,9 +264,10 @@ lessons {
 * **Mensaje** explicativo del resultado
 * **contenido** (contenido)
 content {
-   id_content,
+   id,
    content_type,
-   content
+   content,
+   text
 }
 
 ---

@@ -28,7 +28,7 @@ async def create_initial_contents(db: AsyncSession):
         {
             "lesson_name": "Introducción y entorno de trabajo en Word",
             "content_type": TypeContent.IMAGE,
-            "content": "./public/images/introduction_word.png",
+            "content": "/assets/courses/word/introduction_word.png",
             "text": """Microsoft Word es un programa para crear y editar documentos de texto. Cuando abres Word, lo primero que ves es su entorno de trabajo, donde están las herramientas para escribir, dar formato y organizar tu documento. Conocer cada parte te ayudará a usar Word con confianza y rapidez.Cinta de opciones: Dar formato y organizar textosBarra de herramientas de acceso rápido: Contiene comandos frecuentes para guardar y deshacerÁrea de trabajo: Pate central donde aparece la hoja en blanco y donde escribes, editas y visualizas tu documentoBarra de estado : Muestra información útil como el número de página actual, el total de páginas, el conteo de palabras, el idioma y opciones para cambiar la vista o el zoom.""",
         },
         {

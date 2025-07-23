@@ -27,7 +27,7 @@ class QuestionType(str, Enum):
     Define los tipos posibles para una pregunta de evaluación.
     """
 
-    MULTIPLE_CHOICE = "multiple_choise"
+    MULTIPLE_CHOICE = "multiple_choice"
     OPEN_QUESTION = "open_question"
 
 

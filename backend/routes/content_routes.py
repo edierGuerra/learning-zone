@@ -5,7 +5,7 @@ from models.student_model import Student
 from services.content_services import ContentService
 from dependencies.content_depencies import get_content_services
 
-router = APIRouter(prefix="/api/v1/courses", tags=["Content"])
+router = APIRouter(prefix="/api/v1/student/courses", tags=["Content"])
 
 
 @router.get("/{id_course}/lessons/{id_lesson}/content")

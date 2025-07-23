@@ -2,18 +2,37 @@
 
 import axios from '../../../api/axiosInstance';
 import type { TProgressCourses } from '../../courses/types/Course';
+
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 
-export default async function ProgressCoursesAPI():Promise<TProgressCourses> { /* Cambiar esto por el type correspondiente */
-    try{
+// Tipo para la respuesta esperada según el estándar
+type ProgressAPIResponse = {
+    status: number;
+    message: string;
+    data: TProgressCourses;
+};
 
-        const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/lessons`)
+export default async function ProgressCoursesAPI(): Promise<TProgressCourses> {
+    try {
+        const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/lessons`);
         console.log(response.data)
-        return response.data
+        
+        // Validar status code
+        if (response.status !== 200) {
+            throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
+        }
 
-    }catch(error){
-        console.error('Error en GetCourses')
-        throw error
+        // Validar estructura de respuesta
+        const responseData = response.data as ProgressAPIResponse;
+        if (!responseData.data || !Array.isArray(responseData.data)) {
+            throw new Error('Respuesta del servidor inválida: estructura de progreso incorrecta');
+        }
 
+        console.log(responseData.data);
+        return responseData.data;
+
+    } catch (error) {
+        console.error('Error en ProgressCourses:', error);
+        throw error;
     }
 }

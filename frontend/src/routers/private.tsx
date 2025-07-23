@@ -8,11 +8,13 @@ import Help from "../pages/Help";
 import UserPage from "../modules/user/UserPage";
 import PrivateRouters from "./PrivateRouters";
 import { sharedRoutes } from "./SharedRouters";
-import WordHomePage from "../modules/courses/word/pages/WordHomePage";
-import ExcelHomePage from "../modules/courses/excel/pages/ExcelHomePage";
-import PowerPointHomePage from "../modules/courses/powerpoint/pages/PowerPointHomePage";
+import WordHomePage from "../modules/courses/word/WordHomePage";
+import ExcelHomePage from "../modules/courses/excel/ExcelHomePage";
+import PowerPointHomePage from "../modules/courses/powerpoint/PowerPointHomePage";
 import LandingPage from "../pages/LandingPage";
 import CommentPageWrapper from "../modules/courses/comments/CommentPageWrapper";
+import ContentPage from "../modules/courses/components/ContentPage";
+import EvaluationPage from "../modules/courses/components/EvaluationPage";
 
 
 export default function RoutersPrivates() {
@@ -27,6 +29,8 @@ export default function RoutersPrivates() {
                   <Route path="/word" element={<WordHomePage/>}/>
                   <Route path="/excel" element={<ExcelHomePage/>}/>
                   <Route path="/powerPoint" element={<PowerPointHomePage/>}/>
+                  <Route path="/contentPage" element={<ContentPage/>}/>
+                  <Route path="/evaluationPage" element={<EvaluationPage/>}/>
                   
                   <Route path="/comments/:courseId" element={<CommentPageWrapper />} />
 {/*                   <Route path="/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage />} />

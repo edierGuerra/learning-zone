@@ -15,6 +15,8 @@ export type AppRoutes =
   | "/word"
   | "/excel"
   | "/powerpoint"
+  | "/contentPage"
+  | "/evaluationPage" 
   | "/commentsPowerPoint"
   | "/commentsWord"
   | "/commentsExcel"

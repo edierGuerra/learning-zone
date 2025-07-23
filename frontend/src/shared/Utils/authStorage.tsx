@@ -1,7 +1,7 @@
 // PARA MAYOR SEGURIDAD MIGRAR ESTO A COOKIES
 // Importa los tipos de datos definidos para el usuario y su token
 import type { TComment, TStudentAllComents } from "../../modules/courses/comments/types";
-import type { TCourses, TLessons } from "../../modules/courses/types/Course";
+import type { TContent, TCourses, TEvaluation, TLesson, TLessons } from "../../modules/courses/types/Course";
 import type { TNotifications } from "../../modules/notifications/types/Notifications";
 import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken } from "../../modules/types/User";
 
@@ -156,4 +156,55 @@ export const authStorage = {
     }
   },
   removeLessons:()=>localStorage.removeItem('lessons'),
+
+  setLesson: (lesson: TLesson) =>
+    localStorage.setItem("lesson", JSON.stringify(lesson)),
+
+  // Recupera el objeto de contenido desde localStorage
+  getLesson: (): TLesson | null => {
+    try {
+      const raw = localStorage.getItem("lesson");
+      return raw ? (JSON.parse(raw) as TLesson) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado :", e);
+      return null;
+    }
+  },
+
+  // Elimina el content del localStorage
+  removeLesson: () => localStorage.removeItem("lesson"),
+
+  setContent: (content: TContent) =>
+    localStorage.setItem("content", JSON.stringify(content)),
+
+  // Recupera el objeto de contenido desde localStorage
+  getContent: (): TContent | null => {
+    try {
+      const raw = localStorage.getItem("content");
+      return raw ? (JSON.parse(raw) as TContent) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado :", e);
+      return null;
+    }
+  },
+
+  // Elimina el content del localStorage
+  removeContent: () => localStorage.removeItem("content"),
+
+  setEvaluation: (evaluation: TEvaluation) =>
+    localStorage.setItem("evaluation", JSON.stringify(evaluation)),
+
+  // Recupera el objeto de contenido desde localStorage
+  getEvaluation: (): TEvaluation | null => {
+    try {
+      const raw = localStorage.getItem("evaluation");
+      return raw ? (JSON.parse(raw) as TEvaluation) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado :", e);
+      return null;
+    }
+  },
+
+  // Elimina la evaluation del localStorage
+  removeEvaluation: () => localStorage.removeItem("evaluation"),
 };

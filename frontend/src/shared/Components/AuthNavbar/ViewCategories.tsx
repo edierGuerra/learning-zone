@@ -8,7 +8,7 @@ export default function ViewCategories() {
 
   return (
     <div className='container-view-categories'>
-        <button className='btn-powerPoint' onClick={()=> handleBtnNavigate('/powerPoint')}>Power Point</button>
+        <button className='btn-powerPoint' onClick={()=> handleBtnNavigate('/powerpoint')}>Power Point</button>
         <button className='btn-excel' onClick={()=> handleBtnNavigate('/excel')}>Excel</button>
         <button className='btn-word' onClick={()=> handleBtnNavigate('/word')}>Word</button>
 

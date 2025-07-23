@@ -24,6 +24,7 @@ import {
 import toast from "react-hot-toast";
 import GetCoursesAPI from "../services/GetCourses";
 import ProgressCoursesAPI from "../../user/services/GetProgressCourses.server";
+import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -35,14 +36,18 @@ export const CourseProvider = ({ children }: Props) => {
   const [courses, setCourses] = useState<TCourses>([]);
   const [lessons, setLessons] = useState<TLessons>([]);
   const [progressLessons, setProgressLessons] = useState<TProgressCourses>([]);
-  const [currentLesson, setCurrentLesson] = useState<TLesson | null>(null); /* Leccion que se esta haciendo */
   const [progress,setProgress] = useState(0); /* Progreso del curso especifico */
+  const [currentLesson, setCurrentLesson] = useState<TLesson | null>(null); /* Leccion que se esta haciendo */
   const [content, setContent] = useState<TContent | null>(null); /* Contenido de la leccion */
   const [evaluation, setEvaluation] = useState<TEvaluation | null>(null); /* Evaluacion de la leccion */
-
+  const handleBtnNavigate = useNavigationHandler()
   // Carga inicial: verifica si hay cursos guardados en localStorage
   useEffect(() => {
     const storedCourses = authStorage.getCourses(); // Trae cursos guardado si existe
+    const storedContentLesson = authStorage.getContent(); // Trae contenido guardado si existe
+    const storedLessons = authStorage.getLessons() /* Trae las lecciones guardadas si existen */
+    const storedLesson = authStorage.getLesson() /* Trae la leccion que se esta haciendo si existe */
+    const storedEvaluationLesson = authStorage.getEvaluation(); // Trae evaluacion guardado si existe */
     const token = authStorage.getToken();
     if (token && storedCourses.length ===0) {
       // Si no existen cursos, ejecutar el servicio que envía el token al backend y obtiene los cursos del estudiante
@@ -62,7 +67,24 @@ export const CourseProvider = ({ children }: Props) => {
     if (storedCourses) {
       setCourses(storedCourses);
     }
+
+    // Si hay sesión guardada, se setean los valores
+    if (storedLessons) {
+      setLessons(storedLessons);
+    }
+
+    // Si hay content guardada, se setean los valores
+    if (storedLesson) {
+      setCurrentLesson(storedLesson);
+    }
+    if (storedContentLesson) {
+      setContent(storedContentLesson);
+    } 
+    if (storedEvaluationLesson) {
+      setEvaluation(storedEvaluationLesson);
+    } 
   }, []);
+
   
       /* Funcion que se encarga de mostrar el porcentaje completo */
     useEffect(() => {
@@ -70,7 +92,7 @@ export const CourseProvider = ({ children }: Props) => {
     
       let number = 0;
       lessons.forEach((lesson) => {
-        if (lesson.progress_state === 'complete') {
+        if (lesson.progressState === 'complete') {
           number += 1;
         }
       });
@@ -90,9 +112,17 @@ export const CourseProvider = ({ children }: Props) => {
   const loadLessonsCourse  = async(idCourse:TCourse['id'])=>{
     try{
         const lessonsRes = await LessonsCourseAPI(idCourse);
-        setLessons(lessonsRes) /* Setear las lecciones para poder renderizarlas en el home del curso */
+
+        const lessonsStorage: TLessons = lessonsRes.map((l) => ({
+            id: l.id,
+            name:l.name,
+            progressState:l.progress_state,
+            idCourse:idCourse
+          }));
+
+        setLessons(lessonsStorage) /* Setear las lecciones para poder renderizarlas en el home del curso */
         /* Setear los valores al localstorage */
-        authStorage.setLessons(lessonsRes)
+        authStorage.setLessons(lessonsStorage)
 
 
     }catch(error){
@@ -103,9 +133,22 @@ export const CourseProvider = ({ children }: Props) => {
   /* Funcion que carga el contenido de la leccion */
   const loadLessonContent = async (idCourse: TCourse["id"], lesson: TLesson) => {
     try{
-        setCurrentLesson(lesson); /* Pasar la leccion, esto permite renderizar la leccion en una card en el home */
-        const contentRes = await ContentLessonsAPI({idCourse,idLesson: lesson.id})
-        setContent(contentRes) /* Setear el contenido en su estado, listo para ser renderizado */
+      const contentRes = await ContentLessonsAPI({idCourse,idLesson: lesson.id})
+      /* juntar el nombre de la leccion, con el contenido obtenido del backend */
+      const contentStorage:TContent = {
+        id:contentRes.id,
+        contentType:contentRes.content_type,
+        content:contentRes.content,
+        text:contentRes.text,
+        title:lesson.name
+      }
+        /* Setear en el estado que almacena la leccion que se esta haciendo en el momento */
+        /* Setear en el localStorage la leccion que se esta haciendo actualmente */
+        setCurrentLesson(lesson)
+        authStorage.setLesson(lesson)
+        /* Setearlo en el localStorage */
+        setContent(contentStorage) /* Setear el contenido en su estado, listo para ser renderizado */
+        authStorage.setContent(contentStorage)
     }catch(error){
         console.log(error)
         toast.error('Ups no se pudo cargar')
@@ -113,11 +156,18 @@ export const CourseProvider = ({ children }: Props) => {
   };
 
   /* Funcion que carga la evaluacion de la leccion */
-  const loadLessonEvaluation = async (idCourse: TCourse["id"], lesson: TLesson) => {
+  const loadLessonEvaluation = async (idCourse: TCourse["id"], idLesson: TLesson['id']) => {
     try{
-        setCurrentLesson(lesson); /* Pasar la leccion, esto permite renderizar la evaluacion en la leccion en una card en el home */
-        const evaluationRes = await EvaluationLessonsAPI({idCourse,idLesson: lesson.id})
-        setEvaluation(evaluationRes) /* Setear la evaluacion  en su estado, listo para ser renderizado */
+        const evaluationRes = await EvaluationLessonsAPI({idCourse,idLesson})
+        console.log(evaluationRes)
+        const evaluationStorage:TEvaluation = {
+          id:evaluationRes.id_evaluation,
+          questionType:evaluationRes.question_type,
+          question:evaluationRes.question,
+          options:evaluationRes.options
+        }
+        setEvaluation(evaluationStorage) /* Setear la evaluacion  en su estado, listo para ser renderizado */
+        authStorage.setEvaluation(evaluationStorage)
     }catch(error){
         console.log(error)
         toast.error('Ups no se pudo cargar')
@@ -135,7 +185,21 @@ export const CourseProvider = ({ children }: Props) => {
           };    
 
 
-  /* Agregar funcion que traiga los porcentajes de todos los cursos para mostrarlo en el profile */
+  const renderContent =async(idCourse:TCourse['id'], lesson:TLesson)=>{
+    await loadLessonContent(idCourse,lesson);
+    /* Rederigir a la page del contenido */
+    handleBtnNavigate('/contentPage')
+
+  }
+
+  const renderEvaluation =async(idCourse:TCourse['id'], idLesson:TLesson['id'])=>{
+    alert(idCourse)
+
+    await loadLessonEvaluation(idCourse,idLesson);
+    /* Rederigir a la page del contenido */
+    handleBtnNavigate('/evaluationPage')
+
+  }
 
   return (
     // El Provider envuelve toda la app y expone el contexto con los valores globales
@@ -150,8 +214,6 @@ export const CourseProvider = ({ children }: Props) => {
       // Porcentaje de progreso del curso
       progress,
       // Lección actual que el estudiante está viendo (estado compartido)
-      currentLesson,
-      // Contenido de la lección actual (texto, video, imagen.)
       content,
       // Evaluación actual de la lección (preguntas)
       evaluation,
@@ -163,6 +225,13 @@ export const CourseProvider = ({ children }: Props) => {
       loadLessonEvaluation,
       progressLessons,
       loadProgressLessons,
+      /* Funcion que se encarga de llamar otra funcion que carga los datos del contenido y los setea, ademas redirije a la page del contenido */
+      renderContent,
+      /* Funcion que se encarga de llamar otra funcion que carga los datos de la evaluacion y los setea, ademas redirije a la page de la evaluacion */
+      renderEvaluation,
+      /* Leccion que se esta haciendo */
+      currentLesson
+      
 
       }}
     >

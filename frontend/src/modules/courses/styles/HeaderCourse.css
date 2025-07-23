@@ -21,7 +21,7 @@
 .Excel{
     color: rgb(232, 253, 212);
 }
-.Power-point{
+.Power-Point{
     color: rgb(253, 227, 212);
 }
 
@@ -47,11 +47,27 @@
   border-radius: 12px;
 }
 
-.progress-bar-fill {
+.progress-bar-fill-Word {
   border-bottom: 12px solid #48e;
   position: absolute;
   top: 30px;
   border-radius: 12px;
   transition: width 0.4s ease;
   box-shadow: 4px 0px 0px 1px #41aaf059;
+}
+.progress-bar-fill-Excel {
+  border-bottom: 12px solid rgb(161, 238, 68);
+  position: absolute;
+  top: 30px;
+  border-radius: 12px;
+  transition: width 0.4s ease;
+  box-shadow: 4px 0px 0px 1px #87f0415d;
+}
+.progress-bar-fill-Power-Point {
+  border-bottom: 12px solid rgb(238, 156, 68);
+  position: absolute;
+  top: 30px;
+  border-radius: 12px;
+  transition: width 0.4s ease;
+  box-shadow: 4px 0px 0px 1px #f0964162;
 }

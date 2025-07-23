@@ -29,8 +29,8 @@ export default function HeaderCourse({title}:THeaderCourseProps) {
       // Buscar el id del curso por nombre
       const cursos = authStorage.getCourses();
       // Normalizar el nombre para comparar (sin espacios y minúsculas)
-      const normalizedTitle = title.trim().toLowerCase().replace(/\s+/g, '');
-      const curso = cursos.find(c => c.name.trim().toLowerCase().replace(/\s+/g, '') === normalizedTitle);
+      const normalizedTitle = title.trim().toLowerCase().replace(/[\s-]+/g, '');
+      const curso = cursos.find(c => c.name.trim().toLowerCase().replace(/[\s-]+/g, '') === normalizedTitle);
       if (curso) {
         navigate(`/comments/${curso.id}`);
       } else {
@@ -45,7 +45,7 @@ export default function HeaderCourse({title}:THeaderCourseProps) {
         <div className="container-progress">
             <p className='progress-course-number'>{progress}</p>
             <span className="progress-bar-bg"></span>
-            <span className="progress-bar-fill" style={{ width: `${progress}%` }}></span>
+            <span className={`progress-bar-fill-${title}`} style={{ width: `${progress}%` }}></span>
         </div>
         {/* Agregar sections */}    
     </div>

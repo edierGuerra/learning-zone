@@ -81,6 +81,8 @@ footer {
 }
 
 .container-all-t-p {
+    display: flex;
+    gap: 16px;
     cursor: pointer;
     text-align: center;
 }

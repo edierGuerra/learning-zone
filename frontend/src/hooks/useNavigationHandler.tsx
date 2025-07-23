@@ -10,6 +10,7 @@ export type AppRoutes =
   | "/userPage"
   | "/back"
   | "/sitePolicies"
+  | "/siteSugerences"
   | "/aboutUs"
   | "/aboutInstitution"
   | "/word"

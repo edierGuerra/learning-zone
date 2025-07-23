@@ -120,19 +120,91 @@ async def create_initial_lessons(db: AsyncSession):
         # Lecciones para Excel
         {
             "course_name": "Excel",
-            "name": "Fundamentos de Excel",
+            "name": "Introducción y entorno de trabajo en Excel",
         },
         {
             "course_name": "Excel",
-            "name": "Fórmulas y Funciones Básicas",
+            "name": "Modificar datos",
         },
         {
             "course_name": "Excel",
-            "name": "Gráficos y Análisis de Datos",
+            "name": "Seleccionar y autorrellenar",
         },
         {
             "course_name": "Excel",
-            "name": "Automatización con Macros",
+            "name": "Copiar y Pegar (básico)",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Copiar y pegar (especial)",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Insertar, mover hojas y eliminar hojas",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Formato condicional",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Formatos numéricos clave",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Jerarquía de operadores",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Referencias absolutas ($)",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Función SUMA",
+        },
+        {
+            "course_name": "Excel",
+            "name": "PROMEDIO, CONTAR, MAX, MIN",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Ordenar Datos",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Filtrar datos",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Crear un gráfico",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Función SI (IF)",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Función BUSCARV (VLOOKUP)",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Crear listas desplegables",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Convertir un rango en tabla",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Crear una tabla dinámica",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Proteger una hoja",
+        },
+        {
+            "course_name": "Excel",
+            "name": "Acelera tu flujo de trabajo",
         },
         # Lecciones para PowerPoint
         {

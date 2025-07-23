@@ -280,7 +280,7 @@ content {
 
 1. **Frontend:**
    - Envía un **token de acceso** en el header `Authorization: Bearer <token>`.
-   - Llama a la ruta `/courses/{id_course}/lessons/{id_lesson}/evaluation`.
+   - Llama a la ruta `/courses/{id_course}/lessons/{id_lesson}/evaluation/{id_evaluation}`.
    - Si es **GET**, obtiene la pregunta (para renderizarla).
    - Si es **POST**, envía la **respuesta del estudiante** y el tipo de pregunta.
 
@@ -316,7 +316,7 @@ content {
    - Valida el token y los IDs.
    - Si es:
      - **Pregunta abierta:**
-       - Consulta la pregunta easn la base de datos.
+       - Consulta la pregunta en la base de datos.
        - Envía la pregunta y la respuesta del estudiante a GPT (modelo).
        - El modelo devuelve algo como:
          ```json
@@ -330,15 +330,15 @@ content {
            - `respuesta del estudiante`
            - `score` (del modelo)
            - `fecha actual`.
-         - Retorna `200 OK` con el resultado.
+         - Retorna `200 OK` con el resultado (score) y un mensaje.
        - Si `is_pass` es `false`:
          - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
      - **Pregunta de opción múltiple:**
        - Compara la respuesta enviada con la respuesta guardada en la base de datos.
        - Si es correcta:
-         - Marca progreso (`complete` / `in_progress`).
+         - Marca progreso (`complete` / `in_progress`) la leccion actual en complete y la siguiente en in_progress.
          - Guarda en `Student_answer` con `score: 100`.
-         - Retorna `200 OK`.
+         - Retorna `200 OK` con el resultado (score) y un mensaje.
        - Si es incorrecta:
          - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
 
@@ -365,6 +365,22 @@ content {
 - `404 Not Found`: Curso o lección no encontrada.
 
 ---
+
+
+## **Estructura de `score`**
+
+- **Para opción múltiple y pretunta abierta:**
+  ```json
+  {
+    "status": 200,
+    "message": "evaluacion pasada con exito"
+    "score": {
+      "old_score": 100,
+      "new_score": 180,
+      "date": 3-20-2025 3:53 pm
+    }
+  }
+
 
 ## **Estructura de `evaluation`**
 

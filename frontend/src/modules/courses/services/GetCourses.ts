@@ -2,17 +2,35 @@
 
 import axios from '../../../api/axiosInstance';
 import type {TCourses } from '../types/Course';
+
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 
-export default async function GetCoursesAPI():Promise<TCourses> {
-    try{
+// Tipo para la respuesta esperada según el estándar
+type GetCoursesAPIResponse = {
+  status: number;
+  message: string;
+  data: TCourses;
+};
 
-        const response = await axios.get(VITE_GETCOURSES_ENDPOINT)
-        return response.data.data
+export default async function GetCoursesAPI(): Promise<TCourses> {
+    try {
+        const response = await axios.get(VITE_GETCOURSES_ENDPOINT);
+        
+        // Validar status code
+        if (response.status !== 200) {
+            throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
+        }
 
-    }catch(error){
-        console.error('Error en GetCourses')
-        throw error
+        // Validar estructura de respuesta
+        const responseData = response.data as GetCoursesAPIResponse;
+        if (!responseData.data || !Array.isArray(responseData.data)) {
+            throw new Error('Respuesta del servidor inválida: estructura de datos incorrecta');
+        }
 
+        return responseData.data;
+
+    } catch (error) {
+        console.error('Error en GetCourses:', error);
+        throw error;
     }
 }

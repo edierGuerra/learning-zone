@@ -1,3 +1,4 @@
+
 export type TCourse ={
     id:int,
     name:string,
@@ -19,36 +20,48 @@ export type TProgressCourses = TProgressCourse[]
 export interface TLesson {
     id: number;
     name: string;
-    description: string;
-    progress_state: 'blocked' | 'in_progress' | 'complete';
+    progressState: 'blocked' | 'in_progress' | 'complete';
+    idCourse:TCourse['id']
 }
 
 export type TLessons = TLesson[];
 
 export type TContent ={
     id:number,
+    title: TLesson['name']
     contentType:'text'| 'image' | 'video' ,
-    content:string
+    content:string,
+    text: string
 }
 export type TEvaluation ={
     id:number,
     question:string,
-    questionType:string,
-    options?:string /* Es opcional */
+    questionType:"open_question" | "multiple_choice",
+    options?:string[] /* Es opcional */
+}
+
+export type TScore={
+    oldScore: number,
+    newScore:number,
+    date:string
+
+
 }
 interface TCourseContextType {
     courses:TCourses;
     lessons: TLessons;
     setLessons: React.Dispatch<React.SetStateAction<TLessons>>
     progress: number; // porcentaje
-    currentLesson: Lesson | null;
     content:TContent | null;
+    currentLesson: TLesson | null;
     evaluation:TEvaluation | null,
     loadLessonsCourse:(idCourse: TCourse["id"]) => Promise<void>,
     loadLessonContent:(idCourse: TCourse["id"], lesson: TLesson) => Promise<void>,
-    loadLessonEvaluation: (idCourse: TCourse["id"], lesson: TLesson) => Promise<void>,
+    loadLessonEvaluation: (idCourse: TCourse["id"], idLesson: TLesson['id']) => Promise<void>,
     progressLessons: TProgressCourses,
-    loadProgressLessons: () => Promise<void>;
+    loadProgressLessons: () => Promise<void>,
+    renderContent:(idCourse: TCourse["id"], lesson: TLesson)=> Promise<void>,
+    renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>
 
 }
 

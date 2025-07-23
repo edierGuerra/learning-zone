@@ -1,0 +1,207 @@
+/* Contenedor principal con fondo dinámico */
+.container-content-lesson {
+  position: relative;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2.5rem 3rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  animation: fadeIn 0.8s ease-out;
+  z-index: 10;
+  background-color: rgb(0, 103, 129);
+}
+
+
+.btn-back-content{
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    background-color: transparent;
+    border: none;
+    font-size: 46px;
+    color: var(--color-text-darker);
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s ease;
+}
+/* Título con estilo moderno y línea de acento */
+.title-content {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #0042ad;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.8rem;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+
+/* Texto descriptivo con buena legibilidad */
+.text-content {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #475569;
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+/* Estilos para imagen de contenido */
+.image-content {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.image-content:hover {
+  transform: scale(1.02);
+}
+
+/* Estilos para contenido de texto */
+.content-content {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #334155;
+  background: rgba(248, 250, 252, 0.8);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid #3b82f6;
+  margin: 1.5rem 0;
+}
+
+/* Estilos para video */
+video {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin: 1.5rem 0;
+}
+
+/* Botón de continuar con efecto de brillo */
+.btn-content-next {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.btn-content-next::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: rotate(45deg);
+  animation: shineEffect 3s infinite;
+}
+
+.btn-content-next:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.btn-content-next:active {
+  transform: translateY(1px);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 80px;
+  }
+}
+
+@keyframes shineEffect {
+  0% {
+    left: -100%;
+  }
+  20% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes pulseBackground {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .container-content-lesson {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+
+  .title-content {
+    font-size: 1.8rem;
+  }
+
+  .text-content,
+  .content-content {
+    font-size: 1rem;
+  }
+
+  .btn-content-next {
+    width: 100%;
+    padding: 0.8rem;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Estilos para dispositivos pequeños */
+@media (max-width: 480px) {
+  .container-content-lesson {
+    padding: 1.5rem 1rem;
+  }
+
+  .title-content {
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,329 @@
+
+.btn-back-evaluation{
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    background-color: transparent;
+    border: none;
+    font-size: 46px;
+    color: var(--color-text-darker);
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s ease;
+}
+.container-evaluation-lesson-excel {
+  background: #b0fc90;
+  max-width: 800px;
+  margin: 12rem auto;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  position: relative;
+  min-height: 60vh;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  backdrop-filter: blur(2px);
+  animation: fadeInEval 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container-evaluation-lesson-word {
+  background: #90c3fc;
+  max-width: 800px;
+  margin: 12rem auto;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  position: relative;
+  min-height: 60vh;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  backdrop-filter: blur(2px);
+  animation: fadeInEval 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.container-evaluation-lesson-powerpoint {
+  background: #ffd59e;
+  max-width: 800px;
+  margin: 12rem auto;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  position: relative;
+  min-height: 60vh;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  backdrop-filter: blur(2px);
+  animation: fadeInEval 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* TÍTULO DE LA PREGUNTA */
+.question-evaluation-excel {
+  color: #252f23;
+  background: #f6f7f9;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.2rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+}
+.question-evaluation-word {
+  color: #1a2a4f;
+  background: #eaf3fb;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.2rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+}
+.question-evaluation-powerpoint {
+  color: #4f2a1a;
+  background: #fff6e5;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.2rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+}
+
+/* OPCIONES */
+.container-options {
+  display: grid;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  grid-template-columns: 1fr 1fr;
+
+}
+
+.container-options button {
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+  position: relative;
+}
+
+.option-excel {
+  background: #c3ffbe;
+  color: #23272f;
+}
+.option-excel:hover {
+  background: #a7dea1;
+  color: #143e00;
+}
+.option-excel:active {
+  background: #fff;
+}
+
+.option-word {
+  background: #b0d0fc;
+  color: #1a2a4f;
+}
+.option-word:hover {
+  background: #90b4e6;
+  color: #0d1a33;
+}
+.option-word:active {
+  background: #eaf3fb;
+}
+
+.option-powerpoint {
+  background: #ffe0b0;
+  color: #4f2a1a;
+}
+.option-powerpoint:hover {
+  background: #ffd59e;
+  color: #7a3e00;
+}
+.option-powerpoint:active {
+  background: #fff6e5;
+}
+
+
+.container-options button:active {
+  background: #fff;
+}
+
+.container-options button::before,
+.container-options button::after {
+  display: none;
+}
+
+/* FORMULARIO DE RESPUESTA ABIERTA */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+form input[type="text"] {
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f6f7f9;
+  color: #23272f;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+}
+
+form input[type="text"]:focus {
+  outline: none;
+  border-color: #bfc3ca;
+  background: #fff;
+}
+
+form input[type="text"]::placeholder {
+  color: #a0a4ab;
+  font-style: italic;
+}
+
+form input[type="submit"] {
+  background: #e5e7eb;
+  color: #23272f;
+  border: none;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+form input[type="submit"]:hover {
+  background: #d1d5db;
+}
+
+form input[type="submit"]:active {
+  background: #bfc3ca;
+}
+
+/* MODAL DE PUNTUACIÓN */
+.score-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+  border: 1px solid #e5e7eb;
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  min-width: 320px;
+  text-align: center;
+  animation: fadeInEval 0.4s ease;
+}
+
+.title-window-score-modal {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #23272f;
+  margin-bottom: 1.2rem;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+}
+
+.score-modal p {
+  font-size: 1rem;
+  color: #23272f;
+  margin: 0.7rem 0;
+  padding: 0.7rem;
+  background: #f6f7f9;
+  border-radius: 8px;
+}
+
+.score-modal button {
+  background: #e5e7eb;
+  color: #23272f;
+  border: none;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+}
+
+.score-modal button:hover {
+  background: #d1d5db;
+}
+
+.score-modal button:active {
+  background: #bfc3ca;
+}
+
+/* ANIMACIONES SUTILES */
+@keyframes fadeInEval {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .container-evaluation-lesson {
+    margin: 1rem;
+    padding: 1.5rem 0.7rem;
+  }
+  .question-evaluation {
+    font-size: 1.1rem;
+    padding: 0.7rem;
+  }
+  .container-options {
+    gap: 0.7rem;
+  }
+  .container-options button {
+    padding: 0.7rem 1rem;
+    font-size: 0.95rem;
+  }
+  .score-modal {
+    margin: 1rem;
+    padding: 1.2rem;
+    min-width: auto;
+    width: calc(100% - 2rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .container-evaluation-lesson {
+    padding: 1rem 0.3rem;
+  }
+  .question-evaluation {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+  .score-modal {
+    padding: 0.7rem;
+  }
+  .title-window-score-modal {
+    font-size: 1.1rem;
+  }
+}

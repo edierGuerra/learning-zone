@@ -10,7 +10,6 @@ from datetime import datetime
 
 # Modulos internos
 from .student_notification_model import student_notification
-from .student_answer_model import student_answer
 from database.config_db import Base
 from sqlalchemy import Boolean, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -25,7 +24,7 @@ if TYPE_CHECKING:
     from .course_model import Course
     from .lesson_model import Lesson
     from .notification_model import Notification
-    from .evaluation_model import Evaluation
+    from .student_answer_model import StudentAnswer
 
 
 class Student(Base):
@@ -70,9 +69,9 @@ class Student(Base):
     notifications: Mapped[List["Notification"]] = relationship(
         secondary=student_notification, back_populates="students"
     )  # Relacion con student_notfication hacia notification_Model
-    evaluations: Mapped[List["Evaluation"]] = relationship(
-        secondary=student_answer, back_populates="students"
-    )  # relacion con student_answer_model hacia evaluation_model
+    student_answers_rel: Mapped[List["StudentAnswer"]] = relationship(
+        back_populates="student"
+    )
 
     # Validación de contraseña
     password_token: Mapped[str] = mapped_column(

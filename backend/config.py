@@ -38,6 +38,9 @@ class Settings(BaseSettings):  # clase de configuracion heredando BaseSettings
     token_key: str = Field(..., env="TOKEN_KEY")  # variable añadida para el token key
     token_algorithm: str = Field(default="HS256", env="TOKEN_ALGORITHM")
 
+    # gemini
+    gemini_api_key: str = Field(..., env="GEMINI_API_KEY")
+
 
 # Instancia de la configuración que se usará en toda la aplicación
 settings = Settings()

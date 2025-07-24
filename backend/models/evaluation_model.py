@@ -16,10 +16,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .lesson_model import Lesson
-    from .student_model import Student
+    from .student_answer_model import StudentAnswer
 
 # Módulos internos
-from .student_answer_model import student_answer
 
 
 class QuestionType(str, Enum):
@@ -51,6 +50,6 @@ class Evaluation(Base):
 
     # relaciones
     lesson: Mapped["Lesson"] = relationship(back_populates="evaluation")
-    students: Mapped["Student"] = relationship(
-        back_populates="evaluations", secondary=student_answer
+    student_answers_rel: Mapped[list["StudentAnswer"]] = relationship(
+        back_populates="evaluation"
     )

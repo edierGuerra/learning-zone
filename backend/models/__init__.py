@@ -8,7 +8,8 @@ from .evaluation_model import Evaluation
 from .identification_model import Identification
 from .lesson_model import Lesson
 from .notification_model import Notification
-from .student_answer_model import student_answer
+from .progress_model import progress_model
+from .student_answer_model import StudentAnswer
 from .student_notification_model import student_notification
 from .student_model import Student
 
@@ -22,7 +23,7 @@ __all__ = [
     "Lesson",
     "Notification",
     "progress_model",
-    "student_answer",
+    "StudentAnswer",
     "Student",
     "student_notification",
 ]

@@ -281,7 +281,7 @@ content {
 
 1. **Frontend:**
    - Envía un **token de acceso** en el header `Authorization: Bearer <token>`.
-   - Llama a la ruta `/courses/{id_course}/lessons/{id_lesson}/evaluation/{id_evaluation}`.
+   - Llama a la ruta `/courses/{id_course}/lessons/{id_lesson}/evaluation}`.
    - Si es **GET**, obtiene la pregunta (para renderizarla).
    - Si es **POST**, envía la **respuesta del estudiante** y el tipo de pregunta.
 
@@ -296,7 +296,7 @@ content {
        "evaluation": {
          "id_evaluation": 12,
          "question": "¿Qué es una celda en Excel?",
-         "question_type": "open_choice",   // o "multiple_choice"
+         "question_type": "open_question",   // o "multiple_choice"
          "options": ["Opción A", "Opción B", "Opción C"]  // Solo si es multiple_choice
        }
      }
@@ -305,18 +305,18 @@ content {
 3. **Frontend (Renderiza):**
    - Si la pregunta es de **opción múltiple**, muestra las opciones.
    - Si es de **respuesta abierta**, muestra un campo de texto.
-   - Recoge la respuesta y hace un **POST** a la misma ruta con:
+   - Recoge la respuesta y hace un **POST** a la misma ruta: /courses/{id_course}/lessons/{id_lesson}/evaluation/{id_evaluation} con:
      ```json
      {
        "response": "Respuesta del estudiante",
-       "question_type": "open_choice"  // o "multiple_choice"
+       "question_type": "open_question"  // o "multiple_choice"
      }
      ```
 
 4. **Backend (POST – Validación de Respuesta):**
    - Valida el token y los IDs.
    - Si es:
-     - **Pregunta abierta:**
+     - **Pregunta abierta: open_question**
        - Consulta la pregunta en la base de datos.
        - Envía la pregunta y la respuesta del estudiante a GPT (modelo).
        - El modelo devuelve algo como:
@@ -329,44 +329,44 @@ content {
            - `student_id` (del token)
            - `evaluation_id`
            - `respuesta del estudiante`
-           - `score` (del modelo)
+           - `score` (sumandole la del modelo)
            - `fecha actual`.
-         - Retorna `200 OK` con el resultado (score) y un mensaje.
+         - Retorna `200 OK` con el resultado (score) y un mensaje. Basicamente la estructura de ´score´
        - Si `is_pass` es `false`:
          - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
      - **Pregunta de opción múltiple:**
        - Compara la respuesta enviada con la respuesta guardada en la base de datos.
        - Si es correcta:
          - Marca progreso (`complete` / `in_progress`) la leccion actual en complete y la siguiente en in_progress.
-         - Guarda en `Student_answer` con `score: 100`.
-         - Retorna `200 OK` con el resultado (score) y un mensaje.
+         - Guarda en `Student_answer` con `score: 100`. para las preguntas de opcion multiple, si pasa el score es 100
+         - Retorna `200 OK` con el resultado (score) y un mensaje. (estructura ´score´)
        - Si es incorrecta:
          - Retorna `400 Bad Request` con `message: "Respuesta incorrecta"`.
 
 3. **En caso de error**:
 
    * El backend responde con un código de estado acorde al tipo de error.
-   * **No se retornan los cursos.**
+   * **No se retorna la estructura ´score´**
 
 4. **Respuesta del Frontend**:
 
    * Espera el código de **estado**, **mensaje**, y la **evaluacion**.
    * Si recibe un **200 OK**,  renderiza la evaluacion en el apartado del la leccion
 ---
+   * para la segunda parte tomaria los datos de la estructura ´score´ y los renderiza demostrando que el estudiante si paso la evaluación
 
 ## **Parámetros y Respuestas**
 
 - **Header:** `Authorization: Bearer <token>`
-- **Ruta:** `/courses/{id_course}/lessons/{id_lesson}/evaluation`
+- **Ruta:** `/courses/{id_course}/lessons/{id_lesson}/evaluation/{id_evaluation}`
 
 ### **Respuestas posibles**
-- `200 OK`: Evaluación exitosa (devuelve `evaluation` o resultado de validación).
+- `200 OK`: Evaluación exitosa (devuelve `evaluation` o resultado de validación con la esctructura ´score´).
 - `400 Bad Request`: Respuesta incorrecta.
 - `401 Unauthorized`: Token inválido o no presente.
-- `404 Not Found`: Curso o lección no encontrada.
+- `404 Not Found`: Curso o lección o evaluación no encontrada.
 
 ---
-
 
 ## **Estructura de `score`**
 
@@ -381,7 +381,8 @@ content {
       "date": 3-20-2025 3:53 pm
     }
   }
-
+el old_score sera la sumatoria de todos los puntajes en las evaluaciones
+el new_score sera esa sumatoria mas el puntaje obtenido en la evaluacion actual
 
 ## **Estructura de `evaluation`**
 

@@ -10,15 +10,6 @@ from typing import Optional, List
 # Importa el Enum
 from models.evaluation_model import QuestionType
 
-# class EvaluationBase(BaseModel):
-#     question: str
-#     question_type: QuestionType
-
-# class EvaluationOptions(BaseModel):
-#     question: str
-#     question_type: Literal[QuestionType.MULTIPLE_CHOICE] # Literal le dice a pydantic que esta variable solo puede tener el valor exacto que se le proporciona dentro de los corchetes
-#     options: List[str]
-
 
 class EvaluationResponse(BaseModel):
     """
@@ -46,4 +37,37 @@ class APIEvaluationResponse(BaseModel):
     message: str = Field(..., description="Mensaje descriptivo de la respuesta.")
     evaluation: EvaluationResponse = Field(
         ..., description="El objeto de evaluación solicitado."
+    )
+
+
+# Segunda parte
+
+
+# Esquema para la entrada de la respuesta del estudiante (POST)
+class StudentAnswerRequest(BaseModel):
+    response: str = Field(..., description="La respuesta del estudiante a la pregunta.")
+    question_type: QuestionType = Field(
+        ..., description="El tipo de pregunta a la que se responde."
+    )
+
+
+# Esquema para la respuesta de la API después de validar la respuesta del estudiante (POST)
+class ScoreResponseDetails(BaseModel):
+    old_score: int = Field(
+        ..., description="Puntaje acumulado del estudiante antes de esta evaluación."
+    )
+    new_score: int = Field(
+        ..., description="Puntaje total del estudiante después de esta evaluación."
+    )
+    date: str = Field(
+        ...,
+        description="Fecha y hora de la evaluación (formato 'YYYY-MM-DD HH:MM:SS').",
+    )
+
+
+class APIEvaluationScoreResponse(BaseModel):
+    status: int = Field(..., description="Codigo de estado HTTP de la respuesta.")
+    message: str = Field(..., description="Mensaje descriptivo de la respuesta.")
+    score: Optional[ScoreResponseDetails] = Field(
+        None, description="Detalles del puntaje, si la evaluación fue pasada."
     )

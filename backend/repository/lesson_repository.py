@@ -9,7 +9,7 @@ import logging
 from typing import List, Optional, Tuple  # importamos Tuple para el resultado del join
 
 # Modulos externos
-from sqlalchemy import select
+from sqlalchemy import insert, select, update
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -68,6 +68,25 @@ class LessonRepository:
                 exc_info=e,
             )
             raise  # Relanza la excepción
+
+    async def get_lessons_by_course_id_ordered(self, course_id: int) -> List[Lesson]:
+        """
+        Obtiene todas las leccionaes asociadas a un curso especifico, ordenadas por su ID.
+        util para determinar la siguiente lección.
+        """
+        try:
+            stmt = (
+                select(Lesson).where(Lesson.id_course == course_id).order_by(Lesson.id)
+            )
+            result = await self.db.execute(stmt)
+            return list(result.scalar().all())
+
+        except Exception as e:
+            logger.error(
+                f"Error al obtener lecciones para el curso {course_id}: {e}",
+                exc_info=e,
+            )
+            raise
 
     async def get_course_by_id(self, course_id: int) -> Optional[Course]:
         """
@@ -133,3 +152,40 @@ class LessonRepository:
                 exc_info=True,
             )
             raise
+
+    async def update_progress_status_for_student_lesson(
+        self, student_id: int, lesson_id: int, status: str
+    ) -> None:
+        """
+        Actualiza el estado de progreso de una lección para un estudiante
+        en la tabla "progress_model".
+        si la entrada no existe, la crea.
+        """
+
+        # Intentar actualizar la entrada existente
+        stmt = update(progress_model).where(
+            (progress_model.c.student_id == student_id)
+            & (progress_model.c.lesson_id == lesson_id)
+        )
+        result = await self.db.execute(stmt)
+
+        # Si no se actualizó ninguna fila, significa que no existia, entonces inserta
+        if result.rowcount == 0:
+            insert_stmt = insert(progress_model).values(
+                student_id=student_id, lesson_id=lesson_id, state=status
+            )
+            await self.db.execute(insert_stmt)
+
+    async def get_progress_status_for_student_lesson(
+        self, student_id: int, lesson_id: int
+    ) -> Optional[str]:
+        """
+        Obtiene el estado de progreso de una lección específica para un estudiante.
+        Retorna el valor string del estado o None si no hay entrada de progreso.
+        """
+        stmt = select(progress_model.c.state).where(
+            (progress_model.c.student_id == student_id)
+            & (progress_model.c.lesson_id == lesson_id)
+        )
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()  # Retorna el estado (string) o None

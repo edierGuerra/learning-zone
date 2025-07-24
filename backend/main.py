@@ -6,9 +6,14 @@ una integración fluida y un arranque óptimo del sistema,
 facilitando el desarrollo y la personalización de la aplicación.
 """
 
+import logging
 from contextlib import asynccontextmanager  # reemplazo de on_event
 
 from database.config_db import Base, engine, async_session  # Base de datos
+import google.generativeai as genai
+from dotenv import load_dotenv
+from config import settings
+
 
 # Modulos internos
 from core.initial_lessons import create_initial_lessons
@@ -34,6 +39,22 @@ from routes.content_routes import router as content_router
 from routes.evaluation_routes import router as evaluation_router
 from core.initial_data import create_initial_courses
 from core.initial_content import create_initial_contents
+
+
+logger = logging.getLogger(__name__)
+
+load_dotenv()
+GEMINI_API_KEY = settings.gemini_api_key
+
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    gemini_model = genai.GenerativeModel("models/gemini-1.5-flash")
+    logger.info("Modelo Gemini configurando y cargado.")
+else:
+    gemini_model = None
+    logger.warning(
+        "GEMINI_API_KEY no configurada. La evaluación de preguntas abiertas no funcionará."
+    )
 
 
 # --- Lifespan moderno (reemplaza on_event) ---

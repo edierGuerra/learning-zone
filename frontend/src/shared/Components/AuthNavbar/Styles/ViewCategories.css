@@ -1,33 +1,97 @@
-.container-view-categories{
-    right: 420px;
-    top: 150px;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    background-color:#f6f2ee ;
-    padding: 4rem;
-    border-radius: 20px;
-    z-index: 100;
+/* ===== VIEW CATEGORIES ===== */
+.container-view-categories {
+  position: absolute;
+  right: 24px;
+  top: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  background-color: #f6f2eef1;
+  padding: var(--spacing-md);
+  border-radius: 16px;
+  z-index: 100;
+  width: 50vw;
+  min-width: 180px;
+  max-width: 320px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
-.container-view-categories button{
-    cursor: pointer;
-    padding: .4rem;
-    width:180px;
-    border: none;
-    border-radius: 10px;
-    color: #fff;
-    transition: .3s ease-in-out;
+
+.container-view-categories button {
+  cursor: pointer;
+  padding: 0.5rem 0.2rem;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  transition: 0.3s ease-in-out;
+  font-size: 0.95rem;
 }
-.container-view-categories button:hover{
-    font-size: 20px;
+
+.container-view-categories button:hover {
+  font-size: 1.1rem;
 }
-.btn-powerPoint{
-    background-color: var(--color-main-powerPoint);
+
+.btn-powerPoint {
+  background-color: var(--color-main-powerPoint);
 }
 .btn-excel {
-    background-color: var(--color-main-excel);
+  background-color: var(--color-main-excel);
 }
 .btn-word {
-    background-color: var(--color-main-word);
+  background-color: var(--color-main-word);
+}
+
+/* ===== TABLET (>=768px) ===== */
+@media (min-width: 768px) {
+  .container-view-categories {
+    right: 90px;
+    top: 270px;
+    padding: var(--spacing-lg);
+    gap: var(--spacing-md);
+    max-width: 290px;
+    border-radius: 18px;
+
+  }
+  .container-view-categories button {
+    font-size: 1rem;
+    width: 100%;
+    padding: 0.6rem 0.3rem;
+
+  }
+}
+
+/* ===== DESKTOP (>=1024px) ===== */
+@media (min-width: 1024px) {
+  .container-view-categories {
+    right: 420px;
+    top: 210px;
+    padding: 4rem;
+    gap: 30px;
+    max-width: 420px;
+
+    border-radius: 20px;
+  }
+  .container-view-categories button {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 0.7rem 0.4rem;
+  }
+}
+
+/* ===== MOBILE PEQUEÑO (<=480px) ===== */
+@media (max-width: 480px) {
+  .container-view-categories {
+    right: 34px;
+    top: 140px;
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+    width: 32vw;
+    min-width: 120px;
+    max-width: 99vw;
+    border-radius: 10px;
+  }
+  .container-view-categories button {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.1rem;
+  }
 }

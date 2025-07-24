@@ -1,6 +1,6 @@
 .container-panel-notifications{
-    right: 260px;
-    top: 150px;
+    right: 16vw;
+    top: 400px;
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -42,4 +42,37 @@
     30px;
     border-radius: 12px;
 
+}
+
+/* ===== TABLET (>=768px) ===== */
+@media (min-width: 768px) {
+  .container-panel-notifications {
+    right: 60px;
+    top: 270px;
+    padding: 2rem;
+    border-radius: 16px;
+    max-width: 420px;
+  }
+}
+
+/* ===== DESKTOP (>=1024px) ===== */
+@media (min-width: 1024px) {
+  .container-panel-notifications {
+    right: 260px;
+    top: 200px;
+    padding: 4rem;
+    border-radius: 20px;
+    max-width: 540px;
+  }
+}
+
+/* ===== MOBILE PEQUEÑO (<=480px) ===== */
+@media (max-width: 480px) {
+  .container-panel-notifications {
+    right: 7vw;
+    top: 250px;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 98vw;
+  }
 }

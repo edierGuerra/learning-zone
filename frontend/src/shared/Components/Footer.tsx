@@ -5,10 +5,10 @@ import { FaTiktok } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FiGithub } from "react-icons/fi";
-import { IoLocationOutline } from "react-icons/io5";
 //Style
 import './Styles/Footer.css'
 import { useNavigationHandler } from '../../hooks/useNavigationHandler';
+import MyMap from './MyMap';
 // navegacion
 export default function Footer() {
   const handleBtnNavigate = useNavigationHandler()
@@ -21,8 +21,7 @@ export default function Footer() {
             <img src={iconLz} alt="" />
           </div>
           <div className="contendor-ubi">
-            {<IoLocationOutline className='icon iconUbi'/>}
-            <p>Alfonso L</p>
+            <MyMap/>
           </div>
 
         </section>

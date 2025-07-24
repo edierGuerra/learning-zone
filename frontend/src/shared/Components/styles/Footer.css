@@ -45,22 +45,18 @@ footer {
 
 /* Contenedor de ubicación */
 .contendor-ubi {
+    margin: 0 auto;
+    padding: 0;
+    border: none;
     display: flex;
-    gap: var(--spacing-xs); /* 8px entre icono y texto */
-    padding: var(--spacing-xs) var(--spacing-sm); /* 8px arriba/abajo, 16px izquierda/derecha */
-    border-radius: 20px;
-    border: 1px solid #fff;
-    align-items: center;
-    font-size: var(--font-size-sm); /* 14px en mobile */
 }
+
 
 .icon {
     font-size: var(--font-size-xl); /* 20px en mobile */
 }
 
-.iconUbi {
-    color: #fff;
-}
+
 
 /* ===== CONTENEDOR 2: COPYRIGHT + INSTITUCIÓN + REDES ===== */
 .contenedor-2 {
@@ -158,7 +154,7 @@ footer {
         text-align: left; /* Alineado a la izquierda */
     }
     
-    .container-all-t-p {
+.container-all-t-p {
         cursor: pointer;
         text-align: left;
     }
@@ -186,8 +182,21 @@ footer {
     }
     
     .contenedor-1 {
-        padding: var(--spacing-lg) var(--spacing-xl); /* 32px arriba/abajo, 48px izquierda/derecha */
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-lg) var(--spacing-xl);
     }
+    .contendor-ubi {
+        width: 400px;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: 0;
+        justify-content: flex-end;
+        border-radius: 310px;
+
+    }
+
     
     .container-nombre {
         font-size: var(--font-size-4xl); /* 36px en desktop */

@@ -97,7 +97,7 @@ export const CourseProvider = ({ children }: Props) => {
         }
       });
     
-      const porcent = (number / lessons.length) * 100;
+      const porcent = Math.round((number / lessons.length) * 100);
       setProgress(porcent);
     }, [lessons]);
 

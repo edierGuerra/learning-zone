@@ -31,42 +31,38 @@ export default function WordHomePage() {
       
   }, []);
 
-  // 🔧 Genera curvas específicas según el índice del nodo destino
+
+  // 🔧 Genera un path SVG que pasa suavemente por todas las lecciones,
+  // alternando la intensidad de las curvas y agregando un pequeño zigzag.
+  // El path SIEMPRE pasa por cada punto de las lecciones.
   function generateSmoothPath(points: { left: number; top: number }[]): string {
     if (points.length < 2) return "";
+
+    // Comienza en la primera lección
     let d = `M ${points[0].left + 8} ${points[0].top + 40}`;
-    // Índices de destino para curva C inversa (lecciones 5,8,10,13,16,19)
-    const cInversaIdx = [5, 8, 10, 13, 16, 19];
-    // Índices de destino para línea recta (segmentos 1,2,3,14,21,22)
-    const lineIdx = [1, 2, 3, 14, 21, 22];
+
     for (let i = 1; i < points.length; i++) {
       const p0 = points[i - 1];
       const p1 = points[i];
-      const x0 = p0.left + 8;
-      const y0 = p0.top + 40;
-      const x1 = p1.left + 8;
-      const y1 = p1.top + 40;
-      if (lineIdx.includes(i)) {
-        // Línea recta
-        d += ` L ${x1} ${y1}`;
-      } else if (cInversaIdx.includes(i)) {
-        // Curva en forma de 'C' inversa
-        const c1x = x0;
-        const c1y = y0 + (y1 - y0) * 0.5;
-        const c2x = x0 + (x1 - x0) * 0.5;
-        const c2y = y1;
-        d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x1} ${y1}`;
-      } else {
-        // Curva en forma de 'C' normal
-        const c1x = x0 + (x1 - x0) * 0.5;
-        const c1y = y0;
-        const c2x = x1;
-        const c2y = y0 + (y1 - y0) * 0.5;
-        d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x1} ${y1}`;
-      }
+
+      // Alterna la intensidad de la curva: 0.35, 0.5, 0.65, etc.
+      const controlFactor = 0.35 + 0.15 * (i % 3); // Cambia entre 0.35, 0.5, 0.65
+
+      // Zigzag: alterna la dirección del zigzag en cada segmento
+      const zigzag = (i % 2 === 0 ? 1 : -1) * 111; // 24px de zigzag, alternando arriba/abajo
+
+      // Puntos de control para la curva de Bézier
+      const c1x = p0.left + 8 + (p1.left - p0.left) * controlFactor;
+      const c1y = p0.top + 40 + (p1.top - p0.top) * controlFactor + zigzag;
+      const c2x = p1.left + 8 - (p1.left - p0.left) * controlFactor;
+      const c2y = p1.top + 40 - (p1.top - p0.top) * controlFactor - zigzag;
+
+      d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p1.left + 8} ${p1.top + 40}`;
     }
+
     return d;
   }
+
   const lessonsPositions = [
   { top: 190, left: 160 },
   { top: 290, left: 360 },

@@ -31,63 +31,55 @@ export default function ExcelHomePage() {
   // 🔧 Genera curvas específicas según el índice del nodo destino
   function generateSmoothPath(points: { left: number; top: number }[]): string {
     if (points.length < 2) return "";
+
+    // Comienza en la primera lección
     let d = `M ${points[0].left + 8} ${points[0].top + 40}`;
-    // Índices de destino para curva C inversa (lecciones 5,8,10,13,16,19)
-    const cInversaIdx = [5, 8, 10, 13, 16, 19];
-    // Índices de destino para línea recta (segmentos 1,2,3,14,21,22)
-    const lineIdx = [1, 2, 3, 14, 21, 22];
+
     for (let i = 1; i < points.length; i++) {
       const p0 = points[i - 1];
       const p1 = points[i];
-      const x0 = p0.left + 8;
-      const y0 = p0.top + 40;
-      const x1 = p1.left + 8;
-      const y1 = p1.top + 40;
-      if (lineIdx.includes(i)) {
-        // Línea recta
-        d += ` L ${x1} ${y1}`;
-      } else if (cInversaIdx.includes(i)) {
-        // Curva en forma de 'C' inversa
-        const c1x = x0;
-        const c1y = y0 + (y1 - y0) * 0.5;
-        const c2x = x0 + (x1 - x0) * 0.5;
-        const c2y = y1;
-        d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x1} ${y1}`;
-      } else {
-        // Curva en forma de 'C' normal
-        const c1x = x0 + (x1 - x0) * 0.5;
-        const c1y = y0;
-        const c2x = x1;
-        const c2y = y0 + (y1 - y0) * 0.5;
-        d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x1} ${y1}`;
-      }
+
+      // Alterna la intensidad de la curva: 0.35, 0.5, 0.65, etc.
+      const controlFactor = 0.35 + 0.15 * (i % 3); // Cambia entre 0.35, 0.5, 0.65
+
+      // Zigzag: alterna la dirección del zigzag en cada segmento
+      const zigzag = (i % 2 === 0 ? 1 : -1) * 111; // 24px de zigzag, alternando arriba/abajo
+
+      // Puntos de control para la curva de Bézier
+      const c1x = p0.left + 8 + (p1.left - p0.left) * controlFactor;
+      const c1y = p0.top + 40 + (p1.top - p0.top) * controlFactor + zigzag;
+      const c2x = p1.left + 8 - (p1.left - p0.left) * controlFactor;
+      const c2y = p1.top + 40 - (p1.top - p0.top) * controlFactor - zigzag;
+
+      d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p1.left + 8} ${p1.top + 40}`;
     }
+
     return d;
   }
   // Por ahora, puedes copiar la estructura de WordHomePage o ajustarla según tus necesidades
   const lessonsPositions = [
     { top: 190, left: 160 },
-    { top: 290, left: 360 },
-    { top: 210, left: 600 },
-    { top: 170, left: 880 },
-    { top: 310, left: 1120 },
-    { top: 490, left: 930 },
-    { top: 470, left: 700 },
-    { top: 610, left: 400 },
-    { top: 750, left: 770 },
-    { top: 890, left: 1050 },
-    { top: 1030, left: 750 },
-    { top: 990, left: 440 },
-    { top: 1120, left: 200 },
-    { top: 1350, left: 480 },
-    { top: 1300, left: 720 },
-    { top: 1440, left: 990 },
-    { top: 1710, left: 720 },
-    { top: 1670, left: 400 },
-    { top: 1850, left: 200 },
-    { top: 2070, left: 520 },
-    { top: 1990, left: 840 },
-    { top: 2210, left: 1000 }
+    { top: 360, left: 420 },
+    { top: 220, left: 660 },
+    { top: 150, left: 940 },
+    { top: 320, left: 1180 },
+    { top: 520, left: 990 },
+    { top: 450, left: 740 },
+    { top: 640, left: 460 },
+    { top: 780, left: 830 },
+    { top: 930, left: 1110 },
+    { top: 1080, left: 810 },
+    { top: 980, left: 500 },
+    { top: 1150, left: 260 },
+    { top: 1380, left: 540 },
+    { top: 1280, left: 780 },
+    { top: 1480, left: 1050 },
+    { top: 1740, left: 780 },
+    { top: 1640, left: 460 },
+    { top: 1880, left: 260 },
+    { top: 2120, left: 580 },
+    { top: 2200, left: 920 },
+    { top: 2140, left: 1210 }
   ];
 
   const visualLessons = lessons.map((lesson, i) => ({

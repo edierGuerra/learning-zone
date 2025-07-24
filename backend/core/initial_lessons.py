@@ -209,19 +209,91 @@ async def create_initial_lessons(db: AsyncSession):
         # Lecciones para PowerPoint
         {
             "course_name": "PowerPoint",
-            "name": "Primeros Pasos en PowerPoint",
+            "name": "Introducción y creación de diapositivas en PowerPoint",
         },
         {
             "course_name": "PowerPoint",
-            "name": "Diseño y Temas",
+            "name": "Guardar y abrir presentaciones",
         },
         {
             "course_name": "PowerPoint",
-            "name": "Animaciones y Transiciones",
+            "name": "Eliminar diapositivas",
         },
         {
             "course_name": "PowerPoint",
-            "name": "Presentación Efectiva",
+            "name": "Agregar y dar formato al texto",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Organizar elementos en la diapositiva",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Insertar formas y gráficos básicos",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Insertar y configurar tablas",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Agregar y personalizar gráficos",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Insertar imágenes y multimedia",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Colaborar y Compartir presentaciones",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Aplicar temas y estilos prediseñados",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Configurar fondos y colores personalizados",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Uso de encabezados y pies de página",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Insertar y diseñar SmartArt",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Uso de iconos e ilustraciones",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Insertar audio y video",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Aplicar transiciones y video",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Agregar y personalizar animaciones",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Diseño maestro y plantillas personalizadas",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Uso de la vista Patrón de diapositivas",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Secciones y organización avanzada de presentaciones",
+        },
+        {
+            "course_name": "PowerPoint",
+            "name": "Configurar y realizar presentaciones en vivo",
         },
     ]
 

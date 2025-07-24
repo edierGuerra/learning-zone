@@ -284,3 +284,75 @@ h1 { font-size: var(--font-size-2xl); }
   .no-print { display: none; }
   .print-only { display: block; }
 }
+
+```
+
+---
+
+### Cambios para `NotificationItem.css`:
+
+```css
+/* ===== TABLET (>=768px) ===== */
+@media (min-width: 768px) {
+  .container-notification {
+    padding: 1.5rem 2rem;
+    max-width: 520px;
+  }
+  .title-notification {
+    font-size: 1.5rem;
+  }
+  .message-notification {
+    max-width: 320px;
+    font-size: 1.05rem;
+  }
+}
+
+/* ===== DESKTOP (>=1024px) ===== */
+@media (min-width: 1024px) {
+  .container-notification {
+    max-width: 600px;
+    padding: 2rem 2.5rem;
+  }
+  .title-notification {
+    font-size: 1.7rem;
+  }
+  .message-notification {
+    max-width: 400px;
+    font-size: 1.1rem;
+  }
+}
+
+/* ===== MOBILE PEQUEÑO (<=480px) ===== */
+@media (max-width: 480px) {
+  .container-notification {
+    padding: 0.7rem 0.5rem;
+    border-radius: 8px;
+  }
+  .title-notification {
+    font-size: 1.05rem;
+  }
+  .date-notification {
+    font-size: 0.7rem;
+  }
+  .message-notification {
+    max-width: 98vw;
+    font-size: 0.85rem;
+    padding-bottom: 1px;
+  }
+  .btn-delete-notification {
+    font-size: 1.2rem;
+  }
+}
+```
+
+---
+
+### Cambios para `NotificationPanel.css`:
+
+```css
+<code_block_to_apply_changes_from>
+```
+
+---
+
+Voy a agregarlos automáticamente al final de cada archivo.

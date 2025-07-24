@@ -24,3 +24,8 @@ npm install socket.io-client
 npm install --save-dev @types/socket.io-client
 npm install dayjs
 npm install --save-dev eslint prettier
+
+Para google maps
+    npm install @react-google-maps/api 
+    npm install --save @types/google.maps
+

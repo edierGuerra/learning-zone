@@ -327,7 +327,7 @@ async def create_initial_evaluations(db: AsyncSession):
         },
         {
             "course_name": "Excel",
-            "lesson_name": "Seleccionar y autorellenar",
+            "lesson_name": "Seleccionar y autorrellenar",
             "question": "Si escribes 'Enero' en una celda y arrastras el controlador de relleno hacia abajo, ¿Qué crees que escribirá Excel en las siguientes celdas?",
             "question_type": QuestionType.OPEN_QUESTION,
             "options": None,
@@ -539,7 +539,7 @@ async def create_initial_evaluations(db: AsyncSession):
         # --- Evaluaciones para PowerPoint ---
         {
             "course_name": "PowerPoint",
-            "lesson_name": "Introducción y creación de diapositivas en PowerPoint",
+            "lesson_name": "Introducción y entorno de trabajo en PowerPoint",
             "question": "¿En qué pestaña se encuentra el botón para agregar una nueva diapositiva?",
             "question_type": QuestionType.MULTIPLE_CHOICE,
             "options": [

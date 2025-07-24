@@ -79,7 +79,7 @@ class LessonRepository:
                 select(Lesson).where(Lesson.id_course == course_id).order_by(Lesson.id)
             )
             result = await self.db.execute(stmt)
-            return list(result.scalar().all())
+            return result.scalars().all()
 
         except Exception as e:
             logger.error(
@@ -166,7 +166,7 @@ class LessonRepository:
         stmt = update(progress_model).where(
             (progress_model.c.student_id == student_id)
             & (progress_model.c.lesson_id == lesson_id)
-        )
+        ).values(state=status)  # <-- ESTA LÍNEA ES CLAVE
         result = await self.db.execute(stmt)
 
         # Si no se actualizó ninguna fila, significa que no existia, entonces inserta

@@ -209,7 +209,7 @@ async def create_initial_lessons(db: AsyncSession):
         # Lecciones para PowerPoint
         {
             "course_name": "PowerPoint",
-            "name": "Introducción y creación de diapositivas en PowerPoint",
+            "name": "Introducción y entorno de trabajo en PowerPoint",
         },
         {
             "course_name": "PowerPoint",

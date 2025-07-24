@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 class Lesson(Base):
     __tablename__ = "lessons"  # Comillas simples aquí
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(50))  # nombre
+    name: Mapped[str] = mapped_column(String(150))  # nombre
 
     # Claves Foraneas
     id_course: Mapped[int] = mapped_column(ForeignKey("courses.id"))

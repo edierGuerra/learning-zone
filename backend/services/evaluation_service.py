@@ -105,12 +105,12 @@ class EvaluationService:
                 )
                 options_list = []
 
-            return EvaluationResponse(
-                id_evaluation=evaluation_obj.id,
-                question=evaluation_obj.question,
-                question_type=evaluation_obj.question_type,
-                options=options_list,  # Pasar la lista de opciones
-            )
+        return EvaluationResponse(
+            id_evaluation=evaluation_obj.id,
+            question=evaluation_obj.question,
+            question_type=evaluation_obj.question_type,
+            options=options_list,  # Pasar la lista de opciones
+        )
 
     async def evaluate_student_answer(
         self,

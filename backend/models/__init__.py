@@ -3,7 +3,7 @@
 from .comment_model import Comment
 from .content_model import Content
 from .course_model import Course
-from .course_student_model import course_student
+from .course_student_model import CourseStudentAssociation
 from .evaluation_model import Evaluation
 from .identification_model import Identification
 from .lesson_model import Lesson
@@ -17,7 +17,7 @@ __all__ = [
     "Comment",
     "Content",
     "Course",
-    "course_student",
+    "CourseStudentAssociation",
     "Evaluation",
     "Identification",
     "Lesson",

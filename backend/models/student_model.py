@@ -14,7 +14,6 @@ from database.config_db import Base
 from sqlalchemy import Boolean, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .course_student_model import course_student
 from .progress_model import progress_model
 from typing import TYPE_CHECKING
 
@@ -49,7 +48,7 @@ class Student(Base):
     )
     comments: Mapped[List["Comment"]] = relationship(back_populates="student")
     courses: Mapped[List["Course"]] = relationship(
-        back_populates="students", secondary=course_student
+        secondary="course_students", back_populates="students"
     )
     lessons: Mapped[List["Lesson"]] = relationship(
         back_populates="students", secondary=progress_model

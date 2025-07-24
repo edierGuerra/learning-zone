@@ -7,7 +7,6 @@ from typing import List
 
 # Módulos internos
 from database.config_db import Base
-from .course_student_model import course_student
 
 # Módulos externos
 from sqlalchemy import Integer, String
@@ -31,6 +30,6 @@ class Course(Base):
     # Relaciones
     comments: Mapped[List["Comment"]] = relationship(back_populates="course")
     students: Mapped[List["Student"]] = relationship(
-        back_populates="courses", secondary=course_student
+        secondary="course_students", back_populates="courses"
     )
     lessons: Mapped[List["Lesson"]] = relationship(back_populates="course")

@@ -14,7 +14,7 @@ from models.student_model import Student
 # Modulos internos
 from schemas.student_schemas import StudentRegister
 from schemas.student_schemas import UpdateProfile
-from models.course_student_model import course_student
+from models.course_student_model import CourseStudentAssociation
 
 # Modulos externos
 from sqlalchemy import insert, select
@@ -86,7 +86,7 @@ class StudentRepository:
                     for course_id in base_course_ids
                 ]
                 await self.db.execute(
-                    insert(course_student).values(association_records)
+                    insert(CourseStudentAssociation).values(association_records)
                 )  # Insertando las asociaciones directamente
 
             # Asignar cursos al estudiante

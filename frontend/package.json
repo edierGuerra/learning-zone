@@ -17,6 +17,7 @@
     "@react-three/drei": "^10.3.0",
     "@react-three/fiber": "^9.1.2",
     "@react-three/rapier": "^2.1.0",
+    "@types/google.maps": "^3.58.1",
     "aos": "^2.3.4",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",

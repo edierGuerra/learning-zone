@@ -1,16 +1,18 @@
 # repository/course_repository.py
 
 import logging
+
+from sqlalchemy import update, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from models.course_model import Course
+from models.course_student_model import CourseStudentAssociation, StateCourse
 from repository.student_repository import StudentRepository
 
 logger = logging.getLogger(__name__)  # Objeto para tirar logs
 
 
 class CourseRepository:
-
     # Constructor con la session de la base de datos
     def __init__(self, db: AsyncSession) -> None:
         self.db = db
@@ -39,3 +41,34 @@ class CourseRepository:
         except Exception:
             logger.warning("[ERROR] Error inesperado [ERROR]", exc_info=True)
             return []
+
+    async def mark_course_as_completed_for_student(
+        self, student_id: int, course_id: int
+    ):
+        """
+        Actualiza el estado de un curso a 'completed' para un estudiante específico.
+        """
+        stmt = (
+            update(CourseStudentAssociation)
+            .where(
+                CourseStudentAssociation.student_id == student_id,
+                CourseStudentAssociation.course_id == course_id,
+            )
+            .values(status=StateCourse.COMPLETED)
+        )
+        await self.db.execute(stmt)
+        # el commit se hará en el servicio que llama a esta función
+
+    async def get_course_status_for_student(
+        self, student_id: int, course_id: int
+    ) -> StateCourse:
+        """
+        Obtiene el estado de progreso de un curso para un estudiante.
+        """
+        stmt = select(CourseStudentAssociation.status).where(
+            CourseStudentAssociation.student_id == student_id,
+            CourseStudentAssociation.course_id == course_id,
+        )
+        result = await self.db.execute(stmt)
+        status = result.scalar_one_or_none()
+        return status if status else StateCourse.IN_PROGRESS

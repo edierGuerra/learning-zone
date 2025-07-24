@@ -2,16 +2,27 @@
 """
 Este módulo define el modelo de datos para la tabla intermedia
 que relaciona a los estudiantes con los cursos en los que están inscritos.
+incluye el progreso del curso para cada estudiante.
 """
 # Módulos internos
+from enum import Enum
 from database.config_db import Base
+from sqlalchemy import Column, ForeignKey, Enum as SqlEnum
 
-# Módulos externo
-from sqlalchemy import Column, ForeignKey, Table
 
-course_student = Table(
-    "course_students",
-    Base.metadata,
-    Column("student_id", ForeignKey("students.id"), primary_key=True),
-    Column("course_id", ForeignKey("courses.id"), primary_key=True),
-)
+class StateCourse(str, Enum):
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+
+
+class CourseStudentAssociation(Base):
+    __tablename__ = "course_students"
+
+    student_id: int = Column(ForeignKey("students.id"), primary_key=True)
+    course_id: int = Column(ForeignKey("courses.id"), primary_key=True)
+
+    status: StateCourse = Column(
+        SqlEnum(StateCourse, name="state_course_enum", create_type=True),
+        nullable=False,
+        default=StateCourse.IN_PROGRESS,
+    )

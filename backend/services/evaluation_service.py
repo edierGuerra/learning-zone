@@ -23,6 +23,7 @@ from schemas.evaluation_schemas import (
 )  # Importar los esquemas de respuesta
 from models.evaluation_model import QuestionType
 from models.student_answer_model import StudentAnswer
+from repository.course_repository import CourseRepository
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,7 @@ class EvaluationService:
         self.student_answer_repo = student_answer_repo
         self.db = db_session  # Asignar sesión para hacer commits
         self.gemini_model = gemini_model_instance
+        self.course_repo = CourseRepository(db_session)
 
     async def get_lesson_evaluation(
         self, course_id: int, lesson_id: int, student_id: int
@@ -122,7 +124,7 @@ class EvaluationService:
     ) -> APIEvaluationScoreResponse:
         """
         Valida la respuesta del estudiante para una evaluación,
-        actualiza el progreso y el score
+        actualiza el progreso y el score.
         """
         # 1. Validar curso, lección y existencia de la evaluación
         course_exists = await self.lesson_repo.get_course_by_id(course_id)
@@ -179,9 +181,6 @@ class EvaluationService:
             ):
                 score_obtained = 100.0  # Puntaje fijo para opción múltiple correcta
                 is_pass = True
-            else:
-                score_obtained = 0.0
-                is_pass = False
 
         elif answer_data.question_type == QuestionType.OPEN_QUESTION:
             if not self.gemini_model:
@@ -200,11 +199,11 @@ class EvaluationService:
             score_obtained = gpt_evaluation_result["porcentaje_correcto"]
             is_pass = gpt_evaluation_result["aprobado"]
 
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Tipo de pregunta no soportado.",
-            )
+        # else:
+        #     raise HTTPException(
+        #         status_code=status.HTTP_404_NOT_FOUND,
+        #         detail="Tipo de pregunta no soportado.",
+        #     )
 
         # Si la respuesta fue incorrecta, retornar 400 Bad Request
         if not is_pass:
@@ -244,25 +243,32 @@ class EvaluationService:
 
             should_update = False
             # Logica para actualizar score SOLO SI ES MAYOR Y SOLO PARA OPEN_QUESTION
-            if answer_data.question_type == QuestionType.OPEN_QUESTION:
-                if score_obtained > old_score_for_this_eval:
-                    should_update = True
-                    logger.info(
-                        f"Actualizando score para open_question (mejorado): Eva:{evaluation_id}, Est:{student_id}, Ant:{old_score_for_this_eval}, Nuevo:{score_obtained}"
-                    )
-            elif answer_data.question_type == QuestionType.MULTIPLE_CHOICE:
-                # Para multiple_choice, si ya la ganó (score 100), no se actualiza
-                if (
-                    old_score_for_this_eval < 100.0
-                ):  # si no tenia 100.0 antes o no existía.
-                    should_update = True
-                    logger.info(
-                        f"Actualizando score para multiple_choice (ganado por primera vez o reintentando): Eva:{evaluation_id}, Est:{student_id}, Ant:{old_score_for_this_eval}, Nuevo:{score_obtained}"
-                    )
-                else:
-                    logger.info(
-                        "Evaluación de multiple_choice ya estaba ganada. No se actualiza el score."
-                    )
+            if (
+                answer_data.question_type == QuestionType.OPEN_QUESTION
+                and score_obtained > old_score_for_this_eval
+            ) or (
+                answer_data.question_type == QuestionType.MULTIPLE_CHOICE
+                and old_score_for_this_eval < 100.0
+            ):
+                # if score_obtained > old_score_for_this_eval:
+                should_update = True
+                logger.info(
+                    f"Actualizando score (mejora detectada): Eva:{evaluation_id}, Est:{student_id}, Ant:{old_score_for_this_eval}, Nuevo:{score_obtained}"
+                )
+            # elif answer_data.question_type == QuestionType.MULTIPLE_CHOICE:
+            #     # Para multiple_choice, si ya la ganó (score 100), no se actualiza
+            #     if (
+            #         old_score_for_this_eval < 100.0
+            #     ):  # si no tenia 100.0 antes o no existía.
+            #         should_update = True
+            #         logger.info(
+            #             f"Actualizando score para multiple_choice (ganado por primera vez o reintentando): Eva:{evaluation_id}, Est:{student_id}, Ant:{old_score_for_this_eval}, Nuevo:{score_obtained}"
+            #         )
+
+            # else:
+            #     logger.info(
+            #         "Evaluación de multiple_choice ya estaba ganada. No se actualiza el score."
+            #     )
 
             if should_update:
                 # Actualizar la respuesta existente
@@ -295,11 +301,10 @@ class EvaluationService:
                 f"Nueva respuesta de evaluación {evaluation_id} creada para estudiante {student_id}."
             )
 
-        # Calcular los scores acumulados
+            # Calcular los scores acumulados
 
         old_score_final = old_score_total_system
         new_score_final = old_score_final + score_obtained  # Sumar el score
-
         await self.db.commit()  # Commit para persistir la respuesta del estudiante
 
         # 2. Actualizar el estado de la lección
@@ -307,8 +312,8 @@ class EvaluationService:
             course_id
         )
         current_lesson_index = -1
-        for index, lesson in enumerate(lessons_in_course):
-            if lesson.id == lesson_id:
+        for index, lesson_item in enumerate(lessons_in_course):
+            if lesson_item.id == lesson_id:
                 current_lesson_index = index
                 break
 
@@ -320,29 +325,34 @@ class EvaluationService:
             await self.db.commit()  # Commit para el cambio de progreso de la lección actual
 
             # Marcar la siguiente lección como "in_progress" si existe
-            if current_lesson_index + 1 < len(lessons_in_course):
+            # Determinar si hay una siguiente lección o si el curso ha terminado
+
+            is_last_lesson = (current_lesson_index + 1) == len(lessons_in_course)
+
+            if not is_last_lesson:
+                # No es la última lección -> Marcar la sigueinte como 'in_progress'
                 next_lesson = lessons_in_course[current_lesson_index + 1]
-                # Obtener el progreso actual de la siguiente lección para no sobrescribir si ya está COMPLETA
-                current_next_lesson_progress = (
+                progress_of_next_lesson = (
                     await self.lesson_repo.get_progress_status_for_student_lesson(
                         student_id, next_lesson.id
                     )
                 )
-                if (
-                    current_next_lesson_progress != StateProgress.COMPLETE.value
-                ):  # Solo actualizar si no está ya completa
+
+                # SOlo actualizar si la siguiente lección no está ya completada
+                if progress_of_next_lesson != StateProgress.COMPLETE.value:
                     await self.lesson_repo.update_progress_status_for_student_lesson(
                         student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
                     )
-                    await self.db.commit()  # Commit para el estado de la siguiente lección
+                    await self.db.commit()
             else:
+                # Si la última lección -> Marcar el CURSO como "COMPLETED"
                 logger.info(
-                    f"El estudiante {student_id} ha completado la última lección del curos {course_id}. Marcando curso como completado."
+                    f"Estudiante {student_id} completó la última lección del curso {course_id}. Marcando curso como COMPLETED."
                 )
-                # Aquí necesitarías una función en un repositorio de cursos para actualizar su estado.
-                # Por ejemplo, si tienes un campo 'status' en el modelo Course o en la tabla intermedia 'course_students'.
-                # await self.course_repo.mark_course_as_completed_for_student(student_id, course_id)
-                # await self.db.commit() # Commit para el estado del curso
+                await self.course_repo.mark_course_as_completed_for_student(
+                    student_id, course_id
+                )
+                await self.db.commit()  # Guarda el cambio de estado del curso
 
         # 3. Retornar la respuesta del score
         return APIEvaluationScoreResponse(

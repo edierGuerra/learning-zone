@@ -1,54 +1,16 @@
-:root {
-  --color-primary: #15609c;
-  --color-primary-dark: #011274;
-  --color-bg: #898f99;
-  --color-text: #333;
-  --radius: 8px;
 
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 3rem;
-
-  --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.5rem;
-  --font-size-2xl: 2rem;
-  --font-size-3xl: 2.5rem;
-  --font-size-4xl: 3rem;
-}
-
-/* Reset básico */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  overflow-x: hidden;
-}
-
-/* ============ CONTENEDOR PRINCIPAL ============ */
-.error-page {
+/* Página de error de permisos */
+.invalid-permission-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  /* Evita que tape header/footer */
-  min-height: calc(100vh - 120px); /* Ajusta si tu header/footer tienen otra altura */
+  min-height: calc(100vh - 120px);
   padding: var(--spacing-lg) var(--spacing-md);
   text-align: center;
   width: 100%;
 }
-
-/* ============ ANIMACIÓN ============ */
-.error-animation {
+.invalid-permission-animation {
   width: 100%;
   max-width: 400px;
   margin-bottom: var(--spacing-md);
@@ -57,27 +19,25 @@ body {
 
 /* Responsive */
 @media (max-width: 380px) {
-  .error-animation {
+  .invalid-permission-animation {
     max-width: 280px;
   }
 }
 
-/* ============ TÍTULO ============ */
-.error-page h1 {
+/* Título y texto */
+.invalid-permission-title {
   font-size: var(--font-size-3xl);
   margin-bottom: var(--spacing-sm);
   color: #000;
 }
-
-/* ============ TEXTO ============ */
-.error-page p {
+.invalid-permission-text {
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-lg);
   max-width: 700px;
 }
 
-/* ============ BOTÓN ============ */
-.error-button {
+/* Botón */
+.invalid-permission-button {
   padding: 0.75rem 1.5rem;
   background-color: var(--color-primary);
   color: white;
@@ -89,15 +49,14 @@ body {
   border: none;
   cursor: pointer;
 }
-
-.error-button:hover {
+.invalid-permission-button:hover {
   background-color: var(--color-primary-dark);
   transform: translateY(-2px);
 }
 
 /* Responsive botón */
 @media (max-width: 380px) {
-  .error-button {
+  .invalid-permission-button {
     padding: 0.6rem 1.2rem;
     font-size: 0.95rem;
   }

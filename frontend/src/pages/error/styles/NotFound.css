@@ -1,41 +1,5 @@
 
-:root {
-
-  --mobile: 480px;
-  --tablet: 768px;
-  --desktop: 1024px;
-  --large-desktop: 1200px;
-
-
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 3rem;
-
-
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-}
-
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #898f99;
-  animation: gradientBG 12s ease infinite;
-  overflow-x: hidden;
-}
-
-
-.error404-container {
+.error404-container.notfound-page {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,7 +11,7 @@ body {
 
 
 
-.animation-wrapper {
+.notfound-animation {
   width: 80%;
   max-width: 400px;
   margin-bottom: var(--spacing-md);
@@ -55,23 +19,20 @@ body {
 }
 
 @media (min-width: 768px) {
-  .animation-wrapper {
+  .notfound-animation {
     max-width: 500px;
   }
 }
 
 @media (min-width: 1024px) {
-  .animation-wrapper {
+  .notfound-animation {
     max-width: 600px;
   }
 }
 
-.floating {
-  animation: floating 3s ease-in-out infinite;
-}
+/* .floating se mantiene si se usa en otros lados */
 
-
-h1 {
+.notfound-title {
   font-size: var(--font-size-2xl);
   font-weight: bold;
   margin-bottom: var(--spacing-xs);
@@ -80,18 +41,18 @@ h1 {
 }
 
 @media (min-width: 768px) {
-  h1 {
+  .notfound-title {
     font-size: var(--font-size-3xl);
   }
 }
 
 @media (min-width: 1024px) {
-  h1 {
+  .notfound-title {
     font-size: var(--font-size-4xl);
   }
 }
 
-p {
+.notfound-text {
   font-size: var(--font-size-base);
   color: #05080e;
   z-index: 2;
@@ -99,13 +60,13 @@ p {
 }
 
 @media (min-width: 768px) {
-  p {
+  .notfound-text {
     font-size: var(--font-size-lg);
   }
 }
 
 
-.btn-back-team {
+.notfound-button {
   background-color: #2b6b85;
   color: white;
   padding: var(--spacing-sm) var(--spacing-lg);
@@ -118,7 +79,7 @@ p {
   font-size: var(--font-size-base);
 }
 
-.btn-back-team:hover {
+.notfound-button:hover {
   background-color: #2b18ff;
   transform: translateY(-2px);
 }

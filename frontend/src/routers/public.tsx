@@ -21,7 +21,7 @@ export default function RoutersPublic() {
                 <Route path="/emailNewPassword" element={<RecoverPassword viewFormNewPassword={false}/>}/>
                 <Route path="/newPassword" element={<RecoverPassword viewFormNewPassword={true}/>}/>
                 <Route path="/confirmEmailRequest" element={<ConfirmEmailRequest/>}/>
-                <Route path="/login" element={<LoginAndRegister opcAuth ={true}/>}/>
+                <Route path="/login" element={<LoginAndRegister opcAuth ={true}/>}/>,
                 {sharedRoutes}
 
                 

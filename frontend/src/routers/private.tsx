@@ -33,11 +33,9 @@ export default function RoutersPrivates() {
                   <Route path="/evaluationPage" element={<EvaluationPage/>}/>
                   
                   <Route path="/comments/:courseId" element={<CommentPageWrapper />} />
-{/*                   <Route path="/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage />} />
-                  <Route path="/course/:courseId/lesson/:lessonId/evaluation" element={<LessonEvaluationPage />} /> */}
-                  {sharedRoutes}
                   {/*Redirigir / a /home si está logueado */}
-                  <Route path="/" element={ <LandingPage/>} />
+                  <Route path="/" element={ <LandingPage/>} />,
+                  {sharedRoutes}
 
               </Route>
             </Route>

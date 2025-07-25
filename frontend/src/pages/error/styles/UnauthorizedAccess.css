@@ -1,33 +1,7 @@
-:root {
-  --color-primary: #15609c;
-  --color-primary-dark: #011274;
-  --color-bg: #898f99;
-  --color-text: #333;
-  --radius: 8px;
 
-  --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 2rem;
-  --font-size-2xl: 2.5rem;
-
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-
-  --mobile: 480px;
-}
-
-
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-bg);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow-x: hidden;
-}
 
 /* 📦 Contenedor principal de la página de error */
-.error-page {
+.error-page.unauthorized-access-page {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,21 +17,21 @@ body {
 }
 
 /* 📽️ Animación */
-.error-animation {
+.unauthorized-access-animation {
   width: 100%;
   max-width: 400px;
   margin-bottom: var(--spacing-lg);
 }
 
 /* 🔠 Título */
-.error-page h1 {
+.unauthorized-access-title {
   font-size: var(--font-size-2xl);
   margin-bottom: var(--spacing-sm);
   color: #000;
 }
 
 /* 🧾 Texto */
-.error-page p {
+.unauthorized-access-text {
   font-size: var(--font-size-lg);
   max-width: 600px;
   margin-bottom: var(--spacing-lg);
@@ -65,7 +39,7 @@ body {
 }
 
 /* 🔘 Botón */
-.error-button {
+.unauthorized-access-button {
   background-color: var(--color-primary);
   color: white;
   padding: var(--spacing-sm) var(--spacing-lg);
@@ -77,25 +51,25 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.error-button:hover {
+.unauthorized-access-button:hover {
   background-color: var(--color-primary-dark);
 }
 
 /* 📱 Responsive */
 @media (max-width: var(--mobile)) {
-  .error-animation {
+  .unauthorized-access-animation {
     max-width: 280px;
   }
 
-  .error-page h1 {
+  .unauthorized-access-title {
     font-size: var(--font-size-xl);
   }
 
-  .error-page p {
+  .unauthorized-access-text {
     font-size: var(--font-size-base);
   }
 
-  .error-button {
+  .unauthorized-access-button {
     font-size: 0.95rem;
     padding: 0.6rem 1.2rem;
   }

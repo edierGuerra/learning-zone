@@ -39,7 +39,8 @@ class CourseRepository:
             for course in student.courses:
                 query = await self.db.execute(
                     select(CourseStudentAssociation).where(
-                        CourseStudentAssociation.course_id == course.id
+                        CourseStudentAssociation.course_id == course.id,
+                        CourseStudentAssociation.student_id == id_student,
                     )
                 )
                 status_course = query.scalar_one_or_none()

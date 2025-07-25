@@ -4,6 +4,12 @@ import './styles/Features.css'
 /* import ConfettiExplosion from "react-confetti-explosion"; */
 import '../../../../node_modules/aos/dist/aos.css'
 import AOS from 'aos';
+import image1 from '../../assets/Features/laboral.jpeg'
+import image2 from '../../assets/Features/image.png'
+import image3 from '../../assets/Features/descarga.jpeg'
+import image4 from '../../assets/Features/imageinstitution1.jpg'
+import image5 from '../../assets/Features/colab2.jpg'
+
 export default function Features() {
 
 useEffect(() => {
@@ -36,7 +42,7 @@ useEffect(() => {
         <div className="feature-card">
           <h2 className='title-feature'>prepara para mundo laboral - universitario</h2>
           <TiltedCard
-          imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
+          imageSrc={image1}
           altText="Kendrick Lamar - GNX Album Cover"
           containerHeight="300px"
           containerWidth="300px"
@@ -56,7 +62,7 @@ useEffect(() => {
         <div className="feature-card">
           <h2 className='title-feature'>Organización de la información</h2>
           <TiltedCard
-          imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
+          imageSrc={image2}
           altText="Kendrick Lamar - GNX Album Cover"
           containerHeight="300px"
           containerWidth="300px"
@@ -76,7 +82,7 @@ useEffect(() => {
         <div className="feature-card">
           <h2 className='title-feature'>Organización de la información</h2>
           <TiltedCard
-          imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
+          imageSrc={image3}
           altText="Kendrick Lamar - GNX Album Cover"
           containerHeight="300px"
           containerWidth="300px"
@@ -97,7 +103,7 @@ useEffect(() => {
         <div className="feature-card">
           <h2 className='title-feature'>Trabajo colaborativo en documentos compartidos</h2>
           <TiltedCard
-          imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
+          imageSrc={image4}
           altText="Kendrick Lamar - GNX Album Cover"
           containerHeight="300px"
           containerWidth="300px"
@@ -117,7 +123,7 @@ useEffect(() => {
         <div className="feature-card">
           <h2 className='title-feature'>Trabajo colaborativo en documentos compartidos</h2>
           <TiltedCard
-          imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
+          imageSrc={image5}
           altText="Kendrick Lamar - GNX Album Cover"
           containerHeight="300px"
           containerWidth="300px"
@@ -135,10 +141,6 @@ useEffect(() => {
           />
         </div>
       </section>
-
-
-
-
 
     </div>
   )

@@ -1,0 +1,115 @@
+:root {
+  /* Breakpoints */
+  --mobile: 480px;
+  --tablet: 768px;
+  --desktop: 1024px;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  /* Typography */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  /* Colors */
+  --color-primary: #15609c;
+  --color-primary-dark: #011274;
+  --color-bg: #898f99;
+  --color-text: #333;
+  --color-error: #9e0000;
+  --radius: 8px;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+/* ========== Error Page Layout ========== */
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* Para que no sobrepase header/footer */
+  min-height: calc(100vh - 120px); /* Ajusta según alto real de tu header + footer */
+  padding: var(--spacing-lg) var(--spacing-sm);
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Animación Lottie */
+.error-animation {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: var(--spacing-md);
+  animation: floating 3s ease-in-out infinite;
+}
+
+/* Responsive animation */
+@media (max-width: 380px) {
+  .error-animation {
+    max-width: 300px;
+  }
+}
+
+/* Título */
+.error-page h1 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-error);
+}
+
+/* Texto */
+.error-page p {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-md);
+  max-width: 700px;
+}
+
+/* Botón */
+.error-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: var(--font-size-base);
+  border: none;
+  cursor: pointer;
+}
+
+.error-button:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Animación de flotación */
+@keyframes floating {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}

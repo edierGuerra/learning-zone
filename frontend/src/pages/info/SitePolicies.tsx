@@ -19,7 +19,6 @@ export const SitePolicies =()=> {
 
   }
 
-
     return (
         <div className="container-page-legal">
             <div className="container-sidebar">

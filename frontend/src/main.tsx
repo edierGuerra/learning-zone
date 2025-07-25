@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <StudentProvider> {/* 👈 Esto es obligatorio */}
         <CourseProvider>
-          <App />
+          <App/>
         </CourseProvider>
       </StudentProvider>
     </BrowserRouter>

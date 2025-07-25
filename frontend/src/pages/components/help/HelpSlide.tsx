@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import './styles/Help.css';
 import FloatingArrow from './FloatingArrow';
 import HelpButtons from './HelpButtons';
-import Home from '../../../modules/dashboard/pages/Home'; // ✅ Asegúrate de que esta ruta sea correcta
+import Home from '../../../modules/dashboard/pages/Home';
 
 type HelpSlideProps = {
   index: number;
@@ -9,43 +10,78 @@ type HelpSlideProps = {
   onSkip: () => void;
 };
 
-const helpSteps = [
-  {
-    text: "LOGO REPRESENTATIVO.",
-    arrow: { top: "0px", left: "28px", rotation: "90deg", zIndex: 9999 },
-  },
-  {
-    text: "APARTADO DE CATEGORÍA EN DONDE ESTÁN LOS CURSOS: EXCEL, WORD Y POWERPOINT",
-    arrow: { top: "0px", left: "65%", rotation: "90deg", zIndex: 9999 },
-  },
-  {
-    text: "APARTADO DE NOTIFICACIONES: INFORMACIÓN IMPORTANTE.",
-    arrow: { top: "2px", left: "77%", rotation: "90deg", zIndex: 9999 },
-  },
-  {
-    text: "PERFIL: PROGRESO DEL USUARIO Y EDICIÓN DE INFORMACIÓN.",
-    arrow: { top: "2px", left: "84%", rotation: "90deg", zIndex: 9999 },
-  },
-  {
-    text: "ÍCONO DE AYUDAS.",
-    arrow: { top: "0px", left: "71%", rotation: "90deg", zIndex: 9999 },
-  },
-  {
-    text: "FOOTER.",
-    arrow: { top: "645px", left: "65%", rotation: "320deg", zIndex: 9999 },
-  },
-  {
-    text: "WORD, EXCEL Y POWER POINT SON CURSOS Y ESTARAN COMPUESTOS POR LECCIONES .",
-    arrow: { top: "400px", left: "90%", rotation: "2deg", zIndex: 9999 },
-  },
-];
+// Hook para detectar si es móvil
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= breakpoint);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= breakpoint);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [breakpoint]);
+
+  return isMobile;
+}
 
 export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
-  const { text, arrow } = helpSteps[index];
+  const isMobile = useIsMobile();
+
+  const helpSteps = [
+    {
+      text: "LOGO REPRESENTATIVO.",
+      arrow: isMobile
+        ? { top: "1.5vh", left: "44vw", rotation: "90deg", color: "black" }
+        : { top: "1vh", left: "2vw", rotation: "90deg", color: "white" },
+    },
+    {
+      text: "APARTADO DE CATEGORÍA EN DONDE ESTÁN LOS CURSOS...",
+      arrow: isMobile
+        ? { top: "2vh", left: "25vw", rotation: "90deg" }
+        : { top: "1vh", left: "54vw", rotation: "90deg" },
+    },
+    {
+      text: "APARTADO DE NOTIFICACIONES: INFORMACIÓN IMPORTANTE.",
+      arrow: isMobile
+        ? { top: "2vh", left: "55vw", rotation: "90deg" }
+        : { top: "1vh", left: "70vw", rotation: "90deg" },
+    },
+    {
+      text: "PERFIL: PROGRESO DEL USUARIO Y EDICIÓN DE INFORMACIÓN.",
+      arrow: isMobile
+        ? { top: "2vh", left: "75vw", rotation: "90deg" }
+        : { top: "1vh", left: "79vw", rotation: "90deg" },
+    },
+    {
+      text: "ÍCONO DE AYUDAS.",
+      arrow: isMobile
+        ? { top: "2vh", left: "41vw", rotation: "90deg" }
+        : { top: "1vh", left: "62vw", rotation: "90deg" },
+    },
+    {
+      text: "FOOTER.",
+      arrow: isMobile
+        ? { top: "100vh", left: "30vw", rotation: "320deg" }
+        : { top: "85vh", left: "65vw", rotation: "320deg" },
+    },
+    {
+      text: "WORD, EXCEL Y POWER POINT SON CURSOS Y ESTARÁN COMPUESTOS POR LECCIONES.",
+      arrow: isMobile
+        ? { top: "62vh", left: "78vw", rotation: "2deg" }
+        : { top: "60vh", left: "90vw", rotation: "2deg" },
+    },
+  ];
+
+  const currentStep = helpSteps[index];
+  const arrow = {
+    ...currentStep.arrow,
+    zIndex: 9999,
+  };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '112vh' }}>
-      {/* Fondo del componente Home */}
       <div
         style={{
           position: 'absolute',
@@ -55,18 +91,17 @@ export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
           left: 0,
           zIndex: 0,
           overflow: 'hidden',
-          filter: 'blur(1.5px)' ,
-          pointerEvents: 'none'
+          filter: 'blur(1.5px)',
+          pointerEvents: 'none',
         }}
       >
-        <Home/>
+        <Home />
       </div>
 
-   
       <div className="help-slide" style={{ position: 'relative', zIndex: 10 }}>
         <div className="help-overlay">
           <div className="help-box">
-            <p className="help-text">{text}</p>
+            <p className="help-text">{currentStep.text}</p>
             <HelpButtons
               isLast={index === helpSteps.length - 1}
               onNext={() => setIndex(index + 1)}
@@ -79,4 +114,3 @@ export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
     </div>
   );
 }
-

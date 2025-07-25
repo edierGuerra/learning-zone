@@ -1,4 +1,4 @@
-/* Componente principal */
+/* Componente principal: Panel izquierdo */
 .panel-content-left {
   width: 400px;
   height: 100%;
@@ -7,14 +7,14 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: absolute;
+  position: absolute; 
   left: 0;
   top: 0;
   bottom: 0;
-  animation-duration: 0.4s;
-  animation-fill-mode: both;
+  animation: slideInLeft 0.4s forwards;
 }
 
+/* Animación de entrada */
 @keyframes slideInLeft {
   from {
     transform: translateX(-100%);
@@ -26,7 +26,19 @@
   }
 }
 
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+  z-index: 10;
+}
 
+/* Tipografía y estilo del contenido del panel */
 .panel-title {
   font-size: 36px;
   font-weight: bold;
@@ -35,10 +47,9 @@
 }
 
 .panel-subtitle {
-  font-size: 29px;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #ffffff;
+  font-size: 36px;
+  font-weight: bold;
+  color: #4dd0e1;
 }
 
 .panel-description {
@@ -46,6 +57,7 @@
   line-height: 1.6;
   color: #dddddd;
   margin-bottom: 1rem;
+  
 }
 
 .panel-section h3 {
@@ -73,4 +85,33 @@
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+
+/* 📱 Responsive: móviles */
+@media (max-width: 576px) {
+  .panel-content.right {
+    padding: 1rem;
+     position: relative;
+  }
+
+  .panel-content.right h2 {
+    font-size: 24px;
+  }
+
+  .panel-content.right h3 {
+    font-size: 18px;
+  }
+
+  .panel-content.right ul {
+    font-size: 16px;
+  }
+
+  .panel-content.right li {
+    font-size: 15px;
+  }
+
+  .panel-content.right p {
+    font-size: 13px;
+  }
 }

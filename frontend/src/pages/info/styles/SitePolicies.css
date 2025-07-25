@@ -1,9 +1,10 @@
-/* Contenedor principal con flexbox */
 .container-page-legal {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
   font-family: 'Segoe UI', sans-serif;
   background-color: #fafafa;
+  overflow-x: hidden; /* Evita scroll horizontal */
 }
 
 /* background de la pagina */
@@ -24,6 +25,8 @@
   justify-content: space-between;
   border-right: 1px solid #000000;
   box-shadow: 0 40px 40px rgb(0, 0, 0);
+  justify-content: flex-start; /* Esto evita que el contenido se empuje hasta abajo */
+
 }
 
 /* Icono de react */
@@ -80,15 +83,14 @@
   border: none;
   font-weight: bold;
   color: #f3f3f3;
-  margin-bottom: px;
   font-size: 22px;
+  margin-top: 80px; /* Ajusta este valor a tu gusto */
 }
 .section-contact button:hover {
   color: #1541ba;
 }
 
 .contacts-number li {
-  margin-bottom: 4px;
   color: #f6f6f6;
   font-size: 24px;
   text-decoration: underline
@@ -118,4 +120,114 @@
   height: auto;
   margin: 1rem auto;
 
+}
+
+/* 🔧 Tablets (hasta 768px) */
+@media (max-width: 768px) {
+  .container-page-legal {
+    flex-direction: column;
+  }
+
+  .container-sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px;
+    border-right: none;
+    border-bottom: 1px solid #000;
+    box-shadow: none;
+  }
+
+  .section-nav {
+    display: flex;
+    gap: 20px;
+  }
+
+  .section-nav li {
+    margin-bottom: 0;
+  }
+
+  .section-contact {
+    display: none; /* ocultamos contacto en tablets para mayor limpieza */
+  }
+
+  .container-legal-information {
+    padding: 30px 40px;
+  }
+
+  .container-legal-information h1 {
+    font-size: 36px;
+  }
+
+  .container-legal-information p {
+    font-size: 18px;
+  }
+
+  .politicas {
+    width: 180px;
+  }
+}
+
+/* 📱 Móviles (hasta 576px) */
+/* 📱 Móviles (hasta 576px) */
+@media (max-width: 576px) {
+  .container-page-legal {
+    flex-direction: column;
+  }
+
+  .container-sidebar {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .section-nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sidebar-button {
+    font-size: 20px;
+  }
+
+  .container-legal-information {
+    padding: 20px;
+  }
+
+  .container-legal-information h1 {
+    font-size: 28px;
+  }
+
+  .container-legal-information p {
+    font-size: 16px;
+  }
+
+  .politicas {
+    width: 140px;
+  }
+
+  .icon-back {
+    font-size: 40px;
+  }
+
+  /* ✅ Contacto en móviles */
+  .section-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .contacts-number {
+    padding-left: 0;
+  }
+
+  .contacts-number li {
+    font-size: 16px;
+    color: #f6f6f6;
+    text-decoration: underline;
+  }
 }

@@ -25,7 +25,5 @@ npm install --save-dev @types/socket.io-client
 npm install dayjs
 npm install --save-dev eslint prettier
 
-Para google maps
-    npm install @react-google-maps/api 
-    npm install --save @types/google.maps
-
+lottie para animacion Error page
+npm install lottie-react

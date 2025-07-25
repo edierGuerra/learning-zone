@@ -5,13 +5,13 @@
   margin: 2rem auto;
   padding: 2.5rem 3rem;
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
   backdrop-filter: blur(10px);
   overflow: hidden;
   animation: fadeIn 0.8s ease-out;
-  z-index: 10;
-  background-color: rgb(0, 103, 129);
+  background-image:  url('../assets/backround-content.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 
@@ -22,7 +22,7 @@
     background-color: transparent;
     border: none;
     font-size: 46px;
-    color: var(--color-text-darker);
+    color: var(--color-text-light);
     cursor: pointer;
     z-index: 10;
     transition: transform 0.3s ease;
@@ -31,7 +31,7 @@
 .title-content {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #0042ad;
+  color: #FAFAFA;
   margin-bottom: 1.5rem;
   position: relative;
   padding-bottom: 0.8rem;
@@ -44,9 +44,13 @@
 .text-content {
   font-size: 1.1rem;
   line-height: 1.7;
-  color: #475569;
+  color: #ffffffb3;
   margin-bottom: 2rem;
   font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(15px);
+  padding: .4rem;
+  border-radius: 12px;
 }
 
 /* Estilos para imagen de contenido */
@@ -83,15 +87,28 @@ video {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   margin: 1.5rem 0;
 }
+.btn-downloand-content{
+  background-color: #0042ad;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  color: #fff;
+  padding: .8rem;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(24, 31, 36, 0.607);
 
+
+}
 /* Botón de continuar con efecto de brillo */
 .btn-content-next {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: var(--color-orange);
   color: white;
   font-size: 1.1rem;
   font-weight: 600;
   padding: 0.9rem 2rem;
-  border: none;
+  border-right:3px solid #fff ;
+  border-bottom:3px solid #fff ;
   border-radius: 12px;
   cursor: pointer;
   margin-top: 2rem;
@@ -101,7 +118,7 @@ video {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(199, 214, 245, 0.3);
   margin-left: auto;
   margin-right: 0;
 }
@@ -119,9 +136,11 @@ video {
 }
 
 .btn-content-next:hover {
+  border: none;
+
   transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: var(    --color-accent-orange);
+
 }
 
 .btn-content-next:active {

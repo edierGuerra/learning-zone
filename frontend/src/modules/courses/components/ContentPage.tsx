@@ -1,5 +1,6 @@
 /* Page donde se renderiza el contenido de una leccion */
 import { IoArrowBackCircleSharp } from 'react-icons/io5'
+import { HiDownload } from "react-icons/hi";
 import { useCourseContext } from '../hooks/useCourse'
 import '../styles/ContentPage.css'
 import { useNavigationHandler } from '../../../hooks/useNavigationHandler'
@@ -18,8 +19,12 @@ export default function ContentPage() {
         {content?.contentType === 'image'?
             <img className='image-content' src={content.content} alt="contenido" />:
         content?.contentType === 'text'?
-            <p className='content-content'>{content.content}</p>:
+        <p className='content-content'>{content.content}</p>:
         <video src={content?.content} controls></video>
+    }
+        {/* Botón de descarga justo después del recurso, solo si no es texto */}
+        {content?.contentType !== 'text' &&
+            <a className='btn-downloand-content' href={content?.content} download ><HiDownload/></a>
         }
         <button className='btn-content-next' onClick={()=>renderEvaluation(currentLesson?.idCourse,currentLesson!.id)}>Continuar</button>
     </div>

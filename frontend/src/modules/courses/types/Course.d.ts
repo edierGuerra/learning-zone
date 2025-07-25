@@ -3,6 +3,8 @@ export type TCourse ={
     id:int,
     name:string,
     description:string
+    status: 'in_progress' | 'completed' 
+
 }
 export type TCourses = TCourse[];
 
@@ -13,6 +15,7 @@ export type TProgressCourse  = {
     name_course:TCourse['name'],
     completed_lessons:number,
     all_lessons:number
+    status:TCourse['status']
 };
 export type TProgressCourses = TProgressCourse[]
 

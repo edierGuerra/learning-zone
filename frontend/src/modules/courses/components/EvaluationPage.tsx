@@ -76,14 +76,12 @@ export default function EvaluationPage() {
       if (res.status === 200) { 
         /* Conversion de lo que viene del backend, para que quede tipo camelCase */
           const score:TScore ={
-          newScore:res.score.new_score,
-          oldScore:res.score.old_score,
-          date:res.score.date
+          newScore:res.score!.new_score,
+          oldScore:res.score!.old_score,
+          date:res.score!.date
         } 
         toast.success(res.message); 
         /* Setear en el state el score */
-     
-
         setScore(score);
         /* Habilitar esto para que se muestre la ventana */
         setShowScoreModal(true);

@@ -9,7 +9,7 @@ const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 type GetCoursesAPIResponse = {
   status: number;
   message: string;
-  data: TCourses;
+  courses: TCourses;
 };
 
 export default async function GetCoursesAPI(): Promise<TCourses> {
@@ -23,11 +23,11 @@ export default async function GetCoursesAPI(): Promise<TCourses> {
 
         // Validar estructura de respuesta
         const responseData = response.data as GetCoursesAPIResponse;
-        if (!responseData.data || !Array.isArray(responseData.data)) {
+        if (!responseData.courses || !Array.isArray(responseData.courses)) {
             throw new Error('Respuesta del servidor inválida: estructura de datos incorrecta');
         }
 
-        return responseData.data;
+        return responseData.courses;
 
     } catch (error) {
         console.error('Error en GetCourses:', error);

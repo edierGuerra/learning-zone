@@ -1,0 +1,149 @@
+
+:root {
+
+  --mobile: 480px;
+  --tablet: 768px;
+  --desktop: 1024px;
+  --large-desktop: 1200px;
+
+
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #898f99;
+  animation: gradientBG 12s ease infinite;
+  overflow-x: hidden;
+}
+
+
+.error404-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  position: relative;
+}
+
+
+
+.animation-wrapper {
+  width: 80%;
+  max-width: 400px;
+  margin-bottom: var(--spacing-md);
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .animation-wrapper {
+    max-width: 500px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .animation-wrapper {
+    max-width: 600px;
+  }
+}
+
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+
+h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: bold;
+  margin-bottom: var(--spacing-xs);
+  color: #000;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  h1 {
+    font-size: var(--font-size-4xl);
+  }
+}
+
+p {
+  font-size: var(--font-size-base);
+  color: #05080e;
+  z-index: 2;
+  margin-bottom: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  p {
+    font-size: var(--font-size-lg);
+  }
+}
+
+
+.btn-back-team {
+  background-color: #2b6b85;
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 2;
+  font-size: var(--font-size-base);
+}
+
+.btn-back-team:hover {
+  background-color: #2b18ff;
+  transform: translateY(-2px);
+}
+
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes floating {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+

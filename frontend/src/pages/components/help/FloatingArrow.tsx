@@ -1,12 +1,14 @@
+// FloatingArrow.tsx
 import { FaArrowLeft } from "react-icons/fa";
-import './styles/Help.css';
 
-type ArrowProps = {
+export type ArrowProps = {
   top: string;
   left?: string;
   right?: string;
   zIndex?: number;
   rotation: string;
+  color?: string;
+  overHeader?: boolean; 
 };
 
 export default function FloatingArrow({
@@ -14,7 +16,9 @@ export default function FloatingArrow({
   left,
   right,
   zIndex = 9999,
-  rotation
+  rotation,
+  color = "white",
+  overHeader = false, 
 }: ArrowProps) {
   return (
     <FaArrowLeft
@@ -26,8 +30,8 @@ export default function FloatingArrow({
         right,
         transform: `rotate(${rotation})`,
         fontSize: "4.4rem",
-        color: "",
-        zIndex,
+        color,
+        zIndex: overHeader ? 10001 : zIndex,
         pointerEvents: "none",
       }}
     />

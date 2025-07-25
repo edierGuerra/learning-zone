@@ -1,19 +1,42 @@
-/* Contenedor principal del main */
+
+
+
 .about-us-container {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
   justify-content: center;
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   background-color: #f0f0f0;
+  padding-top: 90px;
+  flex-wrap: wrap;
 }
-/* Estilos imagen */
+
+/* Botón de retroceso */
+.btn-back-team {
+  position: absolute;
+  top: 22px;
+  left: 270px;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 45px;
+  margin-top: 80px;
+}
+
+.left-panel-open .btn-back-team {
+  z-index: 0;
+}
+
+/* Imagen principal */
 .about-static-image {
   width: 40%;
   display: block;
   margin: 0 auto;
 }
-/* Contenedor de imagen y textos */
+
+/* Contenedor central */
 .image-container {
   display: flex;
   flex-direction: column;
@@ -22,39 +45,55 @@
   position: relative;
   padding-bottom: 40px;
   width: 100%;
+  box-sizing: border-box;
 }
 
-/* Cje Tecnology */
+/* Texto */
 .title {
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
-/* Estilos de texto "Más sobre learning zone" */
+
 .subtitle {
   font-size: 2rem;
   margin-top: 0.5rem;
-  color:rgb(59, 109, 209)
+  color: rgb(59, 109, 209);
 }
-/* Botones laterales */
+.navigation-buttons {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%; 
+  z-index: 20;
+  pointer-events: none;
+  box-sizing: border-box;
+  width: 100%;
+}
+
 .icon-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 70px;
-  color: rgb(0, 0, 0);
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
+  font-size: clamp(32px, 5vw, 70px);
+  color: black;
+  z-index: 21;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Posiciones izquierda y derecha de botones lateales*/
-.icon-button.left {
-  left: 330px;
+.icon-white {
+  color: white;
 }
 
-.icon-button.right {
-  right: 330px;
+.above-panel .side-icon {
+  color: white;
 }
 
 /* Paneles laterales */
@@ -62,11 +101,11 @@
   position: absolute;
   top: 0;
   height: 100%;
-  width: 00px;
   padding: 20px;
-  z-index: 2;
+  z-index: 10;
+  box-sizing: border-box;
 }
-/* Animaciones al entrar y salir de los paneles laterales */
+
 .left-panel {
   left: 0;
   animation: slideInLeft 0.3s ease-in-out;
@@ -77,28 +116,10 @@
   animation: slideInRight 0.3s ease-in-out;
 }
 
-/* Estilo blanco para íconos cuando el panel está abierto */
-.icon-white {
-  color: white;
-}
-
-/* Clase para cambiar el estilo del botón cuando está sobre el panel */
-.above-panel .side-icon {
-  color: white;
-}
-
-/* Ajuste visual para mantener el botón por encima y más pegado al borde del panel */
-.icon-button.left.above-panel {
-  left: 330px;
-}
-
-.icon-button.right.above-panel {
-  right: 330px;
-}
-
-/* Estilos para el boton(flecha) */
+/* Botón LearningZone */
 .info-toggle-button {
-  margin-top: 30px;
+  margin-top: 10px;
+  margin-bottom: 30px;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -111,7 +132,7 @@
   position: relative;
   z-index: 2;
 }
-/* Rotacion de la flecha */
+
 .info-toggle-button .icon {
   transition: transform 0.4s ease;
 }
@@ -120,18 +141,93 @@
   transform: rotate(180deg);
 }
 
+/* Tablet */
+@media (max-width: 992px) {
+  .about-us-container {
+    flex-direction: column;
+    padding: 2rem 1rem;
+  }
 
-.btn-back-team {
-  position: absolute;
-  top: 22px;
-  left: 270px;
-  cursor: pointer;
-  z-index: 10; 
-  transition: z-index 0.3s ease;
-  font-size: 45px;
+  .about-static-image {
+    width: 70%;
+  }
+
+  .btn-back-team {
+    left: 15px;
+    font-size: 35px;
+  }
+
+  .side-panel {
+    width: 60%;
+  }
 }
 
-/* Si el panel izquierdo está abierto, envía el botón atrás */
-.left-panel-open .btn-back {
-  z-index: 0;
+/* Móvil */
+@media (max-width: 576px) {
+  .about-us-container {
+    flex-direction: column;
+    padding: 1rem;
+    height: auto;
+  }
+
+  .image-container {
+    padding-bottom: 20px;
+    order: 2;
+  }
+
+  .title,
+  .subtitle {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .about-static-image {
+    width: 90%;
+  }
+
+  .btn-back-team {
+    left: 10px;
+    top: 10px;
+    font-size: 28px;
+    position: static;
+    order: 0;
+    margin-bottom: 10px;
+  }
+
+  .side-panel {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+    box-shadow: none;
+    order: 1;
+  }
+}
+
+/* Panel ancho fijo en pantallas grandes */
+@media (min-width: 577px) {
+  .left-panel,
+  .right-panel {
+    width: 300px;
+  }
+}
+
+/* Tablet intermedio */
+@media (min-width: 577px) and (max-width: 768px) {
+  .side-panel,
+  .left-panel,
+  .right-panel {
+    width: 60%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+  }
+
+  .left-panel {
+    left: 0;
+  }
+
+  .right-panel {
+    right: 0;
+  }
 }

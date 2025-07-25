@@ -4,7 +4,7 @@ import "../about/styles/TeamInfo.css";
 import RightPanel from "../components/teamInfo/RightPanel";
 import LeftPanel from "../components/teamInfo/LeftPanel";
 import LearningZoneInfo from "../components/teamInfo/LearningZoneInfo";
-import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
+import { AiOutlineCaretRight, AiOutlineCaretLeft } from "react-icons/ai";
 import { FaArrowRight } from "react-icons/fa";
 import { IoArrowBackCircleSharp } from "react-icons/io5";
 import { useNavigationHandler } from "../../hooks/useNavigationHandler";
@@ -35,35 +35,44 @@ export const AboutUs = () => {
   return (
     <div className={`about-us-container ${leftPanel ? "left-panel-open" : ""}`}>
       {/* Botón de retroceso */}
-      <button className="btn-back-team" onClick={() => handleBtnNavigate('/back')}>
+      <button className="btn-back-team" onClick={() => handleBtnNavigate("/back")}>
         <IoArrowBackCircleSharp />
       </button>
 
-      {/* Botón izquierdo */}
-      {!showLearningZoneInfo && (
-        <button
-          className={`icon-button left ${leftPanel ? "above-panel" : ""}`}
-          onClick={toggleLeftPanel}
-        >
-          {leftPanel ? (
-            <AiOutlineCaretLeft className="side-icon icon-white" />
-          ) : (
+      {/* Botones de navegación: solo si ambos paneles están cerrados y no se muestra LearningZoneInfo */}
+      {!showLearningZoneInfo && !leftPanel && !rightPanel && (
+        <div className="navigation-buttons">
+          {/* Flecha derecha para el panel izquierdo */}
+          <button
+            className="icon-button"
+            onClick={toggleLeftPanel}
+            title="Abrir panel izquierdo"
+          >
             <AiOutlineCaretRight className="side-icon" />
-          )}
-        </button>
+          </button>
+
+          {/* Flecha izquierda para el panel derecho */}
+          <button
+            className="icon-button"
+            onClick={toggleRightPanel}
+            title="Abrir panel derecho"
+          >
+            <AiOutlineCaretLeft className="side-icon" />
+          </button>
+        </div>
       )}
 
       {/* Panel izquierdo */}
       {leftPanel && (
         <div className="side-panel left-panel">
-          <LeftPanel />
+          <LeftPanel onClose={() => setLeftPanel(false)} />
         </div>
       )}
 
       {/* Panel derecho */}
       {rightPanel && (
         <div className="side-panel right-panel">
-          <RightPanel />
+          <RightPanel onClose={() => setRightPanel(false)} />
         </div>
       )}
 
@@ -87,20 +96,6 @@ export const AboutUs = () => {
           </>
         )}
       </div>
-
-      {/* Botón derecho */}
-      {!showLearningZoneInfo && (
-        <button
-          className={`icon-button right ${rightPanel ? "above-panel" : ""}`}
-          onClick={toggleRightPanel}
-        >
-          {rightPanel ? (
-            <AiOutlineCaretRight className="side-icon icon-white" />
-          ) : (
-            <AiOutlineCaretLeft className="side-icon" />
-          )}
-        </button>
-      )}
     </div>
   );
 };

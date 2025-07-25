@@ -1,62 +1,163 @@
-/* Estilos componente principal */
-.panel-content.right {
+/* 🎯 Estilo principal del panel derecho */
+.panel-content-right {
   width: 400px;
   height: 100%;
   background-color: #081431;
-  color: #ffffff;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: absolute;
-  right: 0;
   top: 0;
+  right: 0;
   bottom: 0;
-  animation: slideInRight 0.4s ease-out;
-
+  z-index: 10;
+  animation: slideInRight 0.4s forwards;
+  overflow-y: auto;
 }
 
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* ▶️ Animación de entrada */
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
     opacity: 0;
   }
   to {
-    transform: translateX(0);
+    transform: translateX(0%);
     opacity: 1;
   }
 }
 
-.panel-content.right h2 {
+/* 📌 Tipografía general */
+.panel-content-right h2,
+.panel-content-right h3,
+.panel-content-right p,
+.panel-content-right li {
+  color: #dddddd;
+  margin: 0;
+}
+
+/* 🎯 Título principal */
+.panel-content-right .panel-title,
+.panel-content-right h2 {
   font-size: 36px;
   font-weight: bold;
   color: #4dd0e1;
+  margin-bottom: 1rem;
 }
 
-.panel-content.right p {
+/* 📝 Subtítulo */
+.panel-content-right .panel-subtitle {
+  font-size: 30px;
+  font-weight: bold;
+  color: #4dd0e1;
+  margin-bottom: 1rem;
+}
+
+/* 📄 Descripción */
+.panel-content-right .panel-description,
+.panel-content-right p {
   font-size: 15px;
   line-height: 1.6;
+  margin-bottom: 1rem;
   color: #dddddd;
-  margin-bottom: 5rem;
-
 }
 
-.panel-content.right h3 {
-  font-size: 22px;
+/* 📚 Sección de habilidades u otros */
+.panel-content-right .panel-section {
+  margin-top: 2rem;
+}
+
+.panel-content-right .panel-section h3,
+.panel-content-right h3 {
+  font-size: 25px;
   font-weight: 600;
   color: #4dd0e1;
-
-
+  margin-bottom: 0.5rem;
 }
 
-.panel-content.right ul {
+/* ✅ Lista de habilidades */
+.panel-content-right .panel-list,
+.panel-content-right ul {
   list-style: none;
-
-  font-size: 20px;
-
+  padding-left: 0;
+  font-size: 18px;
+  line-height: 1.6;
   color: #dddddd;
 }
 
-.panel-content.right li {
-  margin-bottom: 0.9rem;
+.panel-content-right .panel-list li,
+.panel-content-right li {
+  margin-bottom: 0.5rem;
+}
+
+/* 📍 Información adicional (opcional) */
+.panel-content-right .panel-info-place {
+  font-size: 20px;
+  color: #bbbbbb;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 🧠 Responsive – Tablets */
+@media (max-width: 768px) {
+  .panel-content-right {
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .panel-content-right h2 {
+    font-size: 28px;
+  }
+
+  .panel-content-right h3 {
+    font-size: 20px;
+  }
+
+  .panel-content-right p,
+  .panel-content-right ul {
+    font-size: 16px;
+  }
+
+  .panel-content-right .panel-info-place {
+    font-size: 16px;
+  }
+}
+
+/* 📱 Responsive – Móviles */
+@media (max-width: 576px) {
+  .panel-content-right {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .panel-content-right h2 {
+    font-size: 24px;
+  }
+
+  .panel-content-right h3 {
+    font-size: 18px;
+  }
+
+  .panel-content-right p,
+  .panel-content-right ul {
+    font-size: 14px;
+  }
+
+  .panel-content-right .panel-info-place {
+    font-size: 14px;
+  }
 }

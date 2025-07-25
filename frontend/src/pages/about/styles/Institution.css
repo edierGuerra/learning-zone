@@ -1,171 +1,221 @@
 .container-Institution-Page {
   display: flex;
- /*  justify-content: center;
-  align-items: center; */
-  height: 100vh ;
+  flex-direction: column;
   background: linear-gradient(135deg, #d7c7adcb, #c9b798, #e0d6bd);
   padding: 3rem;
-  position: relative;
   justify-content: center;
+  align-items: center;
+  height: auto;
+  position: relative;
 }
+
+/* Contenedor de botones/paneles */
 .button-container,
 .panel-container {
   position: absolute;
   z-index: 1;
 }
+
+/* Slide principal */
 .slide {
-    margin: auto;
-    position: absolute;
-    max-width: 1200px;
-    height: 100%;
-
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  height: auto;
+  position: relative;
 }
 
-/* Estilos para el las imagenes del background*/
-.slide-images img {
-  width: 120%;
-  height: 220px;
-  border-radius: 8px;
-  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.841);
-  border: 5px solid #eee8e8;
-  transition: transform 0.1s ease-in-out;
-
-}
-
-/* Estilos para el contenedor de la cuadrícula de imágenes */
+/* Cuadrícula de imágenes */
 .slide-images {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 43px;
   padding: 30px;
-  height: 14%;
-  margin: 0 auto;
+}
+
+.slide-images img {
+  width: 100%; /* o prueba con 90%, 80% según lo que necesites */
+  max-width: 320px; /* limita el ancho máximo */
+  height: 220px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.841);
+  border: 5px solid #eee8e8;
+  transition: transform 0.1s ease-in-out;
+  margin: 0 auto; /* centra horizontalmente */
 }
 
 .slide-images img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Contenedor oscuro */
-
+/* Contenedor de texto negro */
 .slide-overlay {
-    position: absolute;
-    top: 49%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 75%;
-    height: 50%;
-    min-height: 120px;
-    background: rgba(0, 0, 0, 0.836);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 1.5rem;
-    z-index: 1;
-    padding-bottom: 50px;
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  background: rgba(0, 0, 0, 0.836);
+  color: white;
+  padding: 20px 20px 50px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1.5rem;
+  z-index: 1;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
+/* Redes sociales */
 .redes {
-  height: 1.6rem;
   list-style: none;
-
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-
   margin: 0 auto;
+  height: 1.6rem;
   text-align: center;
-
 }
 
-/* Para un icono específico */
-.red-social-facebook  {
-color: #568bff;
-font-size: 30px;
- transition: transform 0.2s ease-in-out;
-
+/* Iconos */
+.red-social-facebook,
+.red-social-whatssap,
+.red-social-instagram {
+  font-size: 30px;
+  transition: transform 0.2s ease-in-out;
 }
 
-.red-social-facebook:hover {
-  transform: scale(1.5);
+.red-social-facebook {
+  color: #568bff;
 }
-
 .red-social-whatssap {
   color: #25d366;
-  font-size:30px;
-   transition: transform 0.2s ease-in-out;
 }
-
-.red-social-whatssap:hover {
-  transform: scale(1.5);
-}
-
 .red-social-instagram {
   color: orangered;
-  font-size:30px;
-   transition: transform 0.2s ease-in-out;
 }
 
+.red-social-facebook:hover,
+.red-social-whatssap:hover,
 .red-social-instagram:hover {
   transform: scale(1.5);
 }
 
+/* Número */
 .numero {
   list-style: none;
   display: flex;
   justify-content: center;
   gap: 1rem;
-  padding: 0;
+  padding: 2rem;
   margin: 0 auto;
   text-align: center;
-  padding: 2rem 
 }
 
-/* Estilos para el contenedor de los puntos (los botones) */
-
+/* Puntos de navegación */
 .dots {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-    z-index: 10;
-
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  z-index: 10;
 }
 
-/* Estilos para cada punto individual (el componente Boton) */
 .dot {
-    height: 30px;
-    width: 30px;
-    background-color: #bbb;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border: 1px solid #999;
+  height: 30px;
+  width: 30px;
+  background-color: #bbb;
+  border-radius: 50%;
+  border: 1px solid #999;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Estilos para el punto activo (amarillo) */
 .dot.active {
-    background-color: #FFD700;
-    border-color: #FFA500;
+  background-color: #FFD700;
+  border-color: #FFA500;
 }
-
-/* Efecto al pasar el mouse (hover) */
 .dot:hover {
-    background-color: #888;
+  background-color: #888;
 }
-
 .dot.active:hover {
-    background-color: #FFC400;
+  background-color: #FFC400;
 }
 
 .slide-text {
-  font-size: 0.999rem; 
+  font-size: 0.999rem;
+}
 
+/* Responsive: Tablets */
+@media (max-width: 992px) {
+  .slide-images {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 20px;
+  }
 
+  .slide-overlay {
+    width: 85%;
+    height: auto;
+    font-size: 1.2rem;
+    padding: 15px;
+  }
+
+  .dots {
+    transform: translateX(0);
+  }
+}
+
+/* Responsive: Móviles */
+@media (max-width: 576px) {
+  .container-Institution-Page {
+    padding: 1rem;
+  }
+
+  .slide {
+    width: 100%;
+    height: auto;
+  }
+
+  .slide-images {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .slide-images img {
+    width: 100%;
+    height: 180px;
+  }
+
+  .slide-overlay {
+    top: 55%;
+    width: 90%;
+    font-size: 1rem;
+    padding: 15px;
+    height: auto;
+  }
+
+  .numero {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .dot {
+    height: 20px;
+    width: 20px;
+  }
+
+  .red-social-facebook,
+  .red-social-whatssap,
+  .red-social-instagram {
+    font-size: 24px;
+  }
 }

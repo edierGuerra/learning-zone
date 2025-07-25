@@ -9,7 +9,7 @@ const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 type ProgressAPIResponse = {
     status: number;
     message: string;
-    data: TProgressCourses;
+    progress: TProgressCourses;
 };
 
 export default async function ProgressCoursesAPI(): Promise<TProgressCourses> {
@@ -24,12 +24,12 @@ export default async function ProgressCoursesAPI(): Promise<TProgressCourses> {
 
         // Validar estructura de respuesta
         const responseData = response.data as ProgressAPIResponse;
-        if (!responseData.data || !Array.isArray(responseData.data)) {
+        if (!responseData.progress || !Array.isArray(responseData.progress)) {
             throw new Error('Respuesta del servidor inválida: estructura de progreso incorrecta');
         }
 
-        console.log(responseData.data);
-        return responseData.data;
+        console.log(responseData.progress);
+        return responseData.progress;
 
     } catch (error) {
         console.error('Error en ProgressCourses:', error);

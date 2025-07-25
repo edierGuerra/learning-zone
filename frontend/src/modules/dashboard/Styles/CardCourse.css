@@ -1,7 +1,7 @@
 /* Contenedor principal de la tarjeta del curso */
 .container-card-course {
   width: 320px;
-  height: auto;
+  height: 386px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,9 +58,15 @@
   color: var(--color-text-light);
   max-width: 400px;
   font-size: 0.95rem;
-  margin-top: 0.5rem;
+  margin: 0.5rem 0 .3rem 0;
 }
 
+.icon-progress-course{
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  font-size: 26px;
+}
 /* ===== TABLET (>=768px) ===== */
 @media (min-width: 768px) {
   .container-card-course {

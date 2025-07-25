@@ -3,7 +3,7 @@ import { useUser } from "../auth/Hooks/useAuth";
 import { useCourseContext } from "../courses/hooks/useCourse";
 import UpdateInformation from "./Components/UpdateInformation";
 import './Styles/UserPage.css'
-import { useNavigationHandler } from "../../hooks/useNavigationHandler";
+import { useNavigationHandler, type AppRoutes } from "../../hooks/useNavigationHandler";
 import type { TCourse } from "../courses/types/Course";
 export default function UserPage() {
   const {student} = useUser()
@@ -13,7 +13,8 @@ export default function UserPage() {
 
   const handleClickCourseProgress =(id:TCourse['id'], nameRoute:string)=>{
       loadLessonsCourse(id) /* Ejecutar funcion del hook que trae las lecciones */
-      handleBtnNavigate(nameRoute)/* Redirijir al home del curso */
+      const route:AppRoutes | string = nameRoute
+      handleBtnNavigate(route)/* Redirijir al home del curso */
   }
 
 
@@ -34,10 +35,16 @@ export default function UserPage() {
         <div className="container-about-user">
             <section className="section-progress">
               <h2 className="title-progress">Proceso</h2>
+              {/* Agg una etiqueta bolteada que diga en progreso o completad */}
               {progressLessons.map((progress)=>(
-                  <p key={progress.id_course} onClick={()=>handleClickCourseProgress(progress.id_course,`/${progress.name_course}`)} className={`progress-course-${progress.name_course.toLowerCase()}`}>{progress.name_course} <span className="number-process">{progress.completed_lessons}/{progress.all_lessons}</span></p>
+                <>
+                  <p key={progress.id_course} onClick={()=>handleClickCourseProgress(progress.id_course,`/${progress.name_course}`)} className={`progress-course-${progress.name_course.toLowerCase()}`}>{progress.name_course} <span className="number-process">{progress.completed_lessons}/{progress.all_lessons}</span><span className="span-status-course" style={{'background':progress.status === 'completed'? '#59A9FF':'#FF7659'}}>{progress.status === 'completed'? 'Completo':'En progreso'}</span></p>
+
+                 
+                
+                </>
                 ))}
-              <p className="progress-main"> {progressTotal}</p>
+              <p className="progress-main">{progressTotal}</p>
             </section>
             <section className="section-info-user">
                 <UpdateInformation/>

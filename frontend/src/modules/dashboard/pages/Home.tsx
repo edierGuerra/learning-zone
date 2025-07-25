@@ -37,6 +37,7 @@ export default function Home() {
               name={course.name}
               description={course.description}
               image={image}
+              status= {course.status} 
             />
           );
         })}

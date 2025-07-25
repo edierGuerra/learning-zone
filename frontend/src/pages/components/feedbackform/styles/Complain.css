@@ -17,6 +17,18 @@
   min-height: 100vh;
   box-sizing: border-box;
 }
+.btn-back-complain{
+    position: absolute;
+    top: 14rem;
+    left: 2rem;
+    background-color: transparent;
+    border: none;
+    font-size: 46px;
+    color: var(--color-text-dark);
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s ease;
+}
 
 .complaint-header h1 {
   font-size: 2rem;

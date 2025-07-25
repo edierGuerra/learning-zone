@@ -1,4 +1,4 @@
-import "../components/styles/Complain.css"; 
+import "./styles/Complain.css"; 
 interface Props {
   onReset: () => void;
 }

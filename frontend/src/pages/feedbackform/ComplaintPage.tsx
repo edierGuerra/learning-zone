@@ -2,12 +2,18 @@ import { useState } from "react";
 import ComplaintForm from "../components/feedbackform/ComplaintForm";
 import SuccessMessage from "../components/feedbackform/SuccessMessage";
 import "../components/feedbackform/styles/Complain.css";
+import { useNavigationHandler } from "../../hooks/useNavigationHandler";
+import { IoArrowBackCircleSharp } from "react-icons/io5";
 
 const ComplaintPage = () => {
   const [sent, setSent] = useState(false);
+  const handleBtnNavigate = useNavigationHandler()
+
 
   return (
     <div className="complaint-page">
+      <button className="btn-back-complain" onClick={()=>handleBtnNavigate('/back')}>{<IoArrowBackCircleSharp/>}</button>
+
       <header className="complaint-header">
         <h1> Quejas y Observaciones</h1>
         <p>

@@ -361,7 +361,7 @@ class EvaluationService:
             score=ScoreResponseDetails(
                 old_score=round(old_score_final, 2),  # Redondear
                 new_score=round(new_score_final, 2),
-                date=datetime.now().strftime("%Y-%m-%d %I:%M %p"),
+                date=datetime.now().strftime("%H:%M:%S"),
             ),
         )
 

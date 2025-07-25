@@ -10,7 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models.student_model import Student
 from database.config_db import get_session
 from core.security import get_current_student
-from services.evaluation_service import EvaluationService, global_gemini_model
+from services.evaluation_service import EvaluationService
+import services.evaluation_service as eval_svc
 from repository.evaluation_repository import EvaluationRepository
 from repository.lesson_repository import LessonRepository  # Dependencia del servicio
 from schemas.evaluation_schemas import (
@@ -35,12 +36,13 @@ def get_evaluation_service(
     lesson_repo = LessonRepository(db)
     student_answer_repo = StudentAnswerRepository(db)
     # Pasa la instancia global de Gemini al servicio
-    if global_gemini_model is None:
+    gemini = eval_svc.global_gemini_model
+    if gemini is None:
         logger.warning(
             "Intentando inicializar EvaluationService sin el modelo Gemini. Las preguntas abiertas fallarán."
         )
     return EvaluationService(
-        evaluation_repo, lesson_repo, student_answer_repo, db, global_gemini_model
+        evaluation_repo, lesson_repo, student_answer_repo, db, gemini
     )
 
 

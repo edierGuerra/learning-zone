@@ -13,6 +13,7 @@ from database.config_db import Base, engine, async_session  # Base de datos
 import google.generativeai as genai
 from dotenv import load_dotenv
 from config import settings
+import services.evaluation_service as eval_svc
 
 
 # Modulos internos
@@ -55,6 +56,8 @@ else:
     logger.warning(
         "GEMINI_API_KEY no configurada. La evaluación de preguntas abiertas no funcionará."
     )
+
+eval_svc.global_gemini_model = gemini_model
 
 
 # --- Lifespan moderno (reemplaza on_event) ---

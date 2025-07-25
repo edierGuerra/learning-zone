@@ -17,31 +17,7 @@ const center: google.maps.LatLngLiteral = {
   lng: -75.95707
 };
 
-// Tema oscuro para el mapa
-const darkMapStyles: google.maps.MapTypeStyle[] = [
-  {
-    elementType: 'geometry',
-    stylers: [{ color: '#212121' }]
-  },
-  {
-    elementType: 'labels.text.stroke',
-    stylers: [{ color: '#212121' }]
-  },
-  {
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#757575' }]
-  },
-  {
-    featureType: 'water',
-    elementType: 'geometry',
-    stylers: [{ color: '#000000' }]
-  },
-  {
-    featureType: 'road',
-    elementType: 'geometry',
-    stylers: [{ color: '#383838' }]
-  }
-];
+
 
 export default function MyMap() {
   return (
@@ -50,8 +26,9 @@ export default function MyMap() {
         mapContainerStyle={containerStyle}
         center={center}
         zoom={13}
+        
         options={{
-          styles: darkMapStyles,
+          mapId:'25a12c939e4636a1cb17df7c',
           disableDefaultUI: true,  // Opcional: oculta los controles por defecto
           zoomControl: true        // Si quieres mantener el control de zoom
         }}

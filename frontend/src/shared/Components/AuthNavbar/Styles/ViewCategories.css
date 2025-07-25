@@ -9,7 +9,7 @@
   background-color: #f6f2eef1;
   padding: var(--spacing-md);
   border-radius: 16px;
-  z-index: 100;
+  z-index: 5900;
   width: 50vw;
   min-width: 180px;
   max-width: 320px;

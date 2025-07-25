@@ -31,12 +31,27 @@ class CourseRepository:
         """
         try:
             student = await student_repo.get_student_by_id(id_student)
+            courses = []
 
             if not student:
                 logger.warning("[WARNING] Error al validar el estudiante [WARNING]")
                 return []
-
-            return list(student.courses)
+            for course in student.courses:
+                query = await self.db.execute(
+                    select(CourseStudentAssociation).where(
+                        CourseStudentAssociation.course_id == course.id
+                    )
+                )
+                status_course = query.scalar_one_or_none()
+                courses.append(
+                    {
+                        "id": course.id,
+                        "name": course.name,
+                        "description": course.description,
+                        "status": status_course.status,
+                    }
+                )
+            return list(courses)
 
         except Exception:
             logger.warning("[ERROR] Error inesperado [ERROR]", exc_info=True)
@@ -72,3 +87,12 @@ class CourseRepository:
         result = await self.db.execute(stmt)
         status = result.scalar_one_or_none()
         return status if status else StateCourse.IN_PROGRESS
+
+    async def get_status_of_course(self, id_course: int):
+        query = await self.db.execute(
+            select(CourseStudentAssociation).where(
+                CourseStudentAssociation.course_id == id_course
+            )
+        )
+        status_course = query.scalar_one_or_none()
+        return status_course.status

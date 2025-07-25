@@ -20,16 +20,21 @@ from schemas.lesson_schemas import (
 from models.progress_model import StateProgress  # Para el enum
 from models.course_model import Course
 from repository.progress_repository import ProgressRepository
+from repository.course_repository import CourseRepository
 
 logger = logging.getLogger(__name__)
 
 
 class LessonService:
     def __init__(
-        self, lesson_repo: LessonRepository, progress_repo: ProgressRepository
+        self,
+        lesson_repo: LessonRepository,
+        progress_repo: ProgressRepository,
+        course_repo: CourseRepository,
     ) -> None:
         self.lesson_repo = lesson_repo
         self.progress_repo = progress_repo
+        self.course_repo = course_repo
 
     async def get_course_lessons_with_progress(
         self, course_id: int, student_id: int
@@ -111,10 +116,15 @@ class LessonService:
                 )
                 total = len(lessons_with_progress)
 
+                status_of_course = await self.course_repo.get_status_of_course(
+                    course.id
+                )
+
                 info_of_lessons_by_course.append(
                     {
                         "id_course": course.id,
                         "name_course": course.name,
+                        "status": status_of_course,
                         "completed_lessons": completed,
                         "all_lessons": total,
                     }

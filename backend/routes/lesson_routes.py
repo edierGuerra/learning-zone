@@ -19,6 +19,7 @@ from repository.lesson_repository import LessonRepository
 from services.lesson_service import LessonService
 from models.student_model import Student  # Necesario para el tipo "student" en Depends
 from repository.progress_repository import ProgressRepository
+from repository.course_repository import CourseRepository
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,8 @@ router = APIRouter(prefix="/api/v1/student/courses", tags=["Lessons"])
 def get_lesson_service(db: AsyncSession = Depends(get_session)) -> LessonService:
     lesson_repo = LessonRepository(db)
     progress_repo = ProgressRepository(db)  # instancias
-    return LessonService(lesson_repo, progress_repo)  # retorna ambos repos
+    course_repo = CourseRepository(db)  # instancias
+    return LessonService(lesson_repo, progress_repo, course_repo)  # retorna ambos repos
 
 
 @router.get("/{id_course}/lessons", status_code=status.HTTP_200_OK)
@@ -148,4 +150,10 @@ async def get_count_lessons_complete(
     ### Retorna:
     - Lista de diccionarios con las claves: `name_course`, `completed_lessons` y `all_lessons`.
     """
-    return await lesson_service.get_count_complete_lessons(id_student=student.id)
+    return {
+        "status": 200,
+        "message": "Progreso de las lecciones del estudiante obtenidas con exito",
+        "progress": await lesson_service.get_count_complete_lessons(
+            id_student=student.id
+        ),
+    }

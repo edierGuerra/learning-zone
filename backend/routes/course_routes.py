@@ -35,4 +35,4 @@ async def get_courses(
             detail="No se han podido obtener los cursos del estudiante",
         )
 
-    return {"message": "Exito al obtener los cursos", "data": courses}
+    return {"status": 200, "message": "Exito al obtener los cursos", "courses": courses}

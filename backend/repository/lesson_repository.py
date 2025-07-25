@@ -14,6 +14,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Modulos internos
+from models.course_student_model import CourseStudentAssociation
 from models.student_model import Student
 from models.lesson_model import Lesson
 from models.course_model import Course
@@ -163,10 +164,14 @@ class LessonRepository:
         """
 
         # Intentar actualizar la entrada existente
-        stmt = update(progress_model).where(
-            (progress_model.c.student_id == student_id)
-            & (progress_model.c.lesson_id == lesson_id)
-        ).values(state=status)  # <-- ESTA LÍNEA ES CLAVE
+        stmt = (
+            update(progress_model)
+            .where(
+                (progress_model.c.student_id == student_id)
+                & (progress_model.c.lesson_id == lesson_id)
+            )
+            .values(state=status)
+        )  # <-- ESTA LÍNEA ES CLAVE
         result = await self.db.execute(stmt)
 
         # Si no se actualizó ninguna fila, significa que no existia, entonces inserta
@@ -189,3 +194,12 @@ class LessonRepository:
         )
         result = await self.db.execute(stmt)
         return result.scalar_one_or_none()  # Retorna el estado (string) o None
+
+    async def get_status_of_course(self, id_course: int):
+        query = await self.db.execute(
+            select(CourseStudentAssociation).where(
+                CourseStudentAssociation.course_id == id_course
+            )
+        )
+        status_course = query.scalar_one_or_none()
+        return status_course

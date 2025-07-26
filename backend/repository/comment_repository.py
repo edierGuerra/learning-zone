@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Optional
 
 from schemas.comment_schemas import CommentCreate
 from models.comment_model import Comment
@@ -56,3 +57,65 @@ class CommentRepo:
         comments = result.scalars().all()
 
         return comments
+
+    async def update_comment(
+        self, id_comment: int, id_student: int, new_text: str
+    ) -> Optional[Comment]:
+        """Actualiza un comentario"""
+        try:
+            query = await self.db.execute(
+                select(Comment)
+                .where(Comment.id == id_comment, Comment.student_id == id_student)
+                .options(selectinload(Comment.student))
+            )
+
+            comment = query.scalar_one_or_none()
+
+            if comment:
+
+                comment.text = new_text
+
+                await self.db.commit()
+                await self.db.refresh(comment)
+                return comment
+
+            logger.warning(
+                f"[WARNING]: Comentario {id_comment} o Estudiante {id_student} invalido."
+            )
+            await self.db.rollback()
+            return None
+
+        except Exception as e:
+            logger.error(
+                f"[ERROR] No se pudo actualizar el comentario: {e}", exc_info=True
+            )
+            await self.db.rollback()
+            return None
+
+    async def delete_comment(self, id_comment: int, id_student: int):
+        """Permite eliminar un comentario dado su ID y el del estudiante que lo escribio"""
+        try:
+            query = await self.db.execute(
+                select(Comment)
+                .where(Comment.id == id_comment, Comment.student_id == id_student)
+                .options(selectinload(Comment.student))
+            )
+            comment = query.scalar_one_or_none()
+
+            if comment:
+                comment_deleted = comment
+                comment_deleted.text = "Comentario eliminado exitosamente."
+
+                await self.db.delete(comment)
+                await self.db.commit()
+
+                return comment_deleted
+
+            logger.warning(
+                f"[WARNING]: Comentario {id_comment} o Estudiante {id_student} invalido."
+            )
+            await self.db.rollback()
+            return None
+        except Exception:
+            logger.error("[ERROR]: No se pudo eliminar el comenario")
+            await self.db.rollback()

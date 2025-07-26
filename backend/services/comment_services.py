@@ -39,3 +39,31 @@ class CommentService:
                 }
             )
         return list_comments
+
+    async def delete_comment(self, id_comment: int, id_student: int):
+        """Permite eliminar un comentario en base a su id y el del estudiante"""
+        comment = await self.comment_repo.delete_comment(id_comment, id_student)
+        return {
+            "id": comment.id,
+            "course_id": comment.course_id,
+            "parent_id": comment.parent_id,
+            "name_student": comment.student.names,
+            "student_id": comment.student_id,
+            "timestamp": comment.timestamp,
+            "text": comment.text,
+        }
+
+    async def update_comment(self, id_comment: int, id_student: int, new_text: str):
+        """Permite actualizar un comentario"""
+        comment = await self.comment_repo.update_comment(
+            id_comment, id_student, new_text
+        )
+        return {
+            "id": comment.id,
+            "course_id": comment.course_id,
+            "parent_id": comment.parent_id,
+            "name_student": comment.student.names,
+            "student_id": comment.student_id,
+            "timestamp": comment.timestamp,
+            "text": comment.text,
+        }

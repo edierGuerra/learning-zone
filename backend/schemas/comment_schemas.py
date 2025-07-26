@@ -66,3 +66,7 @@ class CommentListResponse(BaseModel):
     list_ids_connects: List[int] = Field(
         ..., description="Lista de IDs de estudiantes conectados"
     )
+
+
+class CommentUpdate(BaseModel):
+    text: str

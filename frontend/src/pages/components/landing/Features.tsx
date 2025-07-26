@@ -9,6 +9,7 @@ import image2 from '../../assets/Features/image.png'
 import image3 from '../../assets/Features/descarga.jpeg'
 import image4 from '../../assets/Features/imageinstitution1.jpg'
 import image5 from '../../assets/Features/colab2.jpg'
+import image6 from '../../assets/Features/educacion-herramientas-infantiles-centradas-futuro-aprendizaje-equipos-educativos-redes-sociales-po_795881-30524.avif'
 
 export default function Features() {
 
@@ -34,13 +35,13 @@ useEffect(() => {
     <div data-aos="fade-up" className='section-feaures'>
       <section className='section-features-title'>
         <span className='title-features-smalll'>Caracteristicas</span>
-        <h2 className='title-features-big'>Que te haran Resaltar</h2>
+        <h2 className='title-features-big'>Que te harán resaltar</h2>
       </section>
       <span className='divid'></span>
 
       <section className='features'>
         <div className="feature-card">
-          <h2 className='title-feature'>prepara para mundo laboral - universitario</h2>
+          <h2 className='title-feature'>Prepara para mundo laboral - universitario</h2>
           <TiltedCard
           imageSrc={image1}
           altText="Kendrick Lamar - GNX Album Cover"
@@ -80,7 +81,7 @@ useEffect(() => {
           />
         </div>
         <div className="feature-card">
-          <h2 className='title-feature'>Organización de la información</h2>
+          <h2 className='title-feature'>Domina el manejo de datos e ideas</h2>
           <TiltedCard
           imageSrc={image3}
           altText="Kendrick Lamar - GNX Album Cover"
@@ -121,7 +122,7 @@ useEffect(() => {
           />
         </div>
         <div className="feature-card">
-          <h2 className='title-feature'>Trabajo colaborativo en documentos compartidos</h2>
+          <h2 className='title-feature'>Éxito garantizado trabajando de la mano con herramientas digitales</h2>
           <TiltedCard
           imageSrc={image5}
           altText="Kendrick Lamar - GNX Album Cover"
@@ -139,7 +140,28 @@ useEffect(() => {
             </p>
           }
           />
+          
         </div>
+        <div className="feature-card">
+          <h2 className='title-feature'>Transforma información en conocimiento útil</h2>
+          <TiltedCard
+          imageSrc={image6}
+          altText="Kendrick Lamar - GNX Album Cover"
+          containerHeight="300px"
+          containerWidth="300px"
+          imageHeight="300px"
+          imageWidth="300px"
+          rotateAmplitude={12}
+          scaleOnHover={1.1}
+          showMobileWarning={false}
+          displayOverlayContent={false}
+          overlayContent={
+            <p className="tilted-card-demo-text">
+              Kendrick Lamar - GNX
+            </p>
+          }
+            />
+            </div>
       </section>
 
     </div>

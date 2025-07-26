@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
 import './styles/Help.css';
-import FloatingArrow from './FloatingArrow';
 import HelpButtons from './HelpButtons';
 import Home from '../../../modules/dashboard/pages/Home';
+
+import image1 from '../../assets/Help/logo.png';
+import image2 from '../../assets/Help/cursos.png';
+import image3 from '../../assets/Help/notificaciones.png';
+import image4 from '../../assets/Help/perfil.png';
+import image5 from '../../assets/Help/ayuda.png';
+import image6 from '../../assets/Help/footer.png';
+import image7 from '../../assets/Help/cursos2.png';
 
 type HelpSlideProps = {
   index: number;
@@ -10,78 +16,43 @@ type HelpSlideProps = {
   onSkip: () => void;
 };
 
-// Hook para detectar si es móvil
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= breakpoint);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= breakpoint);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [breakpoint]);
-
-  return isMobile;
-}
-
 export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
-  const isMobile = useIsMobile();
-
   const helpSteps = [
     {
       text: "LOGO REPRESENTATIVO.",
-      arrow: isMobile
-        ? { top: "1.5vh", left: "44vw", rotation: "90deg", color: "black" }
-        : { top: "1vh", left: "2vw", rotation: "90deg", color: "white" },
+      image: image1,
     },
     {
       text: "APARTADO DE CATEGORÍA EN DONDE ESTÁN LOS CURSOS...",
-      arrow: isMobile
-        ? { top: "2vh", left: "25vw", rotation: "90deg" }
-        : { top: "1vh", left: "54vw", rotation: "90deg" },
+      image: image2,
     },
     {
       text: "APARTADO DE NOTIFICACIONES: INFORMACIÓN IMPORTANTE.",
-      arrow: isMobile
-        ? { top: "2vh", left: "55vw", rotation: "90deg" }
-        : { top: "1vh", left: "70vw", rotation: "90deg" },
+      image: image3,
     },
     {
       text: "PERFIL: PROGRESO DEL USUARIO Y EDICIÓN DE INFORMACIÓN.",
-      arrow: isMobile
-        ? { top: "2vh", left: "75vw", rotation: "90deg" }
-        : { top: "1vh", left: "79vw", rotation: "90deg" },
+      image: image4,
     },
     {
       text: "ÍCONO DE AYUDAS.",
-      arrow: isMobile
-        ? { top: "2vh", left: "41vw", rotation: "90deg" }
-        : { top: "1vh", left: "62vw", rotation: "90deg" },
+      image: image5,
     },
     {
       text: "FOOTER.",
-      arrow: isMobile
-        ? { top: "100vh", left: "30vw", rotation: "320deg" }
-        : { top: "85vh", left: "65vw", rotation: "320deg" },
+      image: image6,
     },
     {
       text: "WORD, EXCEL Y POWER POINT SON CURSOS Y ESTARÁN COMPUESTOS POR LECCIONES.",
-      arrow: isMobile
-        ? { top: "62vh", left: "78vw", rotation: "2deg" }
-        : { top: "60vh", left: "90vw", rotation: "2deg" },
+      image: image7,
     },
   ];
 
   const currentStep = helpSteps[index];
-  const arrow = {
-    ...currentStep.arrow,
-    zIndex: 9999,
-  };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '112vh' }}>
+      {/* Fondo borroso */}
       <div
         style={{
           position: 'absolute',
@@ -98,10 +69,23 @@ export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
         <Home />
       </div>
 
-      <div className="help-slide" style={{ position: 'relative', zIndex: 10 }}>
+      {/* Ayuda */}
+      <div className="help-slide" >
         <div className="help-overlay">
           <div className="help-box">
             <p className="help-text">{currentStep.text}</p>
+
+            {currentStep.image && (
+              <img
+                src={currentStep.image}
+                alt="Imagen explicativa"
+                className="help-image"
+
+              />
+            )}
+            <br></br>
+            
+
             <HelpButtons
               isLast={index === helpSteps.length - 1}
               onNext={() => setIndex(index + 1)}
@@ -109,7 +93,6 @@ export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
             />
           </div>
         </div>
-        <FloatingArrow {...arrow} />
       </div>
     </div>
   );

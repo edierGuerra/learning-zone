@@ -1,8 +1,7 @@
-
 .help-slide {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: 112vh;
 }
 
 .help-overlay {
@@ -16,49 +15,52 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
   box-sizing: border-box;
 }
 
 .help-box {
   background-color: #677035da;
-  padding: 2rem;
+  padding: 2rem 1.5rem; 
   border-radius: 12px;
   text-align: center;
   position: relative;
-  color: black;
   font-weight: bold;
   font-size: 1rem;
   width: 100%;
   max-width: 500px;
-  height: 40%;
   box-sizing: border-box;
 }
 
+
+
 .help-text {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: #ffffff;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-weight: bold;
-  max-width: 600px;
   line-height: 1.4;
 }
 
-.floating-arrow {
-  position: fixed;
-  pointer-events: none;
-  transition: top 0.3s ease, left 0.3s ease, transform 0.3s ease;
+.help-image {
+  width: 100%;
+  max-width: 270px;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  margin: 4rem;
+  object-fit: cover;
+   margin: 0 auto 1.9rem;
 }
 
 .help-buttons {
   display: flex;
-  gap: 1rem;
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 1rem; /* Puedes ajustar a 1.25rem si quieres más separación */
+  margin-top: 1rem;
   justify-content: center;
+  align-items: center;
 }
+
 
 .btn-help {
   background-color: #0bef17;
@@ -69,6 +71,8 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 200px;
 }
 
 .btn-help:hover {
@@ -87,43 +91,28 @@
   color: #000;
 }
 
-/* Estilos base para la flecha */
-.floating-arrow {
-  transition: all 0.3s ease;
-  position: absolute;
-  font-size: 4rem;
-  color: #ffffff;
-  z-index: 9999;
-  pointer-events: none;
-}
+/* ---------- Desktop (768px en adelante) ---------- */
+@media (min-width: 768px) {
+  .help-box {
+    padding: 2rem;
+   /*  height: 69%; */
+  }
 
-/* Posiciones por paso en pantallas grandes */
-.floating-arrow.step-0 { top: 0px; left: 28px; transform: rotate(90deg); }
-.floating-arrow.step-1 { top: 0px; left: 65%; transform: rotate(90deg); }
-.floating-arrow.step-2 { top: 2px; left: 77%; transform: rotate(90deg); }
-.floating-arrow.step-3 { top: 2px; left: 84%; transform: rotate(90deg); }
-.floating-arrow.step-4 { top: 0px; left: 71%; transform: rotate(90deg); }
-.floating-arrow.step-5 { top: 645px; left: 65%; transform: rotate(320deg); }
-.floating-arrow.step-6 { top: 400px; left: 90%; transform: rotate(2deg); }
+  .help-text {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+  }
 
-/* Teléfonos (pantallas <= 768px) */
-@media (max-width: 768px) {
-  .floating-arrow.step-0 { top: 8px; left: 5vw; transform: rotate(70deg); font-size: 3rem; }
-  .floating-arrow.step-1 { top: 10px; left: 50vw; transform: rotate(80deg); font-size: 3rem; }
-  .floating-arrow.step-2 { top: 15px; left: 60vw; transform: rotate(80deg); font-size: 3rem; }
-  .floating-arrow.step-3 { top: 15px; left: 70vw; transform: rotate(80deg); font-size: 3rem; }
-  .floating-arrow.step-4 { top: 15px; left: 55vw; transform: rotate(80deg); font-size: 3rem; }
-  .floating-arrow.step-5 { top: 82vh; left: 50vw; transform: rotate(300deg); font-size: 3rem; }
-  .floating-arrow.step-6 { top: 65vh; left: 80vw; transform: rotate(5deg); font-size: 3rem; }
-}
+  .help-buttons {
+    flex-direction: row;
+    gap: 1rem;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    margin-top: 0;
+  }
 
-/* Tablets (pantallas entre 768px y 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .floating-arrow.step-0 { top: 5px; left: 30px; transform: rotate(80deg); }
-  .floating-arrow.step-1 { top: 5px; left: 55%; transform: rotate(85deg); }
-  .floating-arrow.step-2 { top: 10px; left: 70%; transform: rotate(85deg); }
-  .floating-arrow.step-3 { top: 10px; left: 75%; transform: rotate(85deg); }
-  .floating-arrow.step-4 { top: 10px; left: 60%; transform: rotate(85deg); }
-  .floating-arrow.step-5 { top: 75vh; left: 55%; transform: rotate(310deg); }
-  .floating-arrow.step-6 { top: 60vh; left: 80%; transform: rotate(5deg); }
+  .btn-help {
+    width: auto;
+  }
 }

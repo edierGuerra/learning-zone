@@ -35,17 +35,20 @@ export default function StepsToRegister() {
             >
                 <Step>
                     <Magnet padding={50} disabled={false} magnetStrength={50}>
-                            <h3 className='description-step'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa unde pariatur quia? Et nam numquam optio consequuntur architecto nulla soluta iste quis, commodi ullam doloremque quibusdam distinctio libero exercitationem reiciendis.</h3>
+                            <h3 className='description-step'>Paso 1: Ingresa tu documento de identidad en el formulario de registro. Luego, completa los siguientes datos personales: nombre, apellido, correo electrónico y contraseña.
+                              Este paso crea tu perfil dentro del aplicativo.</h3>
                     </Magnet>
                 </Step>
                 <Step>
                     <Magnet padding={50} disabled={false} magnetStrength={50}>
-                            <h3 className='description-step'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa unde pariatur quia? Et nam numquam optio consequuntur architecto nulla soluta iste quis, commodi ullam doloremque quibusdam distinctio libero exercitationem reiciendis.</h3>
+                            <h3 className='description-step'> Paso 2:
+                              Recibirás un mensaje en tu correo electrónico con un enlace de verificación. Haz clic en el enlace para confirmar tu cuenta y habilitar el acceso.</h3>
                     </Magnet>
                 </Step>
                 <Step>
                     <Magnet padding={50} disabled={false} magnetStrength={50}>
-                            <h3 className='description-step'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa unde pariatur quia? Et nam numquam optio consequuntur architecto nulla soluta iste quis, commodi ullam doloremque quibusdam distinctio libero exercitationem reiciendis.</h3>
+                            <h3 className='description-step'>Paso 3:
+                              Una vez confirmada tu cuenta, serás redirigido automáticamente al inicio del aplicativo. Desde allí podrás comenzar tus cursos y explorar todos los contenidos disponibles.</h3>
                     </Magnet>
                 </Step>
 

@@ -15,6 +15,19 @@ export type TCommentSend = Omit<TComment, 'id' | 'studentId' | 'nameStudent' | '
   token: string;
 };
 
+//Comentario a eliminar
+
+export type TDeleteComment ={
+  idComment:TComment['id'],
+  token:string
+}
+export type TUpdateComment ={
+  idComment:TComment['id'],
+  token:string,
+  text:TComment['text']
+}
+
+
 
 export type TStudentAllComents ={
     id: TStudent['id'];

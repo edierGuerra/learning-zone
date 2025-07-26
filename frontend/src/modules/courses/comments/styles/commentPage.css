@@ -38,13 +38,13 @@
 
 /* Sección de comentarios (lado izquierdo) */
 .comments.excel {
-  background: rgba(13, 158, 52, 0.08);
+  background: rgb(254, 254, 255);
 }
 .comments.word {
-  background: rgba(0, 122, 255, 0.08);
+  background: rgb(254, 254, 255);
 }
 .comments.powerpoint {
-  background: rgba(236, 90, 0, 0.08);
+  background: rgb(254, 254, 255);
 }
 
 /* Sección de usuarios (lado derecho) */
@@ -100,6 +100,8 @@
   scrollbar-color: var(--color-primary-blue, #e5e7eb);
   border-radius: 12px;
   padding: 1rem;
+
+  
 }
 
 /* Scrollbar para Chrome, Edge y Safari */
@@ -174,6 +176,7 @@
 .comment-form {
   display: flex;
   gap: 10px;
+
 }
 
 .input {

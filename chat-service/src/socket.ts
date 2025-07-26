@@ -3,7 +3,7 @@ import { Server, Socket } from 'socket.io';
 import axios from 'axios';
 import http from 'http';
 import dotenv from 'dotenv';
-import { TComment, TCommentSend } from './types';
+import { TComment, TCommentDelete, TCommentSend, TUpdateComment } from './types';
 
 dotenv.config();
 
@@ -116,8 +116,8 @@ export const registerSocketHandlers = (io: Server) => {
           text: res.data.comment.text,
         };
         const data = res.data.list_ids_connects;
-        io.emit('listStudentsConnects', data);
         io.emit('newComment', comment);
+        io.emit('listStudentsConnects', data);
         
         // Enviar confirmación al usuario que envió el comentario
         socket.emit('commentSuccess', { message: 'Comentario enviado exitosamente' });
@@ -131,6 +131,96 @@ export const registerSocketHandlers = (io: Server) => {
         });
       }
     });
+    
+    socket.on('deleteComment', async (deleteComment:TCommentDelete) => {
+      const token = deleteComment.token;
+      if (!token) {
+        console.warn('⚠️ Comentario rechazado: sin token.');
+        socket.emit('commentError', { message: 'No tienes permisos para comentar' });
+        return;
+      }
+
+      try {
+        const res = await api.put<TNewCommentResponse>(
+          `/api/v1/comments?id_comment=${deleteComment.idComment}`,
+    
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        const comment: TComment = {
+          id: res.data.comment.id,
+          courseId: res.data.comment.course_id,
+          parentId: res.data.comment.parent_id,
+          nameStudent: res.data.comment.name_student,
+          studentId: res.data.comment.student_id,
+          timestamp: res.data.comment.timestamp,
+          text: res.data.comment.text,
+        };
+        const data = res.data.list_ids_connects;
+        io.emit('commentUpdated', comment);
+        io.emit('listStudentsConnects', data);
+        
+        // Enviar confirmación al usuario que envió el comentario
+        socket.emit('commentSuccess', { message: 'Comentario Eliminado exitosamente' });
+        
+      } catch (err: any) {
+        console.error('❌ Error Eliminando comentario:', err.message);
+        // Enviar error al cliente
+        socket.emit('commentError', { 
+          message: 'Error al Eliminar el comentario',
+          details: err.response?.data?.detail || err.message 
+        });
+      }
+    });
+    socket.on('updateComment', async (updateComment:TUpdateComment) => {
+      const token = updateComment.token;
+      if (!token) {
+        console.warn('⚠️ Comentario rechazado: sin token.');
+        socket.emit('commentError', { message: 'No tienes permisos para comentar' });
+        return;
+      }
+
+      try {
+        const res = await api.put<TNewCommentResponse>(
+          `/api/v1/comments?id_comment=${updateComment.idComment}`,
+          {
+            text:updateComment.text
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        const comment: TComment = {
+          id: res.data.comment.id,
+          courseId: res.data.comment.course_id,
+          parentId: res.data.comment.parent_id,
+          nameStudent: res.data.comment.name_student,
+          studentId: res.data.comment.student_id,
+          timestamp: res.data.comment.timestamp,
+          text: res.data.comment.text,
+        };
+
+        io.emit('commentUpdated', comment);
+        
+        // ✅ Emitir la lista actualizada de estudiantes conectados
+        io.emit('listStudentsConnects', res.data.list_ids_connects);
+        
+        // ✅ Mensaje correcto para eliminación
+        socket.emit('commentSuccess', { message: 'Comentario actualizado exitosamente' });
+        
+      } catch (err: any) {
+        console.error('❌ Error actualizado comentario:', err.message);
+        // Enviar error al cliente
+        socket.emit('commentError', { 
+          message: 'Error al actualizado el comentario',
+          details: err.response?.data?.detail || err.message 
+        });
+      }
+    });
+    
 
     socket.on('disconnect', () => {
       console.log('🔴 Cliente desconectado del socket');

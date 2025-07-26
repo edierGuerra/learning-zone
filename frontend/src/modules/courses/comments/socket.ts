@@ -13,8 +13,6 @@ export const getSocket = () => {
 
     // Log de conexión y errores
     socket.on('connect', () => console.log('✅ Socket conectado'));
-    socket.on('connect_error', (err) => console.error('❌ Error de conexión:', err.message));
-    socket.on('disconnect', (reason) => console.warn('⚠️ Desconectado:', reason));
   }
   return socket;
 };

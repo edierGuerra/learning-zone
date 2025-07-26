@@ -12,6 +12,22 @@ export type TComment = {
 export type TCommentSend = Omit<TComment, 'id' | 'studentId' | 'nameStudent' | 'timestamp'> & {
   token: string;
 };
+export type TCommentDelete ={
+  idComment:TComment['id'],
+  token:string
+}
+export type TUpdateComment ={
+  idComment:TComment['id'],
+  token:string,
+  text:TComment['text']
+}
+export type TUpdateDelete ={
+  idComment:TComment['id'],
+  token:string
+  text:TComment['text']
+}
+
+
 export type TIStudentsConnect ={
     id:number
 }

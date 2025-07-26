@@ -55,14 +55,14 @@ export default function LoginAndRegister({opcAuth}:TPropsLoginAndregister) {
           <section className={`section-information-login ${clickOptionAuth ? 'active' : 'inactive'}`}>
              <div className="container-info-login">
               <h2>Que gusto tenerte de nuevo!</h2>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid numquam possimus est eveniet ex expedita</p>
+              <p>Cada paso que das hoy te acerca a tus sueños. ¡Sigue adelante!</p>
             </div>
           </section>
           {/* Sección de registro: activa si clickOptionAuth es false, inactiva si es true */}
           <section className={`section-information-register ${!clickOptionAuth ? 'active' : 'inactive'}`}>
             <div className="container-info-register">
               <h2>Que esperas para registrate?</h2>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid numquam possimus est eveniet ex expedita</p>
+              <p>El conocimiento te transforma. Haz parte del cambio.</p>
             </div>
 
           </section>

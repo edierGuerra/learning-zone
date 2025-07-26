@@ -5,6 +5,11 @@ import imgCharif from '../../../assets/cjeTect/img-charif.jpg';
 import imgEdier from '../../../assets/cjeTect/img-edier.jpg';
 import imgCamilo from '../../../assets/cjeTect/img-camilo.jpg';
 import imgJunior from '../../../assets/cjeTect/img-junior.jpg';
+import imageinstitution1 from '../../../assets/juanTamayo/PHOTO-2022-10-04-10-30-36.jpg'
+import imageinstitution2 from '../../../assets/juanTamayo/Captura de pantalla 2025-07-26 001752.png'
+import imageinstitution3 from '../../../assets/juanTamayo/ier.jpg'
+import imageinstitution4 from '../../../assets/juanTamayo/iru.jpg'
+
 //imagenes ier
 
 import '../../../../node_modules/aos/dist/aos.css'
@@ -36,10 +41,10 @@ const itemsCje = [
   { image: imgJunior, text: `Junior - ${partsDevelopment.Frontend}` },
 ];
 const itemsIer = [
-  { image: imgCharif, text:`Charif - ${partsDevelopment.Frontend}`},
-  { image: imgEdier, text: `Edier - ${partsDevelopment.Backend}` },
-  { image: imgCamilo, text: `Camilo - ${partsDevelopment.Backend}` },
-  { image: imgJunior, text: `Junior - ${partsDevelopment.Frontend}` },
+  { image: imageinstitution1 , text:`Mochilas llenas de sueños.`},
+  { image: imageinstitution2, text: `Educación que inspira sonrisas. `},
+  { image: imageinstitution3, text: `Aquí empieza el futuro. `},
+  { image: imageinstitution4, text: `Educación con alegría.` },
 ];
 
   return (

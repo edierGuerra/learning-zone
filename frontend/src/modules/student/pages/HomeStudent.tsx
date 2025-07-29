@@ -1,14 +1,14 @@
 import { useUser } from '../../auth/Hooks/useAuth';
-import CardCourse from '../Components/CardCourse';
+import CardCourse from '../components/CardCourse';
 import word from '../../../assets/learningZone/img-word-course.png';
 import powerpoint from '../../../assets/learningZone/img-powerpoint-course.png';
 import excel from '../../../assets/learningZone/img-excel-course.png';
 
-import '../Styles/Home.css';
+import '../Styles/HomeStudent.css';
 import { useCourseContext } from '../../courses/hooks/useCourse';
 
-export default function Home() {
-  const { student } = useUser();
+export default function HomeStudent() {
+  const { user } =useUser();
   const { courses } = useCourseContext();
 
   // Relación entre nombre y su imagen correspondiente
@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <div className="container-home-user">
-      <h1 className="home-title">Bienvenid@ {student?.name}</h1>
+      <h1 className="home-title">Bienvenid@ {user?.name}</h1>
       <p className='home-paragraph'>Selecciona un curso para comenzar</p>
 
       <div className="container-courses">

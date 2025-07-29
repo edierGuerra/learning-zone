@@ -1,104 +1,121 @@
 import React, { useEffect, useState } from "react";
 import { UserContext } from "./userContext";
-import { authStorage } from "../../../shared/Utils/authStorage"; // Módulo que gestiona localStorage (guardar y obtener token/user)
-import type { TStudentProfile } from "../../types/User";
-import { useNavigationHandler } from "../../../hooks/useNavigationHandler"; // Hook personalizado para manejar navegación sin usar useNavigate directo
+import { authStorage } from "../../../shared/Utils/authStorage";
+import type { TUser, UserRole } from "../../types/User";
+import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import { GetStudentAPI } from "../Services/GetInformationStudent.server";
 import GetNotificationsAPI from "../../notifications/services/GetNotifications.server";
 import type { TNotifications } from "../../notifications/types/Notifications";
 import toast from "react-hot-toast";
 
-// Props que recibe el Provider: los hijos que van dentro del contexto
+// Props que recibe el Provider
 type Props = {
   children: React.ReactNode;
 };
 
-// Provider principal que controla todo lo relacionado con la sesión del estudiante
-export const StudentProvider = ({ children }: Props) => {
-  const handleBtnNavigate = useNavigationHandler(); // Instancia del hook para redirigir
+// Provider principal que controla la sesión de cualquier usuario (estudiante o maestro)
+export const UserProvider = ({ children }: Props) => {
+  const handleBtnNavigate = useNavigationHandler();
 
-  // Estado para guardar el token y el usuario actual
+  // Estado para el usuario actual (estudiante o maestro)
+  const [user, setUser] = useState<TUser | null>(null);
+  const [role, setRole] = useState<UserRole | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [student, setStudent] = useState<TStudentProfile | null>(null);
   const [notifications, setNotifications] = useState<TNotifications>([]);
-
-  // Estado para confirmar que ya se cargó la sesión al iniciar la app
   const [isReady, setIsReady] = useState(false);
 
-  // Carga inicial: verifica si hay token y usuario guardados en localStorage
+  // Carga inicial: verifica si hay sesión guardada
   useEffect(() => {
-    const storedToken = authStorage.getToken();  // Trae el token guardado si existe
-    const storedStudent = authStorage.getUser(); // Trae el usuario guardado si existe
-    const storedNotifications = authStorage.getNotifications(); // Trae el usuario guardado si existe
-    if(storedToken && !storedStudent){
-      // SI existe un token ejeuctar el services que envia el token al backen y obtiene la info del estudiante
-      const infoStudent = async ()=>{
-        // Accediendo al backend y obteniendo la info
-        const dataStudent = await GetStudentAPI();
-        // Conversion de sintaxis
-        const dataStudentLocalStorage:TStudentProfile ={
-          id:dataStudent.user_data.id,
-          numIdentification:dataStudent.user_data.identification_number,
-          name:dataStudent.user_data.names,
-          lastNames:dataStudent.user_data.last_names,
-          email: dataStudent.user_data.email,
-          prefixProfile: dataStudent.prefix_profile
+    const storedToken = authStorage.getToken();
+    const storedUser = authStorage.getUser();
+    const storedNotifications = authStorage.getNotifications();
+
+    // Si hay token pero no usuario, obtener información del backend
+    if (storedToken && !storedUser) {
+      const loadUserInfo = async () => {
+        try {
+          // Por ahora solo cargamos estudiantes, después agregaremos maestros
+          const dataStudent = await GetStudentAPI();
+          
+          // Convertir datos del estudiante
+          const userData: TUser = {
+            id: dataStudent.user_data.id,
+            numIdentification: dataStudent.user_data.identification_number,
+            name: dataStudent.user_data.names,
+            lastNames: dataStudent.user_data.last_names,
+            email: dataStudent.user_data.email,
+            prefixProfile: dataStudent.prefix_profile
+          };
+
+          // Cargar notificaciones
+          const dataNotifications = await GetNotificationsAPI();
+          
+          // Guardar en localStorage
+          authStorage.setUser(userData);
+          authStorage.setNotifications(dataNotifications);
+          
+          // Actualizar estado
+          setUser(userData);
+          setRole('student');
+          setNotifications(dataNotifications);
+        } catch (error) {
+          console.error('Error cargando información del usuario:', error);
         }
-
-        const dataNotifications = await GetNotificationsAPI();
-        authStorage.setNotifications(dataNotifications)
-        setNotifications(dataNotifications)
-
-        // Almacenando la informacion del estudiante en el localStorage
-        authStorage.setStudent(dataStudentLocalStorage)
-        setStudent(dataStudentLocalStorage)
-      }
-      infoStudent()
+      };
+      
+      loadUserInfo();
     }
-    // Recuperar la informacion del usuario
-    // Si hay sesión guardada, se setean los valores
-    if (storedStudent && storedToken && storedNotifications) {
-      setStudent(storedStudent);
+
+    // Si hay sesión guardada, restaurar
+    if (storedUser && storedToken && storedNotifications) {
+      setUser(storedUser);
       setToken(storedToken);
-      setNotifications(storedNotifications)
+      setNotifications(storedNotifications);
     }
 
-    // Marca que ya terminó la validación de la sesión inicial
     setIsReady(true);
   }, []);
 
-  // Booleano que indica si el usuario está logueado (se basa en si hay un usuario en estado)
-  const isLoggedIn =  !!student;
+  // Verificar si el usuario está logueado
+  const isLoggedIn = !!user && !!role;
 
-
-  // Función que cierra sesión: limpia todo lo guardado y redirige al inicio
+  // Función que cierra sesión
   const logout = () => {
-    authStorage.removeToken();     // Elimina token del almacenamiento
-    authStorage.removeUser();      // Elimina usuario del almacenamiento
-    setStudent(null);              // Limpia usuario en estado global
-    setToken(null);                // Limpia token en estado global
-    toast.success('seccion cerrada')
-    authStorage.removeNotifications()
-    setNotifications([])
-    handleBtnNavigate("/");        // Redirige al inicio (se podrias usar replace si deseas evitar retroceder),
-    authStorage.removeCourses()
+    authStorage.removeToken();
+    authStorage.removeUser();
+    authStorage.removeNotifications();
+    authStorage.removeCourses();
+    
+    setUser(null);
+    setRole(null);
+    setToken(null);
+    setNotifications([]);
+    
+    toast.success('Sesión cerrada');
+    handleBtnNavigate("/");
   };
-  const numberNotifications:number = notifications.length
+
+  const numberNotifications = notifications.length;
 
   return (
-    // El Provider envuelve toda la app y expone el contexto con los valores globales
-    <UserContext.Provider value={{  student,
-    token,
-    logout,
-    isLoggedIn,
-    isReady,
-    setStudent,
-    setToken,
-    setNotifications,
-    notifications,
-    numberNotifications }}>
-      {/* Solo renderiza la app si ya se hizo la validación inicial de sesión */}
+    <UserContext.Provider value={{
+      user,
+      role,
+      token,
+      logout,
+      isLoggedIn,
+      isReady,
+      setUser,
+      setToken,
+      setRole,
+      setNotifications,
+      notifications,
+      numberNotifications
+    }}>
       {isReady ? children : null}
     </UserContext.Provider>
   );
 };
+
+// Mantener el nombre anterior para compatibilidad
+export const StudentProvider = UserProvider;

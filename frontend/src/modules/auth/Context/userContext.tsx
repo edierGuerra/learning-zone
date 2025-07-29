@@ -1,4 +1,6 @@
 import { createContext } from "react";
-import type { StudentContextType } from "../../types/User";
+// ✅ CAMBIO: Importar tipo unificado en lugar de solo estudiantes
+import type { TUserContext } from "../../types/User";
 
-export const UserContext = createContext<StudentContextType>({} as StudentContextType);
+// ✅ NUEVO: Contexto unificado que maneja cualquier usuario
+export const UserContext = createContext<TUserContext>({} as TUserContext);

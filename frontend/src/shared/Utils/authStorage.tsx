@@ -3,7 +3,7 @@
 import type { TComment, TStudentAllComents } from "../../modules/courses/comments/types";
 import type { TContent, TCourses, TEvaluation, TLesson, TLessons } from "../../modules/courses/types/Course";
 import type { TNotifications } from "../../modules/notifications/types/Notifications";
-import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken } from "../../modules/types/User";
+import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken, TUser } from "../../modules/types/User";
 
 // Objeto que encapsula el acceso al almacenamiento local (localStorage)
 export const authStorage = {
@@ -20,15 +20,16 @@ export const authStorage = {
     }
   },
   removeCookieConsentGiven:()=>localStorage.removeItem('CookieConsentGiven'),
-  // Guarda el objeto de usuario en localStorage bajo la clave "student"
-  setStudent: (student: TStudentProfile) =>
-    localStorage.setItem("student", JSON.stringify(student)),
 
-  // Recupera el objeto de usuario desde localStorage
-  getUser: (): TStudentProfile | null => {
+  // Guarda el usuario unificado (estudiante o maestro)
+  setUser: (user: TUser) =>
+    localStorage.setItem("user", JSON.stringify(user)),
+
+  // Recupera el usuario unificado desde localStorage
+  getUser: (): TUser | null => {
     try {
-      const raw = localStorage.getItem("student");
-      return raw ? (JSON.parse(raw) as TStudentProfile) : null;
+      const raw = localStorage.getItem("user");
+      return raw ? (JSON.parse(raw) as TUser) : null;
     } catch (e) {
       console.error("El JSON está mal formado :", e);
       return null;
@@ -36,7 +37,8 @@ export const authStorage = {
   },
 
   // Elimina el usuario del localStorage
-  removeUser: () => localStorage.removeItem("student"),
+  removeUser: () => localStorage.removeItem("user"),
+
 
   setAllStudents:(allStudents:TStudentAllComents[])=>
     localStorage.setItem('allStudents',JSON.stringify(allStudents)),

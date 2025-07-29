@@ -1,18 +1,17 @@
 /* Hook que agrupa la lógica para actualizar datos del estudiante */
 
 import React, { useState, useEffect } from 'react';
-import type { TStudent, TStudentProfile } from '../../types/User';
 import { authStorage } from '../../../shared/Utils/authStorage';
-import UpdateStudentAPI from '../services/UpdateStudent.server';
 import { GetStudentAPI } from '../../auth/Services/GetInformationStudent.server';
 import { useUser } from '../../auth/Hooks/useAuth';
 import toast from 'react-hot-toast';
+import UpdateStudentAPI from '../services/UpdateStudent.server';
 
-export default function useFormUpdate() {
-  const {setStudent}= useUser()
+export default function useFormUpdateStudent() {
+  const {setUser}= useUser()
   // --- Tipos usados para validación ---
   type UpdateForm = {
-    name: TStudent['name'];
+    name: TStuden['name'];
     lastNames: TStudent['lastNames'];
   };
 

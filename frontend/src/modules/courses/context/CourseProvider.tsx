@@ -23,7 +23,7 @@ import {
 } from "../types/Course";
 import toast from "react-hot-toast";
 import GetCoursesAPI from "../services/GetCourses";
-import ProgressCoursesAPI from "../../user/services/GetProgressCourses.server";
+import ProgressCoursesAPI from "../../student/services/GetProgressCourses.server";
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto

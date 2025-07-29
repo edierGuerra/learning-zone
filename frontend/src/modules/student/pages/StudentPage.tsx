@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { useUser } from "../auth/Hooks/useAuth";
-import { useCourseContext } from "../courses/hooks/useCourse";
-import UpdateInformation from "./Components/UpdateInformation";
-import './Styles/UserPage.css'
-import { useNavigationHandler, type AppRoutes } from "../../hooks/useNavigationHandler";
-import type { TCourse } from "../courses/types/Course";
-export default function UserPage() {
+import './Styles/StudentPage.css'
+import { useNavigationHandler, type AppRoutes } from "../../../hooks/useNavigationHandler";
+import type { TCourse } from "../../courses/types/Course";
+import UpdateInformation from "../components/UpdateInformation";
+import { useUser } from "../../auth/Hooks/useAuth";
+import { useCourseContext } from "../../courses/hooks/useCourse";
+export default function StudentPage() {
   const {student} = useUser()
   const {loadLessonsCourse,loadProgressLessons, progressLessons} = useCourseContext()
   /* Agrehar en el contexto el loadCertificates */

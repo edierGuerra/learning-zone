@@ -2,10 +2,8 @@
 
 import { Routes, Route } from "react-router-dom";
 import AuthLayout from "../shared/Layouts/AuthLayout";
-import Home from "../modules/dashboard/pages/Home";
 
 import Help from "../pages/Help";
-import UserPage from "../modules/user/UserPage";
 import PrivateRouters from "./PrivateRouters";
 import { sharedRoutes } from "./SharedRouters";
 import WordHomePage from "../modules/courses/word/WordHomePage";
@@ -15,6 +13,7 @@ import LandingPage from "../pages/LandingPage";
 import CommentPageWrapper from "../modules/courses/comments/CommentPageWrapper";
 import ContentPage from "../modules/courses/components/ContentPage";
 import EvaluationPage from "../modules/courses/components/EvaluationPage";
+import StudentPage from "../modules/student/pages/StudentPage";
 
 
 export default function RoutersPrivates() {
@@ -22,8 +21,7 @@ export default function RoutersPrivates() {
         <Routes>
           <Route element={<PrivateRouters/>}>
               <Route element={<AuthLayout/>}>
-                  <Route path="/home" element={<Home/>}/>
-                  <Route path="/userPage" element={<UserPage/>}/>
+                  <Route path="/home" element={<StudentPage/>}/>
                   <Route path="/help" element={<Help/>}/>
                   {/* Rutas de los cursos */}
                   <Route path="/word" element={<WordHomePage/>}/>

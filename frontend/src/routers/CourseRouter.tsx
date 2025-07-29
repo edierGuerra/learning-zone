@@ -8,10 +8,10 @@ import PowerPointHomePage from "../modules/courses/powerpoint/PowerPointHomePage
  * Permite añadir nuevos cursos en el futuro utilizando la misma ruta base.
  */
 export default function CourseRouter() {
-  const { courseSlug } = useParams<{ courseSlug: string }>();
-  const slug = courseSlug?.toLowerCase();
+  const { nameCourse } = useParams<{ nameCourse: string }>();
+  const name = nameCourse?.toLowerCase();
 
-  switch (slug) {
+  switch (name) {
     case "word":
       return <WordHomePage />;
     case "excel":

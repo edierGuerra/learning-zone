@@ -6,7 +6,7 @@ import UpdateInformation from "../components/UpdateInformation";
 import { useUser } from "../../auth/Hooks/useAuth";
 import { useCourseContext } from "../../courses/hooks/useCourse";
 export default function StudentPage() {
-  const {student} = useUser()
+  const {user} = useUser()
   const {loadLessonsCourse,loadProgressLessons, progressLessons} = useCourseContext()
   /* Agrehar en el contexto el loadCertificates */
   const handleBtnNavigate = useNavigationHandler()
@@ -32,7 +32,7 @@ export default function StudentPage() {
   return (
     /* Reemplazar campos por lo del backend */
     <div className="container-profile-user">
-        <h2 className="title-profile-user">Que te trae por aqui {student?.name}</h2>
+        <h2 className="title-profile-user">Que te trae por aqui {user?.name}</h2>
         <div className="container-about-user">
             <section className="section-progress">
               <h2 className="title-progress">Proceso</h2>

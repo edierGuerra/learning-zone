@@ -1,12 +1,15 @@
+/* agregar consulta al backend del rol y retornarlo */
 import React, { useEffect, useState } from "react";
 import { UserContext } from "./userContext";
 import { authStorage } from "../../../shared/Utils/authStorage";
-import type { TUser, UserRole } from "../../types/User";
+import type { TUser, TUserRole } from "../../types/User";
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import { GetStudentAPI } from "../Services/GetInformationStudent.server";
 import GetNotificationsAPI from "../../notifications/services/GetNotifications.server";
 import type { TNotifications } from "../../notifications/types/Notifications";
 import toast from "react-hot-toast";
+import { GetRoleUserAPI } from "../Services/GetRoleUser.server";
+import { GetTeacherAPI } from "../Services/GetInformationTeacher.server";
 
 // Props que recibe el Provider
 type Props = {
@@ -19,7 +22,7 @@ export const UserProvider = ({ children }: Props) => {
 
   // Estado para el usuario actual (estudiante o maestro)
   const [user, setUser] = useState<TUser | null>(null);
-  const [role, setRole] = useState<UserRole | null>(null);
+  const [role, setRole] = useState<TUserRole | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<TNotifications>([]);
   const [isReady, setIsReady] = useState(false);
@@ -29,34 +32,59 @@ export const UserProvider = ({ children }: Props) => {
     const storedToken = authStorage.getToken();
     const storedUser = authStorage.getUser();
     const storedNotifications = authStorage.getNotifications();
+    const storedRole = authStorage.getRole();
 
     // Si hay token pero no usuario, obtener información del backend
-    if (storedToken && !storedUser) {
+    if (storedToken && !storedUser && !storedRole) {
       const loadUserInfo = async () => {
         try {
-          // Por ahora solo cargamos estudiantes, después agregaremos maestros
-          const dataStudent = await GetStudentAPI();
-          
-          // Convertir datos del estudiante
-          const userData: TUser = {
-            id: dataStudent.user_data.id,
-            numIdentification: dataStudent.user_data.identification_number,
-            name: dataStudent.user_data.names,
-            lastNames: dataStudent.user_data.last_names,
-            email: dataStudent.user_data.email,
-            prefixProfile: dataStudent.prefix_profile
-          };
+          /* Solicitar el rol al backend en enviando el token  */
+          const roleUser = await GetRoleUserAPI();
+          setRole(roleUser);
+          authStorage.setRole(roleUser)
+
+          if (roleUser === 'student') {
+            const dataStudent = await GetStudentAPI();
+
+            // Convertir datos del estudiante a TUser
+            const userData: TUser = {
+                id: dataStudent.id,
+                numIdentification: dataStudent.identification_number,
+                name: dataStudent.names,
+                lastNames: dataStudent.last_names,
+                email: dataStudent.email,
+                prefixProfile: dataStudent.prefix_profile
+            };
+
+            // Guardar en localStorage y contexto
+            authStorage.setUser(userData);
+            setUser(userData);
+        }else{
+            const dataTeacher = await GetTeacherAPI();
+            
+            // Convertir datos del estudiante
+            const userData: TUser = {
+              id: dataTeacher.id,
+              numIdentification:dataTeacher.identification_number,
+              name:dataTeacher.names,
+              lastNames:dataTeacher.last_names,
+              email:dataTeacher.email,
+              specialization:dataTeacher.specialization,
+              prefixProfile:dataTeacher.prefix_profile
+            };
+            // Guardar en localStorage
+            authStorage.setUser(userData);
+            setUser(userData);
+
+          }
+
 
           // Cargar notificaciones
           const dataNotifications = await GetNotificationsAPI();
           
-          // Guardar en localStorage
-          authStorage.setUser(userData);
           authStorage.setNotifications(dataNotifications);
           
           // Actualizar estado
-          setUser(userData);
-          setRole('student');
           setNotifications(dataNotifications);
         } catch (error) {
           console.error('Error cargando información del usuario:', error);
@@ -67,10 +95,11 @@ export const UserProvider = ({ children }: Props) => {
     }
 
     // Si hay sesión guardada, restaurar
-    if (storedUser && storedToken && storedNotifications) {
+    if (storedUser && storedToken && storedNotifications && storedRole) {
       setUser(storedUser);
       setToken(storedToken);
       setNotifications(storedNotifications);
+      setRole(storedRole)
     }
 
     setIsReady(true);

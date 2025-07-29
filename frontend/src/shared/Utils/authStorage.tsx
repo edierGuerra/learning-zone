@@ -3,7 +3,7 @@
 import type { TComment, TStudentAllComents } from "../../modules/courses/comments/types";
 import type { TContent, TCourses, TEvaluation, TLesson, TLessons } from "../../modules/courses/types/Course";
 import type { TNotifications } from "../../modules/notifications/types/Notifications";
-import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken, TUser } from "../../modules/types/User";
+import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken, TUser, TUserRole } from "../../modules/types/User";
 
 // Objeto que encapsula el acceso al almacenamiento local (localStorage)
 export const authStorage = {
@@ -20,7 +20,11 @@ export const authStorage = {
     }
   },
   removeCookieConsentGiven:()=>localStorage.removeItem('CookieConsentGiven'),
-
+  
+  // ============================================================================
+  // USUARIO UNIFICADO (ESTUDIANTE O MAESTRO)
+  // ============================================================================
+  
   // Guarda el usuario unificado (estudiante o maestro)
   setUser: (user: TUser) =>
     localStorage.setItem("user", JSON.stringify(user)),
@@ -39,6 +43,25 @@ export const authStorage = {
   // Elimina el usuario del localStorage
   removeUser: () => localStorage.removeItem("user"),
 
+  // ============================================================================
+  // ROL DEL USUARIO
+  // ============================================================================
+  
+  // Guarda el rol del usuario
+  setRole: (role: TUserRole) =>
+    localStorage.setItem("role", role),
+
+  // Recupera el rol del usuario desde localStorage
+  getRole: (): TUserRole | null => {
+    const role = localStorage.getItem("role");
+    return role as TUserRole | null;
+  },
+
+  // Elimina el rol del localStorage
+  removeRole: () => localStorage.removeItem("role"),
+
+  // Elimina el usuario del localStorage (compatibilidad)
+  removeStudent: () => localStorage.removeItem("student"),
 
   setAllStudents:(allStudents:TStudentAllComents[])=>
     localStorage.setItem('allStudents',JSON.stringify(allStudents)),

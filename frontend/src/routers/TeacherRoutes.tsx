@@ -30,9 +30,10 @@ import NotificationCenter from "../modules/teacher/pages/NotificationCenter";
 export default function TeacherRoutes() {
   return (
     <Routes>
-      {/* Dashboard */}
-      <Route path="/" element={<TeacherDashboard />} />
-      <Route path="/dashboard" element={<TeacherDashboard />} />
+      {/* Home */}
+      <Route path="/homeTeacher" element={<HomeTeacher />} />
+      <Route path="/profileTeacher" element={<TeacherPage/>}/> {/* Perfil del profesor */}
+      
       
       {/* Gestión de cursos */}
       <Route path="/courses" element={<CourseManagement />} />

@@ -3,7 +3,8 @@ export type TCourse ={
     id:int,
     name:string,
     description:string
-    status: 'in_progress' | 'completed' 
+    status: 'in_progress' | 'completed'
+    image: string
 
 }
 export type TCourses = TCourse[];

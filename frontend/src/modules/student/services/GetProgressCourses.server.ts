@@ -15,9 +15,6 @@ type ProgressAPIResponse = {
 export default async function ProgressCoursesAPI(): Promise<TProgressCourses> {
     try {
         const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/lessons`);
-        console.log(response.data)
-        alert('se ejecuto')
-        
         // Validar status code
         if (response.status !== 200) {
             throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);

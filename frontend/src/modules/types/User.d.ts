@@ -68,13 +68,13 @@ export type TTeacherProfile = {
 
 export type TUser = TStudentProfile | TTeacherProfile;
 
-export type UserRole = 'student' | 'teacher';
+export type TUserRole = 'student' | 'teacher';
 
 export type TUserProfileToken = {
   name: string;
   email: string;
   token: string;
-  role: UserRole; // ← CAMPO NUEVO: Identifica el tipo de usuario
+  role: TUserRole; // ← CAMPO NUEVO: Identifica el tipo de usuario
 };
 
 export type TUserContext = {

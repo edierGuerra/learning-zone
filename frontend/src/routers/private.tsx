@@ -6,9 +6,7 @@ import AuthLayout from "../shared/Layouts/AuthLayout";
 import Help from "../pages/Help";
 import PrivateRouters from "./PrivateRouters";
 import { sharedRoutes } from "./SharedRouters";
-import WordHomePage from "../modules/courses/word/WordHomePage";
-import ExcelHomePage from "../modules/courses/excel/ExcelHomePage";
-import PowerPointHomePage from "../modules/courses/powerpoint/PowerPointHomePage";
+import CourseRouter from "./CourseRouter";
 import LandingPage from "../pages/LandingPage";
 import CommentPageWrapper from "../modules/courses/comments/CommentPageWrapper";
 import ContentPage from "../modules/courses/components/ContentPage";
@@ -24,9 +22,7 @@ export default function RoutersPrivates() {
                   <Route path="/home" element={<StudentPage/>}/>
                   <Route path="/help" element={<Help/>}/>
                   {/* Rutas de los cursos */}
-                  <Route path="/word" element={<WordHomePage/>}/>
-                  <Route path="/excel" element={<ExcelHomePage/>}/>
-                  <Route path="/powerPoint" element={<PowerPointHomePage/>}/>
+                  <Route path="/courses/:courseSlug" element={<CourseRouter />} />
                   <Route path="/contentPage" element={<ContentPage/>}/>
                   <Route path="/evaluationPage" element={<EvaluationPage/>}/>
                   

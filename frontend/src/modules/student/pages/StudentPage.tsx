@@ -39,7 +39,7 @@ export default function StudentPage() {
               {/* Agg una etiqueta bolteada que diga en progreso o completad */}
               {progressLessons.map((progress)=>(
                 <>
-                  <p key={progress.id_course} onClick={()=>handleClickCourseProgress(progress.id_course,`/${progress.name_course}`)} className={`progress-course-${progress.name_course.toLowerCase()}`}>{progress.name_course} <span className="number-process">{progress.completed_lessons}/{progress.all_lessons}</span><span className="span-status-course" style={{'background':progress.status === 'completed'? '#59A9FF':'#FF7659'}}>{progress.status === 'completed'? 'Completo':'En progreso'}</span></p>
+                  <p key={progress.id_course} onClick={()=>handleClickCourseProgress(progress.id_course,`/courses/${progress.name_course}`)} className={`progress-course-${progress.name_course.toLowerCase()}`}>{progress.name_course} <span className="number-process">{progress.completed_lessons}/{progress.all_lessons}</span><span className="span-status-course" style={{'background':progress.status === 'completed'? '#59A9FF':'#FF7659'}}>{progress.status === 'completed'? 'Completo':'En progreso'}</span></p>
 
                  
                 

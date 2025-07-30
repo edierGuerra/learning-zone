@@ -1,7 +1,7 @@
 /* Serivicio que se encarga de obtener los cursos del estudiante */
 
 import axios from '../../../api/axiosInstance';
-import type {TCourses } from '../types/Course';
+import type { TCoursesStudents } from '../types/Course';
 
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 
@@ -9,10 +9,10 @@ const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 type GetCoursesAPIResponse = {
   status: number;
   message: string;
-  courses: TCourses;
+  courses: TCoursesStudents;
 };
 
-export default async function GetCoursesAPI(): Promise<TCourses> {
+export default async function GetCoursesAPI(): Promise<TCoursesStudents> {
     try {
         const response = await axios.get(VITE_GETCOURSES_ENDPOINT);
         

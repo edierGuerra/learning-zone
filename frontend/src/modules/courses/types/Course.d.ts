@@ -1,13 +1,37 @@
+import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
 
-export type TCourse ={
-    id:int,
-    name:string,
-    description:string
-    status: 'in_progress' | 'completed'
-    image: string
+export type TCourse = {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  colors: TColorPalette; // Paleta de colores del curso
+category:
+    | 'ofimatica'
+    | 'electronica'
+    | 'programacion'
+    | 'diseno'
+    | 'ciberseguridad'
+    | 'desarrollo de videojuegos'
+    | 'inteligencia artificial'
+    | 'desarrollo web'
+    | 'otro';
+};
 
-}
-export type TCourses = TCourse[];
+// Para estudiantes: seleccionamos solo las props necesarias
+export type TCourseStudent = Pick<TCourse, "id" | "name" | "description" | "image" | 'category' |'colors'> & {
+  status: "in_progress" | "completed";
+};
+
+// Para profesores: seleccionamos solo las props necesarias
+export type TCourseTeacher = Pick<TCourse, 'id' | 'name' | 'description' | 'image' |'category' |'colors'> & {
+  is_archive: boolean;
+  is_published: boolean;
+};
+
+export type TCoursesTeachers = TCourseTeacher[];
+export type TCoursesStudents = TCourseStudent[];
+export type TCoursesGeneric = TCoursesTeachers | TCoursesStudents
 
 /* Modelo de progreso de cada curso */
 
@@ -60,8 +84,8 @@ export type TScore={
 
 
 }
-interface TCourseContextType {
-    courses:TCourses;
+interface TStudentCourseContextType {
+    courses:TCoursesStudents;
     lessons: TLessons;
     setLessons: React.Dispatch<React.SetStateAction<TLessons>>
     progress: number; // porcentaje
@@ -74,7 +98,9 @@ interface TCourseContextType {
     progressLessons: TProgressCourses,
     loadProgressLessons: () => Promise<void>,
     renderContent:(idCourse: TCourse["id"], lesson: TLesson)=> Promise<void>,
-    renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>
+    renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>,
+    palette:TColorPalette | null,
+    setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>,
 
 }
 

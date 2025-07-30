@@ -1,25 +1,25 @@
-
-.btn-back-evaluation{
-    position: absolute;
-    top: 1rem;
-    left: 2rem;
-    background-color: transparent;
-    border: none;
-    font-size: 46px;
-    color: var(--color-text-darker);
-    cursor: pointer;
-    z-index: 10;
-    transition: transform 0.3s ease;
+/* Botón de regreso */
+.btn-back-evaluation {
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+  background-color: transparent;
+  border: none;
+  font-size: 46px;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.3s ease;
 }
-.container-evaluation-lesson-excel {
-  background: #b0fc90;
+
+/* Contenedor principal de la evaluación (dinámico con palette) */
+.container-evaluation-lesson {
   max-width: 800px;
   margin: 12rem auto;
   padding: 2.5rem 2rem;
   border-radius: 16px;
   position: relative;
   min-height: 60vh;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(2px);
   animation: fadeInEval 0.5s ease;
   display: flex;
@@ -27,82 +27,24 @@
   justify-content: center;
 }
 
-.container-evaluation-lesson-word {
-  background: #90c3fc;
-  max-width: 800px;
-  margin: 12rem auto;
-  padding: 2.5rem 2rem;
-  border-radius: 16px;
-  position: relative;
-  min-height: 60vh;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
-  backdrop-filter: blur(2px);
-  animation: fadeInEval 0.5s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.container-evaluation-lesson-powerpoint {
-  background: #ffd59e;
-  max-width: 800px;
-  margin: 12rem auto;
-  padding: 2.5rem 2rem;
-  border-radius: 16px;
-  position: relative;
-  min-height: 60vh;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
-  backdrop-filter: blur(2px);
-  animation: fadeInEval 0.5s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* TÍTULO DE LA PREGUNTA */
-.question-evaluation-excel {
-  color: #252f23;
-  background: #f6f7f9;
+/* Título de la pregunta */
+.question-evaluation {
   font-size: 1.5rem;
   font-weight: 700;
   text-align: center;
   margin-bottom: 2rem;
   padding: 1.2rem 0.5rem;
   border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
-}
-.question-evaluation-word {
-  color: #1a2a4f;
-  background: #eaf3fb;
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 2rem;
-  padding: 1.2rem 0.5rem;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
-}
-.question-evaluation-powerpoint {
-  color: #4f2a1a;
-  background: #fff6e5;
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 2rem;
-  padding: 1.2rem 0.5rem;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid;
   box-shadow: 0 2px 8px rgba(0,0,0,0.01);
 }
 
-/* OPCIONES */
+/* Opciones de respuesta */
 .container-options {
   display: grid;
   gap: 1.2rem;
   margin-bottom: 2rem;
   grid-template-columns: 1fr 1fr;
-
 }
 
 .container-options button {
@@ -114,86 +56,39 @@
   transition: background 0.2s, border 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(0,0,0,0.01);
   position: relative;
+  border: 2px solid;
 }
 
-.option-excel {
-  background: #c3ffbe;
-  color: #23272f;
+/* Hover/active genérico (palette lo definirá con JS) */
+.container-options button:hover {
+  opacity: 0.9;
 }
-.option-excel:hover {
-  background: #a7dea1;
-  color: #143e00;
-}
-.option-excel:active {
-  background: #fff;
-}
-
-.option-word {
-  background: #b0d0fc;
-  color: #1a2a4f;
-}
-.option-word:hover {
-  background: #90b4e6;
-  color: #0d1a33;
-}
-.option-word:active {
-  background: #eaf3fb;
-}
-
-.option-powerpoint {
-  background: #ffe0b0;
-  color: #4f2a1a;
-}
-.option-powerpoint:hover {
-  background: #ffd59e;
-  color: #7a3e00;
-}
-.option-powerpoint:active {
-  background: #fff6e5;
-}
-
-
 .container-options button:active {
-  background: #fff;
+  opacity: 0.8;
 }
 
-.container-options button::before,
-.container-options button::after {
-  display: none;
-}
-
-/* FORMULARIO DE RESPUESTA ABIERTA */
+/* Formulario para preguntas abiertas */
 .form-evaluation {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   margin-bottom: 2rem;
 }
+
 .input-evaluation {
   padding: 1rem;
   font-size: 1rem;
-  border: 1px solid #d1d5db;
   border-radius: 8px;
-  background: #f6f7f9;
-  color: #23272f;
   transition: border 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(0,0,0,0.01);
 }
 
 .input-evaluation:focus {
   outline: none;
-  border-color: #bfc3ca;
-  background: #fff;
 }
 
-.input-evaluation::placeholder {
-  color: #a0a4ab;
-  font-style: italic;
-}
-
+/* Botón de enviar respuesta */
 .btn-send-evaluation {
-  background: #e5e7eb;
-  color: #23272f;
   border: none;
   padding: 0.9rem 2rem;
   font-size: 1rem;
@@ -206,25 +101,16 @@
   letter-spacing: 0;
 }
 
-.btn-send-evaluation:hover {
-  background: #d1d5db;
-}
-
-.btn-send-evaluation:active {
-  background: #bfc3ca;
-}
-
-/* MODAL DE PUNTUACIÓN */
+/* Modal de puntaje */
 .score-modal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff;
   border-radius: 16px;
   padding: 2.5rem 2rem;
   box-shadow: 0 8px 32px rgba(0,0,0,0.07);
-  border: 1px solid #e5e7eb;
+  border: 2px solid;
   backdrop-filter: blur(2px);
   z-index: 1000;
   min-width: 320px;
@@ -233,28 +119,26 @@
   display: flex;
   flex-direction: column;
 }
+
+/* Animación de las letras flotantes "Correcto!" */
 .paragraph-left-top {
   position: relative;
   left: -20px;
   top: -25px;
-  transform: rotate(-55deg) scale(1); /* Menos inclinada y un leve aumento */
+  transform: rotate(-55deg) scale(1);
 }
 .paragraph-left-top span {
   position: absolute;
   top: -30px;
   left: 30px;
-  color: #ffffff;
-  background-color: rgb(202, 255, 109);
   border-radius: 20%;
   width: 24px;
   height: 40px;
   padding: .11rem;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
   font-size: 26px;
-  /* NO pongas opacity aquí */
 }
 
-/* Posiciones individuales para cada letra */
 .paragraph-left-top span:nth-child(1) { transform: rotate(-40deg) translateY(-60px); }
 .paragraph-left-top span:nth-child(2) { transform: rotate(-22deg) translateY(-60px); }
 .paragraph-left-top span:nth-child(3) { transform: rotate(-2deg) translateY(-60px); }
@@ -264,31 +148,28 @@
 .paragraph-left-top span:nth-child(7) { transform: rotate(64deg) translateY(-60px); }
 .paragraph-left-top span:nth-child(8) { transform: rotate(80deg) translateY(-60px); }
 .paragraph-left-top span:nth-child(9) { transform: rotate(96deg) translateY(-60px); }
-.paragraph-left-top span:nth-child(10){transform: rotate(112deg) translateY(-60px); }
+.paragraph-left-top span:nth-child(10){ transform: rotate(112deg) translateY(-60px); }
 
-/* Animación para aparición letra por letra */
 @keyframes fadeInLetter {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+
+/* Título de ventana en modal */
 .title-window-score-modal {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #23272f;
   margin-top: 1.2rem;
 }
 
-
-
-.date-score{
+.date-score {
   position: absolute;
   bottom: 4px;
   right: 4px;
 }
 
+/* Botón de cerrar modal */
 .score-modal button {
-  background: #ff6d6d;
-  color: #ffffff;
   border: none;
   padding: 0.8rem 2rem;
   font-size: 1rem;
@@ -300,27 +181,13 @@
   justify-self: flex-end;
 }
 
-.score-modal button:hover {
-  background: #d1d5db;
-}
-
-.score-modal button:active {
-  background: #bfc3ca;
-}
-
-/* ANIMACIONES SUTILES */
+/* Animación de entrada */
 @keyframes fadeInEval {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* RESPONSIVE */
+/* Responsivo */
 @media (max-width: 768px) {
   .container-evaluation-lesson {
     margin: 1rem;

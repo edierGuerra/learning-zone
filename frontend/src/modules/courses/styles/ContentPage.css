@@ -1,4 +1,4 @@
-/* Contenedor principal con fondo dinámico */
+/* Contenedor principal (fondo dinámico desde palette o variables CSS) */
 .container-content-lesson {
   position: relative;
   max-width: 900px;
@@ -8,30 +8,25 @@
   backdrop-filter: blur(10px);
   overflow: hidden;
   animation: fadeIn 0.8s ease-out;
-  background-image:  url('../assets/backround-content.png');
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
-
-.btn-back-content{
-    position: absolute;
-    top: 1rem;
-    left: 2rem;
-    background-color: transparent;
-    border: none;
-    font-size: 46px;
-    color: var(--color-text-light);
-    cursor: pointer;
-    z-index: 10;
-    transition: transform 0.3s ease;
+/* Botón de retroceso (color dinámico desde palette) */
+.btn-back-content {
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+  background-color: transparent;
+  border: none;
+  font-size: 46px;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.3s ease;
 }
-/* Título con estilo moderno y línea de acento */
+
+/* Título (color dinámico desde palette.brand) */
 .title-content {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #FAFAFA;
   margin-bottom: 1.5rem;
   position: relative;
   padding-bottom: 0.8rem;
@@ -39,21 +34,18 @@
   text-align: center;
 }
 
-
-/* Texto descriptivo con buena legibilidad */
+/* Texto descriptivo (color dinámico desde palette.text) */
 .text-content {
   font-size: 1.1rem;
   line-height: 1.7;
-  color: #ffffffb3;
   margin-bottom: 2rem;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(15px);
-  padding: .4rem;
+  padding: 0.4rem;
   border-radius: 12px;
+  backdrop-filter: blur(15px);
 }
 
-/* Estilos para imagen de contenido */
+/* Imagen (borde dinámico si se requiere) */
 .image-content {
   width: 100%;
   max-height: 500px;
@@ -68,47 +60,41 @@
   transform: scale(1.02);
 }
 
-/* Estilos para contenido de texto */
+/* Contenido de texto (colores dinámicos desde palette) */
 .content-content {
   font-size: 1.15rem;
   line-height: 1.8;
-  color: #334155;
-  background: rgba(248, 250, 252, 0.8);
   padding: 1.5rem;
   border-radius: 12px;
-  border-left: 4px solid #3b82f6;
   margin: 1.5rem 0;
+  border-left: 4px solid; /* Color dinámico (palette.brand o accent) */
 }
 
-/* Estilos para video */
+/* Video (borde dinámico si se necesita) */
 video {
   width: 100%;
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   margin: 1.5rem 0;
 }
-.btn-downloand-content{
-  background-color: #0042ad;
+
+/* Botón de descarga (colores dinámicos desde palette) */
+.btn-downloand-content {
   position: absolute;
   top: 30px;
   right: 30px;
-  color: #fff;
-  padding: .8rem;
+  padding: 0.8rem;
   border: none;
   border-radius: 50%;
   box-shadow: 0 4px 12px rgba(24, 31, 36, 0.607);
-
-
+  cursor: pointer;
 }
-/* Botón de continuar con efecto de brillo */
+
+/* Botón de continuar (colores dinámicos desde palette) */
 .btn-content-next {
-  background: var(--color-orange);
-  color: white;
   font-size: 1.1rem;
   font-weight: 600;
   padding: 0.9rem 2rem;
-  border-right:3px solid #fff ;
-  border-bottom:3px solid #fff ;
   border-radius: 12px;
   cursor: pointer;
   margin-top: 2rem;
@@ -136,91 +122,9 @@ video {
 }
 
 .btn-content-next:hover {
-  border: none;
-
   transform: translateY(-3px);
-  background: var(    --color-accent-orange);
-
 }
 
 .btn-content-next:active {
   transform: translateY(1px);
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes expandLine {
-  from {
-    width: 0;
-  }
-  to {
-    width: 80px;
-  }
-}
-
-@keyframes shineEffect {
-  0% {
-    left: -100%;
-  }
-  20% {
-    left: 100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-@keyframes pulseBackground {
-  0%,
-  100% {
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-/* Estilos responsivos */
-@media (max-width: 768px) {
-  .container-content-lesson {
-    padding: 2rem 1.5rem;
-    margin: 1rem;
-  }
-
-  .title-content {
-    font-size: 1.8rem;
-  }
-
-  .text-content,
-  .content-content {
-    font-size: 1rem;
-  }
-
-  .btn-content-next {
-    width: 100%;
-    padding: 0.8rem;
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-
-/* Estilos para dispositivos pequeños */
-@media (max-width: 480px) {
-  .container-content-lesson {
-    padding: 1.5rem 1rem;
-  }
-
-  .title-content {
-    font-size: 1.5rem;
-  }
 }

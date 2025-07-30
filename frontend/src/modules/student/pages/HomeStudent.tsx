@@ -1,13 +1,12 @@
 import { useUser } from '../../auth/Hooks/useAuth';
+import { useStudentCourseContext } from '../../courses/hooks/useCourse';
 import CardCourse from '../components/CardCourse';
 
 import '../Styles/HomeStudent.css';
-import { useCourseContext } from '../../courses/hooks/useCourse';
 
 export default function HomeStudent() {
   const { user } =useUser();
-  const { courses } = useCourseContext();
-
+  const { courses } = useStudentCourseContext();
 
   return (
     <div className="container-home-user">
@@ -23,7 +22,9 @@ export default function HomeStudent() {
               name={course.name}
               description={course.description}
               image={course.image}
-              status= {course.status} 
+              category={course.category}
+              colors={course.colors}
+              status= {'status' in course ? course.status : undefined} 
             />
           );
         })}

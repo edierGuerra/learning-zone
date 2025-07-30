@@ -113,7 +113,7 @@ export const UserProvider = ({ children }: Props) => {
     authStorage.removeToken();
     authStorage.removeUser();
     authStorage.removeNotifications();
-    authStorage.removeCourses();
+    authStorage.removeCoursesStudent();
     
     setUser(null);
     setRole(null);
@@ -146,5 +146,4 @@ export const UserProvider = ({ children }: Props) => {
   );
 };
 
-// Mantener el nombre anterior para compatibilidad
-export const StudentProvider = UserProvider;
+

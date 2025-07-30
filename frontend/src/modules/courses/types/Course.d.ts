@@ -5,7 +5,7 @@ export type TCourse = {
   name: string;
   description: string;
   image: string;
-  colors: TColorPalette; // Paleta de colores del curso
+  palette: TColorPalette; // Paleta de colores del curso
 category:
     | 'ofimatica'
     | 'electronica'
@@ -19,12 +19,12 @@ category:
 };
 
 // Para estudiantes: seleccionamos solo las props necesarias
-export type TCourseStudent = Pick<TCourse, "id" | "name" | "description" | "image" | 'category' |'colors'> & {
+export type TCourseStudent = Pick<TCourse, "id" | "name" | "description" | "image" | 'category' |'palette'> & {
   status: "in_progress" | "completed";
 };
 
 // Para profesores: seleccionamos solo las props necesarias
-export type TCourseTeacher = Pick<TCourse, 'id' | 'name' | 'description' | 'image' |'category' |'colors'> & {
+export type TCourseTeacher = Pick<TCourse, 'id' | 'name' | 'description' | 'image' |'category' |'palette'> & {
   is_archive: boolean;
   is_published: boolean;
 };

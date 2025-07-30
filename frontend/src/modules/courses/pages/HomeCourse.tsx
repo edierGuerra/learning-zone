@@ -13,12 +13,12 @@ import { Rocket } from 'lucide-react';
 import { GiRoundStar } from "react-icons/gi";
 import { useStudentCourseContext } from "../hooks/useCourse";
 import { useParams } from "react-router-dom";
-import { educationalPalettes, type TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
+import { educationalPalettes} from "../../../shared/theme/ColorPalettesCourses";
 import type { TCourse } from "../types/Course";
 import './HomeCourse.css'
 
 
-const defaultPalette:TColorPalette = educationalPalettes.calmFocus
+const defaultPalette:TCourse['palette'] = educationalPalettes.calmFocus
 
 
 
@@ -68,8 +68,8 @@ export default function CourseHomePage() {
 
   const courses = authStorage.getCoursesStudent();
   /* Obtener la paleta de colores de dicho curso */
- const palette: TColorPalette =
-  courses?.find(c => c.id === idCourse)?.colors || defaultPalette;
+ const palette: TCourse['palette'] =
+  courses?.find(c => c.id === idCourse)?.palette || defaultPalette;
   /* Setear en el contexto la paleta de colores */
   setPalette(palette)
   const nameCourse: TCourse['name'] | undefined= courses?.find(c => c.id === idCourse!)?.name;

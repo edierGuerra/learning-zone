@@ -23,7 +23,7 @@ export default function HomeStudent() {
               description={course.description}
               image={course.image}
               category={course.category}
-              colors={course.colors}
+              palette={course.palette}
               status= {'status' in course ? course.status : undefined} 
             />
           );

@@ -29,7 +29,7 @@ export default async function EvaluationLessonsAPI({idCourse, idLesson}: Evaluat
         const id_lesson = idLesson;
         const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/${id_course}/lessons/${id_lesson}/evaluation`);
         console.log(response)
-        
+
         // Validar status code
         if (response.status !== 200) {
             throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
@@ -48,4 +48,3 @@ export default async function EvaluationLessonsAPI({idCourse, idLesson}: Evaluat
         throw error;
     }
 }
-

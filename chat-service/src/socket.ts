@@ -119,9 +119,9 @@ export const registerSocketHandlers = (io: Server) => {
         io.emit('listStudentsConnects', res.data.list_ids_connects);
         socket.emit('commentSuccess', { message: 'Comentario enviado exitosamente' });
       } catch (err: any) {
-        socket.emit('commentError', { 
+        socket.emit('commentError', {
           message: 'Error al enviar el comentario',
-          details: err.response?.data?.detail || err.message 
+          details: err.response?.data?.detail || err.message
         });
       }
     });
@@ -149,9 +149,9 @@ export const registerSocketHandlers = (io: Server) => {
         io.emit('listStudentsConnects', res.data.list_ids_connects);
         socket.emit('commentSuccess', { message: 'Comentario eliminado exitosamente' });
       } catch (err: any) {
-        socket.emit('commentError', { 
+        socket.emit('commentError', {
           message: 'Error al eliminar el comentario',
-          details: err.response?.data?.detail || err.message 
+          details: err.response?.data?.detail || err.message
         });
       }
     });
@@ -181,9 +181,9 @@ export const registerSocketHandlers = (io: Server) => {
         io.emit('listStudentsConnects', res.data.list_ids_connects);
         socket.emit('commentSuccess', { message: 'Comentario actualizado exitosamente' });
       } catch (err: any) {
-        socket.emit('commentError', { 
+        socket.emit('commentError', {
           message: 'Error al actualizar el comentario',
-          details: err.response?.data?.detail || err.message 
+          details: err.response?.data?.detail || err.message
         });
       }
     });

@@ -61,7 +61,7 @@ export const UserProvider = ({ children }: Props) => {
             setUser(userData);
         }else{
             const dataTeacher = await GetTeacherAPI();
-            
+
             // Convertir datos del estudiante
             const userData: TUser = {
               id: dataTeacher.id,
@@ -81,16 +81,16 @@ export const UserProvider = ({ children }: Props) => {
 
           // Cargar notificaciones
           const dataNotifications = await GetNotificationsAPI();
-          
+
           authStorage.setNotifications(dataNotifications);
-          
+
           // Actualizar estado
           setNotifications(dataNotifications);
         } catch (error) {
           console.error('Error cargando información del usuario:', error);
         }
       };
-      
+
       loadUserInfo();
     }
 
@@ -114,12 +114,12 @@ export const UserProvider = ({ children }: Props) => {
     authStorage.removeUser();
     authStorage.removeNotifications();
     authStorage.removeCoursesStudent();
-    
+
     setUser(null);
     setRole(null);
     setToken(null);
     setNotifications([]);
-    
+
     toast.success('Sesión cerrada');
     handleBtnNavigate("/");
   };
@@ -145,5 +145,3 @@ export const UserProvider = ({ children }: Props) => {
     </UserContext.Provider>
   );
 };
-
-

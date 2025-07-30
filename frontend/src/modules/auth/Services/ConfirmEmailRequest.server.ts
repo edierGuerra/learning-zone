@@ -10,7 +10,7 @@ type confirmEmailAPIProps ={
 }
 type confirmEmailAPIPromise ={
     password_token:TStudentProfileToken['token'],
-}  
+}
 
 const VITE_VALIDATE_TOKEN_ENDPOINT = import.meta.env.VITE_VALIDATE_TOKEN_ENDPOINT;
 

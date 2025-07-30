@@ -19,13 +19,13 @@ interface CommentPageProps {
 export default function CommentPage({ courseId, nameCourse }: CommentPageProps) {
   // Estado para almacenar todos los comentarios del curso
   const [comments, setComments] = useState<TComment[]>([]);
-  
+
   // Estado para almacenar la lista de todos los estudiantes
   const [allStudents, setAllStudents] = useState<TStudentAllComents[]>([]);
-  
+
   // Estado para almacenar los IDs de estudiantes conectados
   const [listStudentsConnects, setListStudentsConnects] = useState<TStudent['id'][]>([]);
-  
+
   // ✅ NUEVO: Estado global para controlar qué formulario de actualización está abierto
   // Solo un formulario puede estar abierto a la vez
   const [openUpdateFormId, setOpenUpdateFormId] = useState<number | null>(null);
@@ -73,7 +73,7 @@ export default function CommentPage({ courseId, nameCourse }: CommentPageProps) 
     // ✅ Listener: Recibir comentarios actualizados (eliminados o editados)
     socket.on('commentUpdated', (updatedComment: TComment) => {
       // Actualizar solo el comentario específico en la lista
-      setComments(prev => prev.map(comment => 
+      setComments(prev => prev.map(comment =>
         comment.id === updatedComment.id ? updatedComment : comment
       ));
     });
@@ -103,7 +103,7 @@ export default function CommentPage({ courseId, nameCourse }: CommentPageProps) 
   useEffect(() => {
     // Solo actualizar si hay estudiantes y la lista de conectados es válida
     if (allStudents.length === 0 || !Array.isArray(listStudentsConnects)) return;
-    
+
     // Actualizar el estado de conexión de cada estudiante
     setAllStudents(prev =>
       prev.map(student => ({

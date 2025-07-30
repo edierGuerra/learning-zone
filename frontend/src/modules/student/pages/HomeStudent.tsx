@@ -24,7 +24,7 @@ export default function HomeStudent() {
               image={course.image}
               category={course.category}
               palette={course.palette}
-              status= {'status' in course ? course.status : undefined} 
+              status= {'status' in course ? course.status : undefined}
             />
           );
         })}

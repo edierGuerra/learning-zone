@@ -20,7 +20,7 @@ export default function ConfirmEmailRequest() {
             // Almacenar en el localstorage
             const timeOuth = setTimeout(()=>{
                 handleBtnNavigate('/newPassword'); // forzar el render
-        
+
 
             },2000)
 

@@ -165,46 +165,46 @@
         gap: 12px;
         max-width: 350px;
     }
-    
+
     .title-login {
         font-size: 1.8rem;
         margin-bottom: 0.8rem;
     }
-    
+
     .container-label-input-l {
         margin-top: 25px;
     }
-    
+
     .container-label-input-l input {
         padding: 14px 8px 4px 8px;
         font-size: 0.95rem;
     }
-    
+
     .container-label-input-l label {
         font-size: 15px;
         top: 11px;
         left: 8px;
     }
-    
+
     .container-label-input-l input:focus + label,
     .container-label-input-l input.has-content + label {
         font-size: 18px;
         transform: translateY(-24px) scale(0.85);
     }
-    
+
     .btn-login {
         font-size: 18px;
         padding: 0.9rem;
     }
-    
+
     .paragraph-forgot-a {
         font-size: 11px;
     }
-    
+
     .paragraph-create-account {
         font-size: 13px;
     }
-    
+
     .paragraph-policies-login {
         font-size: 11px;
     }
@@ -217,46 +217,46 @@
         gap: 10px;
         max-width: 300px;
     }
-    
+
     .title-login {
         font-size: 1.5rem;
         margin-bottom: 0.6rem;
     }
-    
+
     .container-label-input-l {
         margin-top: 20px;
     }
-    
+
     .container-label-input-l input {
         padding: 12px 6px 3px 6px;
         font-size: 0.9rem;
     }
-    
+
     .container-label-input-l label {
         font-size: 14px;
         top: 10px;
         left: 6px;
     }
-    
+
     .container-label-input-l input:focus + label,
     .container-label-input-l input.has-content + label {
         font-size: 16px;
         transform: translateY(-22px) scale(0.85);
     }
-    
+
     .btn-login {
         font-size: 16px;
         padding: 0.8rem;
     }
-    
+
     .paragraph-forgot-a {
         font-size: 10px;
     }
-    
+
     .paragraph-create-account {
         font-size: 12px;
     }
-    
+
     .paragraph-policies-login {
         font-size: 10px;
         padding: 0.4rem;
@@ -270,46 +270,46 @@
         gap: 8px;
         max-width: 280px;
     }
-    
+
     .title-login {
         font-size: 1.3rem;
         margin-bottom: 0.5rem;
     }
-    
+
     .container-label-input-l {
         margin-top: 15px;
     }
-    
+
     .container-label-input-l input {
         padding: 10px 5px 2px 5px;
         font-size: 0.85rem;
     }
-    
+
     .container-label-input-l label {
         font-size: 13px;
         top: 8px;
         left: 5px;
     }
-    
+
     .container-label-input-l input:focus + label,
     .container-label-input-l input.has-content + label {
         font-size: 15px;
         transform: translateY(-20px) scale(0.85);
     }
-    
+
     .btn-login {
         font-size: 14px;
         padding: 0.7rem;
     }
-    
+
     .paragraph-forgot-a {
         font-size: 9px;
     }
-    
+
     .paragraph-create-account {
         font-size: 11px;
     }
-    
+
     .paragraph-policies-login {
         font-size: 9px;
         padding: 0.3rem;

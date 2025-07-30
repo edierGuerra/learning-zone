@@ -17,7 +17,7 @@ const ComplaintPage = () => {
       <header className="complaint-header">
         <h1> Quejas y Observaciones</h1>
         <p>
-          Si tienes algún comentario, queja o sugerencia sobre la plataforma o los cursos, 
+          Si tienes algún comentario, queja o sugerencia sobre la plataforma o los cursos,
           por favor llena el siguiente formulario.
         </p>
       </header>

@@ -9,7 +9,7 @@ import { useUser } from "../modules/auth/Hooks/useAuth";
 
 /**
  * RoleRedirect - Redirección principal por roles
- * 
+ *
  * Redirige según el rol del usuario después del login.
  */
 export default function RoleRedirect() {
@@ -23,11 +23,11 @@ export default function RoleRedirect() {
   // Redirección según rol
   switch (role) {
     case "teacher":
-      return <Navigate to="/teacher/dashboard" replace />;
-    
+      return <Navigate to="/teacher/home-teacher" replace />;
+
     case "student":
-      return <Navigate to="/student/courses" replace />;
-    
+      return <Navigate to="/student/home-student" replace />;
+
     default:
       return <Navigate to="/" replace />;
   }
@@ -39,7 +39,7 @@ export default function RoleRedirect() {
 
 /**
  * HomeRoleRedirect - Redirección desde página principal
- * 
+ *
  * Solo redirige si el usuario está logueado.
  * Si no está logueado, permite ver la página normal.
  */
@@ -54,11 +54,11 @@ export function HomeRoleRedirect() {
   // Redirección según rol
   switch (role) {
     case "teacher":
-      return <Navigate to="/teacher/dashboard" replace />;
-    
+      return <Navigate to="/teacher/home-teacher" replace />;
+
     case "student":
-      return <Navigate to="/student/courses" replace />;
-    
+      return <Navigate to="/student/home-student" replace />;
+
     default:
       return null;
   }

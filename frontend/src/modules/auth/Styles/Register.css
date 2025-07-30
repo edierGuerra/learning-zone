@@ -128,38 +128,38 @@
         gap: 12px;
         max-width: 350px;
     }
-    
+
     .title-register {
         font-size: 1.8rem;
         margin-bottom: 0.8rem;
     }
-    
+
     .container-label-input-r {
         margin-top: 25px;
     }
-    
+
     .container-label-input-r input {
         padding: 14px 8px 4px 8px;
         font-size: 0.95rem;
     }
-    
+
     .container-label-input-r label {
         font-size: 15px;
         top: 11px;
         left: 8px;
     }
-    
+
     .container-label-input-r input:focus + label,
     .container-label-input-r input.has-content + label {
         font-size: 18px;
         transform: translateY(-24px) scale(0.85);
     }
-    
+
     .btn-verify-register {
         font-size: 18px;
         padding: 0.9rem;
     }
-    
+
     .error {
         font-size: 0.8rem;
     }
@@ -172,38 +172,38 @@
         gap: 10px;
         max-width: 300px;
     }
-    
+
     .title-register {
         font-size: 1.5rem;
         margin-bottom: 0.6rem;
     }
-    
+
     .container-label-input-r {
         margin-top: 20px;
     }
-    
+
     .container-label-input-r input {
         padding: 12px 6px 3px 6px;
         font-size: 0.9rem;
     }
-    
+
     .container-label-input-r label {
         font-size: 14px;
         top: 10px;
         left: 6px;
     }
-    
+
     .container-label-input-r input:focus + label,
     .container-label-input-r input.has-content + label {
         font-size: 16px;
         transform: translateY(-22px) scale(0.85);
     }
-    
+
     .btn-verify-register {
         font-size: 16px;
         padding: 0.8rem;
     }
-    
+
     .error {
         font-size: 0.75rem;
     }
@@ -216,38 +216,38 @@
         gap: 8px;
         max-width: 280px;
     }
-    
+
     .title-register {
         font-size: 1.3rem;
         margin-bottom: 0.5rem;
     }
-    
+
     .container-label-input-r {
         margin-top: 15px;
     }
-    
+
     .container-label-input-r input {
         padding: 10px 5px 2px 5px;
         font-size: 0.85rem;
     }
-    
+
     .container-label-input-r label {
         font-size: 13px;
         top: 8px;
         left: 5px;
     }
-    
+
     .container-label-input-r input:focus + label,
     .container-label-input-r input.has-content + label {
         font-size: 15px;
         transform: translateY(-20px) scale(0.85);
     }
-    
+
     .btn-verify-register {
         font-size: 14px;
         padding: 0.7rem;
     }
-    
+
     .error {
         font-size: 0.7rem;
     }

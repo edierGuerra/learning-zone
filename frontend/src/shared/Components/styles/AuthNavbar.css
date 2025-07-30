@@ -98,13 +98,13 @@
         padding: var(--spacing-md); /* 24px en todos los lados */
         justify-content: flex-end; /* Alineado a la derecha en tablet */
     }
-    
+
     .opc-auth-navbar {
         gap: var(--spacing-lg); /* 32px entre iconos */
         padding: var(--spacing-md) var(--spacing-lg); /* 24px arriba/abajo, 32px izquierda/derecha */
         flex-wrap: nowrap; /* No se envuelven en tablet */
     }
-    
+
     .icon-auth-navBar {
         font-size: var(--font-size-4xl); /* 36px en tablet */
         padding: var(--spacing-md); /* 24px de padding */
@@ -116,14 +116,14 @@
 /* Desktop (1024px y superior) */
 @media (min-width: 1024px) {
     .auth-navbar {
-        padding: var(--spacing-xs); 
+        padding: var(--spacing-xs);
     }
-    
+
     .opc-auth-navbar {
         gap: var(--spacing-xl); /* 48px entre iconos */
         padding: var(--spacing-xs) var(--spacing-xl); /* 32px arriba/abajo, 48px izquierda/derecha */
     }
-    
+
     .icon-auth-navBar {
         font-size: 36px; /* Tamaño original */
         padding: 10px; /* Padding original */
@@ -137,14 +137,14 @@
     .auth-navbar {
         padding: var(--spacing-xs); /* 8px en todos los lados */
     }
-    
+
     .opc-auth-navbar {
         gap: var(--spacing-sm); /* 16px entre iconos */
         padding: var(--spacing-xs) var(--spacing-sm); /* 8px arriba/abajo, 16px izquierda/derecha */
         flex-wrap: wrap; /* Se envuelven en mobile pequeño */
         justify-content: space-around; /* Distribuidos uniformemente */
     }
-    
+
     .icon-auth-navBar {
         font-size: var(--font-size-2xl); /* 24px en mobile pequeño */
         padding: var(--spacing-xs); /* 8px de padding */
@@ -158,14 +158,14 @@
     .auth-navbar {
         padding: var(--spacing-xs); /* 8px en todos los lados */
     }
-    
+
     .opc-auth-navbar {
         gap: var(--spacing-xs); /* 8px entre iconos */
         padding: var(--spacing-xs); /* 8px en todos los lados */
         flex-direction: column; /* Iconos apilados verticalmente */
         align-items: center;
     }
-    
+
     .icon-auth-navBar {
         font-size: var(--font-size-xl); /* 20px en mobile muy pequeño */
         padding: var(--spacing-xs); /* 8px de padding */
@@ -181,7 +181,7 @@
     .icon-auth-navBar:hover {
         transform: none; /* Sin efectos de escala en touch */
     }
-    
+
     .icon-auth-navBar:active {
         transform: scale(0.95); /* Efecto de presión en touch */
     }

@@ -28,7 +28,7 @@ function useLessonPositions(count: number, width: number, height: number) {
   // evitando división por cero con Math.max.
   const spacingX = width / Math.max(count, 1);
   // spacingY fija la distancia vertical entre lecciones.
-  const spacingY = 120; 
+  const spacingY = 120;
   // Se crea un arreglo de objetos donde cada uno representa la posición de una lección.
   // Se alterna un zigzag en X y Y para dar dinamismo al camino visual.
   return Array.from({ length: count }, (_, i) => ({

@@ -5,26 +5,33 @@ import { sharedRoutes } from "./SharedRouters";
 import TeacherRoutes from "./TeacherRoutes";
 import StudentRoutes from "./StudentRoutes";
 import RoleRedirect from "./RoleRedirect";
+import { StudentGuard, TeacherGuard } from "./RoleGuard";
 
 export default function RoutersPrivates() {
   return (
     <Routes>
-      {/* Todas las rutas privadas requieren autenticación */}
+      {/* Todo lo privado está protegido por este wrapper */}
       <Route element={<PrivateRouters />}>
         <Route element={<AuthLayout />}>
-          {/* Redirige según el rol del usuario (después del login) */}
+
+          {/* Redirección automática según el rol */}
           <Route path="/" element={<RoleRedirect />} />
 
-          {/* Rutas para cada rol */}
-          <Route path="/teacher/*" element={<TeacherRoutes />} />
-          <Route path="/student/*" element={<StudentRoutes />} />
+          {/* Rutas protegidas para profesores */}
+          <Route element={<TeacherGuard />}>
+            <Route path="/teacher/*" element={<TeacherRoutes />} />
+          </Route>
 
-          {/* Rutas comunes pero protegidas (quiénes somos, políticas, etc.) */}
+          {/* Rutas protegidas para estudiantes */}
+          <Route element={<StudentGuard />}>
+            <Route path="/student/*" element={<StudentRoutes />} />
+          </Route>
+
+          {/* Rutas compartidas protegidas */}
           {sharedRoutes}
+
         </Route>
       </Route>
     </Routes>
   );
 }
-
-

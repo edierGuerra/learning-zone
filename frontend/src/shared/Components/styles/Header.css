@@ -74,18 +74,18 @@
         padding: var(--spacing-lg) var(--spacing-md); /* 32px arriba/abajo, 24px izquierda/derecha */
         gap: 0; /* Sin gap porque usamos space-between */
     }
-    
+
     .section-name-img {
         gap: var(--spacing-md);
     }
-    
+
     .name-app {
         margin-left: var(--spacing-lg); /* 32px de margen izquierdo */
         font-size: var(--font-size-4xl); /* 36px en tablet */
         padding: var(--spacing-sm) var(--spacing-lg); /* 16px arriba/abajo, 32px izquierda/derecha */
         text-align: left; /* Alineado a la izquierda */
     }
-    
+
     .word-zone {
         top: -326px; /* Posición original */
         left: 180px; /* Ajustado para tablet */
@@ -101,16 +101,16 @@
         display: flex;
         align-items: center;
     }
-    
 
-    
+
+
     .name-app {
         margin-left: 0px; /* Margen original */
         font-size: 36px; /* Tamaño original */
         padding: 6px 20px; /* Padding original */
         top: -10px;
     }
-    
+
     .word-zone {
         top: 26px; /* Posición original */
         left: 160px; /* Posición original */
@@ -125,7 +125,7 @@
         padding: var(--spacing-sm) var(--spacing-xs); /* 16px arriba/abajo, 8px izquierda/derecha */
         gap: var(--spacing-xs); /* Menos espacio entre elementos */
     }
-    
+
 
     .name-app {
         font-size: var(--font-size-2xl); /* 24px en mobile pequeño */
@@ -133,7 +133,7 @@
         letter-spacing: 0.8px; /* Menos espaciado entre letras */
         left: 26px;
     }
-    
+
     .word-zone {
         top: 24px; /* Ajustado para mobile pequeño */
         left: 90px; /* Ajustado para mobile pequeño */
@@ -149,13 +149,13 @@
         padding: var(--spacing-xs); /* 8px en todos los lados */
     }
 
-    
+
     .name-app {
         font-size: var(--font-size-xl); /* 20px en mobile muy pequeño */
         padding: var(--spacing-xs); /* 8px en todos los lados */
         letter-spacing: 0.5px; /* Menos espaciado */
     }
-    
+
     .word-zone {
         top: 20px; /* Ajustado para mobile muy pequeño */
         left: 80px; /* Ajustado para mobile muy pequeño */
@@ -179,4 +179,3 @@
         align-self: center;
     }
 }
-

@@ -31,4 +31,3 @@ Las rutas de cursos utilizan un parámetro dinámico `courseSlug` que permite ag
 1. El estudiante accede a `/home` y selecciona un curso.
 2. Se navega a `/courses/<nombre>` donde `CourseRouter` decide qué componente mostrar.
 3. Desde allí se cargan lecciones, contenidos y evaluaciones de forma dinámica.
-

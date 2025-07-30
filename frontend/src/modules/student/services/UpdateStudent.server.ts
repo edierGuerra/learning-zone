@@ -4,7 +4,7 @@ import type { TStudent } from '../../types/User'
 
 
 type TUpdateStudentAPIProps ={
-    student : Omit<TStudent, 'id' | 'password' | 'email' | 'numIdentification'> 
+    student : Omit<TStudent, 'id' | 'password' | 'email' | 'numIdentification'>
 }
 type TUpdateStudentResponse = {
   statusCode: number;
@@ -19,7 +19,7 @@ export default async function UpdateStudentAPI({student}:TUpdateStudentAPIProps)
         const infoSudent = {
             names: student.name,
             last_names: student.lastNames,
-        
+
         }
         const response = await axios.put(VITE_UPDATESTUDENT_ENDPOINT,infoSudent)
         return {
@@ -32,6 +32,6 @@ export default async function UpdateStudentAPI({student}:TUpdateStudentAPIProps)
         throw error
 
     }
- 
+
 
 }

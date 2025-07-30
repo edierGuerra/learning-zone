@@ -18,7 +18,7 @@ export default function useNotifications(pollingInterval=4000 ) {
 
     // Activar polling (peticion automatica) automático con useEffect
     const token = authStorage.getToken();
-    
+
     useEffect(() => {
 
         if(token ){
@@ -31,7 +31,7 @@ export default function useNotifications(pollingInterval=4000 ) {
     }
 
     }, []);
- 
+
     const deleteItemNotification= async(idItemNotification:number)=>{
         try{
             setLoadingNot(true);
@@ -40,12 +40,12 @@ export default function useNotifications(pollingInterval=4000 ) {
             if(response.status === 200){
                 await refreshNotifications()
                 await new Promise((resolve) => setTimeout(resolve, 500));
-                
+
             }
             else{
                 toast.error(response.message || '¡Uy! No se pudo eliminar la notificación.');
             }
-            
+
         }catch{
             toast.error('¡Algo salió mal eliminando la notificación!');
         }

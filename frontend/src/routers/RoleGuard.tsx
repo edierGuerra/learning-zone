@@ -15,13 +15,13 @@ interface RoleGuardProps {
 
 /**
  * RoleGuard - Componente principal de protección por roles
- * 
+ *
  * @param allowedRoles - Roles que pueden acceder a esta ruta
  * @param redirectTo - Ruta de redirección si no tiene permisos
  */
-export default function RoleGuard({ 
-  allowedRoles, 
-  redirectTo = "/home" 
+export default function RoleGuard({
+  allowedRoles,
+  redirectTo = "/"
 }: RoleGuardProps) {
   const { user, role } = useUser();
 
@@ -45,12 +45,12 @@ export default function RoleGuard({
  * TeacherGuard - Solo permite acceso a maestros
  */
 export function TeacherGuard() {
-  return <RoleGuard allowedRoles={["teacher"]} redirectTo="/home" />;
+  return <RoleGuard allowedRoles={["teacher"]} redirectTo="/" />;
 }
 
 /**
  * StudentGuard - Solo permite acceso a estudiantes
  */
 export function StudentGuard() {
-  return <RoleGuard allowedRoles={["student"]} redirectTo="/home" />;
+  return <RoleGuard allowedRoles={["student"]} redirectTo="/" />;
 }

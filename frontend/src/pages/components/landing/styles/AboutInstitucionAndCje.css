@@ -139,33 +139,33 @@
         padding: var(--spacing-xl) var(--spacing-lg); /* 48px arriba/abajo, 32px izquierda/derecha */
         gap: var(--spacing-xl); /* 48px entre elementos */
     }
-    
+
     .title-about-landing {
         font-size: var(--font-size-4xl); /* 36px en tablet */
         margin-bottom: var(--spacing-lg); /* 32px de margen inferior */
     }
-    
+
     .container-all-about {
         grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablet */
         gap: var(--spacing-xl); /* 48px entre secciones */
     }
-    
+
     .container-landing-team,
     .container-landing-institution {
         padding: var(--spacing-lg); /* 32px de padding */
     }
-    
+
     .title-landing-team,
     .title-landing-institution {
         font-size: var(--font-size-3xl); /* 30px en tablet */
         margin-bottom: var(--spacing-lg); /* 32px de margen inferior */
     }
-    
+
     .gallery-wrapper {
         max-width: 600px; /* Ancho máximo más pequeño en tablet */
         margin-bottom: var(--spacing-lg); /* 32px de margen inferior */
     }
-    
+
     .btn-view-about-team,
     .btn-view-about-institution {
         font-size: var(--font-size-xl); /* 20px en tablet */
@@ -178,33 +178,33 @@
     .container-about-institucion-and-cje {
         padding: var(--spacing-xl) var(--spacing-xl); /* 48px en todos los lados */
     }
-    
+
     .title-about-landing {
         font-size: 46px; /* Tamaño original */
         margin-bottom: var(--spacing-xl); /* 48px de margen inferior */
     }
-    
+
     .container-all-about {
         gap: 8rem; /* Gap original */
     }
-    
+
     .container-landing-team,
     .container-landing-institution {
         padding: 1rem; /* Padding original */
     }
-    
+
     .title-landing-team,
     .title-landing-institution {
         font-size: 36px; /* Tamaño original */
         margin-bottom: var(--spacing-md); /* 24px de margen inferior */
     }
-    
+
     .gallery-wrapper {
         width: 800px; /* Ancho original */
         max-width: 800px; /* Ancho máximo original */
         margin-bottom: var(--spacing-md); /* 24px de margen inferior */
     }
-    
+
     .btn-view-about-team,
     .btn-view-about-institution {
         font-size: 22px; /* Tamaño original */
@@ -219,32 +219,32 @@
         padding: var(--spacing-lg) var(--spacing-sm); /* 32px arriba/abajo, 16px izquierda/derecha */
         gap: var(--spacing-md); /* 24px entre elementos */
     }
-    
+
     .title-about-landing {
         font-size: var(--font-size-3xl); /* 30px en mobile pequeño */
         margin-bottom: var(--spacing-sm); /* 16px de margen inferior */
     }
-    
+
     .container-all-about {
         gap: var(--spacing-lg); /* 32px entre secciones */
     }
-    
+
     .container-landing-team,
     .container-landing-institution {
         padding: var(--spacing-sm); /* 16px de padding */
     }
-    
+
     .title-landing-team,
     .title-landing-institution {
         font-size: var(--font-size-2xl); /* 24px en mobile pequeño */
         margin-bottom: var(--spacing-sm); /* 16px de margen inferior */
         letter-spacing: 1.2px; /* Menos espaciado */
     }
-    
+
     .gallery-wrapper {
         margin-bottom: var(--spacing-sm); /* 16px de margen inferior */
     }
-    
+
     .btn-view-about-team,
     .btn-view-about-institution {
         font-size: var(--font-size-base); /* 16px en mobile pequeño */
@@ -259,28 +259,28 @@
         padding: var(--spacing-md) var(--spacing-xs); /* 24px arriba/abajo, 8px izquierda/derecha */
         gap: var(--spacing-sm); /* 16px entre elementos */
     }
-    
+
     .title-about-landing {
         font-size: var(--font-size-2xl); /* 24px en mobile muy pequeño */
         margin-bottom: var(--spacing-xs); /* 8px de margen inferior */
     }
-    
+
     .container-all-about {
         gap: var(--spacing-md); /* 24px entre secciones */
     }
-    
+
     .container-landing-team,
     .container-landing-institution {
         padding: var(--spacing-xs); /* 8px de padding */
     }
-    
+
     .title-landing-team,
     .title-landing-institution {
         font-size: var(--font-size-xl); /* 20px en mobile muy pequeño */
         margin-bottom: var(--spacing-xs); /* 8px de margen inferior */
         letter-spacing: 1px; /* Menos espaciado */
     }
-    
+
     .btn-view-about-team,
     .btn-view-about-institution {
         font-size: var(--font-size-sm); /* 14px en mobile muy pequeño */
@@ -297,7 +297,7 @@
     .btn-view-about-institution:hover {
         transform: none; /* Sin elevación en touch */
     }
-    
+
     .btn-view-about-team:active,
     .btn-view-about-institution:active {
         transform: scale(0.98); /* Efecto de presión en touch */
@@ -321,7 +321,7 @@
     .btn-view-about-institution {
         transition: none;
     }
-    
+
     .btn-view-about-team:hover,
     .btn-view-about-institution:hover {
         transform: none;

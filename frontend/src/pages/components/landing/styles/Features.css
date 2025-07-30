@@ -80,35 +80,35 @@
     .section-feaures {
         padding: var(--spacing-xl) var(--spacing-lg); /* 48px arriba/abajo, 32px izquierda/derecha */
     }
-    
+
     .section-features-title {
         gap: var(--spacing-md); /* 24px entre elementos */
         margin-bottom: var(--spacing-xl); /* 48px de margen inferior */
     }
-    
+
     .title-features-smalll {
         font-size: var(--font-size-3xl); /* 30px en tablet */
     }
-    
+
     .title-features-big {
         font-size: var(--font-size-4xl); /* 36px en tablet */
         margin-bottom: var(--spacing-xl); /* 48px de margen inferior */
     }
-    
+
     .features {
         grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablet */
         gap: var(--spacing-xl); /* 48px entre tarjetas */
     }
-    
+
     .feature-card {
         gap: var(--spacing-md); /* 24px entre elementos */
         padding: var(--spacing-lg); /* 32px de padding */
     }
-    
+
     .feature-card:hover {
         gap: var(--spacing-lg); /* 32px entre elementos en hover */
     }
-    
+
     .title-feature {
         font-size: var(--font-size-xl); /* 20px en tablet */
         margin-bottom: var(--spacing-md); /* 24px de margen inferior */
@@ -120,30 +120,30 @@
     .section-feaures {
         padding: var(--spacing-xl) var(--spacing-xl); /* 48px en todos los lados */
     }
-    
+
     .title-features-smalll {
         font-size: 28px; /* Tamaño original */
     }
-    
+
     .title-features-big {
         font-size: 44px; /* Tamaño original */
         margin-bottom: 3rem; /* Margen original */
     }
-    
+
     .features {
         grid-template-columns: repeat(3, 1fr); /* 3 columnas en desktop */
         gap: 2rem; /* Gap original */
     }
-    
+
     .feature-card {
         gap: 16px; /* Gap original */
         padding: 1.5rem; /* Padding más generoso */
     }
-    
+
     .feature-card:hover {
         gap: 26px; /* Gap original en hover */
     }
-    
+
     .title-feature {
         font-size: var(--font-size-lg); /* 18px en desktop */
         margin-bottom: var(--spacing-md); /* 24px de margen inferior */
@@ -155,36 +155,36 @@
     .section-feaures {
         padding: var(--spacing-lg) var(--spacing-sm); /* 32px arriba/abajo, 16px izquierda/derecha */
     }
-    
+
     .section-features-title {
         gap: var(--spacing-xs); /* 8px entre elementos */
         margin-bottom: var(--spacing-md); /* 24px de margen inferior */
     }
-    
+
     .title-features-smalll {
         font-size: var(--font-size-xl); /* 20px en mobile pequeño */
     }
-    
+
     .title-features-big {
         font-size: var(--font-size-3xl); /* 30px en mobile pequeño */
         margin-bottom: var(--spacing-lg); /* 32px de margen inferior */
     }
-    
+
     .features {
         gap: var(--spacing-md); /* 24px entre tarjetas */
     }
-    
+
     .feature-card {
         gap: var(--spacing-xs); /* 8px entre elementos */
         padding: var(--spacing-sm); /* 16px de padding */
         max-width: 300px; /* Ancho máximo más pequeño */
     }
-    
+
     .feature-card:hover {
         gap: var(--spacing-sm); /* 16px entre elementos en hover */
         transform: translateY(-5px); /* Menos elevación en mobile */
     }
-    
+
     .title-feature {
         font-size: var(--font-size-base); /* 16px en mobile pequeño */
         margin-bottom: var(--spacing-xs); /* 8px de margen inferior */
@@ -196,25 +196,25 @@
     .section-feaures {
         padding: var(--spacing-md) var(--spacing-xs); /* 24px arriba/abajo, 8px izquierda/derecha */
     }
-    
+
     .title-features-smalll {
         font-size: var(--font-size-lg); /* 18px en mobile muy pequeño */
     }
-    
+
     .title-features-big {
         font-size: var(--font-size-2xl); /* 24px en mobile muy pequeño */
         margin-bottom: var(--spacing-md); /* 24px de margen inferior */
     }
-    
+
     .features {
         gap: var(--spacing-sm); /* 16px entre tarjetas */
     }
-    
+
     .feature-card {
         max-width: 280px; /* Ancho máximo aún más pequeño */
         padding: var(--spacing-xs); /* 8px de padding */
     }
-    
+
     .title-feature {
         font-size: var(--font-size-sm); /* 14px en mobile muy pequeño */
         margin-bottom: var(--spacing-xs); /* 8px de margen inferior */
@@ -228,7 +228,7 @@
     .feature-card:hover {
         transform: none; /* Sin elevación en touch */
     }
-    
+
     .feature-card:active {
         transform: scale(0.98); /* Efecto de presión en touch */
         background-color: rgba(255, 255, 255, 0.15); /* Fondo más visible en active */
@@ -250,7 +250,7 @@
     .feature-card {
         transition: none;
     }
-    
+
     .feature-card:hover {
         transform: none;
     }

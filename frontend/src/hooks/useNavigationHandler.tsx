@@ -13,14 +13,8 @@ export type AppRoutes =
   | "/siteSugerences"
   | "/aboutUs"
   | "/aboutInstitution"
-  | "/word"
-  | "/excel"
-  | "/powerpoint"
   | "/contentPage"
-  | "/evaluationPage" 
-  | "/commentsPowerPoint"
-  | "/commentsWord"
-  | "/commentsExcel"
+  | "/evaluationPage"
   | "/help";
 
 export const useNavigationHandler = () => {
@@ -31,13 +25,12 @@ export const useNavigationHandler = () => {
       if (window.history.length > 2) {
         navigate(-1); // Ir una página atrás
       } else {
-        navigate("/", { replace: true }); 
+        navigate("/", { replace: true });
       }
     } else {
-      navigate(route); 
+      navigate(route);
     }
   };
 
   return handleBtnNavigate;
 };
-

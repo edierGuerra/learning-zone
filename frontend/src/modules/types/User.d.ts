@@ -12,7 +12,7 @@ export type TStudent = {
   name: string;
   lastNames: string;
   email: string;
-  password: string; 
+  password: string;
 };
 
 // Representa los datos mínimos que retorna el backend tras un login exitoso.
@@ -80,25 +80,23 @@ export type TUserProfileToken = {
 export type TUserContext = {
   // Cambio: 'student' → 'user' (más genérico)
   user: TUser | null;
-  
+
   // ✅ NUEVO: Rol del usuario actual
   role: UserRole | null;
-  
+
   // Mantiene: token, isLoggedIn, isReady, logout
   token: string | null;
   isLoggedIn: boolean;
   isReady: boolean;
   logout: () => void;
-  
+
   // Cambios: Setters actualizados
   setUser: React.Dispatch<React.SetStateAction<TUser | null>>; // ← NUEVO
   setToken: React.Dispatch<React.SetStateAction<string | null>>;
   setRole: React.Dispatch<React.SetStateAction<UserRole | null>>; // ← NUEVO
-  
+
   // Mantiene: notificaciones
   notifications: TNotifications;
   setNotifications: React.Dispatch<React.SetStateAction<TNotifications>>;
   numberNotifications: number;
 };
-
-

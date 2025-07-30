@@ -11,11 +11,11 @@ export default function StudentRouters() {
   return (
     <Routes>
       {/* rutas del estudiante */}
-        <Route path="/homeStudent" element={<HomeStudent />} />
-        <Route path="/profileStudent" element={<StudentProfile/>}/> {/* Perfil del estudiante */}
+        <Route path="/home-student" element={<HomeStudent />} />
+        <Route path="/profile-student" element={<StudentProfile/>}/> {/* Perfil del estudiante */}
         <Route path="/course/:id/:nameCourse" element={<CourseHomePage />} />
-        <Route path="/contentPage" element={<ContentPage/>}/>
-        <Route path="/evaluationPage" element={<EvaluationPage/>}/>
+        <Route path="/contents-page" element={<ContentPage/>}/>
+        <Route path="/evaluation-page" element={<EvaluationPage/>}/>
         <Route path="/comments/:courseId" element={<CommentPageWrapper />} />
 
     </Routes>

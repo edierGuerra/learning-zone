@@ -44,7 +44,7 @@ export default async function SendResponseLessonAPI({
       validateStatus: (status) => status < 500,
     }
   );
-  
+
   return res.data;
 
 }

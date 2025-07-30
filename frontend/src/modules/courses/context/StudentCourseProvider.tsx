@@ -24,8 +24,8 @@ import toast from "react-hot-toast";
 import GetCoursesAPI from "../services/GetCourses";
 import ProgressCoursesAPI from "../../student/services/GetProgressCourses.server";
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
-import { StudentCourseContext } from "./studentCourseContext";
 import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
+import { StudentCourseContext } from "./StudentCourseContext";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -86,24 +86,24 @@ export const StudentCourseProvider = ({ children }: Props) => {
     }
     if (storedContentLesson) {
       setContent(storedContentLesson);
-    } 
+    }
     if (storedEvaluationLesson) {
       setEvaluation(storedEvaluationLesson);
-    } 
+    }
   }, []);
 
-  
+
       /* Funcion que se encarga de mostrar el porcentaje completo */
     useEffect(() => {
       if (lessons.length === 0) return;
-    
+
       let number = 0;
       lessons.forEach((lesson) => {
         if (lesson.progressState === 'complete') {
           number += 1;
         }
       });
-    
+
       const porcent = Math.round((number / lessons.length) * 100);
       setProgress(porcent);
     }, [lessons]);
@@ -189,7 +189,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
             console.log(error)
             toast.error('Ups no se pudo cargar')
         }
-          };    
+          };
 
 
   const renderContent =async(idCourse:TCourse['id'], lesson:TLesson)=>{
@@ -212,7 +212,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
     // El Provider envuelve toda la app y expone el contexto con los valores globales
     <StudentCourseContext.Provider
       value={{
-      // Cursos disponibles (Excel, Word, PowerPoint)
+      setCourses,
       courses,
       // Lecciones del curso actual cargado
       lessons,

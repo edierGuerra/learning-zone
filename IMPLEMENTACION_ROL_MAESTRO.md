@@ -44,7 +44,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 class Teacher(Base):
     __tablename__ = "teachers"
-    
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     identification_number: Mapped[int] = mapped_column(Integer, nullable=False, unique=True)
     names: Mapped[str] = mapped_column(String(50), nullable=False)
@@ -55,13 +55,13 @@ class Teacher(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
     # Tokens de autenticación
     email_token: Mapped[str] = mapped_column(String(255), nullable=True, unique=True)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     password_token: Mapped[str] = mapped_column(String(250), unique=True, nullable=True)
     expire_password_token: Mapped[datetime] = mapped_column(DateTime, nullable=True)
-    
+
     # Relaciones
     courses_created: Mapped[List["Course"]] = relationship(back_populates="teacher")
     notifications_created: Mapped[List["Notification"]] = relationship(back_populates="teacher")
@@ -73,23 +73,23 @@ class Teacher(Base):
 # backend/models/course_model.py
 class Course(Base):
     __tablename__ = "courses"
-    
+
     # Campos existentes...
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str] = mapped_column(String(100))
-    
+
     # NUEVO: Campo para maestro creador
     teacher_id: Mapped[int] = mapped_column(ForeignKey("teachers.id"), nullable=True)
     is_published: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
     # Relaciones existentes...
     comments: Mapped[List["Comment"]] = relationship(back_populates="course")
     students: Mapped[List["Student"]] = relationship(secondary="course_students", back_populates="courses")
     lessons: Mapped[List["Lesson"]] = relationship(back_populates="course")
-    
+
     # NUEVA: Relación con maestro
     teacher: Mapped["Teacher"] = relationship(back_populates="courses_created")
 ```
@@ -100,21 +100,21 @@ class Course(Base):
 # backend/models/notification_model.py
 class Notification(Base):
     __tablename__ = "notifications"
-    
+
     # Campos existentes...
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
     message: Mapped[str] = mapped_column(String(500), nullable=False)
     type: Mapped[str] = mapped_column(String(50), nullable=False)
-    
+
     # NUEVO: Campo para maestro creador
     teacher_id: Mapped[int] = mapped_column(ForeignKey("teachers.id"), nullable=True)
     course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    
+
     # Relaciones existentes...
     students: Mapped[List["Student"]] = relationship(secondary=student_notification, back_populates="notifications")
-    
+
     # NUEVA: Relación con maestro
     teacher: Mapped["Teacher"] = relationship(back_populates="notifications_created")
     course: Mapped["Course"] = relationship(back_populates="notifications")
@@ -147,7 +147,7 @@ from utils.email_utils import send_verification_email
 class TeacherService:
     def __init__(self, repository):
         self.repository = repository
-    
+
     async def create_teacher(self, teacher_data: TeacherCreate) -> Teacher:
         """Crear un nuevo maestro"""
         hashed_password = hash_password(teacher_data.password)
@@ -160,30 +160,30 @@ class TeacherService:
             specialization=teacher_data.specialization
         )
         return await self.repository.create(teacher)
-    
+
     async def get_teacher_by_id(self, teacher_id: int) -> Optional[Teacher]:
         """Obtener maestro por ID"""
         return await self.repository.get_by_id(Teacher, teacher_id)
-    
+
     async def get_teacher_by_email(self, email: str) -> Optional[Teacher]:
         """Obtener maestro por email"""
         return await self.repository.get_by_field(Teacher, "email", email)
-    
+
     async def update_teacher(self, teacher_id: int, teacher_data: TeacherUpdate) -> Teacher:
         """Actualizar datos del maestro"""
         update_data = teacher_data.dict(exclude_unset=True)
         if "password" in update_data:
             update_data["password"] = hash_password(update_data["password"])
         return await self.repository.update(Teacher, teacher_id, update_data)
-    
+
     async def delete_teacher(self, teacher_id: int) -> bool:
         """Eliminar maestro (soft delete)"""
         return await self.repository.update(Teacher, teacher_id, {"is_active": False})
-    
+
     async def get_teacher_courses(self, teacher_id: int) -> List[Course]:
         """Obtener cursos creados por el maestro"""
         return await self.repository.get_teacher_courses(teacher_id)
-    
+
     async def create_course(self, teacher_id: int, course_data: CourseCreate) -> Course:
         """Crear un nuevo curso"""
         course = Course(
@@ -192,29 +192,29 @@ class TeacherService:
             teacher_id=teacher_id
         )
         return await self.repository.create(course)
-    
+
     async def create_lesson(self, teacher_id: int, lesson_data: LessonCreate) -> Lesson:
         """Crear una nueva lección"""
         # Verificar que el curso pertenece al maestro
         course = await self.repository.get_by_id(Course, lesson_data.course_id)
         if not course or course.teacher_id != teacher_id:
             raise ValueError("No tienes permisos para crear lecciones en este curso")
-        
+
         lesson = Lesson(
             name=lesson_data.name,
             description=lesson_data.description,
             course_id=lesson_data.course_id
         )
         return await self.repository.create(lesson)
-    
+
     async def create_evaluation(self, teacher_id: int, evaluation_data: EvaluationCreate) -> Evaluation:
         """Crear una nueva evaluación"""
         lesson = await self.repository.get_by_id(Lesson, evaluation_data.lesson_id)
         course = await self.repository.get_by_id(Course, lesson.course_id)
-        
+
         if not course or course.teacher_id != teacher_id:
             raise ValueError("No tienes permisos para crear evaluaciones en esta lección")
-        
+
         evaluation = Evaluation(
             title=evaluation_data.title,
             description=evaluation_data.description,
@@ -222,7 +222,7 @@ class TeacherService:
             questions=evaluation_data.questions
         )
         return await self.repository.create(evaluation)
-    
+
     async def create_notification(self, teacher_id: int, notification_data: NotificationCreate) -> Notification:
         """Crear una nueva notificación"""
         notification = Notification(
@@ -242,41 +242,41 @@ class TeacherService:
 class CourseManagementService:
     def __init__(self, repository):
         self.repository = repository
-    
+
     async def create_course_with_content(self, teacher_id: int, course_data: CourseCreateWithContent) -> Course:
         """Crear curso con contenido inicial"""
         course = await self.teacher_service.create_course(teacher_id, course_data.course)
-        
+
         # Crear lecciones si se proporcionan
         if course_data.lessons:
             for lesson_data in course_data.lessons:
                 lesson_data.course_id = course.id
                 await self.teacher_service.create_lesson(teacher_id, lesson_data)
-        
+
         return course
-    
+
     async def update_course_content(self, teacher_id: int, course_id: int, content_data: ContentUpdate) -> Course:
         """Actualizar contenido del curso"""
         course = await self.repository.get_by_id(Course, course_id)
         if not course or course.teacher_id != teacher_id:
             raise ValueError("No tienes permisos para editar este curso")
-        
+
         return await self.repository.update(Course, course_id, content_data.dict())
-    
+
     async def publish_course(self, teacher_id: int, course_id: int) -> Course:
         """Publicar curso para estudiantes"""
         course = await self.repository.get_by_id(Course, course_id)
         if not course or course.teacher_id != teacher_id:
             raise ValueError("No tienes permisos para publicar este curso")
-        
+
         return await self.repository.update(Course, course_id, {"is_published": True})
-    
+
     async def archive_course(self, teacher_id: int, course_id: int) -> Course:
         """Archivar curso"""
         course = await self.repository.get_by_id(Course, course_id)
         if not course or course.teacher_id != teacher_id:
             raise ValueError("No tienes permisos para archivar este curso")
-        
+
         return await self.repository.update(Course, course_id, {"is_published": False})
 ```
 
@@ -309,28 +309,28 @@ async def get_current_user(
         detail="Credenciales inválidas",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    
+
     try:
         payload = decode_token(token)
         user_id: int = payload.get("user_id")
         user_type: str = payload.get("user_type")
-        
+
         if user_id is None or user_type is None:
             raise credentials_exception
-            
+
     except Exception:
         raise credentials_exception
-    
+
     if user_type == "student":
         user = await session.get(Student, user_id)
     elif user_type == "teacher":
         user = await session.get(Teacher, user_id)
     else:
         raise credentials_exception
-    
+
     if user is None:
         raise credentials_exception
-    
+
     return user
 
 async def get_current_teacher(
@@ -381,13 +381,13 @@ from models.evaluation_model import Evaluation
 class RoleMiddleware:
     def __init__(self, allowed_roles: List[str]):
         self.allowed_roles = allowed_roles
-    
+
     async def __call__(self, request: Request, call_next):
         # Verificar rol del usuario
         user = request.state.user
         if not user or user.__class__.__name__.lower() not in self.allowed_roles:
             raise HTTPException(status_code=403, detail="Acceso denegado")
-        
+
         response = await call_next(request)
         return response
 
@@ -397,28 +397,28 @@ class SecurityMiddleware:
         """Verificar que el curso pertenece al maestro"""
         course = await session.get(Course, course_id)
         return course and course.teacher_id == teacher_id
-    
+
     @staticmethod
     async def verify_lesson_ownership(teacher_id: int, lesson_id: int, session) -> bool:
         """Verificar que la lección pertenece al maestro"""
         lesson = await session.get(Lesson, lesson_id)
         if not lesson:
             return False
-        
+
         course = await session.get(Course, lesson.course_id)
         return course and course.teacher_id == teacher_id
-    
+
     @staticmethod
     async def verify_evaluation_ownership(teacher_id: int, evaluation_id: int, session) -> bool:
         """Verificar que la evaluación pertenece al maestro"""
         evaluation = await session.get(Evaluation, evaluation_id)
         if not evaluation:
             return False
-        
+
         lesson = await session.get(Lesson, evaluation.lesson_id)
         if not lesson:
             return False
-        
+
         course = await session.get(Course, lesson.course_id)
         return course and course.teacher_id == teacher_id
 ```
@@ -751,7 +751,7 @@ export const CourseCreator: React.FC = () => {
   return (
     <div className="course-creator">
       <h2>Crear Nuevo Curso</h2>
-      
+
       <form onSubmit={handleSubmit} className="course-form">
         <div className="form-group">
           <label htmlFor="name">Nombre del Curso</label>
@@ -810,7 +810,7 @@ class Permissions(str, Enum):
     TAKE_EVALUATIONS = "take_evaluations"
     VIEW_PROGRESS = "view_progress"
     CREATE_COMMENTS = "create_comments"
-    
+
     # Permisos de maestro
     CREATE_COURSES = "create_courses"
     EDIT_COURSES = "edit_courses"
@@ -850,12 +850,12 @@ class PermissionManager:
             Permissions.VIEW_ANALYTICS
         ]
     }
-    
+
     @classmethod
     def has_permission(cls, user_role: UserRole, permission: Permissions) -> bool:
         """Verificar si un rol tiene un permiso específico"""
         return permission in cls.ROLE_PERMISSIONS.get(user_role, [])
-    
+
     @classmethod
     def get_user_permissions(cls, user_role: UserRole) -> List[Permissions]:
         """Obtener todos los permisos de un rol"""
@@ -880,17 +880,17 @@ def require_permission(permission: Permissions):
             current_user = kwargs.get('current_user')
             if not current_user:
                 raise HTTPException(status_code=401, detail="Usuario no autenticado")
-            
+
             # Determinar rol del usuario
             user_role = UserRole.TEACHER if hasattr(current_user, 'specialization') else UserRole.STUDENT
-            
+
             # Verificar permiso
             if not PermissionManager.has_permission(user_role, permission):
                 raise HTTPException(
-                    status_code=403, 
+                    status_code=403,
                     detail=f"No tienes permisos para realizar esta acción: {permission}"
                 )
-            
+
             return await func(*args, **kwargs)
         return wrapper
     return decorator
@@ -902,19 +902,19 @@ def require_teacher_ownership(resource_type: str):
         async def wrapper(*args, **kwargs):
             current_user = kwargs.get('current_user')
             resource_id = kwargs.get(f'{resource_type}_id')
-            
+
             if not current_user or not hasattr(current_user, 'specialization'):
                 raise HTTPException(status_code=403, detail="Se requiere rol de maestro")
-            
+
             # Verificar propiedad del recurso
             if not await SecurityMiddleware.verify_resource_ownership(
                 current_user.id, resource_id, resource_type, kwargs.get('session')
             ):
                 raise HTTPException(
-                    status_code=403, 
+                    status_code=403,
                     detail=f"No tienes permisos para acceder a este {resource_type}"
                 )
-            
+
             return await func(*args, **kwargs)
         return wrapper
     return decorator
@@ -968,4 +968,4 @@ def require_teacher_ownership(resource_type: str):
 3. **Planificar recursos**: ¿Necesitas ayuda con alguna fase específica?
 4. **Establecer métricas**: ¿Cómo medirás el éxito de la implementación?
 
-¿Te gustaría que empiece implementando alguna fase específica o prefieres que profundice en algún aspecto particular? 
+¿Te gustaría que empiece implementando alguna fase específica o prefieres que profundice en algún aspecto particular?

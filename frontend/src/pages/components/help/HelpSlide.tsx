@@ -84,7 +84,7 @@ export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
               />
             )}
             <br></br>
-            
+
 
             <HelpButtons
               isLast={index === helpSteps.length - 1}

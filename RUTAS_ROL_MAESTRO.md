@@ -6,7 +6,7 @@
 ```
 frontend/src/routers/
 ├── index.tsx              ✅ Modificado
-├── private.tsx            ✅ Modificado  
+├── private.tsx            ✅ Modificado
 ├── TeacherRoutes.tsx      ✅ Nuevo
 ├── RoleGuard.tsx          ✅ Nuevo
 └── RoleRedirect.tsx       ✅ Nuevo
@@ -20,14 +20,14 @@ frontend/src/routers/
 ```typescript
 // Componentes disponibles:
 <TeacherGuard />      // Solo maestros
-<StudentGuard />      // Solo estudiantes  
+<StudentGuard />      // Solo estudiantes
 ```
 
 ### **RoleRedirect.tsx** - Redirección Automática
 ```typescript
 // Redirección automática según rol:
 - teacher → /teacher/dashboard
-- student → /student/courses  
+- student → /student/courses
 ```
 
 ---

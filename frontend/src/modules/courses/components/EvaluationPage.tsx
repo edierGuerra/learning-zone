@@ -46,15 +46,15 @@ export default function EvaluationPage() {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [showScoreModal, score]);
-  
+
   if (!palette) return <div>Error: No se pudo cargar la paleta de colores.</div>;
 
   // Maneja la respuesta del estudiante y actualiza progreso y puntaje
   const handleAnswer = async (
-    e: React.FormEvent<HTMLFormElement> | null, 
+    e: React.FormEvent<HTMLFormElement> | null,
     id:TEvaluation['id'],
-    response: string, 
-    questionType: TEvaluation['questionType'] 
+    response: string,
+    questionType: TEvaluation['questionType']
   ) => {
     if (e) e.preventDefault();
     try {

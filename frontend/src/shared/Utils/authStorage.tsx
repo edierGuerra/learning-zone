@@ -21,11 +21,11 @@ export const authStorage = {
     }
   },
   removeCookieConsentGiven:()=>localStorage.removeItem('CookieConsentGiven'),
-  
+
   // ============================================================================
   // USUARIO UNIFICADO (ESTUDIANTE O MAESTRO)
   // ============================================================================
-  
+
   // Guarda el usuario unificado (estudiante o maestro)
   setUser: (user: TUser) =>
     localStorage.setItem("user", JSON.stringify(user)),
@@ -47,7 +47,7 @@ export const authStorage = {
   // ============================================================================
   // ROL DEL USUARIO
   // ============================================================================
-  
+
   // Guarda el rol del usuario
   setRole: (role: TUserRole) =>
     localStorage.setItem("role", role),
@@ -99,7 +99,7 @@ export const authStorage = {
   getToken: (): string | null => localStorage.getItem("token"),
 
   removeToken: () => localStorage.removeItem("token"),
-  
+
   // Token de request email
   setRequestEmailToken: (token: TStudentProfileToken['token']) =>
     localStorage.setItem("RequestEmailToken", token),
@@ -128,7 +128,7 @@ export const authStorage = {
 
   removeIdAutoIncrementStudent: () =>
     localStorage.removeItem("idAutoIncrementStudent"),
-/*   
+/*
   setNameStudent:(name:TStudent['name'])=>
     localStorage.setItem('name', name),
 
@@ -261,7 +261,7 @@ export const authStorage = {
       return null;
     }
   },
-   
+
    // Elimina la paleta de colores  del localStorage
   removePaletteColors: () => localStorage.removeItem("paletteColors"),
 

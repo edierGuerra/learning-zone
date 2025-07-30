@@ -9,20 +9,20 @@
   --tablet: 768px;
   --desktop: 1024px;
   --large-desktop: 1200px;
-  
+
   /* Container max-widths */
   --container-mobile: 100%;
   --container-tablet: 720px;
   --container-desktop: 960px;
   --container-large: 1140px;
-  
+
   /* Spacing responsive */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 1.5rem;
   --spacing-lg: 2rem;
   --spacing-xl: 3rem;
-  
+
   /* Font sizes responsive */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -53,7 +53,7 @@
     max-width: var(--container-tablet);
     padding: 0 var(--spacing-md);
   }
-  
+
   .hidden-mobile { display: block; }
   .hidden-tablet { display: none; }
 }
@@ -63,7 +63,7 @@
     max-width: var(--container-desktop);
     padding: 0 var(--spacing-lg);
   }
-  
+
   .hidden-tablet { display: block; }
   .hidden-desktop { display: none; }
 }
@@ -72,6 +72,6 @@
   .container {
     max-width: var(--container-large);
   }
-  
+
   .hidden-desktop { display: block; }
 }

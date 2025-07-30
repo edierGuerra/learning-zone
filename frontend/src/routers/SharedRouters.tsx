@@ -13,6 +13,6 @@ export const sharedRoutes = [
   <Route key="sitePolicies" path="/sitePolicies" element={<SitePolicies />} />,
   <Route key="siteSugerences" path="/siteSugerences" element={<ComplaintPage />} />,
   ...errorsRouters
-  
+
 
 ];

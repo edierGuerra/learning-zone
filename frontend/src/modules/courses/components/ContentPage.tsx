@@ -10,9 +10,9 @@ export default function ContentPage() {
     const handleBtnNavigate = useNavigationHandler();
     if (!palette) return <div>Error: No se pudo cargar la paleta de colores.</div>;
 
-    
 
-    
+
+
   return (
   <div
     className="container-content-lesson"

@@ -33,7 +33,7 @@ export default function useFormRegister() {
 
 
   const [formVerify, setFormVerify] = useState(true);
-  
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

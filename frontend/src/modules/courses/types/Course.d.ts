@@ -85,6 +85,7 @@ export type TScore={
 
 }
 interface TStudentCourseContextType {
+    setCourses:React.Dispatch<React.SetStateAction<TCoursesStudents>>;
     courses:TCoursesStudents;
     lessons: TLessons;
     setLessons: React.Dispatch<React.SetStateAction<TLessons>>
@@ -92,17 +93,14 @@ interface TStudentCourseContextType {
     content:TContent | null;
     currentLesson: TLesson | null;
     evaluation:TEvaluation | null,
-    loadLessonsCourse:(idCourse: TCourse["id"]) => Promise<void>,
-    loadLessonContent:(idCourse: TCourse["id"], lesson: TLesson) => Promise<void>,
-    loadLessonEvaluation: (idCourse: TCourse["id"], idLesson: TLesson['id']) => Promise<void>,
-    progressLessons: TProgressCourses,
-    loadProgressLessons: () => Promise<void>,
-    renderContent:(idCourse: TCourse["id"], lesson: TLesson)=> Promise<void>,
-    renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>,
-    palette:TColorPalette | null,
-    setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>,
+    loadLessonsCourse:(idCourse: TCourse["id"]) => Promise<void>;
+    loadLessonContent:(idCourse: TCourse["id"], lesson: TLesson) => Promise<void>;
+    loadLessonEvaluation: (idCourse: TCourse["id"], idLesson: TLesson['id']) => Promise<void>;
+    progressLessons: TProgressCourses;
+    loadProgressLessons: () => Promise<void>;
+    renderContent:(idCourse: TCourse["id"], lesson: TLesson)=> Promise<void>;
+    renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>;
+    palette:TColorPalette | null;
+    setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>;
 
 }
-
-
-

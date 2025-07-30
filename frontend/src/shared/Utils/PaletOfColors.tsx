@@ -2,10 +2,10 @@ import { educationalPalettes } from '../theme/ColorPalettesCourses'
 
 export default function PaletOfColors() {
 
-    
+
   return (
     <div className='containet-palet-colors'>
-       { 
+       {
     // Recorremos el objeto `educationalPalettes` convirtiéndolo en un array de [clave, valor]
     Object.entries(educationalPalettes).map(([name, palette]) => (
     // Cada iteración devuelve un bloque <div> que representa una paleta
@@ -29,7 +29,7 @@ export default function PaletOfColors() {
   ))
 }
 
-      
+
     </div>
   )
 }

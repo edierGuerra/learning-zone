@@ -8,7 +8,7 @@ export default function IconNotifications() {
     <>
       <IoMdNotifications />
       {numberNotifications > 0 && (
-        <span 
+        <span
         style={{
           marginLeft: "-10px",
           textAlign: "center",

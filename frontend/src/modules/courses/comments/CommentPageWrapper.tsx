@@ -26,7 +26,7 @@ export default function CommentPageWrapper() {
     };
   }, [numericCourseId]);
 
-  const cursos = authStorage.getCourses();
+  const cursos = authStorage.getCoursesStudent();
   const curso = cursos.find(c => c.id === numericCourseId);
   if (!curso) return <div>Curso no encontrado</div>;
 

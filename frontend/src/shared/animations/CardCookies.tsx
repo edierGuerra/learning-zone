@@ -94,7 +94,7 @@ const CardCookies = () => {
                                 <path fill="#644647" d="M33.129 29.18l-2.803 1.065a.953.953 0 00-.053 1.764.957.957 0 00.73.022l2.803-1.065a.953.953 0 00-.677-1.783v-.003zm24.373-3.628l-2.167.823a.956.956 0 00-.054 1.764.954.954 0 00.73.021l2.169-.823a.954.954 0 10-.678-1.784v-.001z" />
                             </svg>
                         </div>
-            
+
                         <div className="card-center">
                             <h5 className="card-title">Your privacy is important to us</h5>
                             <p className="card-text-cookie">
@@ -105,7 +105,7 @@ const CardCookies = () => {
                                 <a className="card-link" onClick={()=>handleBtnNavigate('/sitePolicies')}>Privacy Policy</a>.
                             </p>
                         </div>
-            
+
                         <div className="card-right">
                             <button className="card-more-options" onClick={()=>setClickMoreOptions(true)}>More Options</button>
                             <button className="card-accept" type="button" onClick={acceptConsent}>Accept</button>

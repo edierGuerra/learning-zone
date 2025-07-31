@@ -1,12 +1,31 @@
+import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
 
-export type TCourse ={
-    id:int,
-    name:string,
-    description:string
-    status: 'in_progress' | 'completed' 
+export type TCourse = {
+    id: number;
+    name: string;
+    description: string;
+    image: string;
+    palette: TColorPalette; // Paleta de colores del curso
+    category:
+        | 'ofimatica'
+        | 'electronica'
+        | 'programacion'
+        | 'diseno'
+        | 'ciberseguridad'
+        | 'desarrollo de videojuegos'
+        | 'inteligencia artificial'
+        | 'desarrollo web'
+        | 'otro';
+};
 
-}
-export type TCourses = TCourse[];
+// Para estudiantes: seleccionamos solo las props necesarias
+export type TCourseStudent = Pick<TCourse, "id" | "name" | "description" | "image" | 'category' |'palette'> & {
+  status: "in_progress" | "completed";
+};
+
+
+export type TCoursesStudents = TCourseStudent[];
+export type TCoursesGeneric = TCoursesTeachers | TCoursesStudents
 
 /* Modelo de progreso de cada curso */
 
@@ -38,6 +57,10 @@ export interface TLesson {
 
 export type TLessons = TLesson[];
 
+
+
+
+
 export type TContent ={
     id:number,
     title: TLesson['name']
@@ -59,23 +82,25 @@ export type TScore={
 
 
 }
-interface TCourseContextType {
-    courses:TCourses;
+
+
+interface TStudentCourseContextType {
+    setCourses:React.Dispatch<React.SetStateAction<TCoursesStudents>>;
+    courses:TCoursesStudents;
     lessons: TLessons;
     setLessons: React.Dispatch<React.SetStateAction<TLessons>>
     progress: number; // porcentaje
     content:TContent | null;
     currentLesson: TLesson | null;
     evaluation:TEvaluation | null,
-    loadLessonsCourse:(idCourse: TCourse["id"]) => Promise<void>,
-    loadLessonContent:(idCourse: TCourse["id"], lesson: TLesson) => Promise<void>,
-    loadLessonEvaluation: (idCourse: TCourse["id"], idLesson: TLesson['id']) => Promise<void>,
-    progressLessons: TProgressCourses,
-    loadProgressLessons: () => Promise<void>,
-    renderContent:(idCourse: TCourse["id"], lesson: TLesson)=> Promise<void>,
-    renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>
+    loadLessonsCourse:(idCourse: TCourse["id"]) => Promise<void>;
+    loadLessonContent:(idCourse: TCourse["id"], lesson: TLesson) => Promise<void>;
+    loadLessonEvaluation: (idCourse: TCourse["id"], idLesson: TLesson['id']) => Promise<void>;
+    progressLessons: TProgressCourses;
+    loadProgressLessons: () => Promise<void>;
+    renderContent:(idCourse: TCourse["id"], lesson: TLesson)=> Promise<void>;
+    renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>;
+    palette:TColorPalette | null;
+    setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>;
 
 }
-
-
-

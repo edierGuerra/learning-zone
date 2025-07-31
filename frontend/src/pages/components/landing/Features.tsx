@@ -140,7 +140,7 @@ useEffect(() => {
             </p>
           }
           />
-          
+
         </div>
         <div className="feature-card">
           <h2 className='title-feature'>Transforma información en conocimiento útil</h2>

@@ -617,20 +617,20 @@ el new_score sera esa sumatoria mas el puntaje obtenido en la evaluacion actual
 
 ### **Flujo General – Gestión de Certificados**
 
-1. **Habilitación del Certificado (Backend):**  
-   - La certificación solo se habilita cuando el estudiante ha completado exitosamente **los 3 cursos obligatorios**.  
-   - Una vez validado, se genera o asocia un certificado digital (PDF) al estudiante en la base de datos.  
+1. **Habilitación del Certificado (Backend):**
+   - La certificación solo se habilita cuando el estudiante ha completado exitosamente **los 3 cursos obligatorios**.
+   - Una vez validado, se genera o asocia un certificado digital (PDF) al estudiante en la base de datos.
 
-2. **Frontend – Visualización de Certificados:**  
-   - El usuario ingresa al apartado **"Mis Certificaciones"** en el perfil (`/profile/certifications`).  
-   - Envía una solicitud **GET** al backend para obtener la lista de certificados.  
+2. **Frontend – Visualización de Certificados:**
+   - El usuario ingresa al apartado **"Mis Certificaciones"** en el perfil (`/profile/certifications`).
+   - Envía una solicitud **GET** al backend para obtener la lista de certificados.
    - El frontend:
      - Si **no existen certificados**, renderiza un mensaje: `"Aún no tienes certificaciones disponibles."`.
      - Si **existen certificados**, muestra una lista con:
        - Nombre del certificado.
        - Botón de descarga (atributo `download`) que apunta a la URL del documento.
 
-3. **Backend – Respuesta de Certificados:**  
+3. **Backend – Respuesta de Certificados:**
    - Valida el token del estudiante.
    - Recupera de la base de datos los certificados asociados al `student_id`.
    - Devuelve un array de objetos con la siguiente estructura:
@@ -650,7 +650,7 @@ el new_score sera esa sumatoria mas el puntaje obtenido en la evaluacion actual
      }
      ```
 
-4. **Descarga del Certificado:**  
+4. **Descarga del Certificado:**
    - El botón de descarga en el frontend permite al usuario descargar el archivo directamente usando el atributo `download`.
    - La URL de descarga puede ser pública o protegida (en este último caso, el frontend enviará el token para validación antes de entregar el archivo).
 
@@ -667,16 +667,16 @@ el new_score sera esa sumatoria mas el puntaje obtenido en la evaluacion actual
 
 ### **Parámetros Esperados**
 
-* **Header:** `Authorization: Bearer <access-token>`  
+* **Header:** `Authorization: Bearer <access-token>`
 
 ---
 
 ### **Respuestas Posibles**
 
-- `200 OK`: Devuelve lista de certificados o archivo de descarga.  
-- `204 No Content`: No hay certificados disponibles.  
-- `401 Unauthorized`: Token inválido o ausente.  
-- `404 Not Found`: Certificado no encontrado (cuando se intenta descargar uno inexistente).  
+- `200 OK`: Devuelve lista de certificados o archivo de descarga.
+- `204 No Content`: No hay certificados disponibles.
+- `401 Unauthorized`: Token inválido o ausente.
+- `404 Not Found`: Certificado no encontrado (cuando se intenta descargar uno inexistente).
 
 ---
 

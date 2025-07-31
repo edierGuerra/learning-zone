@@ -17,7 +17,7 @@ export default function useRecoverPassword() {
     const MIN_PASSWORD_LENGTH = 6;
 
     const [loading,setLoading] = useState(false);
-    
+
     const [email, setEmail] = useState<TStudent['email']>(); // Estado que controla el email
     const [password, setPassword] = useState<TStudent['password']>(''); // Inicializa con cadena vacía
     const [confirmPassword, setConfirmPassword] = useState<TStudent['password']>(''); // Inicializa con cadena vacía
@@ -48,21 +48,21 @@ export default function useRecoverPassword() {
         } else if (!isValidEmail(email)) {
             errors.email = ERROR_MESSAGES.invalidEmail;
         }
-        
+
         return errors;
-        
+
     }
-    
+
     const validatesPasswords =(form:Pick<RequestPassworForm, 'password' |'confirmPassword'>) =>{
         const errors: FormErrors = {};
-        
+
         // Validar contraseña
         if (!isRequired(form.password)) {
             errors.password = ERROR_MESSAGES.required("contraseña");
         } else if (!hasMinLength(form.password, MIN_PASSWORD_LENGTH)) {
             errors.password = ERROR_MESSAGES.minLength("contraseña", MIN_PASSWORD_LENGTH);
         }
-        
+
         // Validar confirmación
         if (form.confirmPassword !== form.password) {
             errors.confirmPassword = ERROR_MESSAGES.passwordsDoNotMatch;
@@ -92,7 +92,7 @@ export default function useRecoverPassword() {
             const response = await SendEmailRequestAPI(email!);
             if(!response.email){
                 toast.error(response.message)
-                return 
+                return
             }
             // Guardando el email en el localStorage
             toast.success('Correo verificado')
@@ -102,7 +102,7 @@ export default function useRecoverPassword() {
             toast.error('No se pudo encontrar tu cuenta')
         }finally{
             setLoading(false)
-        } 
+        }
 
     }
 
@@ -147,9 +147,9 @@ export default function useRecoverPassword() {
 
     }
 
-    
+
   return {
-    
+
   // Estados del formulario
   email,
   setEmail,

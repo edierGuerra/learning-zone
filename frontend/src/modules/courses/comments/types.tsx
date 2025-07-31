@@ -40,4 +40,3 @@ export type TStudentAllComents ={
     prefixProfile: string; // Campo útil para mostrar iniciales, títulos o avatar textual
     stateConnect: boolean
 };
-  

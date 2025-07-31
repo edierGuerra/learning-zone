@@ -12,7 +12,7 @@ const NotFound = () => {
       </div>
       <h1 className="notfound-title">¡Ups! Página no encontrada </h1>
       <p className="notfound-text">¡Error 404! Esta página decidió que hoy era buen día para hacerse invisible. ¡Y lo logró!</p>
-            <button className="btn-back-team notfound-button" onClick={() => handleBtnNavigate("/back")}> 
+            <button className="btn-back-team notfound-button" onClick={() => handleBtnNavigate("/back")}>
               Volver al inicio
             </button>
     </div>

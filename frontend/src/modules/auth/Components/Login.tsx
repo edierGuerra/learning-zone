@@ -18,7 +18,7 @@ export default function Login() {
   useEffect(() => {
     if (viewSucessMessage) {
       const timeout = setTimeout(() => {
-        window.location.href = '/home';
+        window.location.href = '/';
       }, 3000);
 
       return () => clearTimeout(timeout); // limpieza si desmonta antes
@@ -30,7 +30,7 @@ export default function Login() {
   return (
     <>
     {viewSucessMessage? (
-      <> 
+      <>
         <form className='form-login' onSubmit={(e) => handleSubmitLogin(e)}>
           <h2 className='title-login'>Sign In</h2>
 
@@ -69,10 +69,10 @@ export default function Login() {
           <p onClick={()=>handleBtnNavigate('/register')} className='paragraph-create-account'>Don´t have an Account <a>Register</a></p>
           <a onClick={()=>handleBtnNavigate('/sitePolicies')}  className='paragraph-policies-login'>Términos y condiciones Política de Privacidad</a>
         </form>
-        
-      
+
+
       </>
-     
+
 
     ):
       <form className='form-login' onSubmit={(e) => handleSubmitLogin(e)}>
@@ -116,9 +116,9 @@ export default function Login() {
 
 
   }
-    
-    
+
+
     </>
-  
+
   );
 }

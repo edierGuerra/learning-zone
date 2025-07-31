@@ -28,8 +28,8 @@ export default async function ContentLessonsAPI({idCourse, idLesson}: ContentLes
         const id_course = idCourse;
         const id_lesson = idLesson;
         const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/${id_course}/lessons/${id_lesson}/content`);
-        
-        
+
+
         // Validar status code
         if (response.status !== 200) {
             throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
@@ -48,4 +48,3 @@ export default async function ContentLessonsAPI({idCourse, idLesson}: ContentLes
         throw error;
     }
 }
-

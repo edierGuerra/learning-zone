@@ -14,7 +14,7 @@
     scrollbar-color: var(--color-primary-blue) var(--color-neutral-light-gray);
 }
 .title-container-notifications{
-    
+
 }
 /* Establece el ancho de la barra de desplazamiento vertical */
 .container-panel-notifications::-webkit-scrollbar {

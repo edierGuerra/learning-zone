@@ -1,6 +1,6 @@
 # services/comment_services.py
 
-""" Modulo que se encarga de toda la logica de negocio referente a los comentarios """
+"""Modulo que se encarga de toda la logica de negocio referente a los comentarios"""
 
 from repository.comment_repository import CommentRepo
 from schemas.comment_schemas import CommentCreate

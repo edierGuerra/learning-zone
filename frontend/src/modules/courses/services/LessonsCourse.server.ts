@@ -8,6 +8,7 @@ type TContentLessonsAPIResponse = {
     id: TLesson['id'],
     name: TLesson['name'],
     progress_state: TLesson['progressState']
+    category: TCourse['category']
 }
 
 // Tipo para la respuesta esperada según el estándar

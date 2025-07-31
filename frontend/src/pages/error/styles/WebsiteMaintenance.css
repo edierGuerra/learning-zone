@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 160px); 
+  min-height: calc(100vh - 160px);
   padding: 2rem;
   color: var(--color-text);
   text-align: center;
@@ -59,11 +59,11 @@
   }
 
   .maintenance-title {
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
   }
 
   .maintenance-text {
-    font-size: 1rem; 
+    font-size: 1rem;
   }
 
   .maintenance-button {

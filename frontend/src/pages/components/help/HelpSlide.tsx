@@ -1,6 +1,6 @@
 import './styles/Help.css';
 import HelpButtons from './HelpButtons';
-import Home from '../../../modules/dashboard/pages/Home';
+import Home from '../../../modules/student/pages/HomeStudent';
 
 import image1 from '../../assets/Help/logo.png';
 import image2 from '../../assets/Help/cursos.png';
@@ -84,7 +84,7 @@ export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
               />
             )}
             <br></br>
-            
+
 
             <HelpButtons
               isLast={index === helpSteps.length - 1}

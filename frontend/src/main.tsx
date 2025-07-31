@@ -1,16 +1,16 @@
 import './index.css'
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { StudentProvider } from './modules/auth/Context/userProvider';
 import App from './App';
-import { CourseProvider } from './modules/courses/context/CourseProvider';
+import { StudentCourseProvider } from './modules/courses/context/StudentCourseProvider';
+import { UserProvider } from './modules/auth/Context/userProvider';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
-      <StudentProvider> {/* 👈 Esto es obligatorio */}
-        <CourseProvider>
+      <UserProvider> {/* 👈 Esto es obligatorio */}
+        <StudentCourseProvider>
           <App/>
-        </CourseProvider>
-      </StudentProvider>
+        </StudentCourseProvider>
+      </UserProvider>
     </BrowserRouter>
 );

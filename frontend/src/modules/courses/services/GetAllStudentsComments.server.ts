@@ -10,7 +10,7 @@ type TResponseGetAllStudentsAPI ={
     last_names: TStudent['lastNames'],
     email: TStudent['email'],
     prefix_profile: TStudentProfile['prefixProfile'],
-} 
+}
 export default async function GetAllStudentsCommentsAPI():Promise<TResponseGetAllStudentsAPI[]> {
     try{
         const response = await axios.get(VITE_ALLSTUDENTS_ENDPOINT)

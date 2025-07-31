@@ -39,7 +39,7 @@ function App() {
             padding: '14px 22px', // Padding definido en el CSS
             // box-shadow y backdrop-filter son manejados por la clase CSS
           },
-          
+
 
           // Configuración específica para cada tipo de toast
           // Aquí aplicamos las clases CSS específicas y los temas de íconos

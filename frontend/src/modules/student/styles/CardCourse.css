@@ -1,0 +1,118 @@
+/* Contenedor principal de la tarjeta del curso */
+.container-card-course {
+  width: 320px;
+  height: 386px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+
+  /* Transiciones y efectos */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  perspective: 1000px;
+
+  position: relative;
+  overflow: visible; /* Permite que sobresalga la imagen */
+}
+
+/* Hover: efecto 3D */
+.container-card-course:hover {
+  transform: scale(1.03) rotateY(3deg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Imagen del curso */
+.image-course-card {
+  height: 247px;
+  transition: transform 0.6s ease;
+  will-change: transform;
+  position: relative;
+  z-index: 10;
+}
+
+/* Efecto en hover para la imagen */
+.container-card-course:hover .image-course-card {
+  transform: rotateY(8deg) translateY(-20px) translateZ(30px) scale(1.07);
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.129)) hue-rotate(10deg) brightness(.9);
+}
+
+/* Título del curso */
+.title-course-card {
+  align-self: self-start;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  /* Color dinámico (se maneja en el componente con palette.brand) */
+}
+
+/* Descripción del curso */
+.description-course-card {
+  max-width: 400px;
+  font-size: 0.95rem;
+  margin: 0.5rem 0 .3rem 0;
+  /* Color dinámico (se maneja en el componente con palette.text) */
+}
+
+/* Ícono de progreso */
+.icon-progress-course {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  font-size: 26px;
+  /* Color dinámico (se maneja en el componente con palette.brand/accent) */
+}
+
+/* ===== TABLET (>=768px) ===== */
+@media (min-width: 768px) {
+  .container-card-course {
+    width: 260px;
+    padding: 1rem;
+  }
+  .image-course-card {
+    height: 180px;
+  }
+  .title-course-card {
+    font-size: 1.1rem;
+  }
+  .description-course-card {
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== DESKTOP (>=1024px) ===== */
+@media (min-width: 1024px) {
+  .container-card-course {
+    width: 320px;
+    padding: 1.2rem;
+  }
+  .image-course-card {
+    height: 247px;
+  }
+  .title-course-card {
+    font-size: 1.2rem;
+  }
+  .description-course-card {
+    font-size: 0.95rem;
+  }
+}
+
+/* ===== MOBILE PEQUEÑO (<=480px) ===== */
+@media (max-width: 480px) {
+  .container-card-course {
+    width: 55%;
+    padding: 0.9rem;
+    border-radius: 14px;
+  }
+  .image-course-card {
+    height: 130px;
+  }
+  .title-course-card {
+    font-size: .8rem;
+  }
+  .description-course-card {
+    font-size: 0.6rem;
+  }
+}

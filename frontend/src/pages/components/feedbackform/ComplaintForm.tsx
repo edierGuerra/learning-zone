@@ -20,7 +20,7 @@ const ComplaintForm = ({ onSuccess }: ComplaintFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Formulario enviado:", formData);
-    onSuccess(); 
+    onSuccess();
   };
 
   return (

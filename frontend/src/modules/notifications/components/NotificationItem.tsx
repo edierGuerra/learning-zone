@@ -49,7 +49,7 @@ export default function NotificationItem({ notification }: TNotificationItemProp
         <p className="message-notification">
           {showFull || !isLong
             ? notification.message // Si está expandido o no es largo, mostrar todo
-            : 
+            :
             notification.message.slice(0, maxLength) + "..." }
             {isLong && (
           <button
@@ -62,7 +62,7 @@ export default function NotificationItem({ notification }: TNotificationItemProp
         </p>
 
         {/* 👁‍🗨 Mostrar botón "Ver más / Ver menos" solo si el mensaje es largo */}
-        
+
 
         {/* 🗑 Botón para eliminar una sola notificación */}
         <button

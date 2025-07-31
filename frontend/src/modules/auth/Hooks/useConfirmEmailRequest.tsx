@@ -35,14 +35,14 @@ export default function useConfirmEmailRequest() {
                     setMessage('Ups! hubo un error');
                     return;
                 }
-                console.log(responseConfirm.password_token)                
+                console.log(responseConfirm.password_token)
                 if(responseConfirm.password_token){
                     // Almacenando en el localStorage el token de request_EmaiL
                     authStorage.setRequestEmailToken(responseConfirm.password_token)
                     setMessage('Cuenta confirmada exitosamente. Redirigiendo...');
                     setSuccess(true);
-                    
-                    
+
+
                 }
                 else{
                     return

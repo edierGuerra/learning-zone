@@ -19,7 +19,7 @@ export default function RequestEmail() {
           const timeout = setTimeout(() => {
             window.location.href = '/confirmEmailRequest'
           }, 3000);
-    
+
           return () => clearTimeout(timeout); // limpieza si desmonta antes
         }
       }, [viewSucessMessage]);

@@ -7,7 +7,7 @@ export default function NotificationPanel() {
   const {notifications} = useUser()
   const {deleteAllNotification,loadingNot} = useNotifications()
   return (
-    <div className='container-panel-notifications'> 
+    <div className='container-panel-notifications'>
       {notifications.length >0?<>
       <h2 className='title-container-notifications'>Bandeja de notificaciones</h2>
 

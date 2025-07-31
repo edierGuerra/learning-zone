@@ -24,7 +24,7 @@ export default function RoutersPublic() {
                 <Route path="/login" element={<LoginAndRegister opcAuth ={true}/>}/>,
                 {sharedRoutes}
 
-                
+
             </Route>
         </Routes>
   )

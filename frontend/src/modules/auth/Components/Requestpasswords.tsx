@@ -18,7 +18,7 @@ export default function Requestpasswords() {
   const handleBtnNavigate = useNavigationHandler();
   const password_token = authStorage.getRequestEmailToken();
 
-useEffect(() => { 
+useEffect(() => {
     if (!password_token) {
       toast.error('¡Acceso denegado! Por favor solicita el enlace de recuperación.');
       handleBtnNavigate('/emailNewPassword');

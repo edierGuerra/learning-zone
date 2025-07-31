@@ -83,26 +83,26 @@
         gap: var(--spacing-xl); /* 48px entre elementos */
         min-height: 800px; /* Altura mínima más grande */
     }
-    
+
     .title-section-steps {
         max-width: 900px; /* Ancho máximo más grande */
     }
-    
+
     .title-section-steps h2 {
         font-size: var(--font-size-4xl); /* 36px en tablet */
         padding: var(--spacing-md); /* 24px de padding */
     }
-    
+
     .title-section-steps p {
         font-size: var(--font-size-3xl); /* 30px en tablet */
         padding: var(--spacing-lg); /* 32px de padding */
     }
-    
+
     .title-section-steps p:hover {
         font-size: var(--font-size-4xl); /* 36px en hover */
         transform: translateY(-6px); /* Más elevación */
     }
-    
+
     .description-step {
         font-size: var(--font-size-lg); /* 18px en tablet */
         max-width: 700px; /* Ancho máximo más grande */
@@ -116,27 +116,27 @@
         gap: 100px; /* Gap original */
         min-height: 870px; /* Altura original */
     }
-    
+
     .title-section-steps {
         max-width: 1000px; /* Ancho máximo más grande */
     }
-    
+
     .title-section-steps h2 {
         font-size: 44px; /* Tamaño original */
         padding: 0.5rem; /* Padding original */
     }
-    
+
     .title-section-steps p {
         font-size: 24px; /* Tamaño original */
         padding: 1.4rem; /* Padding original */
         margin-top: -0.5px; /* Margen original */
     }
-    
+
     .title-section-steps p:hover {
         font-size: 26px; /* Tamaño original en hover */
         transform: translateY(-4px); /* Transformación original */
     }
-    
+
     .description-step {
         font-size: var(--font-size-lg); /* 18px en desktop */
         max-width: 800px; /* Ancho máximo más grande */
@@ -150,28 +150,28 @@
         gap: var(--spacing-lg); /* 32px entre elementos */
         min-height: 500px; /* Altura mínima más pequeña */
     }
-    
+
     .title-section-steps {
         max-width: 100%; /* Ancho completo en mobile pequeño */
     }
-    
+
     .title-section-steps h2 {
         font-size: var(--font-size-3xl); /* 30px en mobile pequeño */
         padding: var(--spacing-xs); /* 8px de padding */
         border-radius: 8px; /* Border radius más pequeño */
     }
-    
+
     .title-section-steps p {
         font-size: var(--font-size-xl); /* 20px en mobile pequeño */
         padding: var(--spacing-sm); /* 16px de padding */
         border-radius: 0 0 8px 8px; /* Border radius más pequeño */
     }
-    
+
     .title-section-steps p:hover {
         font-size: var(--font-size-2xl); /* 24px en hover */
         transform: translateY(-2px); /* Menos elevación */
     }
-    
+
     .description-step {
         font-size: var(--font-size-sm); /* 14px en mobile pequeño */
         max-width: 100%; /* Ancho completo */
@@ -186,24 +186,24 @@
         gap: var(--spacing-md); /* 24px entre elementos */
         min-height: 450px; /* Altura mínima aún más pequeña */
     }
-    
+
     .title-section-steps h2 {
         font-size: var(--font-size-2xl); /* 24px en mobile muy pequeño */
         padding: var(--spacing-xs); /* 8px de padding */
         border-radius: 6px; /* Border radius más pequeño */
     }
-    
+
     .title-section-steps p {
         font-size: var(--font-size-lg); /* 18px en mobile muy pequeño */
         padding: var(--spacing-xs); /* 8px de padding */
         border-radius: 0 0 6px 6px; /* Border radius más pequeño */
     }
-    
+
     .title-section-steps p:hover {
         font-size: var(--font-size-xl); /* 20px en hover */
         transform: translateY(-1px); /* Elevación mínima */
     }
-    
+
     .description-step {
         font-size: var(--font-size-xs); /* 12px en mobile muy pequeño */
         letter-spacing: 1px; /* Menos espaciado entre letras */
@@ -218,7 +218,7 @@
     .title-section-steps p:hover {
         transform: none; /* Sin elevación en touch */
     }
-    
+
     .title-section-steps p:active {
         transform: scale(0.98); /* Efecto de presión en touch */
         background-color: rgb(3, 49, 117); /* Color de hover en active */
@@ -241,7 +241,7 @@
     .title-section-steps p {
         transition: none;
     }
-    
+
     .title-section-steps p:hover {
         transform: none;
     }

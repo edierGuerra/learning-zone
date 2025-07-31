@@ -33,4 +33,3 @@ export type TUpdateDelete ={
 export type TIStudentsConnect ={
     id:number
 }
-

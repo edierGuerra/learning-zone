@@ -28,7 +28,7 @@
     text-transform: uppercase;
     transition: 0.5s;
     background-size: 200% auto;
-    color: white;            
+    color: white;
     border-radius: 10px;
     display: block;
     cursor: pointer;
@@ -55,11 +55,11 @@
         gap: 20px;
         max-width: 450px;
     }
-    
+
     .title-Request-email {
         font-size: 1.8rem;
     }
-    
+
     .btn-email-verify {
         font-size: 16px;
         padding: 12px 35px;
@@ -74,12 +74,12 @@
         gap: 18px;
         max-width: 400px;
     }
-    
+
     .title-Request-email {
         font-size: 1.5rem;
         margin-bottom: 0.8rem;
     }
-    
+
     .btn-email-verify {
         font-size: 15px;
         padding: 10px 30px;
@@ -94,16 +94,15 @@
         gap: 15px;
         max-width: 320px;
     }
-    
+
     .title-Request-email {
         font-size: 1.3rem;
         margin-bottom: 0.6rem;
     }
-    
+
     .btn-email-verify {
         font-size: 14px;
         padding: 8px 25px;
         max-width: 240px;
     }
 }
-         

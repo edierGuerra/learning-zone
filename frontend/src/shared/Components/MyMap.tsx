@@ -26,7 +26,7 @@ export default function MyMap() {
         mapContainerStyle={containerStyle}
         center={center}
         zoom={13}
-        
+
         options={{
           mapId:'25a12c939e4636a1cb17df7c',
           disableDefaultUI: true,  // Opcional: oculta los controles por defecto

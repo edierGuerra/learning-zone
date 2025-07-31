@@ -17,9 +17,9 @@ export default function LeftPanel({ onClose }: LeftPanelProps) {
         <h2 className="panel-title">CJE TECNOLOGY</h2>
         <p className="panel-subtitle">¿Qué es?</p>
         <p className="panel-description">
-          CJE Technology es una iniciativa académica conformada por aprendices del SENA, 
-          orientada al desarrollo de soluciones tecnológicas con fines educativos y sociales. 
-          A través del trabajo colaborativo, aplicamos conocimientos en programación, diseño y análisis 
+          CJE Technology es una iniciativa académica conformada por aprendices del SENA,
+          orientada al desarrollo de soluciones tecnológicas con fines educativos y sociales.
+          A través del trabajo colaborativo, aplicamos conocimientos en programación, diseño y análisis
           para construir plataformas digitales innovadoras, con compromiso, creatividad y buenas prácticas de desarrollo.
         </p>
 

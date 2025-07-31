@@ -124,36 +124,36 @@ footer {
         align-items: center;
         padding: var(--spacing-md) var(--spacing-lg); /* Más padding */
     }
-    
+
     .container-nombre {
         font-size: var(--font-size-3xl); /* 30px en tablet */
     }
-    
+
     .container-nombre img {
         width: 70px; /* Logo más grande */
     }
-    
+
     .contendor-ubi {
         font-size: var(--font-size-base); /* 16px en tablet */
         padding: var(--spacing-sm) var(--spacing-md); /* Más padding */
     }
-    
+
     .icon {
         font-size: var(--font-size-2xl); /* 24px en tablet */
     }
-    
+
     .contenedor-2 {
         flex-direction: row; /* Elementos en la misma fila */
         justify-content: space-between; /* Distribuidos */
         align-items: center;
         padding: var(--spacing-md) var(--spacing-lg); /* Más padding */
     }
-    
+
     .subtitle-copyright {
         font-size: var(--font-size-lg); /* 18px en tablet */
         text-align: left; /* Alineado a la izquierda */
     }
-    
+
 .container-all-t-p {
         cursor: pointer;
         text-align: left;
@@ -161,15 +161,15 @@ footer {
     .contenedor-institucion h3 {
         font-size: var(--font-size-lg); /* 18px en tablet */
     }
-    
+
     .contenedor-institucion img {
         width: 50px; /* Logo más grande */
     }
-    
+
     .contenedor-redes {
         padding-right: var(--spacing-lg); /* 32px de padding derecho */
     }
-    
+
     .contenedor-redes ul {
         gap: var(--spacing-md); /* 24px entre iconos */
     }
@@ -180,7 +180,7 @@ footer {
     footer {
         padding: var(--spacing-lg) 0; /* 32px arriba/abajo */
     }
-    
+
     .contenedor-1 {
         flex-direction: row;
         justify-content: space-between;
@@ -197,40 +197,40 @@ footer {
 
     }
 
-    
+
     .container-nombre {
         font-size: var(--font-size-4xl); /* 36px en desktop */
     }
-    
+
     .container-nombre img {
         width: 80px; /* Logo original */
     }
-    
+
     .contendor-ubi {
         font-size: var(--font-size-lg); /* 18px en desktop */
         padding: var(--spacing-sm) var(--spacing-lg); /* Más padding */
     }
-    
+
     .icon {
         font-size: var(--font-size-3xl); /* 30px en desktop */
     }
-    
+
     .contenedor-2 {
         padding: var(--spacing-lg) var(--spacing-xl); /* Más padding */
     }
-    
+
     .subtitle-copyright {
         font-size: var(--font-size-xl); /* 20px en desktop */
     }
-    
+
     .contenedor-institucion h3 {
         font-size: var(--font-size-xl); /* 20px en desktop */
     }
-    
+
     .contenedor-institucion img {
         width: 60px; /* Logo original */
     }
-    
+
     .contenedor-redes ul {
         gap: var(--spacing-lg); /* 32px entre iconos */
     }
@@ -241,45 +241,45 @@ footer {
     .contenedor-1 {
         padding: var(--spacing-xs) var(--spacing-sm); /* Menos padding */
     }
-    
+
     .container-nombre {
         font-size: var(--font-size-xl); /* 20px en mobile pequeño */
         flex-direction: column; /* Logo arriba, texto abajo */
         text-align: center;
     }
-    
+
     .container-nombre img {
         width: 50px; /* Logo más pequeño */
     }
-    
+
     .contendor-ubi {
         font-size: var(--font-size-xs); /* 12px en mobile pequeño */
         padding: var(--spacing-xs) var(--spacing-md); /* Menos padding */
         flex-direction: column; /* Icono arriba, texto abajo */
         text-align: center;
     }
-    
+
     .icon {
         font-size: var(--font-size-lg); /* 18px en mobile pequeño */
     }
-    
+
     .contenedor-2 {
         padding: var(--spacing-xs); /* Menos padding */
         gap: var(--spacing-xs); /* Menos espacio entre elementos */
     }
-    
+
     .subtitle-copyright {
         font-size: var(--font-size-sm); /* 14px en mobile pequeño */
     }
-    
+
     .contenedor-institucion h3 {
         font-size: var(--font-size-sm); /* 14px en mobile pequeño */
     }
-    
+
     .contenedor-institucion img {
         width: 35px; /* Logo más pequeño */
     }
-    
+
     .contenedor-redes ul {
         gap: var(--spacing-xs); /* 8px entre iconos */
     }

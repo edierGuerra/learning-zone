@@ -29,10 +29,5 @@ lottie para animacion Error page
 npm install lottie-react
 
 Para google maps
-    npm install @react-google-maps/api 
+    npm install @react-google-maps/api
     npm install --save @types/google.maps
-
-
-
-
-

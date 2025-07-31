@@ -38,13 +38,13 @@ export default function Comment({
   openUpdateFormId, // Estado global del formulario abierto
   setOpenUpdateFormId // Función para controlar formularios
 }: CommentProps) {
-  
+
   // ✅ Estados locales del componente
   const [showReplyForm, setShowReplyForm] = useState(false); // Controlar formulario de respuesta
   const [showWindowInformation, setShowWindowInformation] = useState(false); // Controlar ventana de información
   const [textUpdate, setTextUpdate] = useState(text); // Texto temporal para edición
   const socket = getSocket();  // Usamos la instancia compartida
-  
+
 
   // ✅ Función para eliminar un comentario (marcar como "eliminado")
   const handleDeleteComment = () => {
@@ -91,7 +91,7 @@ export default function Comment({
     }
     // Emitir evento al servidor para actualizar el comentario
     socket.emit('updateComment', updateComment);
-    
+
     // ✅ Cerrar el formulario después de enviar (control global)
     setOpenUpdateFormId(null);
   }
@@ -99,7 +99,7 @@ export default function Comment({
   const student = allStudents.find(s => s.id === studentId);
   const numIdentification = student?.numIdentification || 0; // Número de identificación para generar color
   const prefixProfile = student?.prefixProfile || ''; // Inicial para mostrar en avatar
-  
+
   // ✅ Generar color único basado en el nombre y número de identificación
   const avatarColor = GenerateColorFromName(nameStudent, numIdentification);
 
@@ -112,11 +112,11 @@ export default function Comment({
     <div className="comment">
       {/* ✅ Formulario de actualización - Solo se muestra si este comentario tiene el formulario abierto */}
       {openUpdateFormId === id && (
-        <form 
+        <form
           onSubmit={(e) => {
             e.preventDefault(); // Prevenir envío por defecto
             handleUpdateComment(); // Llamar función de actualización
-          }} 
+          }}
           className='container-form-update-comment'
         >
           <button className='btn-close-update-comment' onClick={() => setOpenUpdateFormId(null)}>Cerrar</button>
@@ -149,7 +149,7 @@ export default function Comment({
           )}
         </div>
       )}
-      
+
       {/* ✅ Avatar clickeable que abre la ventana de información */}
       <div
         onClick={() => setShowWindowInformation(true)}
@@ -170,26 +170,26 @@ export default function Comment({
 
         {/* ✅ Texto del comentario */}
         <div className="text">{text}</div>
-        
+
         {/* ✅ Botones de opciones - Solo visibles para el autor del comentario */}
         {currentUserId === studentId && (
           <div className='container-opc-comment'>
             {/* Botón de eliminar comentario */}
-            <button 
-              onClick={() => handleDeleteComment()} 
-              style={{'color':'#FF674A'}} 
+            <button
+              onClick={() => handleDeleteComment()}
+              style={{'color':'#FF674A'}}
               className='opc-delete-comment'
             >
               <MdDelete/>
             </button>
-            
+
             {/* ✅ Botón de editar - Controla el estado global del formulario */}
-            <button 
-              onClick={() => setOpenUpdateFormId(openUpdateFormId === id ? null : id)} 
-              style={{'color':'#FFCC4A'}} 
+            <button
+              onClick={() => setOpenUpdateFormId(openUpdateFormId === id ? null : id)}
+              style={{'color':'#FFCC4A'}}
               className='opc-update-update'
             >
-              <BiSolidEditAlt/> 
+              <BiSolidEditAlt/>
             </button>
           </div>
         )}
@@ -198,7 +198,7 @@ export default function Comment({
         <button onClick={() => setShowReplyForm(!showReplyForm)}>
           {showReplyForm ? 'Cancelar' : 'Responder'}
         </button>
-        
+
         {/* ✅ Formulario para enviar una respuesta - Solo visible si showReplyForm es true */}
         {showReplyForm && (
           <CommentForm
@@ -227,4 +227,3 @@ export default function Comment({
     </div>
   );
 }
-

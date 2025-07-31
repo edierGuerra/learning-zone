@@ -161,26 +161,26 @@
     padding: 3rem 1.5rem;
     gap: 0.8rem;
   }
-  
+
   .card-center {
     flex: 1 1 60%;
     padding: 0 0.5rem;
   }
-  
+
   .card-title {
     font-size: 0.95rem;
   }
-  
+
   .card-text-cookie {
     font-size: 0.9rem;
   }
-  
+
   .card-more-options,
   .card-accept {
     font-size: 0.8rem;
     padding: 0.4rem 0.8rem;
   }
-  
+
   .card-options {
     max-width: 450px;
     width: 95%;
@@ -188,15 +188,15 @@
     bottom: 70px;
     padding: 18px;
   }
-  
+
   .options-title {
     font-size: 1.1rem;
   }
-  
+
   .options-description {
     font-size: 0.9rem;
   }
-  
+
   .btn-save,
   .btn-cancel {
     padding: 8px 14px;
@@ -213,39 +213,39 @@
     align-items: center;
     text-align: center;
   }
-  
+
   .card-left {
     order: 1;
   }
-  
+
   .card-center {
     flex: 1 1 100%;
     order: 2;
     padding: 0;
   }
-  
+
   .card-right {
     order: 3;
     width: 100%;
     justify-content: center;
     gap: 1rem;
   }
-  
+
   .card-title {
     font-size: 0.9rem;
   }
-  
+
   .card-text-cookie {
     font-size: 0.85rem;
   }
-  
+
   .card-more-options,
   .card-accept {
     font-size: 0.75rem;
     padding: 0.5rem 1rem;
     min-width: 120px;
   }
-  
+
   .card-options {
     max-width: 90%;
     width: 90%;
@@ -254,24 +254,24 @@
     bottom: 60px;
     padding: 15px;
   }
-  
+
   .options-title {
     font-size: 1rem;
   }
-  
+
   .options-description {
     font-size: 0.85rem;
   }
-  
+
   .option-item {
     font-size: 0.8rem;
   }
-  
+
   .options-actions {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .btn-save,
   .btn-cancel {
     padding: 10px 16px;
@@ -286,39 +286,39 @@
     padding: 1.5rem 0.8rem;
     gap: 0.8rem;
   }
-  
+
   .card-title {
     font-size: 0.85rem;
   }
-  
+
   .card-text-cookie {
     font-size: 0.8rem;
   }
-  
+
   .card-more-options,
   .card-accept {
     font-size: 0.7rem;
     padding: 0.4rem 0.8rem;
     min-width: 100px;
   }
-  
+
   .card-options {
     padding: 12px;
     bottom: 50px;
   }
-  
+
   .options-title {
     font-size: 0.95rem;
   }
-  
+
   .options-description {
     font-size: 0.8rem;
   }
-  
+
   .option-item {
     font-size: 0.75rem;
   }
-  
+
   .btn-save,
   .btn-cancel {
     padding: 8px 12px;

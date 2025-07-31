@@ -3,7 +3,7 @@
 .quantum-notification-toast {
   /* Fondo principal: utiliza tu variable de color principal oscura con transparencia */
   background: rgba(var(--color-primary-dark-bg), 0.85);
-  
+
   /* **Efecto de cristal esmerilado (Glassmorphism):** Clave para el toque futurista */
   backdrop-filter: blur(10px) brightness(1.2); /* Desenfoca más y da un brillo s
   util */
@@ -16,19 +16,19 @@
     var(--color-accent-blue-light),   /* Azul claro para un degradado suave */
     var(--color-mint-green)           /* Verde menta para un toque de brillo holográfico */
   ) 1; /* Esto aplica el degradado al borde del elemento */
-  
+
   /* Bordes ligeramente redondeados para un aspecto moderno y pulido */
   border-radius: 8px;
-  
+
   /* Sombra compleja para darle profundidad y un "resplandor" característico */
-  box-shadow: 
+  box-shadow:
     0px 4px 20px rgba(0, 0, 0, 0.5),     /* Sombra principal más oscura y difusa */
     0px 0px 15px var(--color-primary-blue), /* Resplandor sutil en tono azul principal */
     0px 0px 8px rgba(var(--color-mint-green), 0.3); /* Un toque de resplandor en verde menta */
 
   /* Color del texto: asegura alto contraste y legibilidad sobre el fondo oscuro */
   color: var(--color-text-light-alt); /* Blanco puro */
-  
+
   /* Tipografía: limpia, moderna y legible, ideal para un contexto educativo */
   font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
   font-size: 16px;

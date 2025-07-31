@@ -13,7 +13,10 @@ async def create_initial_courses(db: AsyncSession):
     Crea los cursos en la base de datos
     """
     cursos_base = [
-        {"name": "Word", "description": "Curso de procesamiento de texto con Word"},
+        {
+            "name": "Word",
+            "description": "Curso de procesamiento de texto con Word",
+        },
         {
             "name": "PowerPoint",
             "description": "Curso de creación de presentaciones efectivas",

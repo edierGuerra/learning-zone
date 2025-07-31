@@ -50,6 +50,9 @@ class CourseRepository:
                         "name": course.name,
                         "description": course.description,
                         "status": status_course.status,
+                        "category": course.category,
+                        "image": course.image,
+                        "colors": course.colors,
                     }
                 )
             return list(courses)

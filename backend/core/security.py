@@ -17,7 +17,7 @@ from services.student_services import StudentService
 oauth2_scheme_register = OAuth2PasswordBearer(tokenUrl="api/v1/student/verify_email")
 
 
-def encode_access_token(payload: dict, exp_time: int = 3600) -> str:
+def encode_access_token_student(payload: dict, exp_time: int = 3600) -> str:
     """
     Codifica un token de acceso.
 

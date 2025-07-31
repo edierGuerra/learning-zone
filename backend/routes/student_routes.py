@@ -4,7 +4,7 @@
 Este modulo contiene todas las rutas propias del estudiante.
 """
 
-from core.security import encode_access_token, get_current_student
+from core.security import encode_access_token_student, get_current_student
 from dependencies.student_dependencie import get_student_services
 
 # Modulos externos
@@ -81,7 +81,7 @@ async def verify_email_token(
         student = await service.get_student_by_id(id_student)
         if student:
             student_pyload = {"sub": str(student.id)}
-            token = encode_access_token(student_pyload)
+            token = encode_access_token_student(student_pyload)
             return JSONResponse(
                 content={
                     "access_token": token,
@@ -182,7 +182,7 @@ async def login_student(
         )
         if student is not None:
             to_encode = {"sub": str(student.id)}
-            access_token = encode_access_token(payload=to_encode)
+            access_token = encode_access_token_student(payload=to_encode)
             if not access_token:
                 raise HTTPException(
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

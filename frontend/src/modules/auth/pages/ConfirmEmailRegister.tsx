@@ -19,7 +19,7 @@ export default function ConfirmEmailRegister() {
         if(success){
             // Almacenar en el localstorage
             const timeOuth = setTimeout(()=>{
-                window.location.href = '/home'; // forzar el render
+                window.location.href = '/';
 
             },2000)
 

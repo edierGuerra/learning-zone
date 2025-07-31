@@ -1,21 +1,21 @@
 import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
 
 export type TCourse = {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  palette: TColorPalette; // Paleta de colores del curso
-category:
-    | 'ofimatica'
-    | 'electronica'
-    | 'programacion'
-    | 'diseno'
-    | 'ciberseguridad'
-    | 'desarrollo de videojuegos'
-    | 'inteligencia artificial'
-    | 'desarrollo web'
-    | 'otro';
+    id: number;
+    name: string;
+    description: string;
+    image: string;
+    palette: TColorPalette; // Paleta de colores del curso
+    category:
+        | 'ofimatica'
+        | 'electronica'
+        | 'programacion'
+        | 'diseno'
+        | 'ciberseguridad'
+        | 'desarrollo de videojuegos'
+        | 'inteligencia artificial'
+        | 'desarrollo web'
+        | 'otro';
 };
 
 // Para estudiantes: seleccionamos solo las props necesarias
@@ -23,13 +23,7 @@ export type TCourseStudent = Pick<TCourse, "id" | "name" | "description" | "imag
   status: "in_progress" | "completed";
 };
 
-// Para profesores: seleccionamos solo las props necesarias
-export type TCourseTeacher = Pick<TCourse, 'id' | 'name' | 'description' | 'image' |'category' |'palette'> & {
-  is_archive: boolean;
-  is_published: boolean;
-};
 
-export type TCoursesTeachers = TCourseTeacher[];
 export type TCoursesStudents = TCourseStudent[];
 export type TCoursesGeneric = TCoursesTeachers | TCoursesStudents
 
@@ -63,6 +57,10 @@ export interface TLesson {
 
 export type TLessons = TLesson[];
 
+
+
+
+
 export type TContent ={
     id:number,
     title: TLesson['name']
@@ -84,6 +82,8 @@ export type TScore={
 
 
 }
+
+
 interface TStudentCourseContextType {
     setCourses:React.Dispatch<React.SetStateAction<TCoursesStudents>>;
     courses:TCoursesStudents;

@@ -18,7 +18,7 @@ export default function Login() {
   useEffect(() => {
     if (viewSucessMessage) {
       const timeout = setTimeout(() => {
-        window.location.href = '/home';
+        window.location.href = '/';
       }, 3000);
 
       return () => clearTimeout(timeout); // limpieza si desmonta antes

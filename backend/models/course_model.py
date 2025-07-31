@@ -9,7 +9,7 @@ from typing import List
 from database.config_db import Base
 
 # Módulos externos
-from sqlalchemy import Enum, Integer, String, JSON
+from sqlalchemy import Boolean, Enum, Integer, String, JSON, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
@@ -43,10 +43,13 @@ class Course(Base):
     palette: Mapped[dict[str, str]] = mapped_column(
         JSON, nullable=True
     )  # colores del curso
-    image: Mapped[str] = mapped_column(String(100), nullable=True)  # imagen del curso
+    image: Mapped[str] = mapped_column(Text, nullable=True)  # imagen del curso
     category: Mapped[CourseCategoryEnum] = mapped_column(
         Enum(CourseCategoryEnum), nullable=False
     )  # categoria del curso
+    is_published: Mapped[bool] = mapped_column(
+        Boolean, default=False
+    )  # curso publicado
 
     # Relaciones
     comments: Mapped[List["Comment"]] = relationship(back_populates="course")

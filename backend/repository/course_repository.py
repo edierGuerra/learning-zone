@@ -49,10 +49,10 @@ class CourseRepository:
                         "id": course.id,
                         "name": course.name,
                         "description": course.description,
-                        "status": status_course.status,
-                        "category": course.category,
                         "image": course.image,
-                        "colors": course.colors,
+                        "category": course.category,
+                        "palette": course.palette,
+                        "status": status_course.status,
                     }
                 )
             return list(courses)

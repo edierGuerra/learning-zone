@@ -39,6 +39,7 @@ def encode_access_token(payload: dict, exp_time: int = 3600) -> str:
     # Tiempo de expiración
     expiration_time = issued_at + timedelta(seconds=exp_time)
     to_encode["exp"] = int(expiration_time.timestamp())
+    to_encode["role"] = "student"
 
     # Configruacion del token
     token = jwt.encode(to_encode, settings.token_key, settings.token_algorithm)

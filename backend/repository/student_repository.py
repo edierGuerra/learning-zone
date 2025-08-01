@@ -160,9 +160,7 @@ class StudentRepository:
         student = result.scalar_one_or_none()
         return student
 
-    async def valid_student(
-        self, user_email: str, user_password: str
-    ) -> Optional[Student]:
+    async def valid_student(self, email: str, password: str) -> Optional[Student]:
         """
         ## Validar correo del estudiante
 
@@ -178,18 +176,18 @@ class StudentRepository:
         try:
             # Buscar el estudiane por medio de su correo
             result = await self.db.execute(
-                select(Student).where(Student.email == user_email)
+                select(Student).where(Student.email == email)
             )
             student = result.scalar_one_or_none()
 
             # Lanzar error y retornar None en caso de no encontrar el estudiante por medio del correo
             if not student:
-                logger.warning("⚠️ Correo de estudiante no encontrado: %s", user_email)
+                logger.warning("⚠️ Correo de estudiante no encontrado: %s", email)
                 return None
 
             # Validar la contraseña
             validate_password = valid_password(
-                password=user_password, hash_password=student.password
+                password=password, hash_password=student.password
             )
 
             if validate_password is False:

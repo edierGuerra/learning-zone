@@ -31,7 +31,7 @@ def encode_access_token(
         token(str): El token ya encriptado con la información del estudiante
 
     """
-    # Copia de pyload
+    # Copia de payload
     to_encode = payload.copy()
 
     # Tiempo de emisión
@@ -45,9 +45,10 @@ def encode_access_token(
     # Agrega el rol del usuario al token
     if is_teacher:
         to_encode["role"] = "teacher"
-    to_encode["role"] = "student"
+    else:
+        to_encode["role"] = "student"
 
-    # Configruacion del token
+    # Configuración del token
     token = jwt.encode(to_encode, settings.token_key, settings.token_algorithm)
     return token
 

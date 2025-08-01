@@ -91,14 +91,12 @@ class StudentService:
         Valida que el correo del estudiante se encuentre en la base de datos.
 
         ### Parámentros:
-        - `email(str)`: Correo del estudiante con el que sera validado.
+        - `email(str)`: Correo del estudiante con el que será validado.
 
         ### Retornos:
         - `Optional[Student]`: Objeto de tipo estudiante, en caso de error None
         """
-        student = await self.repository.valid_student(
-            user_email=email, user_password=password
-        )
+        student = await self.repository.valid_student(email=email, password=password)
         return student
 
     async def recovery_password(self, email: str) -> Optional[Student]:
@@ -236,4 +234,4 @@ class StudentService:
         return list_students
 
     async def valid_teacher(self, email: str, password: str) -> Optional[Teacher]:
-        self.repository.valid_teacher(user_email=email, user_password=password)
+        return await self.repository.valid_teacher(email=email, password=password)

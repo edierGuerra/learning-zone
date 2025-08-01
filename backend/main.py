@@ -7,6 +7,7 @@ facilitando el desarrollo y la personalización de la aplicación.
 """
 
 import logging
+from fastapi.security import HTTPBearer
 from contextlib import asynccontextmanager
 
 from core.security import get_current_role
@@ -46,6 +47,9 @@ from core.initial_content import create_initial_contents
 from super_admin import create_admin
 
 logger = logging.getLogger(__name__)
+
+
+bearer_scheme = HTTPBearer()
 
 load_dotenv()
 GEMINI_API_KEY = settings.gemini_api_key
@@ -143,10 +147,10 @@ async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.get("/api/v1/role")
+@app.get("/api/v1/role", dependencies=[Depends(bearer_scheme)])
 async def valid_user_role(role: str = Depends(get_current_role)):
     """Valida el rol de un usuario en base a un token JWT."""
-    return role
+    return {"role": role}
 
 
 # --- Routers ----

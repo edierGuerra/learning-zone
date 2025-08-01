@@ -8,7 +8,7 @@ from typing import Optional
 from datetime import datetime, timedelta
 
 from fastapi import HTTPException, status
-from teacher.model import Teacher
+from models.teacher_model import Teacher
 from models.student_model import Student
 
 # Modulos internos

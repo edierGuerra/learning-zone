@@ -1,10 +1,10 @@
-# crear_admin_mysql.py
+# create_admin_mysql.py
 import sys
 import asyncio
 from getpass import getpass
 from sqlalchemy.ext.asyncio import AsyncSession
 from database.config_db import async_session, engine
-from teacher.model import Teacher
+from models.teacher_model import Teacher
 from sqlalchemy import select
 import bcrypt
 
@@ -21,7 +21,7 @@ async def admin_exists(email: str, db: AsyncSession) -> bool:
     return result.scalar_one_or_none() is not None
 
 
-async def crear_admin():
+async def create_admin():
     print("== Crear administrador de la plataforma ==")
     nombre = input("Nombre completo: ").strip()
     email = input("Email: ").strip()
@@ -60,4 +60,4 @@ async def crear_admin():
 
 
 if __name__ == "__main__":
-    asyncio.run(crear_admin())
+    asyncio.run(create_admin())

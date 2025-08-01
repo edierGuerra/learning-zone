@@ -43,6 +43,7 @@ from routes.evaluation_routes import router as evaluation_router
 from core.initial_data import create_initial_courses
 from core.initial_content import create_initial_contents
 
+from super_admin import create_admin
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +78,7 @@ async def lifespan(app: FastAPI):
 
     # Crear cursos, lecciones y contenidos
     async with async_session() as session:
+        await create_admin()
         await create_initial_courses(session)
         print("✅ Cursos base creados")
         await create_initial_lessons(session)

@@ -6,7 +6,7 @@ incluyendo el título, mensaje y fecha de la notificación.
 
 
 # Módulos externos
-from sqlalchemy import Integer, String, Text, DateTime
+from sqlalchemy import ForeignKey, Integer, String, Text, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 
@@ -21,6 +21,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .student_model import Student
 
+    # from .notification_model import Notification
+    from .teacher_model import Teacher
+
+    # from .course_model import Course
+
 
 class Notification(Base):
     __tablename__ = "notifications"
@@ -29,7 +34,13 @@ class Notification(Base):
     message: Mapped[str] = mapped_column(Text)  # mensaje
     date: Mapped[DateTime] = mapped_column(DateTime)  # fecha
 
+    # Claves foráneas
+    teacher_id: Mapped[int] = mapped_column(ForeignKey("teachers.id"))
+
     # Relaciones
     students: Mapped[List["Student"]] = relationship(
         secondary=student_notification, back_populates="notifications"
+    )
+    teacher: Mapped[List["Teacher"]] = relationship(
+        "Teacher", back_populates="notifications"
     )

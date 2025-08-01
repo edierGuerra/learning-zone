@@ -10,7 +10,7 @@ from datetime import datetime
 
 from models.course_model import Course
 from models.student_model import Student
-from teacher.model import Teacher
+from models.teacher_model import Teacher
 
 # Modulos internos
 from schemas.student_schemas import StudentRegister

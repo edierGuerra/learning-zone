@@ -188,7 +188,7 @@ async def login_student(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Correo o contraseña incorrectos",
             )
-        elif student is not None and teacher is not None:
+        elif student is not None and teacher is None:
             to_encode = {"sub": str(student.id)}
             access_token = encode_access_token(payload=to_encode)
             if not access_token:
@@ -196,7 +196,7 @@ async def login_student(
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="Error al generar el token",
                 )
-        elif teacher is not None:
+        elif teacher is not None and student is None:
             to_encode = {"sub": str(teacher.id)}
             access_token = encode_access_token(payload=to_encode, is_teacher=True)
             if not access_token:

@@ -7,8 +7,9 @@ facilitando el desarrollo y la personalización de la aplicación.
 """
 
 import logging
-from contextlib import asynccontextmanager  # reemplazo de on_event
+from contextlib import asynccontextmanager
 
+from core.security import get_current_role
 from database.config_db import Base, engine, async_session  # Base de datos
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -22,11 +23,12 @@ from core.initial_lessons import create_initial_lessons
 # Importa la nueva función de inicialización de evaluaciones
 from core.initial_evaluations import create_initial_evaluations
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware  # Importa CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
 
 from routes.identification_routes import router as identification_router
 from routes.student_routes import router as student_router
@@ -36,8 +38,8 @@ from routes.lesson_routes import router as lesson_router
 from routes.course_routes import router as course_router
 from routes.comment_routes import router as comment_router
 from routes.content_routes import router as content_router
-
 from routes.evaluation_routes import router as evaluation_router
+
 from core.initial_data import create_initial_courses
 from core.initial_content import create_initial_contents
 
@@ -137,6 +139,12 @@ async def root(request: Request):
     """
     # Retorna el archivo index.html, pasando el objeto request obligatorio
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/api/v1/role")
+async def valid_user_role(role: str = Depends(get_current_role)):
+    """Valida el rol de un usuario en base a un token JWT."""
+    return role
 
 
 # --- Routers ----

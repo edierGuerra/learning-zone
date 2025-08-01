@@ -4,7 +4,7 @@
 Este modulo contiene todas las rutas propias del estudiante.
 """
 
-from core.security import encode_access_token_student, get_current_student
+from core.security import encode_access_token, get_current_student
 from dependencies.student_dependencie import get_student_services
 
 # Modulos externos
@@ -81,7 +81,7 @@ async def verify_email_token(
         student = await service.get_student_by_id(id_student)
         if student:
             student_pyload = {"sub": str(student.id)}
-            token = encode_access_token_student(student_pyload)
+            token = encode_access_token(student_pyload)
             return JSONResponse(
                 content={
                     "access_token": token,
@@ -180,19 +180,30 @@ async def login_student(
         student = await services.valid_student(
             password=student_login.password, email=student_login.email
         )
-        if student is not None:
+        teacher = await services.valid_teacher(
+            password=student_login.password, email=student_login.email
+        )
+        if student is None and teacher is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Correo o contraseña incorrectos",
+            )
+        elif student is not None and teacher is not None:
             to_encode = {"sub": str(student.id)}
-            access_token = encode_access_token_student(payload=to_encode)
+            access_token = encode_access_token(payload=to_encode)
             if not access_token:
                 raise HTTPException(
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="Error al generar el token",
                 )
-        if student is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Correo o contraseña incorrectos",
-            )
+        elif teacher is not None:
+            to_encode = {"sub": str(teacher.id)}
+            access_token = encode_access_token(payload=to_encode, is_teacher=True)
+            if not access_token:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Error al generar el token",
+                )
         return JSONResponse(
             content={
                 "access_token": access_token,

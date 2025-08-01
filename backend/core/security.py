@@ -17,7 +17,9 @@ from services.student_services import StudentService
 oauth2_scheme_register = OAuth2PasswordBearer(tokenUrl="api/v1/student/verify_email")
 
 
-def encode_access_token_student(payload: dict, exp_time: int = 3600) -> str:
+def encode_access_token(
+    payload: dict, exp_time: int = 3600, is_teacher: bool = False
+) -> str:
     """
     Codifica un token de acceso.
 
@@ -39,11 +41,50 @@ def encode_access_token_student(payload: dict, exp_time: int = 3600) -> str:
     # Tiempo de expiración
     expiration_time = issued_at + timedelta(seconds=exp_time)
     to_encode["exp"] = int(expiration_time.timestamp())
+
+    # Agrega el rol del usuario al token
+    if is_teacher:
+        to_encode["role"] = "teacher"
     to_encode["role"] = "student"
 
     # Configruacion del token
     token = jwt.encode(to_encode, settings.token_key, settings.token_algorithm)
     return token
+
+
+async def get_current_role(
+    token: str = Depends(oauth2_scheme_register),
+):
+    """
+    ## Obtener Rol
+
+    Extrae el rol del usuario a partir del token de acceso.
+
+    ### Parámetros:
+    `token(str)`: Token que contiene la información codificada.
+
+    ### Retorna:
+    `role(str)`: Rol del usuario extraído del token.
+
+    ### Excepciones:
+        `status(401)`: En caso de que el token sea inválido o no contenga el rol.
+    """
+    try:
+        payload = jwt.decode(
+            token=token, key=settings.token_key, algorithms=[settings.token_algorithm]
+        )
+        role = payload.get("role")
+        if role is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token inválido o rol no encontrado",
+            )
+        return role
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token inválido o rol no encontrado",
+        )
 
 
 async def get_current_student(

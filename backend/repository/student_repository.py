@@ -10,6 +10,7 @@ from datetime import datetime
 
 from models.course_model import Course
 from models.student_model import Student
+from teacher.model import Teacher
 
 # Modulos internos
 from schemas.student_schemas import StudentRegister
@@ -388,3 +389,28 @@ class StudentRepository:
         students = result.scalars().all()
 
         return students
+
+    async def valid_teacher(self, email: str, password: str):
+        """
+        Valida si el correo y la contraseña corresponden a un profesor registrado.
+        """
+        try:
+            result = await self.db.execute(
+                select(Teacher).where(Teacher.email == email)
+            )
+            teacher = result.scalar_one_or_none()
+
+            if not teacher:
+                logger.warning("⚠️ Correo de profesor no encontrado: %s", email)
+                return None
+
+            if valid_password(password, teacher.password):
+                logger.info("✅ Profesor validado correctamente ✅")
+                return teacher
+            else:
+                logger.warning("⚠️ Contraseña incorrecta para el profesor ⚠️")
+                return None
+
+        except Exception as e:
+            logger.error("⛔ Error al validar al profesor ⛔", exc_info=e)
+            return None

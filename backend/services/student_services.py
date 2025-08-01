@@ -8,6 +8,7 @@ from typing import Optional
 from datetime import datetime, timedelta
 
 from fastapi import HTTPException, status
+from teacher.model import Teacher
 from models.student_model import Student
 
 # Modulos internos
@@ -233,3 +234,6 @@ class StudentService:
             )
 
         return list_students
+
+    async def valid_teacher(self, email: str, password: str) -> Optional[Teacher]:
+        self.repository.valid_teacher(user_email=email, user_password=password)

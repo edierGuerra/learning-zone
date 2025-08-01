@@ -24,6 +24,7 @@ async def create_initial_courses(db: AsyncSession):
             },
             "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fes.m.wikipedia.org%2Fwiki%2FArchivo%3AMicrosoft_Office_Word_%25282019%25E2%2580%2593present%2529.svg&psig=AOvVaw0eL8Zi0zeI0zjEpZ8BHYnB&ust=1754011350851000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJic19D35Y4DFQAAAAAdAAAAABAL",
             "category": CourseCategoryEnum.OFFICE,
+            "is_published": True,
         },
         {
             "name": "PowerPoint",
@@ -36,6 +37,7 @@ async def create_initial_courses(db: AsyncSession):
             },
             "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AMicrosoft_Office_PowerPoint_%25282019%25E2%2580%2593present%2529.svg&psig=AOvVaw16QSAzf5g9ac1RXI0vq_Cf&ust=1754011574010000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCPirrbr45Y4DFQAAAAAdAAAAABAE",
             "category": CourseCategoryEnum.OFFICE,
+            "is_published": True,
         },
         {
             "name": "Excel",
@@ -48,29 +50,9 @@ async def create_initial_courses(db: AsyncSession):
             },
             "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fes.m.wikipedia.org%2Fwiki%2FArchivo%3AMicrosoft_Office_Excel_%25282019%25E2%2580%2593present%2529.svg&psig=AOvVaw1veDqh4l1yHZcDF9nqxP89&ust=1754011458213000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCMjgzp345Y4DFQAAAAAdAAAAABAL",
             "category": CourseCategoryEnum.OFFICE,
+            "is_published": True,
         },
     ]
-
-    # for data in cursos_base:
-    #     result = await db.execute(select(Course).where(Course.name == data["name"]))
-    #     existing = result.scalars().first()
-    #     if existing:
-    #         logger.info(
-    #             f"[INFO] El curso '{data['name']}' ya existe. No se crea de nuevo."
-    #         )
-    #         continue
-
-    #     course = Course(
-    #         name=data["name"],
-    #         description=data["description"],
-    #         palette=data["palette"],
-    #         image=data["image"],
-    #         category=data["category"])
-    #     db.add(course)
-    #     logger.info(f"[INFO] Curso creado: {data['name']}")
-
-    # await db.commit()
-    # logger.info("[INFO] Cursos base inicializados correctamente.")
 
     async with db.begin():
         for data in cursos_base:

@@ -6,6 +6,7 @@ import TeacherRoutes from "./TeacherRoutes";
 import StudentRoutes from "./StudentRoutes";
 import RoleRedirect from "./RoleRedirect";
 import { StudentGuard, TeacherGuard } from "./RoleGuard";
+import { TeacherCourseProvider } from "../modules/teacher/context/TeacherCourseProvider";
 
 export default function RoutersPrivates() {
   return (
@@ -18,9 +19,12 @@ export default function RoutersPrivates() {
           <Route path="/" element={<RoleRedirect />} />
 
           {/* Rutas protegidas para profesores */}
-          <Route element={<TeacherGuard />}>
-            <Route path="/teacher/*" element={<TeacherRoutes />} />
-          </Route>
+          <TeacherCourseProvider>
+            <Route element={<TeacherGuard />}>
+              <Route path="/teacher/*" element={<TeacherRoutes />} />
+            </Route>
+
+          </TeacherCourseProvider>
 
           {/* Rutas protegidas para estudiantes */}
           <Route element={<StudentGuard />}>

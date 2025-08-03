@@ -8,12 +8,12 @@
 import { Routes, Route } from "react-router-dom";
 
 // Importaciones de páginas de maestro
-import TeacherDashboard from "../modules/teacher/pages/TeacherDashboard";
 import CourseManagement from "../modules/teacher/pages/CourseManagement";
-import LessonCreator from "../modules/teacher/pages/LessonCreator";
-import EvaluationCreator from "../modules/teacher/pages/EvaluationCreator";
 import StudentProgress from "../modules/teacher/pages/StudentProgress";
 import NotificationCenter from "../modules/teacher/pages/NotificationCenter";
+import TeacherHome from "../modules/teacher/pages/TeacherHome";
+import LessonEditor from "../modules/teacher/components/LessonEditor";
+import LessonCreate from "../modules/teacher/components/LessonCreator";
 
 // COMPONENTE PRINCIPAL
 /**
@@ -31,21 +31,18 @@ export default function TeacherRoutes() {
   return (
     <Routes>
       {/* Home */}
-      <Route path="/home-teacher" element={<HomeTeacher />} />
+      <Route path="/home-teacher" element={<TeacherHome />} /> {/* Page del teacher */}
       <Route path="/profile-teacher" element={<TeacherPage/>}/> {/* Perfil del profesor */}
 
 
       {/* Gestión de cursos */}
-      <Route path="/courses" element={<CourseManagement />} />
+      <Route path="/courses" element={<TeacherHome />} />
       <Route path="/courses/create" element={<div>Crear nuevo curso</div>} />
-      <Route path="/courses/:courseId" element={<div>Editar curso</div>} />
-      <Route path="/courses/:courseId/lessons" element={<div>Gestionar lecciones</div>} />
+      <Route path="/courses/:courseId" element={<CourseManagement/>} />
+      <Route path="/courses/:courseId/edit" element={<div>Gestionar lecciones</div>} />
 
-      {/* Creación de contenido */}
-      <Route path="/lessons/create" element={<LessonCreator />} />
-      <Route path="/lessons/:lessonId/edit" element={<div>Editar lección</div>} />
-      <Route path="/evaluations/create" element={<EvaluationCreator />} />
-      <Route path="/evaluations/:evaluationId/edit" element={<div>Editar evaluación</div>} />
+      <Route path="courses/lessons/create" element={<LessonCreate />} />
+      <Route path="courses/:courseId/lessons/:lessonId/edit" element={<LessonEditor/>}/>
 
       {/* Gestión de estudiantes */}
       <Route path="/students" element={<div>Lista de estudiantes</div>} />

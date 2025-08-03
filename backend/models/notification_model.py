@@ -20,11 +20,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .student_model import Student
-
-    # from .notification_model import Notification
-    from .teacher_model import Teacher
-
-    # from .course_model import Course
+    from teacher.model import Teacher
 
 
 class Notification(Base):

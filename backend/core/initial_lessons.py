@@ -1,4 +1,4 @@
-# /core/initial_lessons.py
+# core/initial_lessons.py
 
 from models.lesson_model import Lesson
 from models.course_model import Course  # Modelo de curso para buscar IDs
@@ -19,6 +19,12 @@ async def create_initial_lessons(db: AsyncSession):
     result = await db.execute(select(Course.id, Course.name))
     for course_id, course_name in result.all():
         course_data[course_name] = course_id
+        # Genera un map de nombres de curso a sus IDs:
+        # {
+        #     "Word": 1,
+        #     "Excel": 2,
+        #     "PowerPoint": 3
+        # }
 
     if not course_data:
         logger.warning(
@@ -299,11 +305,14 @@ async def create_initial_lessons(db: AsyncSession):
 
     # Iterar y crear las lecciones
     for data in lessons_base:
-        course_id = course_data.get(data["course_name"])
+        course_id = course_data.get(
+            data["course_name"]
+        )  # Obtener el ID del curso por su nombre
         if course_id is None:
             logger.warning(
                 f"[WARNING] Curso '{data['course_name']}' no encontrado para la lección '{data['name']}'. Saltando."
             )
+            continue
 
             # Verificar si la lección ya existe para este curso
         result = await db.execute(

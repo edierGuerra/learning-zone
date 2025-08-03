@@ -1,20 +1,37 @@
 # core/security.py
 
 # Modulos externos
-from datetime import datetime, timedelta, timezone
+from datetime import (
+    datetime,
+    timedelta,
+    timezone,
+)  # Para manejar fechas (creacion y expiración de tokens)
 
-from config import settings  # modulo de donde se conecta al archivo .env
+from config import (
+    settings,
+)  # modulo de donde se conecta al archivo .env, apra cargar las variables de entorno como la token_key y algoritmo
 
 # Modulos internos
-from dependencies.student_dependencie import get_student_services
+from dependencies.student_dependencie import (
+    get_student_services,
+)  # Importa la funcion que obtiene los servicios del estudiante
 from fastapi import Depends, HTTPException, status
-from fastapi.security.oauth2 import OAuth2PasswordBearer
-from jose import jwt
-from services.student_services import StudentService
+from fastapi.security.oauth2 import (
+    OAuth2PasswordBearer,
+)  # Extrae el token del header Authorization
+from jose import (
+    jwt,
+)  # Importa la librería para generar y verificar tokens JWT, Para codificar/decodificar tokens JWT
+from services.student_services import (
+    StudentService,
+)  # El servicio que encapsula la logica para obtener datos del estudiante
 
 # Generación y manipulación del token
 
-oauth2_scheme_register = OAuth2PasswordBearer(tokenUrl="api/v1/student/verify_email")
+# Extrae el token de cada request cuando este header este presente
+oauth2_scheme_register = OAuth2PasswordBearer(
+    tokenUrl="api/v1/student/verify_email"
+)  # Ruta para obtener el token de acceso, se usa para extraer el token del header Authorization,
 
 
 def encode_access_token(
@@ -31,16 +48,20 @@ def encode_access_token(
         token(str): El token ya encriptado con la información del estudiante
 
     """
-    # Copia de payload
+    # Copia de payload para no modificar el original
     to_encode = payload.copy()
 
     # Tiempo de emisión
     issued_at = datetime.now(timezone.utc)
-    to_encode["iat"] = int(issued_at.timestamp())
+    to_encode["iat"] = int(
+        issued_at.timestamp()
+    )  # Tiempo de emisión en formato timestamp. Cuando fue emitido
 
     # Tiempo de expiración
     expiration_time = issued_at + timedelta(seconds=exp_time)
-    to_encode["exp"] = int(expiration_time.timestamp())
+    to_encode["exp"] = int(
+        expiration_time.timestamp()
+    )  # Tiempo de expiración en formato timestamp. Cuando expira el token
 
     # Agrega el rol del usuario al token
     if is_teacher:
@@ -48,13 +69,15 @@ def encode_access_token(
     else:
         to_encode["role"] = "student"
 
-    # Configuración del token
+    # Configuración del token, se pasan todos los datos necesarios para la creación del token
     token = jwt.encode(to_encode, settings.token_key, settings.token_algorithm)
     return token
 
 
 async def get_current_role(
-    token: str = Depends(oauth2_scheme_register),
+    token: str = Depends(
+        oauth2_scheme_register
+    ),  # hace que FastAPI extraiga el token del header Authorization, de la token del request
 ):
     """
     ## Obtener Rol
@@ -75,12 +98,12 @@ async def get_current_role(
             token=token, key=settings.token_key, algorithms=[settings.token_algorithm]
         )
         role = payload.get("role")
-        if role is None:
+        if role is None:  # Si no se encuentra el rol en el token, arroja una excepción
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token inválido o rol no encontrado",
             )
-        return role
+        return role  # retorna el rol del usuario extraído del token
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -89,7 +112,9 @@ async def get_current_role(
 
 
 async def get_current_student(
-    token: str = Depends(oauth2_scheme_register),
+    token: str = Depends(
+        oauth2_scheme_register
+    ),  # hace que FastAPI extraiga el token del header Authorization, de la token del request
     services: StudentService = Depends(get_student_services),
 ):
     """
@@ -112,7 +137,7 @@ async def get_current_student(
     pyload = jwt.decode(
         token=token, key=settings.token_key, algorithms=[settings.token_algorithm]
     )
-    student_id = pyload.get("sub")
+    student_id = pyload.get("sub")  # Extrae el id del estudiante del token
 
     # Lanza excepción en caso de no obtener el id del estudiante
     if student_id is None:

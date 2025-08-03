@@ -4,7 +4,7 @@ import asyncio
 from getpass import getpass
 from sqlalchemy.ext.asyncio import AsyncSession
 from database.config_db import async_session, engine
-from models.teacher_model import Teacher
+from teacher.model import Teacher
 from sqlalchemy import select
 import bcrypt
 

@@ -12,7 +12,7 @@ from .progress_model import progress_model
 from .student_answer_model import StudentAnswer
 from .student_notification_model import student_notification
 from .student_model import Student
-from .teacher_model import Teacher
+from teacher.model import Teacher
 
 __all__ = [
     "Comment",

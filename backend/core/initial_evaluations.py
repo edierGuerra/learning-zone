@@ -1,4 +1,4 @@
-# /core/initial_evaluations.py
+# core/initial_evaluations.py
 
 import json  # Necesario para json.dumps
 import logging
@@ -16,6 +16,10 @@ from models.evaluation_model import (
     QuestionType,
 )  # El modelo de la evaluacion con la clase que describe el Enum
 
+# los logger son necesarios para registrar eventos y mensajes importantes durante la ejecucion
+# Tiene diferentes niveles de severidad, como DEBUG, INFO, WARNING, ERROR y CRITICAL.
+# Esto permite a los desarrolladores y administradores del sistema rastrear el flujo de la aplicación, identificar problemas y realizar un seguimiento de eventos importantes.
+# Pueden ser eviados a archivos, a la consola o a otros sistemas de monitoreo; incluso a bases de datos o servicios de terceros.
 logger = logging.getLogger(__name__)
 
 
@@ -28,6 +32,7 @@ async def create_initial_evaluations(db: AsyncSession):
     lesson_data_map: Dict[str, Dict[str, int]] = (
         {}
     )  # {"CourseName": {"LessonName": x, "lesson_id": y}}
+    # lesson_data_map[nombre_curso][nombre_leccion] = id_leccion
 
     # Necesitamos obtener el nombre del curso asociado a cada lección.
     # result = await db.execute(select(Lesson).id, Lesson.name, Lesson.course)) # seleciona el id, el nombre de la leccion y la relacion "course" para el nombre del curso
@@ -36,29 +41,29 @@ async def create_initial_evaluations(db: AsyncSession):
             selectinload(Lesson.course)
         )  # Carga la relación 'course'
     )
-
-    # for lesson_id, lesson_name, course_obj in result.all():
-    #     if course_obj: # Asegurarse que el curso exista
-    #         course_name = course_obj.name
-    #         if course_name not in lesson_data_map:
-    #             lesson_data_map[course_name] = {}
-    #         lesson_data_map[course_name][lesson_name] = lesson_id
+    # selectinload(Lesson.course) para traer las lecciones y sus cursos relacionados en un solo query eficiente (evita N+1).
 
     # Ahora iteras sobre los objetos Lesson directamente
     for (
         lesson_obj
     ) in result.scalars().all():  # Usa .scalars().all() para obtener los objetos Lesson
         # lesson_obj es una instancia de Lesson, y lesson_obj.course es el objeto Course relacionado
-        if lesson_obj.course:  # Asegurarse de que el curso exista
+        if (
+            lesson_obj.course
+        ):  # Verifica que haya una relacion con algun curso, evita errores si hay lecciones huerfanas
             course_name = (
                 lesson_obj.course.name
-            )  # <--- Accede al nombre del curso a través del objeto Course
+            )  # <--- Accede al nombre del curso relacionado a través del objeto Lesson, en caso de que si haya una relacion con curso.
 
-            if course_name not in lesson_data_map:
-                lesson_data_map[course_name] = {}
-            lesson_data_map[course_name][
-                lesson_obj.name
-            ] = lesson_obj.id  # Usa lesson_obj.name y lesson_obj.id
+            if (
+                course_name not in lesson_data_map
+            ):  # Si el curso no está en el mapa, lo inicializas, si no hay una entrada para ese curso; es decir si el nombre de ese curso no esta en el diccionario de lesson_data_map.
+                lesson_data_map[course_name] = (
+                    {}
+                )  # Inicializa un nuevo diccionario para ese curso
+            lesson_data_map[course_name][  # Usa el nombre de la lección como clave
+                lesson_obj.name  #
+            ] = lesson_obj.id  # Asocia el ID de la lección al nombre de la lección
 
     if not lesson_data_map:
         logger.warning(
@@ -774,6 +779,11 @@ async def create_initial_evaluations(db: AsyncSession):
         course_name = data["course_name"]
         lesson_name = data["lesson_name"]
 
+        # Intenta obtener el diccionario de lecciones para ese curso. Dentro de ese subdiccionario, busca el ID de la leccion por su nombre.
+        # Si no se encuentra, se asigna None a lesson_id.
+        # Ejemplo: lesson_data_map["Word"]["Introducción y entorno de trabajo en Word"] = 1
+        # El primer get busca si existe una clave con ese course_name, si no existe devuelve un diccionario vacío en vez de un error.
+        # luego el lesson_name se busca dentro de el resultado anterior, sobre el diccionario de lecciones para ese curso. Si el curso existe y la leccion tambien -> devuelve el lesson_id, si no -> None
         lesson_id = lesson_data_map.get(course_name, {}).get(lesson_name)
 
         if lesson_id is None:
@@ -782,6 +792,7 @@ async def create_initial_evaluations(db: AsyncSession):
             )
             continue
 
+        # Verificar si ya existe una evaluación para esta lección
         result = await db.execute(
             select(Evaluation).where(Evaluation.id_leccion == lesson_id)
         )

@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from .comment_model import Comment
     from .student_model import Student
     from .lesson_model import Lesson
-    from .teacher_model import Teacher
+    from teacher.model import Teacher
 
 import enum
 
@@ -65,7 +65,7 @@ class Course(Base):
     )
     lessons: Mapped[List["Lesson"]] = relationship(back_populates="course")
     teacher: Mapped["Teacher"] = relationship(
-        "Teacher", back_populates="courses"  # Relación con el profesor
+        "Teacher", back_populates="courses"
     )  # Relación con el profesor, un curso tiene un solo profesor
 
     def __repr__(self) -> str:

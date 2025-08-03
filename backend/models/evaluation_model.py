@@ -38,7 +38,7 @@ class Evaluation(Base):
         SqlEnum(QuestionType, name="question_type_enum", create_type=True),
         nullable=False,
     )  # tipo, 'name' es el nombre del tipo de la BD
-    options: Mapped[str] = mapped_column(Text, nullable=True)  # opciones
+    options: Mapped[list] = mapped_column(Text, nullable=True)  # opciones
     correct_answer: Mapped[str] = mapped_column(
         Text, nullable=True
     )  # respuesta_correcta

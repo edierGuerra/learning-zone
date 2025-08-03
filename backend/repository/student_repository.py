@@ -10,6 +10,7 @@ from datetime import datetime
 
 from models.course_model import Course
 from models.student_model import Student
+from teacher.model import Teacher
 
 # Modulos internos
 from schemas.student_schemas import StudentRegister
@@ -159,9 +160,7 @@ class StudentRepository:
         student = result.scalar_one_or_none()
         return student
 
-    async def valid_student(
-        self, user_email: str, user_password: str
-    ) -> Optional[Student]:
+    async def valid_student(self, email: str, password: str) -> Optional[Student]:
         """
         ## Validar correo del estudiante
 
@@ -177,18 +176,18 @@ class StudentRepository:
         try:
             # Buscar el estudiane por medio de su correo
             result = await self.db.execute(
-                select(Student).where(Student.email == user_email)
+                select(Student).where(Student.email == email)
             )
             student = result.scalar_one_or_none()
 
             # Lanzar error y retornar None en caso de no encontrar el estudiante por medio del correo
             if not student:
-                logger.warning("⚠️ Correo de estudiante no encontrado: %s", user_email)
+                logger.warning("⚠️ Correo de estudiante no encontrado: %s", email)
                 return None
 
             # Validar la contraseña
             validate_password = valid_password(
-                password=user_password, hash_password=student.password
+                password=password, hash_password=student.password
             )
 
             if validate_password is False:
@@ -388,3 +387,28 @@ class StudentRepository:
         students = result.scalars().all()
 
         return students
+
+    async def valid_teacher(self, email: str, password: str):
+        """
+        Valida si el correo y la contraseña corresponden a un profesor registrado.
+        """
+        try:
+            result = await self.db.execute(
+                select(Teacher).where(Teacher.email == email)
+            )
+            teacher = result.scalar_one_or_none()
+
+            if not teacher:
+                logger.warning("⚠️ Correo de profesor no encontrado: %s", email)
+                return None
+
+            if valid_password(password, teacher.password):
+                logger.info("✅ Profesor validado correctamente ✅")
+                return teacher
+            else:
+                logger.warning("⚠️ Contraseña incorrecta para el profesor ⚠️")
+                return None
+
+        except Exception as e:
+            logger.error("⛔ Error al validar al profesor ⛔", exc_info=e)
+            return None

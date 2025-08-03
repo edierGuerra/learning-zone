@@ -1,18 +1,23 @@
+# core/initial_content.py
+
 from models.content_model import Content, TypeContent
 from models.lesson_model import Lesson
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-import logging
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+)  # Sesión asincrónica para interactuar con la base de datos. Estandarizado para apps con FastAPI.
+from sqlalchemy import select  # Crear consultas SQL de forma segura y eficiente.
+import logging  # Para registrar advertencias e información en la consola o en archivos de log.
 
 logger = logging.getLogger(__name__)
 
 
+# Funcion asincrónica que recibe una sesión de base de daots y ejecuta la carga de contenidos iniciales.
 async def create_initial_contents(db: AsyncSession):
     """
     Crea contenidos iniciales tipo imagen asociados a las lecciones,
     usando IDs reales a partir del nombre de la lección.
     """
-    # Obtener todas las lecciones existentes
+    # Obtener todas las lecciones existentes obteniendo su ID y nombre.
     result = await db.execute(select(Lesson.id, Lesson.name))
     lesson_rows = result.all()
 
@@ -20,7 +25,7 @@ async def create_initial_contents(db: AsyncSession):
         logger.warning("[WARNING] No se encontraron lecciones en la base de datos.")
         return
 
-    # Mapeo: nombre de la lección → id
+    # Mapeo: nombre de la lección → id, se define un diccionario de nombre:id_leccion por el for que extrae los datos del objeto lesson_rows.
     lesson_name_to_id = {name: id_ for id_, name in lesson_rows}
 
     # Contenidos base con tipo de contenido 'image' y descripción obligatoria 'text'
@@ -438,11 +443,14 @@ async def create_initial_contents(db: AsyncSession):
         },
     ]
 
+    # Itera sobre los contendios base, extrayendo el nombre de la leccion y el id en base al nombre de la leccion
     for data in contents_base:
         lesson_name = data["lesson_name"]
         lesson_id = lesson_name_to_id.get(lesson_name)
 
-        if lesson_id is None:
+        if (
+            lesson_id is None
+        ):  # Verifica si el id no se encuentra, si no se encuentra continua con el siguiente contenido
             logger.warning(
                 f"[WARNING] Lección '{lesson_name}' no encontrada. Saltando contenido."
             )
@@ -454,7 +462,9 @@ async def create_initial_contents(db: AsyncSession):
                 (Content.content == data["content"]) & (Content.lesson_id == lesson_id)
             )
         )
-        existing = result.scalars().first()
+        existing = (
+            result.scalars().first()
+        )  # Scalars extrae la columna principal o lista sin devolver una tupla y first devuelve el primer objeto o None si no hay resultados.
 
         if existing:
             logger.info(
@@ -462,6 +472,7 @@ async def create_initial_contents(db: AsyncSession):
             )
             continue
 
+        # Crear el objeto Content y agregarlo a la sesión
         content = Content(
             content_type=data["content_type"],
             content=data["content"],
@@ -473,5 +484,6 @@ async def create_initial_contents(db: AsyncSession):
             f"[INFO] Contenido creado (tipo imagen) para la lección '{lesson_name}'."
         )
 
+    # Guardar los cambios en la base de datos
     await db.commit()
     logger.info("[INFO] Contenidos tipo imagen inicializados correctamente.")

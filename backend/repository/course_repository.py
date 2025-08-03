@@ -49,6 +49,9 @@ class CourseRepository:
                         "id": course.id,
                         "name": course.name,
                         "description": course.description,
+                        "image": course.image,
+                        "category": course.category,
+                        "palette": course.palette,
                         "status": status_course.status,
                     }
                 )

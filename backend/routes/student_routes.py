@@ -177,34 +177,52 @@ async def login_student(
             ```
     """
     try:
+        # Validar usuario en ambas tablas
         student = await services.valid_student(
             password=student_login.password, email=student_login.email
         )
-        if student is not None:
-            to_encode = {"sub": str(student.id)}
-            access_token = encode_access_token(payload=to_encode)
-            if not access_token:
-                raise HTTPException(
-                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    detail="Error al generar el token",
-                )
-        if student is None:
+        teacher = await services.valid_teacher(
+            password=student_login.password, email=student_login.email
+        )
+
+        # Si no existe ninguno, error de credenciales
+        if not student and not teacher:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Correo o contraseña incorrectos",
+            )
+
+        # Si existen ambos, define una política
+        if student and teacher:
+            # Ejemplo: priorizar login de profesor (ajusta según tu política)
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Error de autenticación: se encontró un conflicto entre roles.",
+            )
+        elif student:
+            to_encode = {"sub": str(student.id)}
+            access_token = encode_access_token(payload=to_encode)
+        elif teacher:
+            to_encode = {"sub": str(teacher.id)}
+            access_token = encode_access_token(payload=to_encode, is_teacher=True)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Error de autenticación: se encontró un conflicto entre roles.",
             )
         return JSONResponse(
             content={
                 "access_token": access_token,
                 "token_type": "bearer",
                 "message": "Inicio de sesión exitoso",
-            },
-            status_code=status.HTTP_200_OK,
+            }
         )
-    except Exception:
+    except Exception as e:
+        # Log del error para depuración
+        print(f"Error al iniciar sesión: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error desconosido",
+            detail="Error inesperado en el servidor :(",
         )
 
 

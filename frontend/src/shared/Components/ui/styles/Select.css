@@ -1,0 +1,32 @@
+.custom-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px;
+  width: 100%;
+  position: relative;
+}
+
+.select-trigger {
+  padding: 10px;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+.select-content {
+  background: white;
+  border: 1px solid #ccc;
+  margin-top: 4px;
+}
+
+.select-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.select-item:hover {
+  background-color: #eaeaea;
+}
+
+.select-value {
+  color: #888;
+}

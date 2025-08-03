@@ -1,8 +1,9 @@
 // PARA MAYOR SEGURIDAD MIGRAR ESTO A COOKIES
 // Importa los tipos de datos definidos para el usuario y su token
 import type { TComment, TStudentAllComents } from "../../modules/courses/comments/types";
-import type { TContent, TCoursesStudents, TCoursesTeachers, TEvaluation, TLesson, TLessons } from "../../modules/courses/types/Course";
+import type { TContent, TCoursesStudents, TEvaluation, TLessonsStudent, TLessonsTeacher, TLessonStudent } from "../../modules/courses/types/CourseStudent";
 import type { TNotifications } from "../../modules/notifications/types/Notifications";
+import type { TCoursesTeachers, TCourseTeacherResponse, TFormDataLesson, TLessonTeacherResponse } from "../../modules/teacher/types/Teacher";
 import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken, TUser, TUserRole } from "../../modules/types/User";
 import type { TColorPalette } from "../theme/ColorPalettesCourses";
 
@@ -169,7 +170,7 @@ export const authStorage = {
   removeCoursesStudent:()=>localStorage.removeItem('coursesStudent'),
 
   setCoursesTeacher:(courses:TCoursesTeachers)=>{
-    localStorage.setItem('coursesStudent',JSON.stringify(courses))
+    localStorage.setItem('coursesTeacher',JSON.stringify(courses))
   },
   getCoursesTeacher:():TCoursesTeachers =>{
     try {
@@ -183,29 +184,79 @@ export const authStorage = {
   },
   removeCoursesTeacher:()=>localStorage.removeItem('coursesTeacher'),
 
-
-  setLessons:(lessons:TLessons)=>{
-    localStorage.setItem('lessons',JSON.stringify(lessons))
+  setCourseTeacher:(course:TCourseTeacherResponse)=>{
+    localStorage.setItem('courseTeacher',JSON.stringify(course))
   },
-  getLessons:():TLessons =>{
+  getCourseTeacher: (): TCourseTeacherResponse | null => {
     try {
-      const raw = localStorage.getItem("lessons");
-      return raw ? (JSON.parse(raw) as TLessons) : [];
+      const raw = localStorage.getItem("courseTeacher");
+      return raw ? (JSON.parse(raw) as TCourseTeacherResponse) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado:", e);
+      return null;
+    }
+  },
+
+  removeCourseTeacher:()=>localStorage.removeItem('courseTeacher'),
+
+
+  setLessonsStudents:(lessons:TLessonsStudent)=>{
+    localStorage.setItem('lessonsStudent',JSON.stringify(lessons))
+  },
+  getLessonsStudents:():TLessonsStudent =>{
+    try {
+      const raw = localStorage.getItem("lessonsStudent");
+      return raw ? (JSON.parse(raw) as TLessonsStudent) : [];
     } catch (e) {
       console.error("El JSON está mal formado:", e);
       return [];
     }
   },
-  removeLessons:()=>localStorage.removeItem('lessons'),
+  removeLessonsStudents:()=>localStorage.removeItem('lessonsStudent'),
 
-  setLesson: (lesson: TLesson) =>
-    localStorage.setItem("lesson", JSON.stringify(lesson)),
+
+
+  setLessonsTeacher: (lesson: TLessonsTeacher) =>
+    localStorage.setItem("lessonsTeacher", JSON.stringify(lesson)),
 
   // Recupera el objeto de contenido desde localStorage
-  getLesson: (): TLesson | null => {
+  getLessonsTeacher: (): TLessonsTeacher | null => {
+    try {
+      const raw = localStorage.getItem("lessonsTeacher");
+      return raw ? (JSON.parse(raw) as TLessonsTeacher) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado :", e);
+      return null;
+    }
+  },
+  // Elimina el content del localStorage
+  removeLessonsTeacher: () => localStorage.removeItem("lessonsTeacher"),
+
+  setFormLessonInfo: (formInfoLesson: TFormDataLesson) =>
+    localStorage.setItem('formLesson', JSON.stringify(formInfoLesson)),
+
+  getFormLessonInfo: (): TFormDataLesson | null => {
+    try {
+      const raw = localStorage.getItem('formLesson');
+      return raw ? (JSON.parse(raw) as TFormDataLesson) : null;
+    } catch (e) {
+      console.error('El JSON está mal formado:', e);
+      return null;
+    }
+  },
+
+  removeFormLessonInfo: () => localStorage.removeItem('formLesson'),
+
+
+
+
+  setLesson: (lesson: TLessonStudent | TLessonTeacherResponse | null ) =>
+    localStorage.setItem("lesson", JSON.stringify(lesson)),
+  // Recupera el objeto de contenido desde localStorage
+  getLesson: (): TLessonStudent | TLessonTeacherResponse | null => {
     try {
       const raw = localStorage.getItem("lesson");
-      return raw ? (JSON.parse(raw) as TLesson) : null;
+      return raw ? (JSON.parse(raw) as TLessonStudent | TLessonTeacherResponse | null) : null;
     } catch (e) {
       console.error("El JSON está mal formado :", e);
       return null;
@@ -214,6 +265,7 @@ export const authStorage = {
 
   // Elimina el content del localStorage
   removeLesson: () => localStorage.removeItem("lesson"),
+
 
   setContent: (content: TContent) =>
     localStorage.setItem("content", JSON.stringify(content)),

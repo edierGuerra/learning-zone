@@ -2,7 +2,7 @@
 import axios from "../../../api/axiosInstance";
 import type { TTeacher } from "../../types/User";
 
-const VITE_GETTEACHER_ENDPOINT = import.meta.env.VITE_GETTEACHER_ENDPOINT;
+const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 
 // Estructura esperada para los datos del profesor
 type TTeacherDataResponse = {
@@ -28,7 +28,7 @@ type TeacherAPIResponse = {
  */
 export async function GetTeacherAPI(): Promise<TTeacherDataResponse & { prefix_profile: string }> {
     try {
-        const response = await axios.get(VITE_GETTEACHER_ENDPOINT);
+        const response = await axios.get(VITE_TEACHER_ENDPOINT);
 
         // Validar código de respuesta
         if (response.status !== 200) {

@@ -2,7 +2,7 @@
 import toast from 'react-hot-toast';
 import { useStudentCourseContext } from '../../../modules/courses/hooks/useCourse'
 import GetCoursesByCategoryAPI from '../../../modules/courses/services/GetCoursesByCategory.server';
-import type { TCourse } from '../../../modules/courses/types/Course';
+import type { TCourse } from '../../../modules/courses/types/CourseStudent';
 import './Styles/ViewCategories.css'
 
 export default function ViewCategories() {

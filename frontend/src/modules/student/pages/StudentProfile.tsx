@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import './Styles/StudentPage.css'
 import { useNavigationHandler, type AppRoutes } from "../../../hooks/useNavigationHandler";
-import type { TCourse } from "../../courses/types/Course";
+import type { TCourse } from "../../courses/types/CourseStudent";
 import UpdateInformation from "../components/UpdateInformation";
 import { useUser } from "../../auth/Hooks/useAuth";
 import { useStudentCourseContext } from "../../courses/hooks/useCourse";

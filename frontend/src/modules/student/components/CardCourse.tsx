@@ -1,7 +1,7 @@
 import { RiProgress8Line } from "react-icons/ri";
 import { GrStatusGood } from "react-icons/gr";
 import '../Styles/CardCourse.css';
-import type { TCourse, TCourseStudent } from '../../courses/types/Course';
+import type { TCourse, TCourseStudent } from '../../courses/types/CourseStudent';
 import { useNavigate } from 'react-router-dom';
 import { useStudentCourseContext } from "../../courses/hooks/useCourse";
 
@@ -22,7 +22,7 @@ export default function CardCourse({ id, image, name, description, status, palet
   // Maneja el click para cargar lecciones y navegar al curso
   const handleClickCourse = () => {
     loadLessonsCourse(id);
-    navigate(`/course/${id}/${name}`);
+    navigate(`student/course/${id}/${name}`);
   };
 
   return (

@@ -1,7 +1,7 @@
 /* Serivicio que se encarga de obtener el progreso del estudiante del estudiante */
 
 import axios from '../../../api/axiosInstance';
-import type { TProgressCourses } from '../../courses/types/Course';
+import type { TProgressCourses } from '../../courses/types/CourseStudent';
 
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 

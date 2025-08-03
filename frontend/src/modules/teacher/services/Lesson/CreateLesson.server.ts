@@ -4,7 +4,8 @@
 /* Serivicio que se encarga de obtener los cursos del estudiante */
 
 import axios from '../../../../api/axiosInstance';
-import type { TLessonTeacherResponse, TLessonTeacherSend } from '../../types/Teacher';
+import type { TCourse } from '../../../courses/types/CourseStudent';
+import type { TLessonContentResponse, TLessonTeacherResponse } from '../../types/Teacher';
 
 const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 
@@ -15,21 +16,25 @@ type TCreateLessonAPIResponse={
     id_lesson: TLessonTeacherResponse['id'];
 };
 
+type TCreateLessonAPIProps = {
+  idCourse:TCourse['id'],
+  lessonContent:TLessonContentResponse
+
+};
 
 
-export default async function CreateLessonAPI(lesson:TLessonTeacherSend): Promise<TLessonTeacherResponse['id']> {
+export default async function CreateLessonAPI({ idCourse, lessonContent}:TCreateLessonAPIProps): Promise<TLessonTeacherResponse['id']> {
     try {
-        const id_course = lesson.idCourse
         const formData = new FormData();
-        formData.append("name", lesson.name);
-        formData.append("content_type", lesson.content.contentType);
-        formData.append("text", lesson.content.text);
-        if (lesson.content.file) {
-            formData.append("file", lesson.content.file);
+        formData.append("name", lessonContent.name);
+        formData.append("content_type", lessonContent.content.content_type);
+        formData.append("text", lessonContent.content.text);
+        if (lessonContent.content.file) {
+            formData.append("file", lessonContent.content.file);
         }
 
 
-        const response = await axios.post(`${VITE_TEACHER_ENDPOINT}/courses/${id_course}/lessons`, formData, {
+        const response = await axios.post(`${VITE_TEACHER_ENDPOINT}/courses/${idCourse}/lessons`, formData, {
             headers: {
             "Content-Type": "multipart/form-data",
             },

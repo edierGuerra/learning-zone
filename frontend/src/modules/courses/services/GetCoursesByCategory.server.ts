@@ -2,7 +2,7 @@
 /* Serivicio que se encarga de obtener los cursos del estudiante */
 
 import axios from '../../../api/axiosInstance';
-import type { TCourse, TCoursesStudents } from '../types/Course';
+import type { TCourse, TCoursesStudents } from '../types/CourseStudent';
 
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 

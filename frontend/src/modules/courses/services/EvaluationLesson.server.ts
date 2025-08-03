@@ -1,12 +1,12 @@
 /* Servicio que solicita al backend la evaluacion de una respectiva leccion */
 import axios from '../../../api/axiosInstance';
-import type {TCourse, TEvaluation, TLesson } from '../types/Course';
+import type {TCourseStudent, TEvaluation, TLessonStudent } from '../types/CourseStudent';
 
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 /* Agregar en response un atributo score que es el puntaje */
 type EvaluationLessonsAPIProps = {
-    idCourse: TCourse['id'],
-    idLesson: TLesson['id']
+    idCourse: TCourseStudent['id'],
+    idLesson: TLessonStudent['id']
 }
 
 type TEvaluationLessonsAPIResponse = {

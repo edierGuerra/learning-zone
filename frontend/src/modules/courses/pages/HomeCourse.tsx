@@ -14,7 +14,7 @@ import { GiRoundStar } from "react-icons/gi";
 import { useStudentCourseContext } from "../hooks/useCourse";
 import { useParams } from "react-router-dom";
 import { educationalPalettes} from "../../../shared/theme/ColorPalettesCourses";
-import type { TCourse } from "../types/Course";
+import type { TCourse } from "../types/CourseStudent";
 import './HomeCourse.css'
 
 
@@ -98,7 +98,7 @@ export default function CourseHomePage() {
 
   // Limpia datos previos y carga lecciones desde backend al montar.
   useEffect(() => {
-    authStorage.removeLessons();
+    authStorage.removeLessonsStudents();
     authStorage.removeLesson();
     authStorage.removeContent();
     authStorage.removeEvaluation();

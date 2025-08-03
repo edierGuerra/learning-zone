@@ -1,6 +1,6 @@
 /* Servicio que se conecta al backend para solicitar las lecciones de un cursos de un estudiante  */
 import axios from '../../../api/axiosInstance';
-import type {TCourse,TLesson } from '../types/Course';
+import type {TCourse,TLesson } from '../types/CourseStudent';
 
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 

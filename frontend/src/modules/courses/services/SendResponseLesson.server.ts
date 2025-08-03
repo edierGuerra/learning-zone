@@ -1,6 +1,6 @@
 /* Servicio que envía al backend la respuesta del usuario y valida si es correcta o no */
 import axios from '../../../api/axiosInstance';
-import type { TCourse, TEvaluation, TLesson, TScore } from '../types/Course';
+import type { TCourse, TEvaluation, TLesson, TScore } from '../types/CourseStudent';
 
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 

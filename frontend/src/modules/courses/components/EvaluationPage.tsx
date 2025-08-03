@@ -1,7 +1,7 @@
 /* Page donde se renderiza la evaluación de una lección (dinámico para cualquier curso) */
 
 import { useState, useEffect, useRef } from "react"
-import type { TEvaluation, TScore } from "../types/Course"
+import type { TEvaluation, TScore } from "../types/CourseStudent"
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import '../styles/EvaluationPage.css'
 import { IoArrowBackCircleSharp } from "react-icons/io5";

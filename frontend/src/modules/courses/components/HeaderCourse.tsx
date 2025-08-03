@@ -6,7 +6,7 @@ import { authStorage } from '../../../shared/Utils/authStorage';
 import type { TStudentAllComents } from '../comments/types';
 import { useNavigate } from 'react-router-dom';
 import { useStudentCourseContext } from '../hooks/useCourse';
-import type { TCourse } from '../types/Course';
+import type { TCourse } from '../types/CourseStudent';
 
 // Props del componente: recibe título dinámico
 interface THeaderCourseProps {

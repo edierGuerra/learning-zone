@@ -16,16 +16,17 @@ import {
   type TCourse,
   type TCoursesStudents,
   type TEvaluation,
-  type TLesson,
-  type TLessons,
+  type TLessonsStudent,
+  type TLessonStudent,
   type TProgressCourses,
-} from "../types/Course";
+} from "../types/CourseStudent";
 import toast from "react-hot-toast";
 import GetCoursesAPI from "../services/GetCourses";
 import ProgressCoursesAPI from "../../student/services/GetProgressCourses.server";
 import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
 import { StudentCourseContext } from "./StudentCourseContext";
+import type { TLessonTeacherResponse } from "../../teacher/types/Teacher";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -35,10 +36,10 @@ type Props = {
 // Provider principal que controla todo lo relacionado con la sesión del estudiante
 export const StudentCourseProvider = ({ children }: Props) => {
   const [courses, setCourses] = useState<TCoursesStudents>([]);
-  const [lessons, setLessons] = useState<TLessons>([]);
+  const [lessons, setLessons] = useState<TLessonsStudent>([]);
   const [progressLessons, setProgressLessons] = useState<TProgressCourses>([]);
   const [progress,setProgress] = useState(0); /* Progreso del curso especifico */
-  const [currentLesson, setCurrentLesson] = useState<TLesson | null>(null); /* Leccion que se esta haciendo */
+  const [currentLesson, setCurrentLesson] = useState<TLessonStudent | TLessonTeacherResponse | null>(null); /* Leccion que se esta haciendo */
   const [content, setContent] = useState<TContent | null>(null); /* Contenido de la leccion */
   const [evaluation, setEvaluation] = useState<TEvaluation | null>(null); /* Evaluacion de la leccion */
   const [palette, setPalette] = useState<TColorPalette | null>(null);
@@ -47,7 +48,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
   useEffect(() => {
     const storedCourses = authStorage.getCoursesStudent(); // Trae cursos guardado si existe
     const storedContentLesson = authStorage.getContent(); // Trae contenido guardado si existe
-    const storedLessons = authStorage.getLessons() /* Trae las lecciones guardadas si existen */
+    const storedLessons = authStorage.getLessonsStudents() /* Trae las lecciones guardadas si existen */
     const storedLesson = authStorage.getLesson() /* Trae la leccion que se esta haciendo si existe */
     const storedEvaluationLesson = authStorage.getEvaluation(); // Trae evaluacion guardado si existe */
     const storedPaletteColors = authStorage.getPaletteColors(); // Trae evaluacion guardado si existe */
@@ -109,7 +110,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
     }, [lessons]);
 
 
-  const storageLessons = authStorage.getLessons()
+  const storageLessons = authStorage.getLessonsStudents()
   useEffect(()=>{
     if(storageLessons.length >0){
       setLessons(storageLessons)
@@ -120,7 +121,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
     try{
         const lessonsRes = await LessonsCourseAPI(idCourse);
 
-        const lessonsStorage: TLessons = lessonsRes.map((l) => ({
+        const lessonsStorage: TLessonsStudent = lessonsRes.map((l) => ({
             id: l.id,
             name:l.name,
             progressState:l.progress_state,
@@ -129,7 +130,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
 
         setLessons(lessonsStorage) /* Setear las lecciones para poder renderizarlas en el home del curso */
         /* Setear los valores al localstorage */
-        authStorage.setLessons(lessonsStorage)
+        authStorage.setLessonsStudents(lessonsStorage)
 
 
     }catch(error){
@@ -138,7 +139,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
     }
   }
   /* Funcion que carga el contenido de la leccion */
-  const loadLessonContent = async (idCourse: TCourse["id"], lesson: TLesson) => {
+  const loadLessonContent = async (idCourse: TCourse["id"], lesson: TLessonStudent) => {
     try{
       const contentRes = await ContentLessonsAPI({idCourse,idLesson: lesson.id})
       /* juntar el nombre de la leccion, con el contenido obtenido del backend */
@@ -163,7 +164,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
   };
 
   /* Funcion que carga la evaluacion de la leccion */
-  const loadLessonEvaluation = async (idCourse: TCourse["id"], idLesson: TLesson['id']) => {
+  const loadLessonEvaluation = async (idCourse: TCourse["id"], idLesson: TLessonStudent['id']) => {
     try{
         const evaluationRes = await EvaluationLessonsAPI({idCourse,idLesson})
         console.log(evaluationRes)
@@ -192,14 +193,14 @@ export const StudentCourseProvider = ({ children }: Props) => {
           };
 
 
-  const renderContent =async(idCourse:TCourse['id'], lesson:TLesson)=>{
+  const renderContent =async(idCourse:TCourse['id'], lesson:TLessonStudent)=>{
     await loadLessonContent(idCourse,lesson);
     /* Rederigir a la page del contenido */
     handleBtnNavigate('/contentPage')
 
   }
 
-  const renderEvaluation =async(idCourse:TCourse['id'], idLesson:TLesson['id'])=>{
+  const renderEvaluation =async(idCourse:TCourse['id'], idLesson:TLessonStudent['id'])=>{
     alert(idCourse)
 
     await loadLessonEvaluation(idCourse,idLesson);

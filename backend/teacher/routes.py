@@ -105,6 +105,19 @@ async def update_course(
     return {"message": "Curso actualizado con exito.", "course": updated_course}
 
 
+@router.delete(
+    "/courses/{course_id}",
+    description="Elimina un curso por su ID.",
+    dependencies=[Depends(bearer_scheme)],
+)
+async def delete_course(
+    course_id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """Elimina un curso por su ID."""
+    return await teacher_services.delete_course(course_id)
+
+
 # ---- Rutas del profesor ----
 @router.get("/", dependencies=[Depends(bearer_scheme)])
 async def get_teacher_info(teacher: Teacher = Depends(get_current_teacher)):

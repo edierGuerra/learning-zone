@@ -51,5 +51,5 @@ class Evaluation(Base):
     # relaciones
     lesson: Mapped["Lesson"] = relationship(back_populates="evaluation")
     student_answers_rel: Mapped[list["StudentAnswer"]] = relationship(
-        back_populates="evaluation"
+        back_populates="evaluation", cascade="all, delete-orphan"
     )

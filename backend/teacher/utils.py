@@ -13,6 +13,7 @@ cloudinary.config(
 )
 
 
+# -- Funciones de utilidad para manejar archivos y Cloudinary
 async def save_and_upload_file(
     file: UploadFile, upload_folder: str = "uploads", public_id: str = None
 ) -> str:
@@ -74,6 +75,18 @@ async def update_file_on_cloudinary(file: UploadFile, public_id: str) -> str:
     return url
 
 
+async def delete_file_from_cloudinary(public_id: str) -> None:
+    """
+    Elimina un archivo de Cloudinary usando su public_id.
+    :param public_id: ID público del archivo en Cloudinary a eliminar.
+    """
+    try:
+        cloudinary.uploader.destroy(public_id, resource_type="auto")
+    except Exception as e:
+        print(f"Error al eliminar el archivo de Cloudinary: {e}")
+
+
+# -- Otras funciones de utilidad --
 def generate_profile_prefix(name: str, last_name: str) -> str:
     """
     ## Generar prefijo

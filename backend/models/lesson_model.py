@@ -37,7 +37,11 @@ class Lesson(Base):
     students: Mapped[List["Student"]] = relationship(
         back_populates="lessons", secondary=progress_model
     )
-    contents: Mapped[List["Content"]] = relationship(back_populates="lesson")
+    contents: Mapped[List["Content"]] = relationship(
+        back_populates="lesson", cascade="all, delete-orphan"
+    )
 
     # relaciones
-    evaluation: Mapped["Evaluation"] = relationship(back_populates="lesson")
+    evaluation: Mapped["Evaluation"] = relationship(
+        back_populates="lesson", cascade="all, delete-orphan"
+    )

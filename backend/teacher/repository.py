@@ -1,11 +1,13 @@
 """Repositorio con todos los procesos"""
 
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 
 from models.course_model import Course
 from teacher.model import Teacher
+from teacher.utils import delete_file_from_cloudinary
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -77,6 +79,24 @@ class TeacherRepo:
         logger.info(f"Curso ID {course_id} actualizado exitosamente.")
         return course
 
+    async def delete_course(self, course_id: int) -> None:
+        """
+        Elimina un curso por su ID.
+        :param course_id: ID del curso a eliminar.
+        """
+        stmt = select(Course).where(Course.id == course_id)
+        result = await self.db.execute(stmt)
+        course = result.scalar_one_or_none()
+
+        if not course:
+            logger.error(f"Curso con ID {course_id} no encontrado.")
+            raise ValueError("Curso no encontrado")
+
+        await delete_file_from_cloudinary(course.name)
+        await self.db.delete(course)
+        await self.db.commit()
+        logger.info(f"Curso ID {course_id} eliminado exitosamente.")
+
     # --- Métodos de Profesores ---
     async def get_teacher_by_id(self, teacher_id: int):
         """
@@ -85,7 +105,11 @@ class TeacherRepo:
         :return: Objeto Teacher.
         """
         logger.info(f"Obteniendo profesor con ID {teacher_id}")
-        stmt = select(Teacher).where(Teacher.id == teacher_id)
+        stmt = (
+            select(Teacher)
+            .options(selectinload(Teacher.courses))
+            .where(Teacher.id == teacher_id)
+        )
         result = await self.db.execute(stmt)
         if not result:
             logger.error(f"Profesor con ID {teacher_id} no encontrado.")

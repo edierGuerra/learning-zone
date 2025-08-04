@@ -11,6 +11,7 @@ class TeacherServices:
     def __init__(self, repo: TeacherRepo):
         self.repo = repo
 
+    # --- Métodos de Cursos ---
     async def create_course(self, course: dict) -> dict:
         """
         Crea un nuevo curso en la base de datos.
@@ -51,6 +52,16 @@ class TeacherServices:
             )
         return await self.repo.update_course(course_id, course_data)
 
+    async def delete_course(self, course_id: int) -> dict:
+        """
+        Elimina un curso por su ID.
+        :param course_id: ID del curso a eliminar.
+        :return: Mensaje de confirmación.
+        """
+        await self.repo.delete_course(course_id)
+        return {"message": "Curso eliminado exitosamente."}
+
+    # --- Métodos de Profesores ---
     async def get_teacher_by_id(self, teacher_id: int):
         """
         Obtiene un profesor por su ID.

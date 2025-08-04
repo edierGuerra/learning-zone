@@ -66,7 +66,9 @@ class Course(Base):
     students: Mapped[List["Student"]] = relationship(
         secondary="course_students", back_populates="courses"
     )
-    lessons: Mapped[List["Lesson"]] = relationship(back_populates="course")
+    lessons: Mapped[List["Lesson"]] = relationship(
+        back_populates="course", cascade="all, delete-orphan"
+    )
     teacher: Mapped["Teacher"] = relationship(
         "Teacher", back_populates="courses"
     )  # Relación con el profesor, un curso tiene un solo profesor

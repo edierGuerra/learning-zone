@@ -1,13 +1,20 @@
+# teacher/repository.py
+
 """Repositorio con todos los procesos"""
 
+# Modulos externos
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 
+# Modulos internos
 from models.course_model import Course
+from models.lesson_model import Lesson
 from teacher.model import Teacher
 from teacher.utils import delete_file_from_cloudinary
+from models.content_model import Content, TypeContent
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -116,3 +123,27 @@ class TeacherRepo:
             return None
         logger.info(f"Profesor con ID {teacher_id} obtenido exitosamente.")
         return result.scalar_one_or_none()
+
+    async def create_lesson_with_content(
+        self, name: str, id_course: int, content_data: dict
+    ):
+        """
+        Crea una nueva lección en la base de datos.
+        :param lesson: Objeto Lesson con los detalles de la lección.
+        :return: None
+        """
+        new_lesson = Lesson(name=name, id_course=id_course)
+        self.db.add(new_lesson)
+        await self.db.flush()  # Permite obtener el ID antes de commit
+
+        new_content = Content(
+            lesson_id=new_lesson.id,
+            content_type=TypeContent(content_data["content_type"]),
+            content=content_data["content"],
+            text=content_data["text"],
+        )
+        self.db.add(new_content)
+
+        await self.db.commit()
+        await self.db.refresh(new_lesson)
+        return new_lesson

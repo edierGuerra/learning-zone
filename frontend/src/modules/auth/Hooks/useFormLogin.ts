@@ -87,8 +87,8 @@ export default function useFormLogin() {
       // --- Inicializar sesión global: carga rol, datos y notificaciones ---
       await initSession();
 
-      // --- Redirigir a "/", que se encargará de llevar a /student o /teacher según el rol ---
-      handleBtnNavigate("/");
+      // --- Redirigir a "/redirect", que se encargará de llevar a /student o /teacher según el rol ---
+      handleBtnNavigate("/redirect");
 
     } catch (err) {
       toast.error("No se pudo iniciar sesión.");

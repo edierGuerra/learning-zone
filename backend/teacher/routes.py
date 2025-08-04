@@ -13,6 +13,7 @@ from models.course_model import CourseCategoryEnum
 from .dependencies import get_teacher_services
 import json
 from .oauth import get_current_teacher
+from .utils import generate_profile_prefix
 
 router = APIRouter(prefix="/api/v1/teachers", tags=["Teachers"])
 
@@ -48,3 +49,18 @@ async def create_course(
     }
     new_course = await teacher_services.create_course(course=course_data)
     return {"message": "Curso creado con exito.", "course": new_course}
+
+
+@router.get("/", dependencies=[Depends(bearer_scheme)])
+async def get_teacher_info(teacher: Teacher = Depends(get_current_teacher)):
+    """Obtiene la información del profesor actual."""
+    return {
+        "id": teacher.id,
+        "name": teacher.name,
+        "email": teacher.email,
+        "specialization": teacher.specialization,
+        "last_name": teacher.last_name,
+        "prefix_profile": generate_profile_prefix(
+            name=teacher.name, last_name=teacher.last_name
+        ),
+    }

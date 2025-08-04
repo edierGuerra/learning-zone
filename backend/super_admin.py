@@ -34,7 +34,8 @@ async def create_admin():
             print("Conexión a la base de datos cerrada.")
             return
 
-        nombre = input("Nombre completo: ").strip()
+        name = input("Nombre completo: ").strip()
+        apellido = input("Apellido completo: ").strip()
         while True:
             password = getpass("Contraseña: ")
             confirm = getpass("Confirma la contraseña: ")
@@ -46,7 +47,7 @@ async def create_admin():
 
         try:
             hashed = hash_password(password)
-            admin = Teacher(name=nombre, email=email, password=hashed)
+            admin = Teacher(name=name, last_name=apellido, email=email, password=hashed)
             db.add(admin)
             await db.commit()
             await db.refresh(admin)

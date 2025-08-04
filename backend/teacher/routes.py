@@ -120,7 +120,7 @@ async def delete_course(
     return await teacher_services.delete_course(course_id)
 
 
-@router.patch("/{course_id}")
+@router.patch("/{course_id}", dependencies=[Depends(bearer_scheme)])
 async def publish_course(
     course_id: int, teacher_services: TeacherServices = Depends(get_teacher_services)
 ):

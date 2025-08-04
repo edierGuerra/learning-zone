@@ -77,10 +77,11 @@ export default function AuthNavbar() {
         <button
           className="icon-auth-navBar icon-home"
           onClick={() => {
-            handleBtnNavigate('/home');             // Navega al home
+            handleBtnNavigate('/');             // Navega al home
             setViewNotifications(false);            // Cierra notificaciones si estaban abiertas
             setViewCategories(false);               // Cierra categorías si estaban abiertas
-            authStorage.removeLessons();            // Limpia datos en localStorage
+            authStorage.removeLessonsStudents();            // Limpia datos en localStorage
+            authStorage.removeLessonsTeacher();            // Limpia datos en localStorage
           }}
         >
           <AiFillHome />

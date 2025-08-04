@@ -45,7 +45,7 @@ export default function RoleGuard({
  * TeacherGuard - Solo permite acceso a maestros
  */
 export function TeacherGuard() {
-  return <RoleGuard allowedRoles={["teacher"]} redirectTo="/" />;
+  return <RoleGuard allowedRoles={["teacher"]} redirectTo="/landing" />;
 }
 
 /**

@@ -108,4 +108,5 @@ interface TStudentCourseContextType {
     palette:TColorPalette | null;
     setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>;
 
+
 }

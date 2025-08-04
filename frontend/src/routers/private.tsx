@@ -11,27 +11,31 @@ import { TeacherCourseProvider } from "../modules/teacher/context/TeacherCourseP
 export default function RoutersPrivates() {
   return (
     <Routes>
-      {/* Todo lo privado está protegido por este wrapper */}
+      {/* Wrapper general que protege todas las rutas privadas */}
       <Route element={<PrivateRouters />}>
         <Route element={<AuthLayout />}>
 
-          {/* Redirección automática según el rol */}
+          {/* Redirección inicial según el rol */}
           <Route path="/" element={<RoleRedirect />} />
 
           {/* Rutas protegidas para profesores */}
-          <TeacherCourseProvider>
-            <Route element={<TeacherGuard />}>
-              <Route path="/teacher/*" element={<TeacherRoutes />} />
-            </Route>
-
-          </TeacherCourseProvider>
+          <Route element={<TeacherGuard />}>
+            <Route
+              path="/teacher/*"
+              element={
+                <TeacherCourseProvider>
+                  <TeacherRoutes />
+                </TeacherCourseProvider>
+              }
+            />
+          </Route>
 
           {/* Rutas protegidas para estudiantes */}
           <Route element={<StudentGuard />}>
             <Route path="/student/*" element={<StudentRoutes />} />
           </Route>
 
-          {/* Rutas compartidas protegidas */}
+          {/* Rutas compartidas (pueden estar protegidas) */}
           {sharedRoutes}
 
         </Route>

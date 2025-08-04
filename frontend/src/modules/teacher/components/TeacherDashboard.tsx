@@ -2,11 +2,15 @@ import React from 'react';
 import '../styles/TeacherDashboard.css';
 import { useTeacherCourseContext } from '../hooks/useCourseTeacher';
 import CardCourseTeacher from './CardCourseTeacher';
+import { useUser } from '../../auth/Hooks/useAuth';
 
 export default function TeacherDashboard() {
   const {courses} = useTeacherCourseContext()
+  const {user} = useUser()
+
   return (
     <div className="container-teacher-dashboard">
+      <h2 className='title-welcome-teacher'>Bienvenido {user?.name}</h2>
       <button className='btn-space-teacher'>Mi Espacio</button>
       {/* Contenedor de cursos */}
 

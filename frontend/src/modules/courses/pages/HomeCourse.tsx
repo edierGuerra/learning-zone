@@ -15,7 +15,7 @@ import { useStudentCourseContext } from "../hooks/useCourse";
 import { useParams } from "react-router-dom";
 import { educationalPalettes} from "../../../shared/theme/ColorPalettesCourses";
 import type { TCourse } from "../types/CourseStudent";
-import './HomeCourse.css'
+import '../styles/HomeCourse.css'
 
 
 const defaultPalette:TCourse['palette'] = educationalPalettes.calmFocus

@@ -99,4 +99,6 @@ export type TUserContext = {
   notifications: TNotifications;
   setNotifications: React.Dispatch<React.SetStateAction<TNotifications>>;
   numberNotifications: number;
+  initSession: ()=>Promise<void>
+
 };

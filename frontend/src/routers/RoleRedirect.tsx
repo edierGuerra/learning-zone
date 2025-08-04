@@ -17,7 +17,7 @@ export default function RoleRedirect() {
 
   // Usuario no autenticado
   if (!user || !role) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/landing" replace />;
   }
 
   // Redirección según rol
@@ -29,7 +29,7 @@ export default function RoleRedirect() {
       return <Navigate to="/student/home-student" replace />;
 
     default:
-      return <Navigate to="/" replace />;
+      return <Navigate to="/landing" replace />;
   }
 }
 

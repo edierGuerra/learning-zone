@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import './Styles/StudentPage.css'
+import '../Styles/StudentPage.css'
 import { useNavigationHandler, type AppRoutes } from "../../../hooks/useNavigationHandler";
 import type { TCourse } from "../../courses/types/CourseStudent";
 import UpdateInformation from "../components/UpdateInformation";

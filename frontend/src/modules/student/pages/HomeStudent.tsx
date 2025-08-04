@@ -7,6 +7,7 @@ import '../Styles/HomeStudent.css';
 export default function HomeStudent() {
   const { user } =useUser();
   const { courses } = useStudentCourseContext();
+  console.log('wyyyy')
 
   return (
     <div className="container-home-user">

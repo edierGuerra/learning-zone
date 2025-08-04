@@ -31,7 +31,7 @@ export default function TeacherRoutes() {
   return (
     <Routes>
       {/* Home */}
-      <Route path="/home-teacher" element={<TeacherHome />} /> {/* Page del teacher */}
+      <Route path="home-teacher" element={<TeacherHome />} /> {/* Page del teacher */}
       <Route path="/profile-teacher" element={<TeacherPage/>}/> {/* Perfil del profesor */}
 
 

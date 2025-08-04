@@ -6,5 +6,5 @@ export default function PrivateRouters() {
     // Variable del context que me dice si se encuentra logueado o no
     const {isLoggedIn} = useUser()
     // EN caso de que este logueado renderizar Outlet, en caso de que no renderizar a landing
-    return isLoggedIn ? <Outlet/>: <Navigate to='/' replace />
+    return isLoggedIn ? <Outlet/>: <Navigate to='/landing' replace />
 }

@@ -14,7 +14,7 @@ from teacher.dependencies import get_teacher_services
 from fastapi import Depends, HTTPException, status
 from fastapi.security.oauth2 import OAuth2PasswordBearer
 from jose import jwt
-from service import TeacherServices
+from .service import TeacherServices
 
 # Generación y manipulación del token
 
@@ -79,7 +79,7 @@ async def get_current_teacher(
         )
 
     id_to_valid = int(teacher_id)
-    teacher = await services.get_teacher_by_id(id=id_to_valid)
+    teacher = await services.get_teacher_by_id(teacher_id=id_to_valid)
 
     if not teacher:
         raise HTTPException(

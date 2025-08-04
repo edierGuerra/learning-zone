@@ -23,25 +23,28 @@ async def admin_exists(email: str, db: AsyncSession) -> bool:
 
 async def create_admin():
     print("== Crear administrador de la plataforma ==")
-    nombre = input("Nombre completo: ").strip()
     email = input("Email: ").strip()
-    while True:
-        password = getpass("Contraseña: ")
-        confirm = getpass("Confirma la contraseña: ")
-        if password == confirm and len(password) >= 8:
-            break
-        print(
-            "Las contraseñas no coinciden o son demasiado cortas (mínimo 8 caracteres)."
-        )
 
     async with async_session() as db:
-        try:
-            if await admin_exists(email, db):
-                print(
-                    f"Ya existe un administrador/profesor con el email {email}. No se realizaron cambios."
-                )
-                return
+        if await admin_exists(email, db):
+            print(
+                f"Ya existe un administrador/profesor con el email {email}. No se realizaron cambios."
+            )
+            await engine.dispose()
+            print("Conexión a la base de datos cerrada.")
+            return
 
+        nombre = input("Nombre completo: ").strip()
+        while True:
+            password = getpass("Contraseña: ")
+            confirm = getpass("Confirma la contraseña: ")
+            if password == confirm and len(password) >= 8:
+                break
+            print(
+                "Las contraseñas no coinciden o son demasiado cortas (mínimo 8 caracteres)."
+            )
+
+        try:
             hashed = hash_password(password)
             admin = Teacher(name=nombre, email=email, password=hashed)
             db.add(admin)
@@ -54,7 +57,6 @@ async def create_admin():
             await db.rollback()
             print("Error al crear el administrador:", str(e))
             sys.exit(1)
-    # 👇 Cerramos el pool aquí, antes de que el loop muera
     await engine.dispose()
     print("Conexión a la base de datos cerrada.")
 

@@ -42,6 +42,9 @@ class Course(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(50))  # nombre del curso
     description: Mapped[str] = mapped_column(String(100))  # descripcion del curso
+    name_palette: Mapped[str] = mapped_column(
+        String(50), nullable=True
+    )  # nombre de la paleta de colores
     palette: Mapped[dict[str, str]] = mapped_column(
         JSON, nullable=True
     )  # colores del curso

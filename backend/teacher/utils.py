@@ -22,15 +22,13 @@ async def save_and_upload_file(file: UploadFile, upload_folder: str = "uploads")
     if not os.path.exists(upload_folder):
         os.makedirs(upload_folder)
 
-    # Nombre único para el archivo (cero colisiones, nivel Infinity Gauntlet)
+    # Nombre único para el archivo
     filename = f"{uuid4().hex}_{file.filename}"
     local_path = os.path.join(upload_folder, filename)
 
-    # Guarda el archivo localmente (la magia async/await de Starlette)
+    # Guarda el archivo localmente
     with open(local_path, "wb") as destination:
-        content = (
-            await file.read()
-        )  # Lee todo el archivo (cuidado con archivos MUY grandes)
+        content = await file.read()  # Lee todo el archivo
         destination.write(content)
 
     # Sube el archivo a Cloudinary y elimina local

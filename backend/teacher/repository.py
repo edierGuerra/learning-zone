@@ -125,6 +125,18 @@ class TeacherRepo:
         logger.info(f"Curso ID {course_id} publicado/despublicado exitosamente.")
         return course
 
+    async def filter_courses_by_category(self, category: str):
+        """
+        Filtra los cursos por categoría.
+        :param category: Categoría por la que filtrar.
+        :return: Lista de cursos filtrados.
+        """
+        stmt = select(Course).where(Course.category == category)
+        result = await self.db.execute(stmt)
+        courses = result.scalars().all()
+        logger.info(f"Se encontraron {len(courses)} cursos en la categoría {category}.")
+        return courses
+
     # --- Métodos de Profesores ---
     async def get_teacher_by_id(self, teacher_id: int):
         """

@@ -141,6 +141,20 @@ async def get_courses(teacher: Teacher = Depends(get_current_teacher)):
     return teacher.courses
 
 
+@router.get(
+    "/courses/category/{category}",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Courses"],
+)
+async def filter_courses_by_category(
+    category: CourseCategoryEnum,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """Filtra los cursos por categoría."""
+    return await teacher_services.filter_courses_by_category(category)
+
+
 # ---- Rutas del profesor ----
 @router.get("/", dependencies=[Depends(bearer_scheme)])
 async def get_teacher_info(teacher: Teacher = Depends(get_current_teacher)):

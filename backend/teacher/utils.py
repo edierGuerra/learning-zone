@@ -13,7 +13,9 @@ cloudinary.config(
 )
 
 
-async def save_and_upload_file(file: UploadFile, upload_folder: str = "uploads") -> str:
+async def save_and_upload_file(
+    file: UploadFile, upload_folder: str = "uploads", public_id: str = None
+) -> str:
     """
     Guarda un archivo localmente, lo sube a Cloudinary y elimina el archivo local.
     :param file: UploadFile de FastAPI.
@@ -34,7 +36,36 @@ async def save_and_upload_file(file: UploadFile, upload_folder: str = "uploads")
 
     # Sube el archivo a Cloudinary y elimina local
     try:
-        result = cloudinary.uploader.upload(local_path)
+        result = cloudinary.uploader.upload(
+            local_path, public_id=public_id, resource_type="auto"
+        )
+        url = result.get("secure_url")
+    finally:
+        if os.path.exists(local_path):
+            os.remove(local_path)
+
+    return url
+
+
+async def update_file_on_cloudinary(file: UploadFile, public_id: str) -> str:
+    """
+    Actualiza un archivo existente en Cloudinary reemplazando el archivo con el mismo public_id.
+    :param file: UploadFile de FastAPI.
+    :param public_id: ID público del archivo en Cloudinary a actualizar.
+    :return: URL del archivo actualizado en Cloudinary.
+    """
+    filename = f"{uuid4().hex}_{file.filename}"
+    local_path = os.path.join("uploads", filename)
+
+    if not os.path.exists("uploads"):
+        os.makedirs("uploads")
+
+    with open(local_path, "wb") as destination:
+        content = await file.read()
+        destination.write(content)
+
+    try:
+        result = cloudinary.uploader.upload(local_path, public_id=public_id)
         url = result.get("secure_url")
     finally:
         if os.path.exists(local_path):

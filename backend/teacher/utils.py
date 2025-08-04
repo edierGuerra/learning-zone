@@ -3,12 +3,13 @@ import cloudinary
 from uuid import uuid4
 from fastapi import UploadFile
 import cloudinary.uploader
+from config import settings
 
 cloudinary.config(
-    cloud_name="dhznpt8rr",
-    api_key="315573984497752",
-    api_secret="fvmAfaRGed2SuOLVNgKZxVaJlSI",
-    secure=True,
+    cloud_name=settings.cloud_name,
+    api_key=settings.cloudinary_api_key,
+    api_secret=settings.cloudinary_api_secret,
+    secure=settings.cloud_secure,  # Usa HTTPS si es True
 )
 
 

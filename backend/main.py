@@ -109,7 +109,7 @@ app = FastAPI(
             "Edier Andrés Guerra Vargas",
             "Camilo Andres Ospina Villa",
             "Junior Herrera Agudelo",
-            "Charift Tatiana Giraldo",
+            "Charif Tatiana Giraldo",
         ]
     },
 )

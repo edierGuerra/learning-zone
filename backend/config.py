@@ -1,4 +1,4 @@
-# app/config.py
+# backend/config.py
 """
 Este módulo define la configuración central de la aplicación utilizando la biblioteca pydantic-settings para gestionar variables de
 entorno de forma segura y estructurada.
@@ -40,6 +40,12 @@ class Settings(BaseSettings):  # clase de configuracion heredando BaseSettings
 
     # gemini
     gemini_api_key: str = Field(..., env="GEMINI_API_KEY")
+
+    # Cloudinary
+    cloud_name: str = Field(..., env="CLOUD_NAME")
+    cloudinary_api_key: str = Field(..., env="CLOUDINARY_API_KEY")
+    cloudinary_api_secret: str = Field(..., env="CLOUDINARY_API_SECRET")
+    cloud_secure: bool = Field(default=True, env="CLOUD_SECURE")
 
 
 # Instancia de la configuración que se usará en toda la aplicación

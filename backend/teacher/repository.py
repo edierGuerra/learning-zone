@@ -104,6 +104,27 @@ class TeacherRepo:
         await self.db.commit()
         logger.info(f"Curso ID {course_id} eliminado exitosamente.")
 
+    async def publish_course(self, course_id: int) -> Course:
+        """
+        Publica o despublica un curso por su ID.
+        :param course_id: ID del curso a publicar.
+        :return: El curso publicado.
+        """
+        course = await self.get_course_by_id(course_id)
+        if not course:
+            logger.error(f"Curso con ID {course_id} no encontrado.")
+            raise ValueError("Curso no encontrado")
+
+        if course.is_published is False:
+            course.is_published = True
+        elif course.is_published is True:
+            course.is_published = False
+
+        await self.db.commit()
+        await self.db.refresh(course)
+        logger.info(f"Curso ID {course_id} publicado/despublicado exitosamente.")
+        return course
+
     # --- Métodos de Profesores ---
     async def get_teacher_by_id(self, teacher_id: int):
         """

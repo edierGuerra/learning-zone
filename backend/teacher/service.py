@@ -62,6 +62,14 @@ class TeacherServices:
         await self.repo.delete_course(course_id)
         return {"message": "Curso eliminado exitosamente."}
 
+    async def publish_course(self, course_id: int) -> Course:
+        """
+        Publica un curso por su ID.
+        :param course_id: ID del curso a publicar.
+        :return: Curso publicado.
+        """
+        return await self.repo.publish_course(course_id=course_id)
+
     # --- Métodos de Profesores ---
     async def get_teacher_by_id(self, teacher_id: int):
         """
@@ -71,7 +79,7 @@ class TeacherServices:
         """
         return await self.repo.get_teacher_by_id(teacher_id)
 
-    ### METODOS PARA CREAR LECCIONES ###
+    ### --- Métodos de lecciones ---
 
     async def create_lesson(self, lesson: dict, content: dict) -> dict:
         """

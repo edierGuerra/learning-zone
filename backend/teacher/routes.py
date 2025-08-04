@@ -120,6 +120,14 @@ async def delete_course(
     return await teacher_services.delete_course(course_id)
 
 
+@router.patch("/{course_id}")
+async def publish_course(
+    course_id: int, teacher_services: TeacherServices = Depends(get_teacher_services)
+):
+    """Publica un curso, haciendolo visible para los estudiantes."""
+    return await teacher_services.publish_course(course_id=course_id)
+
+
 # ---- Rutas del profesor ----
 @router.get("/", dependencies=[Depends(bearer_scheme)])
 async def get_teacher_info(teacher: Teacher = Depends(get_current_teacher)):

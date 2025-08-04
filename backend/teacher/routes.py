@@ -7,9 +7,11 @@ Este modulo contiene todas la rutas con las diferentes operaciones que puede rea
 from fastapi import APIRouter, Depends, Form, UploadFile, File
 from fastapi.security import HTTPBearer
 
+from schemas.lesson_schemas import LessonPResponse
 from teacher.model import Teacher
 from .service import TeacherServices
 from models.course_model import CourseCategoryEnum
+from models.content_model import TypeContent
 from .dependencies import get_teacher_services
 import json
 from .oauth import get_current_teacher
@@ -64,3 +66,27 @@ async def get_teacher_info(teacher: Teacher = Depends(get_current_teacher)):
             name=teacher.name, last_name=teacher.last_name
         ),
     }
+
+
+@router.post(
+    "/courses/{course_id}/lessons",
+    response_model=LessonPResponse,
+    dependencies=[Depends(bearer_scheme)],
+)
+async def create_lesson_for_course(
+    course_id: int,
+    name: str = Form(...),
+    content_type: TypeContent = Form(...),
+    text: str = Form(...),
+    file: UploadFile = File(None),
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Crea una nueva lección para un curso específico.
+    """
+    # Sube el archivo si no es texto
+    new_lesson = await teacher_services.create_lesson(
+        lesson={"name": name, "id_course": course_id},
+        content={"content_type": content_type, "file": file, "text": text},
+    )
+    return new_lesson

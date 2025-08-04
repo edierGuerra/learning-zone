@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from .repository import TeacherRepo
 from teacher.utils import save_and_upload_file
 
@@ -25,3 +26,32 @@ class TeacherServices:
         :return: Objeto Teacher.
         """
         return await self.repo.get_teacher_by_id(teacher_id)
+
+    ### METODOS PARA CREAR LECCIONES ###
+
+    async def create_lesson(self, lesson: dict, content: dict) -> dict:
+        """
+        Crea una nueva lección en la base de datos.
+        :param lesson: Objeto Lesson con los detalles de la lección.
+        :return: La lección creada.
+        """
+
+        # Validacion opcional
+        if content["content_type"] != "text" and not content["file"]:
+            raise HTTPException(
+                status_code=400, detail="Archivo requerido para contenido multimedia."
+            )
+
+        content_url = ""
+        if content.get("file"):
+            content_url = await save_and_upload_file(content["file"])
+
+        return await self.repo.create_lesson_with_content(
+            name=lesson["name"],
+            id_course=lesson["id_course"],
+            content_data={
+                "content_type": content["content_type"],
+                "content": content_url,
+                "text": content["text"],
+            },
+        )

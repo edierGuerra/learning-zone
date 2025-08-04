@@ -20,6 +20,14 @@ class LessonResponse(BaseModel):
         from_attributes = True
 
 
+class LessonPResponse(BaseModel):
+    id: int
+    name: str
+
+    class config:
+        from_attributes = True
+
+
 class LessonProgressResponse(BaseModel):
     id_course: int
     name_course: str

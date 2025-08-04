@@ -1,65 +1,30 @@
-/**
- * Redirige automáticamente a los usuarios según su rol.
- */
-
 import { Navigate } from "react-router-dom";
 import { useUser } from "../modules/auth/Hooks/useAuth";
 
-// COMPONENTE PRINCIPAL
-
 /**
- * RoleRedirect - Redirección principal por roles
- *
- * Redirige según el rol del usuario después del login.
+ * Redirige automáticamente según el rol del usuario.
+ * No renderiza contenido visible.
  */
 export default function RoleRedirect() {
-  const { user, role } = useUser();
+  const { user, role, isReady } = useUser();
+
+  // Esperar a que la información del usuario esté lista
+  if (!isReady) return null;
 
   // Usuario no autenticado
   if (!user || !role) {
-    return <Navigate to="/landing" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Redirección según rol
-  switch (role) {
-    case "teacher":
-      return <Navigate to="/teacher/home-teacher" replace />;
-
-    case "student":
-      return <Navigate to="/student/home-student" replace />;
-
-    default:
-      return <Navigate to="/landing" replace />;
-  }
-}
-
-// ============================================================================
-// REDIRECCIÓN DESDE PÁGINA PRINCIPAL
-// ============================================================================
-
-/**
- * HomeRoleRedirect - Redirección desde página principal
- *
- * Solo redirige si el usuario está logueado.
- * Si no está logueado, permite ver la página normal.
- */
-export function HomeRoleRedirect() {
-  const { user, role } = useUser();
-
-  // Usuario no autenticado - no redirigir
-  if (!user || !role) {
-    return null;
+  if (role === "teacher") {
+    return <Navigate to="/teacher/home-teacher" replace />;
   }
 
-  // Redirección según rol
-  switch (role) {
-    case "teacher":
-      return <Navigate to="/teacher/home-teacher" replace />;
-
-    case "student":
-      return <Navigate to="/student/home-student" replace />;
-
-    default:
-      return null;
+  if (role === "student") {
+    return <Navigate to="/student/home-student" replace />;
   }
+
+  // Rol desconocido
+  return <Navigate to="/" replace />;
 }

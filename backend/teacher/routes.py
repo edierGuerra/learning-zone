@@ -4,7 +4,8 @@ teacher/routes.py
 Este modulo contiene todas la rutas con las diferentes operaciones que puede realizar el profesor
 """
 
-from fastapi import APIRouter, Depends, Form, UploadFile, File
+from typing import Optional
+from fastapi import APIRouter, Depends, Form, UploadFile, File, HTTPException
 from fastapi.security import HTTPBearer
 
 from schemas.lesson_schemas import LessonPResponse
@@ -12,6 +13,7 @@ from teacher.model import Teacher
 from .service import TeacherServices
 from models.course_model import CourseCategoryEnum
 from models.content_model import TypeContent
+from models.evaluation_model import QuestionType
 from .dependencies import get_teacher_services
 import json
 from .oauth import get_current_teacher
@@ -166,3 +168,68 @@ async def create_lesson_for_course(
         content={"content_type": content_type, "file": file, "text": text},
     )
     return new_lesson
+
+
+@router.post(
+    "/courses/{course_id}/lessons/{lesson_id}/evaluations",
+    dependencies=[Depends(bearer_scheme)],
+)
+async def create_evaluation_for_lesson(
+    course_id: int,
+    lesson_id: int,
+    question_type: QuestionType = Form(...),
+    question: str = Form(...),
+    options: str = Form(...),  # String JSON del frontend
+    correct_answer: Optional[str] = Form(None),
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Crea una evaluación para una lección.
+    Si es de tipo open_question, se ignoran opciones y correct_answer.
+    """
+    # Parsea las opciones si es de opción múltiple
+    # Validar y parsear las opciones solo si es multiple_choice
+    parsed_options = None
+    if question_type == QuestionType.MULTIPLE_CHOICE:
+        if options:
+            try:
+                options = json.dumps(options)
+                parsed_options = json.loads(options)
+                if not isinstance(parsed_options, list) or len(parsed_options) < 2:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Debes enviar al menos dos opciones válidas como lista.",
+                    )
+            except json.JSONDecodeError:
+                raise HTTPException(
+                    status_code=400,
+                    detail='El campo \'options\' debe ser un JSON válido (ej: ["a", "b"]).',
+                )
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="El campo 'options' es requerido para preguntas de opción múltiple.",
+            )
+
+        if not correct_answer:
+            raise HTTPException(
+                status_code=400,
+                detail="El campo 'correct_answer' es requerido para preguntas de opción múltiple.",
+            )
+
+    # Preparar el payload de creación
+    evaluation_data = {
+        "lesson_id": lesson_id,
+        "question_type": question_type,
+        "question": question,
+        "options": (
+            parsed_options if question_type == QuestionType.MULTIPLE_CHOICE else None
+        ),
+        "correct_answer": (
+            correct_answer if question_type == QuestionType.MULTIPLE_CHOICE else None
+        ),
+    }
+
+    new_eval = await teacher_services.create_evaluation(evaluation_data)
+
+    return {"message": "Evaluación creada con éxito", "evaluation": new_eval}

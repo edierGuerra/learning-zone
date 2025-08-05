@@ -28,7 +28,7 @@ class EvaluationRepository:
         Funcion que permite obtener la evaluación de una lección especifica
         """
         try:
-            stmt = select(Evaluation).where(Evaluation.id_leccion == lesson_id)
+            stmt = select(Evaluation).where(Evaluation.lesson_id == lesson_id)
             result = await self.db.execute(stmt)
             return result.scalar_one_or_none()
         except Exception as e:

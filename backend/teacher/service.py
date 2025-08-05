@@ -107,3 +107,27 @@ class TeacherServices:
                 "text": content["text"],
             },
         )
+
+    async def create_evaluation(self, data: dict):
+        """
+        Crea una evaluación considerando el tipo de pregunta.
+        Si es de opción múltiple, requiere opciones y respuesta correcta.
+        Si es abierta, se ignoran las opciones y la respuesta correcta.
+        """
+        if data["question_type"] == "open_question":
+            data["options"] = None
+            data["correct_answer"] = None
+
+        elif data["question_type"] == "multiple_choice":
+            if not data.get("options") or not isinstance(data["options"], list):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Se requieren opciones válidas para preguntas de opción múltiple.",
+                )
+            if not data.get("correct_answer"):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Se requiere una respuesta correcta para preguntas de opción múltiple.",
+                )
+
+        return await self.repo.create_evaluation_for_lesson(data)

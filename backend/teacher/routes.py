@@ -141,7 +141,7 @@ async def publish_course(
     return await teacher_services.publish_course(course_id=course_id)
 
 
-@router.get("/courses/all", dependencies=[Depends(bearer_scheme)], tags=["Courses"])
+@router.get("/courses/", dependencies=[Depends(bearer_scheme)], tags=["Courses"])
 async def get_courses(teacher: Teacher = Depends(get_current_teacher)):
     """Obtiene todos los cursos del profesor actual."""
     return teacher.courses

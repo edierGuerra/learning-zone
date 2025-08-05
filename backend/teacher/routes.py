@@ -19,7 +19,7 @@ import json
 from .oauth import get_current_teacher
 from .utils import generate_profile_prefix
 
-router = APIRouter(prefix="/api/v1/teachers", tags=["Teachers"])
+router = APIRouter(prefix="/api/v1/teachers", tags=["Teacher"])
 
 
 bearer_scheme = HTTPBearer()
@@ -64,6 +64,7 @@ async def create_course(
 async def get_course(
     course_id: int,
     teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
 ):
     """Obtiene un curso por su ID."""
     course = await teacher_services.get_course_by_id(course_id)
@@ -76,6 +77,7 @@ async def get_course(
     "/courses/{course_id}",
     description="Actualiza un curso existente.",
     dependencies=[Depends(bearer_scheme)],
+    tags=["Courses"],
 )
 async def update_course(
     course_id: int,
@@ -113,6 +115,7 @@ async def update_course(
     "/courses/{course_id}",
     description="Elimina un curso por su ID.",
     dependencies=[Depends(bearer_scheme)],
+    tags=["Courses"],
 )
 async def delete_course(
     course_id: int,
@@ -122,12 +125,36 @@ async def delete_course(
     return await teacher_services.delete_course(course_id)
 
 
-@router.patch("/{course_id}")
+@router.patch(
+    "/courses/{course_id}", dependencies=[Depends(bearer_scheme)], tags=["Courses"]
+)
 async def publish_course(
-    course_id: int, teacher_services: TeacherServices = Depends(get_teacher_services)
+    course_id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
 ):
     """Publica un curso, haciendolo visible para los estudiantes."""
     return await teacher_services.publish_course(course_id=course_id)
+
+
+@router.get("/courses/all", dependencies=[Depends(bearer_scheme)], tags=["Courses"])
+async def get_courses(teacher: Teacher = Depends(get_current_teacher)):
+    """Obtiene todos los cursos del profesor actual."""
+    return teacher.courses
+
+
+@router.get(
+    "/courses/category/{category}",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Courses"],
+)
+async def filter_courses_by_category(
+    category: CourseCategoryEnum,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """Filtra los cursos por categoría."""
+    return await teacher_services.filter_courses_by_category(category)
 
 
 # ---- Rutas del profesor ----
@@ -146,10 +173,12 @@ async def get_teacher_info(teacher: Teacher = Depends(get_current_teacher)):
     }
 
 
+# ---- Rutas de lecciones ----
 @router.post(
     "/courses/{course_id}/lessons",
     response_model=LessonPResponse,
     dependencies=[Depends(bearer_scheme)],
+    tags=["Lessons"],
 )
 async def create_lesson_for_course(
     course_id: int,

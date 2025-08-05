@@ -70,6 +70,14 @@ class TeacherServices:
         """
         return await self.repo.publish_course(course_id=course_id)
 
+    async def filter_courses_by_category(self, category: str) -> list[Course]:
+        """
+        Filtra los cursos por categoría.
+        :param category: Categoría por la que filtrar.
+        :return: Lista de cursos filtrados.
+        """
+        return await self.repo.filter_courses_by_category(category)
+
     # --- Métodos de Profesores ---
     async def get_teacher_by_id(self, teacher_id: int):
         """

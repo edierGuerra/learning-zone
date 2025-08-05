@@ -4,10 +4,14 @@ teacher/routes.py
 Este modulo contiene todas la rutas con las diferentes operaciones que puede realizar el profesor
 """
 
-from fastapi import APIRouter, Depends, Form, UploadFile, File
+from fastapi import APIRouter, Depends, Form, UploadFile, File, status
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBearer
 
+from routes.notifications_routes import get_notification_services
 from schemas.lesson_schemas import LessonPResponse
+from schemas.notification_schemas import NotificationCreate
+from services.notification_services import NotificationService
 from teacher.model import Teacher
 from .service import TeacherServices
 from models.course_model import CourseCategoryEnum
@@ -195,3 +199,43 @@ async def create_lesson_for_course(
         content={"content_type": content_type, "file": file, "text": text},
     )
     return new_lesson
+
+
+# --- Rutas de notificaciones ---
+
+
+@router.post("notifications/", dependencies=[Depends(bearer_scheme)])
+async def create_notifications(
+    notification_data: NotificationCreate,
+    services: NotificationService = Depends(get_notification_services),
+    teacher: Teacher = Depends(get_current_teacher),
+) -> JSONResponse:
+    # Aquí deberías añadir una dependencia de seguridad para administradores, ej:
+    # current_admin: AdminUser = Depends(get_current_admin_user)
+    """
+    ## Crear y distribuir nueva notificación a todos los estudiantes
+
+    Permite crear una nueva notificación y la asocia directamente a todos los estudiantes
+    registrados en la plataforma.
+
+    ### Parámetros:
+    - **notification_data** (`NotificationCreate`): Objeto Pydantic con el título y mensaje de la notificación.
+
+    ### Respuesta:
+    - **200 OK**: Notificación creada y distribuida exitosamente a todos los estudiantes.
+        ```json
+        {
+          "message": "Notificación creada y distribuida a todos los estudiantes.",
+          "notification_id": 123
+        }
+        ```
+    - **500 Internal Server Error**: Si ocurre un error inesperado al crear o distribuir la notificación.
+
+    ### Seguridad:
+    - **IMPORTANTE**: Esta ruta debería estar protegida para que solo administradores o usuarios autorizados puedan usarla.
+      Añade una dependencia de autenticación/autorización aquí (ej. `Depends(get_current_admin_user)`).
+    """
+    response = await services.create_and_distribuite_notification_to_all(
+        teacher_id=teacher.id, notification_data=notification_data
+    )
+    return JSONResponse(content=response, status_code=status.HTTP_200_OK)

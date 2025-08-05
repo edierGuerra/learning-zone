@@ -33,13 +33,15 @@ class NotificationService:
             )
 
     async def create_and_distribuite_notification_to_all(
-        self, notification_data: NotificationCreate
+        self, notification_data: NotificationCreate, teacher_id: int
     ) -> dict:
         """Crea una notificación y la asocia directamente a todos los estudiantes existentes."""
         try:
             # Crear la notificación base
             new_notification = await self.notification_repo.create_notification(
-                title=notification_data.title, message=notification_data.message
+                title=notification_data.title,
+                message=notification_data.message,
+                teacher_id=teacher_id,
             )
 
             # Obtener IDs de todos los estudiantes

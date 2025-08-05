@@ -25,12 +25,15 @@ class NotificationRepository:
     def __init__(self, db: AsyncSession) -> None:
         self.db = db
 
-    async def create_notification(self, title: str, message: str) -> Notification:
+    async def create_notification(
+        self, title: str, message: str, teacher_id: int
+    ) -> Notification:
         """Crea una nueva notificacion en la base de datos."""
         try:
             new_notification = Notification(
                 title=title,
                 message=message,
+                teacher_id=teacher_id,
                 date=datetime.now(),  # Establece la fecha de creacion aquí
             )
             self.db.add(new_notification)

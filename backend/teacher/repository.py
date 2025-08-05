@@ -157,6 +157,7 @@ class TeacherRepo:
         logger.info(f"Profesor con ID {teacher_id} obtenido exitosamente.")
         return result.scalar_one_or_none()
 
+    # --- Métodos de Lecciones ---
     async def create_lesson_with_content(
         self, name: str, id_course: int, content_data: dict
     ):
@@ -180,3 +181,18 @@ class TeacherRepo:
         await self.db.commit()
         await self.db.refresh(new_lesson)
         return new_lesson
+
+    async def get_lesson_by_id(self, lesson_id: int) -> Lesson:
+        """
+        Obtiene una lección por su ID.
+        :param lesson_id: ID de la lección a obtener.
+        :return: Objeto Lesson.
+        """
+        logger.info(f"Obteniendo lección con ID {lesson_id}")
+        stmt = select(Lesson).where(Lesson.id == lesson_id)
+        result = await self.db.execute(stmt)
+        if not result:
+            logger.error(f"Lección con ID {lesson_id} no encontrada.")
+            return None
+        logger.info(f"Lección con ID {lesson_id} obtenida exitosamente.")
+        return result.scalar_one_or_none()

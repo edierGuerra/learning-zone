@@ -6,7 +6,6 @@ Incluye funcionalidades para obtener y eliminar notificaciones individuales o to
 
 # Módulos internos
 from repository.notification_repository import NotificationRepository
-from schemas.notification_schemas import NotificationCreate
 from services.notification_services import NotificationService
 from core.security import get_current_student
 from models.student_model import Student
@@ -127,39 +126,3 @@ async def delete_notifications(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Ha ocurrido un error en el servidor",
         )
-
-
-@router.post("/")
-async def create_notifications(
-    notification_data: NotificationCreate,
-    services: NotificationService = Depends(get_notification_services),
-) -> JSONResponse:
-    # Aquí deberías añadir una dependencia de seguridad para administradores, ej:
-    # current_admin: AdminUser = Depends(get_current_admin_user)
-    """
-    ## Crear y distribuir nueva  otificación a todos los estudiantes
-
-    Permite crear una nueva notificación y la asocia directamente a todos los estudiantes
-    registrados en la plataforma.
-
-    ### Parámetros:
-    - **notification_data** (`NotificationCreate`): Objeto Pydantic con el título y mensaje de la notificación.
-
-    ### Respuesta:
-    - **200 OK**: Notificación creada y distribuida exitosamente a todos los estudiantes.
-        ```json
-        {
-          "message": "Notificación creada y distribuida a todos los estudiantes.",
-          "notification_id": 123
-        }
-        ```
-    - **500 Internal Server Error**: Si ocurre un error inesperado al crear o distribuir la notificación.
-
-    ### Seguridad:
-    - **IMPORTANTE**: Esta ruta debería estar protegida para que solo administradores o usuarios autorizados puedan usarla.
-      Añade una dependencia de autenticación/autorización aquí (ej. `Depends(get_current_admin_user)`).
-    """
-    response = await services.create_and_distribuite_notification_to_all(
-        notification_data
-    )
-    return JSONResponse(content=response, status_code=status.HTTP_200_OK)

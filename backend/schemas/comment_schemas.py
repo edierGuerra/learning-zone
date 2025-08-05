@@ -34,7 +34,7 @@ class CommentResponse(BaseModel):
     student_id: int = Field(..., description="ID del estudiante")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CommentResponseFull(BaseModel):
@@ -58,7 +58,7 @@ class CommentOut(BaseModel):
     student_id: int = Field(..., description="ID del estudiante autor")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CommentListResponse(BaseModel):

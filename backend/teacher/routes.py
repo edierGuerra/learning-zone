@@ -6,12 +6,12 @@ Este modulo contiene todas la rutas con las diferentes operaciones que puede rea
 
 from fastapi import APIRouter, Depends, Form, UploadFile, File, status, HTTPException
 from fastapi.responses import JSONResponse
-from typing import Optional
+from typing import Optional, List
 from fastapi.security import HTTPBearer
 
 from routes.notifications_routes import get_notification_services
 from schemas.lesson_schemas import LessonPResponse
-from schemas.notification_schemas import NotificationCreate
+from schemas.notification_schemas import NotificationCreate, NotificationResponse
 from services.notification_services import NotificationService
 from teacher.model import Teacher
 from .service import TeacherServices
@@ -318,3 +318,20 @@ async def create_notifications(
         teacher_id=teacher.id, notification_data=notification_data
     )
     return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+
+
+# --- Rutas de notificaciones para profesores ---
+@router.get(
+    "/notifications/",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Notifications"],
+    response_model=List[NotificationResponse],
+)
+async def get_notifications(
+    services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Obtiene todas las notificaciones para un profesor específico.
+    """
+    return await services.get_notifications_by_teacher_id(teacher.id)

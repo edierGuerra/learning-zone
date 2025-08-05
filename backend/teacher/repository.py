@@ -213,3 +213,28 @@ class TeacherRepo:
         await self.db.commit()
         await self.db.refresh(new_eval)
         return new_eval
+
+    # --- Metodos de Notificaciones ---
+    async def get_notifications_by_teacher_id(self, teacher_id: int):
+        """
+        Obtiene las notificaciones asociadas a un profesor.
+        :param teacher_id: ID del profesor.
+        :return: Lista de notificaciones.
+        """
+        stmt = (
+            select(Teacher)
+            .where(Teacher.id == teacher_id)
+            .options(selectinload(Teacher.notifications))
+        )
+        result = await self.db.execute(stmt)
+        teacher = result.scalar_one_or_none()
+
+        if not teacher:
+            logger.error(f"Profesor con ID {teacher_id} no encontrado.")
+            return []
+
+        notifications = teacher.notifications
+        logger.info(
+            f"Se encontraron {len(notifications)} notificaciones para el profesor ID {teacher_id}."
+        )
+        return notifications

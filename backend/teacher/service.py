@@ -116,6 +116,18 @@ class TeacherServices:
             },
         )
 
+    async def get_lesson_by_id(self, lesson_id: int):
+        """
+        Obtiene una lección por su ID.
+        :param lesson_id: ID de la lección.
+        :return: Objeto Lesson.
+        """
+        lesson = await self.repo.get_lesson_by_id(lesson_id)
+        if not lesson:
+            raise HTTPException(status_code=404, detail="Lección no encontrada")
+        return lesson
+
+    # --- Métodos de Evaluaciones ---
     async def create_evaluation(self, data: dict):
         """
         Crea una evaluación considerando el tipo de pregunta.

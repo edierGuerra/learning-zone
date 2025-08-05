@@ -199,6 +199,7 @@ class TeacherRepo:
         logger.info(f"Lección con ID {lesson_id} obtenida exitosamente.")
         return result.scalar_one_or_none()
 
+    # --- Métodos de Evaluaciones ---
     async def create_evaluation_for_lesson(self, evaluation_data: dict):
         """
         Crea una evaluación asociada a una lección.

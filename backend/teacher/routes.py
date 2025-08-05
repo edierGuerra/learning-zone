@@ -141,7 +141,7 @@ async def publish_course(
     return await teacher_services.publish_course(course_id=course_id)
 
 
-@router.get("/courses/all", dependencies=[Depends(bearer_scheme)], tags=["Courses"])
+@router.get("/courses/", dependencies=[Depends(bearer_scheme)], tags=["Courses"])
 async def get_courses(teacher: Teacher = Depends(get_current_teacher)):
     """Obtiene todos los cursos del profesor actual."""
     return teacher.courses
@@ -203,6 +203,18 @@ async def create_lesson_for_course(
     return new_lesson
 
 
+@router.get(
+    "/lessons/{lesson_id}", dependencies=[Depends(bearer_scheme)], tags=["Lessons"]
+)
+async def get_lesson(
+    lesson_id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """Obtiene una lección por su ID."""
+    return await teacher_services.get_lesson_by_id(lesson_id)
+
+
+# --- Rutas de evaluaciones ----
 @router.post(
     "/courses/{course_id}/lessons/{lesson_id}/evaluations",
     dependencies=[Depends(bearer_scheme)],

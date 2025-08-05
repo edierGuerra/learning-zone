@@ -248,6 +248,21 @@ class TeacherRepo:
         await self.db.refresh(new_eval)
         return new_eval
 
+    async def get_evaluation_by_lesson_id(self, lesson_id: int):
+        """
+        Obtiene una evaluación por el ID de la lección.
+        :param lesson_id: ID de la lección.
+        :return: Objeto Evaluation.
+        """
+        stmt = select(Evaluation).where(Evaluation.lesson_id == lesson_id)
+        result = await self.db.execute(stmt)
+        evaluation = result.scalar_one_or_none()
+        if not evaluation:
+            logger.error(f"Evaluación para lección ID {lesson_id} no encontrada.")
+            return None
+        logger.info(f"Evaluación para lección ID {lesson_id} obtenida exitosamente.")
+        return evaluation
+
     # --- Metodos de Notificaciones ---
     async def get_notifications_by_teacher_id(self, teacher_id: int):
         """

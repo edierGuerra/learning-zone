@@ -19,10 +19,12 @@ export default function CardCourse({ id, image, name, description, status, palet
   const { loadLessonsCourse } = useStudentCourseContext();
   const navigate = useNavigate();
 
+
   // Maneja el click para cargar lecciones y navegar al curso
   const handleClickCourse = () => {
     loadLessonsCourse(id);
-    navigate(`student/course/${id}/${name}`);
+    // Navegación absoluta para evitar rutas anidadas incorrectas
+    navigate(`/student/course/${id}/${name}`);
   };
 
   return (

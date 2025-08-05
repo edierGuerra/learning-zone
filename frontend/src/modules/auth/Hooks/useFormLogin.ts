@@ -5,8 +5,10 @@ import { loginAPI } from "../Services/Login.server";
 import { authStorage } from "../../../shared/Utils/authStorage";
 import toast from "react-hot-toast";
 import { useUser } from "../../auth/Hooks/useAuth"; // Hook para acceder a initSession
+import { useNavigate } from "react-router-dom";
 
 export default function useFormLogin() {
+  const navigate = useNavigate()
   // --- Tipos utilizados para formularios y errores ---
   type LoginForm = Pick<TStudent, "email" | "password">;
   type FormErrors = Partial<Record<keyof LoginForm, string>>;
@@ -84,11 +86,13 @@ export default function useFormLogin() {
       // --- Guardar token recibido en localStorage ---
       authStorage.setToken(response.access_token);
 
-      // --- Inicializar sesión global: carga rol, datos y notificaciones ---
-      await initSession();
+      // --- Inicializar sesión global y esperar a que termine
+      const success = await initSession();
 
-      // --- Redirigir a "/redirect", que se encargará de llevar a /student o /teacher según el rol ---
-      handleBtnNavigate("/redirect");
+      if (success) {
+        navigate("/redirect"); // Ahora sí, el rol ya está garantizado
+      }
+
 
     } catch (err) {
       toast.error("No se pudo iniciar sesión.");

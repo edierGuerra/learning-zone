@@ -35,50 +35,53 @@ export const UserProvider = ({ children }: Props) => {
    * y carga la información correspondiente del usuario y sus notificaciones.
    * Esta función debe llamarse inmediatamente después de guardar el token.
    */
-  const initSession = async () => {
-    const storedToken = authStorage.getToken();
-    if (!storedToken) return;
+const initSession = async (): Promise<boolean> => {
+  const storedToken = authStorage.getToken();
+  if (!storedToken) return false;
 
-    try {
-      const roleUser = await GetRoleUserAPI();
-      authStorage.setRole(roleUser);
-      setRole(roleUser);
+  try {
+    const roleUser = await GetRoleUserAPI();
+    authStorage.setRole(roleUser);
+    setRole(roleUser);
 
-      if (roleUser === "student") {
-        const data = await GetStudentAPI();
-        const userData: TUser = {
-          id: data.id,
-          numIdentification: data.identification_number,
-          name: data.names,
-          lastNames: data.last_names,
-          email: data.email,
-          prefixProfile: data.prefix_profile
-        };
-        authStorage.setUser(userData);
-        setUser(userData);
-      } else {
-        const data = await GetTeacherAPI();
-        const userData: TUser = {
-          id: data.id,
-          numIdentification: data.identification_number,
-          name: data.names,
-          lastNames: data.last_names,
-          email: data.email,
-          specialization: data.specialization,
-          prefixProfile: data.prefix_profile
-        };
-        authStorage.setUser(userData);
-        setUser(userData);
-      }
-
-      const userNotifications = await GetNotificationsAPI();
-      authStorage.setNotifications(userNotifications);
-      setNotifications(userNotifications);
-
-    } catch (error) {
-      console.error("Error al inicializar sesión:", error);
+    if (roleUser === "student") {
+      const data = await GetStudentAPI();
+      const userData: TUser = {
+        id: data.id,
+        numIdentification: data.identification_number,
+        name: data.names,
+        lastNames: data.last_names,
+        email: data.email,
+        prefixProfile: data.prefix_profile
+      };
+      authStorage.setUser(userData);
+      setUser(userData);
+    } else {
+      const data = await GetTeacherAPI();
+      const userData: TUser = {
+        id: data.id,
+        numIdentification: data.identification_number,
+        name: data.names,
+        lastNames: data.last_names,
+        email: data.email,
+        specialization: data.specialization,
+        prefixProfile: data.prefix_profile
+      };
+      authStorage.setUser(userData);
+      setUser(userData);
     }
-  };
+
+    const userNotifications = await GetNotificationsAPI();
+    authStorage.setNotifications(userNotifications);
+    setNotifications(userNotifications);
+
+    return true;
+
+  } catch (error) {
+    console.error("Error al inicializar sesión:", error);
+    return false;
+  }
+};
 
   // Carga inicial: verifica si hay sesión guardada o incompleta
   useEffect(() => {

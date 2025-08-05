@@ -3,8 +3,6 @@ import '../Styles/Login.css'; // Asegúrate de que este archivo exista
 /* import { GrView } from 'react-icons/gr';
 import { GrFormViewHide } from 'react-icons/gr'; */
 import useFormLogin from '../Hooks/useFormLogin';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const {email,
@@ -18,26 +16,6 @@ export default function Login() {
       errors,
       viewSucessMessage
     } = useFormLogin()
-
-
-const navigate = useNavigate();
-
-useEffect(() => {
-  // Cuando el login es exitoso y se activa la bandera de éxito...
-  if (viewSucessMessage) {
-    // Inicia un temporizador para esperar 3 segundos (puede usarse para mostrar mensaje de bienvenida, spinner, etc.)
-    const timeout = setTimeout(() => {
-      // Luego del delay, redirige a la ruta raíz "/"
-      // Desde allí, el componente <RoleRedirect /> se encarga de enviar al usuario a su página según el rol
-      navigate('/', { replace: true });
-    }, 3000);
-
-    // Limpieza del timeout si el componente se desmonta antes del tiempo
-    return () => clearTimeout(timeout);
-  }
-}, [viewSucessMessage, navigate]);
-
-
 
   return (
     <>

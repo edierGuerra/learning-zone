@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import HelpSlide from './components/help/HelpSlide';
 import './components/help/styles/Help.css';
-import { useNavigationHandler } from '../hooks/useNavigationHandler';
+import { useNavigate } from 'react-router-dom';
 
 export default function Help() {
   const [index, setIndex] = useState(0);
-  const handleBtnNavigate = useNavigationHandler();
+  const navigate = useNavigate()
 
   const handleSkip = () => {
     console.log('Finalizó o saltó la ayuda');
-    handleBtnNavigate('/home');
+    navigate('/redirect');
   };
 
   return (

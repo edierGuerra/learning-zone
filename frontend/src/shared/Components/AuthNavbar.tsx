@@ -77,7 +77,7 @@ export default function AuthNavbar() {
         <button
           className="icon-auth-navBar icon-home"
           onClick={() => {
-            handleBtnNavigate('/');             // Navega al home
+            handleBtnNavigate('/redirect');             // Navega al home
             setViewNotifications(false);            // Cierra notificaciones si estaban abiertas
             setViewCategories(false);               // Cierra categorías si estaban abiertas
             authStorage.removeLessonsStudents();            // Limpia datos en localStorage
@@ -129,7 +129,7 @@ export default function AuthNavbar() {
         <button
           className="icon-auth-navBar icon-prefix"
           onClick={() => {
-            handleBtnNavigate('/userPage');           // Navega a página de usuario
+            handleBtnNavigate('/student/profile-student');           // Navega a página de usuario
             setViewNotifications(false);              // Cierra otros paneles
             setViewCategories(false);
           }}

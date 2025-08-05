@@ -12,6 +12,7 @@ from fastapi.security import HTTPBearer
 from routes.notifications_routes import get_notification_services
 from schemas.lesson_schemas import LessonPResponse
 from schemas.notification_schemas import NotificationCreate, NotificationResponse
+from teacher.schemas import LessonCResponse
 from services.notification_services import NotificationService
 from teacher.model import Teacher
 from .service import TeacherServices
@@ -204,14 +205,43 @@ async def create_lesson_for_course(
 
 
 @router.get(
-    "/lessons/{lesson_id}", dependencies=[Depends(bearer_scheme)], tags=["Lessons"]
+    "/courses/{course_id}/lessons",
+    description="Obtiene todas las lecciones de un curso por su ID.",
+    response_model=List[LessonPResponse],
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Lessons"],
+)
+async def get_lessons_by_course(
+    course_id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Obtiene todas las lecciones de un curso por su ID.
+    Solo accesible para el profesor que creó el curso.
+    """
+    lessons = await teacher_services.get_lessons_by_course(course_id)
+    if not lessons:
+        raise HTTPException(
+            status_code=404, detail="No se encontraron lecciones para este curso."
+        )
+    return lessons
+
+
+@router.get(
+    "/lessons/{lesson_id}",
+    response_model=LessonCResponse,
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Lessons"],
 )
 async def get_lesson(
     lesson_id: int,
     teacher_services: TeacherServices = Depends(get_teacher_services),
 ):
-    """Obtiene una lección por su ID."""
-    return await teacher_services.get_lesson_by_id(lesson_id)
+    """Obtiene una lección por su ID y devuelve su contenido (LessonCResponse)"""
+    lesson = await teacher_services.get_lesson_by_id(lesson_id)
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Lección no encontrada.")
+    return lesson
 
 
 # --- Rutas de evaluaciones ----
@@ -224,7 +254,7 @@ async def create_evaluation_for_lesson(
     lesson_id: int,
     question_type: QuestionType = Form(...),
     question: str = Form(...),
-    options: str = Form(...),  # String JSON del frontend
+    options: Optional[str] = Form(None),  # String JSON del frontend
     correct_answer: Optional[str] = Form(None),
     teacher_services: TeacherServices = Depends(get_teacher_services),
 ):
@@ -238,7 +268,6 @@ async def create_evaluation_for_lesson(
     if question_type == QuestionType.MULTIPLE_CHOICE:
         if options:
             try:
-                options = json.dumps(options)
                 parsed_options = json.loads(options)
                 if not isinstance(parsed_options, list) or len(parsed_options) < 2:
                     raise HTTPException(
@@ -274,10 +303,9 @@ async def create_evaluation_for_lesson(
             correct_answer if question_type == QuestionType.MULTIPLE_CHOICE else None
         ),
     }
+    await teacher_services.create_evaluation(evaluation_data)
 
-    new_eval = await teacher_services.create_evaluation(evaluation_data)
-
-    return {"message": "Evaluación creada con éxito", "evaluation": new_eval}
+    return {"message": "Evaluación creada con éxito"}
 
 
 # --- Rutas de notificaciones ---

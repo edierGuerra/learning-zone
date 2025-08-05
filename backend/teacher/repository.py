@@ -27,6 +27,7 @@ class TeacherRepo:
         self.db = db
 
     # --- Métodos de Cursos ---
+
     async def create_course(self, course: dict) -> Course:
         """
         Crea un nuevo curso en la base de datos.
@@ -160,6 +161,7 @@ class TeacherRepo:
         return result.scalar_one_or_none()
 
     # --- Métodos de Lecciones ---
+
     async def create_lesson_with_content(
         self, name: str, id_course: int, content_data: dict
     ):
@@ -191,8 +193,14 @@ class TeacherRepo:
         :return: Objeto Lesson.
         """
         logger.info(f"Obteniendo lección con ID {lesson_id}")
-        stmt = select(Lesson).where(Lesson.id == lesson_id)
+
+        stmt = (
+            select(Lesson)
+            .where(Lesson.id == lesson_id)
+            .options(selectinload(Lesson.contents))  # precarga el contenido asociado
+        )
         result = await self.db.execute(stmt)
+
         if not result:
             logger.error(f"Lección con ID {lesson_id} no encontrada.")
             return None
@@ -200,6 +208,32 @@ class TeacherRepo:
         return result.scalar_one_or_none()
 
     # --- Métodos de Evaluaciones ---
+
+    async def get_lessons_by_course(self, course_id: int) -> list[Lesson]:
+        """
+        Obtiene todas las lecciones de un curso por su ID.
+        :param course_id: ID del curso.
+        :return: Lista de lecciones.
+        """
+        logger.info(f"Obteniendo lecciones para el curso con ID {course_id}")
+        stmt = (
+            select(Lesson)
+            .where(Lesson.id_course == course_id)
+            .options(selectinload(Lesson.contents))  # precarga el contenido asociado
+        )
+        result = await self.db.execute(stmt)
+        lessons = result.scalars().all()
+
+        if not lessons:
+            logger.warning(f"No se encontraron lecciones para el curso ID {course_id}.")
+        else:
+            logger.info(
+                f"Se encontraron {len(lessons)} lecciones para el curso ID {course_id}."
+            )
+        return lessons
+
+    # --- Métodos de Evaluaciones ---
+
     async def create_evaluation_for_lesson(self, evaluation_data: dict):
         """
         Crea una evaluación asociada a una lección.

@@ -116,6 +116,31 @@ class TeacherServices:
             },
         )
 
+    async def get_lessons_by_course(self, course_id: int) -> list:
+        """
+        Obtiene todas las lecciones de un curso por su ID.
+        :param course_id: ID del curso.
+        :return: Lista de lecciones.
+        """
+        lessons = await self.repo.get_lessons_by_course(course_id)
+
+        lesson_data = []
+        for lesson in lessons:
+            first_content = lesson.contents[0] if lesson.contents else None
+
+            # Creamos un dict manualmente que coincida con el esquema `LessonCResponse`
+            lesson_data.append(
+                {
+                    "id": lesson.id,
+                    "name": lesson.name,
+                    "content": first_content,  # Puede ser None si no tiene contenido aún
+                }
+            )
+
+        return lesson_data
+
+    # --- Métodos de Evaluaciones ---
+
     async def get_lesson_by_id(self, lesson_id: int):
         """
         Obtiene una lección por su ID.

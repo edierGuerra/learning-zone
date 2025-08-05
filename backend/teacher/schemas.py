@@ -38,3 +38,22 @@ class EvaluationCreate(BaseModel):
             object.__setattr__(self, "options", None)
             object.__setattr__(self, "correct_answer", None)
         return self
+
+
+class ContentSchema(BaseModel):
+    id: int
+    content_type: str
+    content: Optional[str] = None
+    text: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class LessonCResponse(BaseModel):
+    id: int
+    name: str
+    contents: List[ContentSchema]
+
+    class Config:
+        from_attributes = True

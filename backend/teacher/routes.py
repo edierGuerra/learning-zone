@@ -280,6 +280,18 @@ async def create_evaluation_for_lesson(
     return {"message": "Evaluación creada con éxito", "evaluation": new_eval}
 
 
+@router.get(
+    "/lessons/{lesson_id}/evaluations",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Evaluations"],
+)
+async def get_evaluation(
+    lesson_id: int, teacher_services: TeacherServices = Depends(get_teacher_services)
+):
+    """Obtiene una evaluación por el ID de la lección."""
+    return await teacher_services.get_evaluation_by_lesson_id(lesson_id)
+
+
 # --- Rutas de notificaciones ---
 
 
@@ -320,7 +332,6 @@ async def create_notifications(
     return JSONResponse(content=response, status_code=status.HTTP_200_OK)
 
 
-# --- Rutas de notificaciones para profesores ---
 @router.get(
     "/notifications/",
     dependencies=[Depends(bearer_scheme)],

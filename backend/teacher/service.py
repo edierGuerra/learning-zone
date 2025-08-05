@@ -152,6 +152,17 @@ class TeacherServices:
 
         return await self.repo.create_evaluation_for_lesson(data)
 
+    async def get_evaluation_by_lesson_id(self, lesson_id: int):
+        """
+        Obtiene una evaluación por el ID de la lección.
+        :param lesson_id: ID de la lección.
+        :return: Objeto Evaluation.
+        """
+        evaluation = await self.repo.get_evaluation_by_lesson_id(lesson_id)
+        if not evaluation:
+            raise HTTPException(status_code=404, detail="Evaluación no encontrada")
+        return evaluation
+
     # --- Métodos de Notificaciones ---
     async def get_notifications_by_teacher_id(self, teacher_id: int):
         """

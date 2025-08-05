@@ -188,6 +188,15 @@ class TeacherServices:
             raise HTTPException(status_code=404, detail="Evaluación no encontrada")
         return evaluation
 
+    async def delete_lesson(self, lesson_id: int) -> dict:
+        """
+        Elimina una lección por su ID.
+        :param lesson_id: ID de la lección a eliminar.
+        :return: Mensaje de confirmación.
+        """
+        await self.repo.delete_lesson(lesson_id)
+        return {"message": "Lección eliminada exitosamente."}
+
     # --- Métodos de Notificaciones ---
     async def get_notifications_by_teacher_id(self, teacher_id: int):
         """

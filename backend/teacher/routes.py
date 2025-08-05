@@ -244,6 +244,27 @@ async def get_lesson(
     return lesson
 
 
+@router.delete(
+    "/lessons/{lesson_id}",
+    description="Elimina la leccion con su contenido y evaluación asociada.",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Lessons"],
+)
+async def delete_lesson(
+    lesson_id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """Elimina una lección por su ID."""
+    lesson = await teacher_services.get_lesson_by_id(lesson_id)
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Lección no encontrada.")
+    await teacher_services.delete_lesson(lesson_id)
+    return JSONResponse(
+        content={"message": "Lección eliminada con éxito."},
+        status_code=status.HTTP_200_OK,
+    )
+
+
 # --- Rutas de evaluaciones ----
 @router.post(
     "/courses/{course_id}/lessons/{lesson_id}/evaluations",

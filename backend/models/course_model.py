@@ -42,6 +42,9 @@ class Course(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(50))  # nombre del curso
     description: Mapped[str] = mapped_column(String(100))  # descripcion del curso
+    name_palette: Mapped[str] = mapped_column(
+        String(50), nullable=True
+    )  # nombre de la paleta de colores
     palette: Mapped[dict[str, str]] = mapped_column(
         JSON, nullable=True
     )  # colores del curso
@@ -63,7 +66,9 @@ class Course(Base):
     students: Mapped[List["Student"]] = relationship(
         secondary="course_students", back_populates="courses"
     )
-    lessons: Mapped[List["Lesson"]] = relationship(back_populates="course")
+    lessons: Mapped[List["Lesson"]] = relationship(
+        back_populates="course", cascade="all, delete-orphan"
+    )
     teacher: Mapped["Teacher"] = relationship(
         "Teacher", back_populates="courses"
     )  # Relación con el profesor, un curso tiene un solo profesor

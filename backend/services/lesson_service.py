@@ -127,6 +127,7 @@ class LessonService:
                         "status": status_of_course,
                         "completed_lessons": completed,
                         "all_lessons": total,
+                        "palette": course.palette,
                     }
                 )
 

@@ -40,6 +40,7 @@ from routes.course_routes import router as course_router
 from routes.comment_routes import router as comment_router
 from routes.content_routes import router as content_router
 from routes.evaluation_routes import router as evaluation_router
+from teacher.routes import router as teacher_router
 
 from core.initial_data import create_initial_courses
 from core.initial_content import create_initial_contents
@@ -76,7 +77,7 @@ async def lifespan(app: FastAPI):
     """
     # Crear tablas
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        # await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
         print("✅ Tablas creadas")
 
@@ -108,7 +109,7 @@ app = FastAPI(
             "Edier Andrés Guerra Vargas",
             "Camilo Andres Ospina Villa",
             "Junior Herrera Agudelo",
-            "Charift Tatiana Giraldo",
+            "Charif Tatiana Giraldo",
         ]
     },
 )
@@ -163,3 +164,4 @@ app.include_router(course_router)
 app.include_router(comment_router)
 app.include_router(content_router)
 app.include_router(evaluation_router)
+app.include_router(teacher_router)

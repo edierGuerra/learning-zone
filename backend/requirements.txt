@@ -8,6 +8,7 @@ cffi==1.17.1
 cfgv==3.4.0
 charset-normalizer==3.4.2
 click==8.2.1
+cloudinary==1.44.1
 colorama==0.4.6
 cryptography==45.0.4
 distlib==0.3.9
@@ -59,6 +60,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
 python-http-client==3.3.7
 python-jose==3.5.0
+python-multipart==0.0.20
 pytz==2025.2
 PyYAML==6.0.2
 requests==2.32.4

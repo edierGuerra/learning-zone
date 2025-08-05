@@ -16,10 +16,8 @@ export default function RoutersPublic() {
         <Routes>
             <Route element={<PublicLayout />}>
                 <Route path="/" element={<LandingPage/>}/>
-                <Route path="/landing" element={<LandingPage/>}/>
                 <Route path="/register" element={<LoginAndRegister opcAuth={false} />}/>
                 <Route path="/confirmEmailRegister" element={<ConfirmEmailRegister/>}/>{/* ################## tener en cuenta para backend */}
-
                 <Route path="/emailNewPassword" element={<RecoverPassword viewFormNewPassword={false}/>}/>
                 <Route path="/newPassword" element={<RecoverPassword viewFormNewPassword={true}/>}/>
                 <Route path="/confirmEmailRequest" element={<ConfirmEmailRequest/>}/>

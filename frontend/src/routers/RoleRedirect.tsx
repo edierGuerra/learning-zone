@@ -1,30 +1,26 @@
-import { Navigate } from "react-router-dom";
-import { useUser } from "../modules/auth/Hooks/useAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { authStorage } from "../shared/Utils/authStorage"; // Asegúrate de que esta funcione correctamente
 
-/**
- * Redirige automáticamente según el rol del usuario.
- * No renderiza contenido visible.
- */
 export default function RoleRedirect() {
-  const { user, role, isReady } = useUser();
+  const navigate = useNavigate();
+  alert('eeee')
 
-  // Esperar a que la información del usuario esté lista
-  if (!isReady) return null;
+  useEffect(() => {
+    // Opción 1: desde localStorage directamente
+    const role = authStorage.getRole(); // "teacher" | "student" | undefined/nullclg
+    console.log(role)
 
-  // Usuario no autenticado
-  if (!user || !role) {
-    return <Navigate to="/" replace />;
-  }
 
-  // Redirección según rol
-  if (role === "teacher") {
-    return <Navigate to="/teacher/home-teacher" replace />;
-  }
+    if (role === "teacher") {
+      navigate("/teacher/home", { replace: true });
+    } else if (role === "student") {
+      navigate("/student/home-student", { replace: true });
+    } else {
+      // Si no hay rol, redirige al landing
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
 
-  if (role === "student") {
-    return <Navigate to="/student/home-student" replace />;
-  }
-
-  // Rol desconocido
-  return <Navigate to="/" replace />;
+  return null; // No renderiza nada, solo redirecciona
 }

@@ -14,7 +14,7 @@ export default function StudentRoutes() {
       <Route path="home-student" element={<HomeStudent />} />
       <Route path="profile-student" element={<StudentProfile />} />
       <Route path="course/:id/:nameCourse" element={<CourseHomePage />} />
-      <Route path="contents-page" element={<ContentPage />} />
+      <Route path="content-page" element={<ContentPage />} />
       <Route path="evaluation-page" element={<EvaluationPage />} />
       <Route path="comments/:courseId" element={<CommentPageWrapper />} />
     </Routes>

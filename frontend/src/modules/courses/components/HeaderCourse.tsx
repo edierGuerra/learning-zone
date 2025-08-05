@@ -33,7 +33,7 @@ export default function HeaderCourse({ title, idCourse }: THeaderCourseProps) {
     authStorage.setAllStudents(studentStorage);
     const courseId = idCourse;
     if (courseId) {
-      navigate(`/comments/${courseId}`);
+      navigate(`/student/comments/${courseId}`);
     } else {
       alert('No se encontró el curso correspondiente.');
     }

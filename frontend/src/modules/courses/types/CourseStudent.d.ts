@@ -36,7 +36,8 @@ export type TProgressCourse  = {
     name_course:TCourse['name'],
     completed_lessons:number,
     all_lessons:number,
-    status:TCourse['status']
+    status:TCourse['status'],
+    palette:TColorPalette
 };
 export type TProgressCourses = TProgressCourse[]
 
@@ -54,7 +55,8 @@ export interface TLessonStudent {
     id: number;
     name: string;
     progressState: 'blocked' | 'in_progress' | 'complete';
-    idCourse:TCourse['id']
+    idCourse:TCourseStudent['id'],
+    nameCourse:TCourseStudent['name']
 }
 
 

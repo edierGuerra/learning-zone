@@ -8,6 +8,7 @@ import { IoArrowBackCircleSharp } from "react-icons/io5";
 import SendResponseLessonAPI from "../services/SendResponseLesson.server";
 import toast from "react-hot-toast";
 import { useStudentCourseContext } from "../hooks/useCourse";
+import { useNavigate } from "react-router-dom";
 /* Page donde se renderiza la evaluación de una lección (dinámico para cualquier curso) */
 
 
@@ -19,6 +20,8 @@ export default function EvaluationPage() {
   const handleBtnNavigate = useNavigationHandler();
   const [animatedScore, setAnimatedScore] = useState<number | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const navigate = useNavigate()
 
 
   // Animación progresiva del puntaje en el modal
@@ -74,7 +77,7 @@ export default function EvaluationPage() {
         return;
       }
       toast.error(res.message);
-      handleBtnNavigate('/contentPage');
+      navigate('/student/content-page');
     } catch {
       toast.error("Ocurrió un error al enviar la respuesta");
     }
@@ -83,7 +86,7 @@ export default function EvaluationPage() {
   // Cierra el modal de puntaje y vuelve al home del curso
   const handleBtnClickModalScore = () => {
     setShowScoreModal(false);
-    handleBtnNavigate(`/course/${currentLesson?.idCourse}`);
+    navigate(`/student/course/${currentLesson.idCourse}/${currentLesson.name}`);
   }
 
   if (!evaluation) return <div>No hay evaluación</div>;

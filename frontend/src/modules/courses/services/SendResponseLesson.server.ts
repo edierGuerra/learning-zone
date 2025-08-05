@@ -1,13 +1,13 @@
 /* Servicio que envía al backend la respuesta del usuario y valida si es correcta o no */
 import axios from '../../../api/axiosInstance';
-import type { TCourse, TEvaluation, TLesson, TScore } from '../types/CourseStudent';
+import type { TCourse, TEvaluation, TLessonStudent, TScore } from '../types/CourseStudent';
 
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 
 type SendResponseLessonAPIProps = {
   id: TEvaluation['id'];            // id de la evaluación
   idCourse: TCourse['id'];
-  idLesson: TLesson['id'];
+  idLesson: TLessonStudent['id'];
   response: string;
   questionType: TEvaluation['questionType'];
 };

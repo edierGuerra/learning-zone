@@ -23,10 +23,10 @@ import {
 import toast from "react-hot-toast";
 import GetCoursesAPI from "../services/GetCourses";
 import ProgressCoursesAPI from "../../student/services/GetProgressCourses.server";
-import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
 import { StudentCourseContext } from "./StudentCourseContext";
 import type { TLessonTeacherResponse } from "../../teacher/types/Teacher";
+import { useNavigate } from "react-router-dom";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -35,6 +35,7 @@ type Props = {
 
 // Provider principal que controla todo lo relacionado con la sesión del estudiante
 export const StudentCourseProvider = ({ children }: Props) => {
+  const navigate = useNavigate()
   const [courses, setCourses] = useState<TCoursesStudents>([]);
   const [lessons, setLessons] = useState<TLessonsStudent>([]);
   const [progressLessons, setProgressLessons] = useState<TProgressCourses>([]);
@@ -43,7 +44,6 @@ export const StudentCourseProvider = ({ children }: Props) => {
   const [content, setContent] = useState<TContent | null>(null); /* Contenido de la leccion */
   const [evaluation, setEvaluation] = useState<TEvaluation | null>(null); /* Evaluacion de la leccion */
   const [palette, setPalette] = useState<TColorPalette | null>(null);
-  const handleBtnNavigate = useNavigationHandler()
   // Carga inicial: verifica si hay cursos guardados en localStorage
   useEffect(() => {
     const storedCourses = authStorage.getCoursesStudent(); // Trae cursos guardado si existe
@@ -120,17 +120,20 @@ export const StudentCourseProvider = ({ children }: Props) => {
   const loadLessonsCourse  = async(idCourse:TCourse['id'])=>{
     try{
         const lessonsRes = await LessonsCourseAPI(idCourse);
+        console.log(lessonsRes)
 
         const lessonsStorage: TLessonsStudent = lessonsRes.map((l) => ({
             id: l.id,
             name:l.name,
             progressState:l.progress_state,
-            idCourse:idCourse
+            idCourse:idCourse,
+            nameCourse:l.name
           }));
+        console.log(lessonsStorage)
 
+        authStorage.setLessonsStudents(lessonsStorage)
         setLessons(lessonsStorage) /* Setear las lecciones para poder renderizarlas en el home del curso */
         /* Setear los valores al localstorage */
-        authStorage.setLessonsStudents(lessonsStorage)
 
 
     }catch(error){
@@ -196,7 +199,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
   const renderContent =async(idCourse:TCourse['id'], lesson:TLessonStudent)=>{
     await loadLessonContent(idCourse,lesson);
     /* Rederigir a la page del contenido */
-    handleBtnNavigate('/contentPage')
+    navigate('/student/content-page')
 
   }
 
@@ -205,7 +208,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
 
     await loadLessonEvaluation(idCourse,idLesson);
     /* Rederigir a la page del contenido */
-    handleBtnNavigate('/evaluationPage')
+    navigate('/student/evaluation-page')
 
   }
 

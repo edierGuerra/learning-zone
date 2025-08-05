@@ -25,7 +25,7 @@ async def create_initial_contents(db: AsyncSession):
         logger.warning("[WARNING] No se encontraron lecciones en la base de datos.")
         return
 
-    # Mapeo: nombre de la lección → id, se define un diccionario de nombre:id_leccion por el for que extrae los datos del objeto lesson_rows.
+    # Mapeo: nombre de la lección → id, se define un diccionario de nombre:lesson_id por el for que extrae los datos del objeto lesson_rows.
     lesson_name_to_id = {name: id_ for id_, name in lesson_rows}
 
     # Contenidos base con tipo de contenido 'image' y descripción obligatoria 'text'

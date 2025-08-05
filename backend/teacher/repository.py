@@ -7,8 +7,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
+import json
 
 # Modulos internos
+from models.evaluation_model import Evaluation
 from models.course_model import Course
 from models.lesson_model import Lesson
 from teacher.model import Teacher
@@ -196,3 +198,17 @@ class TeacherRepo:
             return None
         logger.info(f"Lección con ID {lesson_id} obtenida exitosamente.")
         return result.scalar_one_or_none()
+
+    async def create_evaluation_for_lesson(self, evaluation_data: dict):
+        """
+        Crea una evaluación asociada a una lección.
+        """
+        options = evaluation_data.get("options")
+        if options:
+            evaluation_data["options"] = json.dumps(options)
+
+        new_eval = Evaluation(**evaluation_data)
+        self.db.add(new_eval)
+        await self.db.commit()
+        await self.db.refresh(new_eval)
+        return new_eval

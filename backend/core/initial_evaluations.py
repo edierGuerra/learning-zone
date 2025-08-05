@@ -32,7 +32,7 @@ async def create_initial_evaluations(db: AsyncSession):
     lesson_data_map: Dict[str, Dict[str, int]] = (
         {}
     )  # {"CourseName": {"LessonName": x, "lesson_id": y}}
-    # lesson_data_map[nombre_curso][nombre_leccion] = id_leccion
+    # lesson_data_map[nombre_curso][nombre_leccion] = lesson_id
 
     # Necesitamos obtener el nombre del curso asociado a cada lección.
     # result = await db.execute(select(Lesson).id, Lesson.name, Lesson.course)) # seleciona el id, el nombre de la leccion y la relacion "course" para el nombre del curso
@@ -794,7 +794,7 @@ async def create_initial_evaluations(db: AsyncSession):
 
         # Verificar si ya existe una evaluación para esta lección
         result = await db.execute(
-            select(Evaluation).where(Evaluation.id_leccion == lesson_id)
+            select(Evaluation).where(Evaluation.lesson_id == lesson_id)
         )
         existing_evaluation = result.scalars().first()
 
@@ -816,7 +816,7 @@ async def create_initial_evaluations(db: AsyncSession):
             ],  # <--- Pasa el miembro del Enum directamente
             options=options_to_store,
             correct_answer=correct_answer_to_store,
-            id_leccion=lesson_id,
+            lesson_id=lesson_id,
         )
         db.add(evaluation)
         logger.info(

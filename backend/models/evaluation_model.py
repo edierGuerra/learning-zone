@@ -44,7 +44,7 @@ class Evaluation(Base):
     )  # respuesta_correcta
 
     # claves foraneas
-    id_leccion: Mapped[int] = mapped_column(
+    lesson_id: Mapped[int] = mapped_column(
         ForeignKey("lessons.id"), unique=True, nullable=False
     )
 

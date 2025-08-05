@@ -38,7 +38,7 @@ class Content(Base):
     # Claves foraneas
     lesson_id: Mapped[int] = mapped_column(
         ForeignKey("lessons.id")
-    )  # id_leccion (foreign key)
+    )  # lesson_id (foreign key)
 
     # Relaciones
     lesson: Mapped["Lesson"] = relationship(back_populates="contents")

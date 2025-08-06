@@ -10,7 +10,7 @@ import logging
 import json
 
 # Modulos internos
-from models.evaluation_model import Evaluation
+from models.evaluation_model import Evaluation, QuestionType
 from models.course_model import Course
 from models.lesson_model import Lesson
 from teacher.model import Teacher
@@ -261,6 +261,41 @@ class TeacherRepo:
             logger.error(f"Evaluación para lección ID {lesson_id} no encontrada.")
             return None
         logger.info(f"Evaluación para lección ID {lesson_id} obtenida exitosamente.")
+        return evaluation
+
+    async def update_evaluation(self, evaluation_id: int, evaluation_data: dict):
+        """
+        Actualiza una evaluación existente.
+        :param evaluation_id: ID de la evaluación a actualizar.
+        :param evaluation_data: Datos actualizados de la evaluación.
+        :return: La evaluación actualizada.
+        """
+        stmt = select(Evaluation).where(Evaluation.id == evaluation_id)
+        result = await self.db.execute(stmt)
+        evaluation = result.scalar_one_or_none()
+
+        if not evaluation:
+            logger.error(f"Evaluación con ID {evaluation_id} no encontrada.")
+            raise ValueError("Evaluación no encontrada")
+
+        if (
+            evaluation.options
+            and evaluation_data["question_type"] == QuestionType.OPEN_QUESTION
+        ):
+            logger.warning(
+                "La evaluación es de tipo pregunta abierta, se eliminarán las opciones y la respuesta correcta."
+            )
+            evaluation_data["options"] = None
+            evaluation_data["correct_answer"] = None
+        for key, value in evaluation_data.items():
+            logger.info(
+                f"Actualizando {key} a {value} para la evaluación ID {evaluation_id}"
+            )
+            setattr(evaluation, key, value)
+
+        await self.db.commit()
+        await self.db.refresh(evaluation)
+        logger.info(f"Evaluación ID {evaluation_id} actualizada exitosamente.")
         return evaluation
 
     # --- Metodos de Notificaciones ---

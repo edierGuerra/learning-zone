@@ -188,6 +188,15 @@ class TeacherServices:
             raise HTTPException(status_code=404, detail="Evaluación no encontrada")
         return evaluation
 
+    async def update_evaluation(self, evaluation_id: int, data: dict):
+        """
+        Actualiza una evaluación existente.
+        :param evaluation_id: ID de la evaluación a actualizar.
+        :param data: Datos actualizados de la evaluación.
+        :return: La evaluación actualizada.
+        """
+        return await self.repo.update_evaluation(evaluation_id, data)
+
     # --- Métodos de Notificaciones ---
     async def get_notifications_by_teacher_id(self, teacher_id: int):
         """

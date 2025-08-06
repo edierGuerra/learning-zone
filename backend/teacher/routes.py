@@ -320,6 +320,64 @@ async def get_evaluation(
     return await teacher_services.get_evaluation_by_lesson_id(lesson_id)
 
 
+@router.put(
+    "/evaluations/{evaluation_id}",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Evaluations"],
+)
+async def update_evaluation(
+    evaluation_id: int,
+    question_type: QuestionType = Form(...),
+    question: Optional[str] = Form(None),
+    options: Optional[str] = Form(None),  # String JSON del frontend
+    correct_answer: Optional[str] = Form(None),
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Actualiza una evaluación existente. Permite modificar solo la pregunta, solo las opciones,
+    solo el correct_answer, o cualquier combinación de estos campos.
+    """
+    evaluation_data = {"question_type": question_type}
+
+    # Solo agrega los campos si fueron enviados
+    if question == "":
+        question = None
+    if options == "":
+        options = None
+    if correct_answer == "":
+        correct_answer = None
+
+    if question is not None:
+        evaluation_data["question"] = question
+
+    if question_type == QuestionType.MULTIPLE_CHOICE:
+        if options is not None:
+            try:
+                parsed_options = json.loads(options)
+                if not isinstance(parsed_options, list) or len(parsed_options) < 2:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Debes enviar al menos dos opciones válidas como lista.",
+                    )
+                evaluation_data["options"] = parsed_options
+            except json.JSONDecodeError:
+                raise HTTPException(
+                    status_code=400,
+                    detail='El campo \'options\' debe ser un JSON válido (ej: ["a", "b"]).',
+                )
+        if correct_answer is not None:
+            evaluation_data["correct_answer"] = correct_answer
+    else:
+        # Para open_question, solo actualiza si se envía la pregunta
+        pass
+
+    updated_eval = await teacher_services.update_evaluation(
+        evaluation_id, evaluation_data
+    )
+
+    return {"message": "Evaluación actualizada con éxito", "evaluation": updated_eval}
+
+
 # --- Rutas de notificaciones ---
 
 

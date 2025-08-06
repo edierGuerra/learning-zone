@@ -1,6 +1,8 @@
+import json
 import logging
 from fastapi import HTTPException
 
+from models.evaluation_model import QuestionType
 from models.lesson_model import Lesson
 from .repository import TeacherRepo
 from teacher.utils import save_and_upload_file, update_file_on_cloudinary
@@ -208,13 +210,46 @@ class TeacherServices:
             raise HTTPException(status_code=404, detail="Evaluación no encontrada")
         return evaluation
 
+    # async def update_evaluation(self, evaluation_id: int, data: dict):
+    #     """
+    #     Actualiza una evaluación existente.
+    #     :param evaluation_id: ID de la evaluación a actualizar.
+    #     :param data: Datos actualizados de la evaluación.
+    #     :return: La evaluación actualizada.
+    #     """
+    #     return await self.repo.update_evaluation(evaluation_id, data)
+
     async def update_evaluation(self, evaluation_id: int, data: dict):
         """
-        Actualiza una evaluación existente.
-        :param evaluation_id: ID de la evaluación a actualizar.
-        :param data: Datos actualizados de la evaluación.
-        :return: La evaluación actualizada.
+        Actualiza una evaluación considerando el tipo de pregunta y evitando errores
+        al cambiar entre open_question y multiple_choice.
         """
+        # Si pasa de OPEN_QUESTION a MULTIPLE_CHOICE
+        if data.get("question_type") == QuestionType.MULTIPLE_CHOICE:
+            # Validar opciones
+            options = data.get("options")
+            if not options or not isinstance(options, list) or len(options) < 2:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Debes enviar al menos dos opciones válidas como lista.",
+                )
+            if not data.get("correct_answer"):
+                raise HTTPException(
+                    status_code=400,
+                    detail="La respuesta correcta es requerida para preguntas de opción múltiple.",
+                )
+            # Serializar a JSON para almacenar en DB
+            data["options"] = json.dumps(options)
+
+        # Si pasa de MULTIPLE_CHOICE a OPEN_QUESTION
+        elif data.get("question_type") == QuestionType.OPEN_QUESTION:
+            data["options"] = None
+            data["correct_answer"] = None
+
+        # Si no cambia el tipo pero envía lista, asegurar serialización
+        elif isinstance(data.get("options"), list):
+            data["options"] = json.dumps(data["options"])
+
         return await self.repo.update_evaluation(evaluation_id, data)
 
     # --- Métodos de Notificaciones ---

@@ -12,13 +12,12 @@ from fastapi.security import HTTPBearer
 from routes.notifications_routes import get_notification_services
 from schemas.lesson_schemas import LessonPResponse
 from schemas.notification_schemas import NotificationCreate, NotificationResponse
-from teacher.schemas import EvaluationCreate, LessonCResponse
+from teacher.schemas import EvaluationCreate, EvaluationUpdate, LessonCResponse
 from services.notification_services import NotificationService
 from teacher.model import Teacher
 from .service import TeacherServices
 from models.course_model import CourseCategoryEnum
 from models.content_model import TypeContent
-from models.evaluation_model import QuestionType
 from .dependencies import get_teacher_services
 import json
 from .oauth import get_current_teacher
@@ -327,49 +326,14 @@ async def get_evaluation(
 )
 async def update_evaluation(
     evaluation_id: int,
-    question_type: QuestionType = Form(...),
-    question: Optional[str] = Form(None),
-    options: Optional[str] = Form(None),  # String JSON del frontend
-    correct_answer: Optional[str] = Form(None),
+    evaluation: EvaluationUpdate,
     teacher_services: TeacherServices = Depends(get_teacher_services),
 ):
     """
     Actualiza una evaluación existente. Permite modificar solo la pregunta, solo las opciones,
     solo el correct_answer, o cualquier combinación de estos campos.
     """
-    evaluation_data = {"question_type": question_type}
-
-    # Solo agrega los campos si fueron enviados
-    if question == "":
-        question = None
-    if options == "":
-        options = None
-    if correct_answer == "":
-        correct_answer = None
-
-    if question is not None:
-        evaluation_data["question"] = question
-
-    if question_type == QuestionType.MULTIPLE_CHOICE:
-        if options is not None:
-            try:
-                parsed_options = json.loads(options)
-                if not isinstance(parsed_options, list) or len(parsed_options) < 2:
-                    raise HTTPException(
-                        status_code=400,
-                        detail="Debes enviar al menos dos opciones válidas como lista.",
-                    )
-                evaluation_data["options"] = parsed_options
-            except json.JSONDecodeError:
-                raise HTTPException(
-                    status_code=400,
-                    detail='El campo \'options\' debe ser un JSON válido (ej: ["a", "b"]).',
-                )
-        if correct_answer is not None:
-            evaluation_data["correct_answer"] = correct_answer
-    else:
-        # Para open_question, solo actualiza si se envía la pregunta
-        pass
+    evaluation_data = evaluation.model_dump(exclude_unset=True)
 
     updated_eval = await teacher_services.update_evaluation(
         evaluation_id, evaluation_data

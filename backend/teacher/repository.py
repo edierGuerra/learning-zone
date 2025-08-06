@@ -40,7 +40,7 @@ class TeacherRepo:
             await self.db.commit()
             await self.db.refresh(new_course)
             logger.info(f"Curso creado exitosamente con ID: {new_course.id}")
-            return new_course
+            return new_course.id
         except Exception as e:
             logger.error(f"Error al crear curso: {e}", exc_info=True)
             raise

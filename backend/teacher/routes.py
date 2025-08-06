@@ -244,25 +244,45 @@ async def get_lesson(
     return lesson
 
 
-@router.delete(
+@router.put(
     "/lessons/{lesson_id}",
-    description="Elimina la leccion con su contenido y evaluación asociada.",
+    response_model=LessonCResponse,
     dependencies=[Depends(bearer_scheme)],
     tags=["Lessons"],
 )
-async def delete_lesson(
+async def update_lesson(
     lesson_id: int,
+    name: Optional[str] = Form(None),
+    content_type: Optional[TypeContent] = Form(None),
+    text: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None),
     teacher_services: TeacherServices = Depends(get_teacher_services),
 ):
-    """Elimina una lección por su ID."""
-    lesson = await teacher_services.get_lesson_by_id(lesson_id)
-    if not lesson:
-        raise HTTPException(status_code=404, detail="Lección no encontrada.")
-    await teacher_services.delete_lesson(lesson_id)
-    return JSONResponse(
-        content={"message": "Lección eliminada con éxito."},
-        status_code=status.HTTP_200_OK,
+    """
+    Actualiza una lección existente. Permite modificar solo el nombre, el contenido o ambos.
+    Si se proporciona un archivo, se subirá y actualizará el contenido.
+    """
+    lesson_data = {}
+    content_data = {}
+
+    if name is not None:
+        lesson_data["name"] = name
+    if content_type is not None:
+        content_data["content_type"] = content_type
+    if text is not None:
+        content_data["text"] = text
+    if file is not None:
+        content_data["file"] = file
+
+    if not lesson_data and not content_data:
+        raise HTTPException(
+            status_code=400,
+            detail="Debes proporcionar al menos un campo para actualizar.",
+        )
+    update_lesson = await teacher_services.update_lesson(
+        lesson_id, lesson_data, content_data
     )
+    return update_lesson
 
 
 # --- Rutas de evaluaciones ----

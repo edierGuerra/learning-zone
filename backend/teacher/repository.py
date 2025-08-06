@@ -3,11 +3,14 @@
 """Repositorio con todos los procesos"""
 
 # Modulos externos
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 import json
+
+from .utils import save_and_upload_file
 
 # Modulos internos
 from models.evaluation_model import Evaluation, QuestionType
@@ -15,6 +18,7 @@ from models.course_model import Course
 from models.lesson_model import Lesson
 from teacher.model import Teacher
 from teacher.utils import delete_file_from_cloudinary
+from teacher.utils import update_file_on_cloudinary
 from models.content_model import Content, TypeContent
 
 
@@ -174,10 +178,15 @@ class TeacherRepo:
         self.db.add(new_lesson)
         await self.db.flush()  # Permite obtener el ID antes de commit
 
+        if content_data.get("content"):
+            content_url = await save_and_upload_file(
+                content_data["content"], public_id=new_lesson.id
+            )
+
         new_content = Content(
             lesson_id=new_lesson.id,
             content_type=TypeContent(content_data["content_type"]),
-            content=content_data["content"],
+            content=content_url,
             text=content_data["text"],
         )
         self.db.add(new_content)
@@ -206,6 +215,57 @@ class TeacherRepo:
             return None
         logger.info(f"Lección con ID {lesson_id} obtenida exitosamente.")
         return result.scalar_one_or_none()
+
+    async def update_lesson(
+        self, lesson_id: int, lesson_data: dict, content_data: dict
+    ) -> Lesson:
+        """
+        Actualiza una lección existente.
+        :param lesson_id: ID de la lección a actualizar.
+        :param lesson_data: Datos actualizados de la lección.
+        :return: La lección actualizada.
+        """
+        stmt = (
+            select(Lesson)
+            .where(Lesson.id == lesson_id)
+            .options(selectinload(Lesson.contents))
+        )
+        result = await self.db.execute(stmt)
+        lesson = result.scalar_one_or_none()
+
+        if not lesson:
+            logger.error(f"Lección con ID {lesson_id} no encontrada.")
+            raise HTTPException(status_code=404, detail="Lección no encontrada")
+
+        for key, value in lesson_data.items():
+            logger.info(f"Actualizando {key} a {value} para la lección ID {lesson_id}")
+            setattr(lesson, key, value)
+
+        # Actualizar contenido si se proporciona
+        if content_data:
+            content = lesson.contents[0] if lesson.contents else None
+            if not content:
+                raise HTTPException(
+                    status_code=404, detail="Contenido no encontrado en la lección"
+                )
+
+            if "content_type" in content_data:
+                content.content_type = content_data["content_type"]
+
+            if "text" in content_data:
+                content.text = content_data["text"]
+                content.content = content_data["text"]
+
+            if "file" in content_data:
+                url = await update_file_on_cloudinary(
+                    content_data["file"], public_id=lesson_id
+                )
+                content.content = url
+
+        await self.db.commit()
+        await self.db.refresh(lesson)
+        logger.info(f"Lección ID {lesson_id} actualizada exitosamente.")
+        return lesson
 
     async def delete_lesson(self, lesson_id: int) -> None:
         """

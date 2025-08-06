@@ -1,5 +1,7 @@
 import logging
 from fastapi import HTTPException
+
+from models.lesson_model import Lesson
 from .repository import TeacherRepo
 from teacher.utils import save_and_upload_file, update_file_on_cloudinary
 from models.course_model import Course
@@ -102,16 +104,15 @@ class TeacherServices:
                 status_code=400, detail="Archivo requerido para contenido multimedia."
             )
 
-        content_url = ""
-        if content.get("file"):
-            content_url = await save_and_upload_file(content["file"])
+        # if content.get("file"):
+        #     content_url = await save_and_upload_file(content["file"])
 
         return await self.repo.create_lesson_with_content(
             name=lesson["name"],
             id_course=lesson["id_course"],
             content_data={
                 "content_type": content["content_type"],
-                "content": content_url,
+                "content": content.get("file"),  # Puede ser None si es texto
                 "text": content["text"],
             },
         )
@@ -138,6 +139,17 @@ class TeacherServices:
             )
 
         return lesson_data
+
+    async def update_lesson(
+        self, lesson_id: int, lesson_data: dict, content_data: dict
+    ) -> Lesson:
+        """
+        Actualiza una lección existente.
+        :param lesson_id: ID de la lección a actualizar.
+        :param lesson_data: Datos actualizados de la lección.
+        :return: La lección actualizada.
+        """
+        return await self.repo.update_lesson(lesson_id, lesson_data, content_data)
 
     async def delete_lesson(self, lesson_id: int) -> dict:
         """

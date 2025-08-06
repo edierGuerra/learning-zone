@@ -1,3 +1,197 @@
-.teacher-dashboard {
-  padding: 1rem;
+/* ===== HEADER DEL DASHBOARD DEL DOCENTE ===== */
+.header-teacher-dashboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  border-bottom: 2px solid #10101056;
+  border-left: 2px solid #10101056;
+  border-right: 2px solid #10101056;
+  border-radius: 30px;
+  padding: 3rem;
+
+  align-items: center;
+}
+.btn-add-course {
+  background-color: #04bd16;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.8rem;
+  padding: 1rem 1rem;
+  width: auto;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.btn-add-course:hover {
+  transform: scale(1.1);
+}
+
+/* ===== TEACHER DASHBOARD GENERAL ===== */
+.container-teacher-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-md);
+  flex: 1;
+  min-height: 100dvh;
+  background-color: #fff;
+
+}
+
+/* Título de bienvenida */
+.title-welcome-teacher {
+  color: #D4F1F9;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  font-size: var(--font-size-2xl);
+  text-align: center;
+}
+
+/* Botón "Mi Espacio" */
+.btn-space-teacher {
+  background-color: var(--color-primary);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-md);
+  border: none;
+  border-radius: var(--font-size-2xl);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-space-teacher:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Contenedor general de los cursos */
+.container-courses-teacher {
+  margin-top: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+/* Título de la sección "Mis Cursos" */
+.title-container-courses-teacher {
+  align-self: center;
+  text-align: center;
+  color: #ffffff;
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-sm);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== TABLET (>=768px) ===== */
+@media (min-width: 768px) {
+  .container-teacher-dashboard {
+    padding: var(--spacing-lg);
+  }
+
+  .title-welcome-teacher {
+    font-size: var(--font-size-3xl);
+    text-align: left;
+    align-self: flex-start;
+  }
+
+  .header-teacher-dashboard {
+    flex-direction: row;
+    padding: 0 var(--spacing-md);
+  }
+
+  .btn-add-course {
+    font-size: 1.6rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .container-courses-teacher {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  .title-container-courses-teacher {
+    font-size: var(--font-size-2xl);
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ===== DESKTOP (>=1024px) ===== */
+@media (min-width: 1024px) {
+  .container-teacher-dashboard {
+    padding: var(--spacing-xl);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .title-welcome-teacher {
+    font-size: var(--font-size-4xl);
+  }
+
+  .header-teacher-dashboard {
+    padding: 0 var(--spacing-lg);
+  }
+
+  .btn-add-course {
+    font-size: 1.8rem;
+    padding:1.2rem 1.2rem;
+  }
+
+  .title-container-courses-teacher {
+    font-size: var(--font-size-3xl);
+  }
+
+  .container-courses-teacher {
+    gap: var(--spacing-xl);
+  }
+}
+
+/* ===== MOBILE PEQUEÑO (<=480px) ===== */
+@media (max-width: 480px) {
+  .container-teacher-dashboard {
+    padding: var(--spacing-xs);
+    min-height: auto;
+  }
+
+  .title-welcome-teacher {
+    font-size: var(--font-size-lg);
+  }
+
+  .btn-space-teacher {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .header-teacher-dashboard {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+  }
+
+  .btn-add-course {
+    font-size: 1.2rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+  }
+
+  .title-container-courses-teacher {
+    font-size: var(--font-size-md);
+  }
+
+  .container-courses-teacher {
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+  }
 }

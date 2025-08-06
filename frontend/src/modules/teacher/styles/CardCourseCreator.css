@@ -1,0 +1,147 @@
+/* ===== TARJETA DE CURSO PARA DOCENTE ===== */
+.container-card-course-teacher {
+  width: 320px;
+  height: 416px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+
+  /* Fondo y bordes definidos dinámicamente por props inline */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  perspective: 1000px;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover con efecto 3D */
+.container-card-course-teacher:hover {
+  transform: scale(1.03) rotateY(2deg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Imagen del curso */
+.image-course-card-teacher {
+  height: 240px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.6s ease;
+  z-index: 10;
+}
+
+/* Imagen animada en hover */
+.container-card-course-teacher:hover .image-course-card-teacher {
+  transform: rotateY(6deg) translateY(-15px) translateZ(25px) scale(1.05);
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.15)) hue-rotate(6deg) brightness(0.95);
+}
+
+/* Título */
+.title-course-card-teacher {
+  align-self: flex-start;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Descripción */
+.description-course-card-teacher {
+  font-size: 0.95rem;
+  margin: 0.5rem 0 0.3rem 0;
+  line-height: 1.4;
+  max-height: 4.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Categoría (como etiqueta) */
+.category-course-teacher {
+  align-self: flex-start;
+  font-size: 1rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  margin-top: 0.4rem;
+  font-weight: 500;
+}
+
+/* Icono de publicación */
+.status-course-teacher {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  font-size: 26px;
+}
+.footer-card-teacher {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 0.6rem;
+}
+.footer-card-teacher {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 0.6rem;
+}
+.footer-card-teacher {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 0.6rem;
+}
+.footer-card-teacher {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 0.6rem;
+}
+
+
+/* ===== TABLET (>=768px) ===== */
+@media (min-width: 768px) {
+  .container-card-course-teacher {
+    width: 260px;
+    padding: 1rem;
+  }
+  .image-course-card-teacher {
+    height: 180px;
+  }
+  .title-course-card-teacher {
+    font-size: 1.1rem;
+  }
+  .description-course-card-teacher {
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== DESKTOP (>=1024px) ===== */
+@media (min-width: 1024px) {
+  .container-card-course-teacher {
+    width: 320px;
+    padding: 1.2rem;
+  }
+  .image-course-card-teacher {
+    height: 240px;
+  }
+  .title-course-card-teacher {
+    font-size: 1.2rem;
+  }
+  .description-course-card-teacher {
+    font-size: 0.95rem
+}}

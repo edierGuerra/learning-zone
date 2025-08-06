@@ -1,5 +1,5 @@
 /* ===== CONTENEDOR PRINCIPAL ===== */
-.container-form-course-teacher {
+.container-form-lesson-teacher {
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -8,39 +8,42 @@
     text-align: center;
     width: 100%;
     background-color: #fff;
-
+    background-image: url('https://sdmntprcentralus.oaiusercontent.com/files/00000000-e148-61f5-8e69-fc8444292d6e/raw?se=2025-08-06T17%3A19%3A25Z&sp=r&sv=2024-08-04&sr=b&scid=59af2276-c56c-5b12-b655-267a59492af8&skoid=04233560-0ad7-493e-8bf0-1347c317d021&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-06T10%3A12%3A25Z&ske=2025-08-07T10%3A12%3A25Z&sks=b&skv=2024-08-04&sig=iu2Yl%2BLEVV23xD4VyETYKx/YpeRkyYS9t3IHLwKj/HA%3D');
+    background-size: cover;
+    background-position: center;
 }
 
 /* ===== ENVOLTURA DEL FORM ===== */
-.envoltura-form-teacher {
+.envoltura-form-lesson {
     padding: 2rem;
     border-radius: 14px;
     max-width: 600px;
     width: 100%;
+    background-color: #add8e6;
     background-position: center center;
     backdrop-filter: blur(2px);
-    box-shadow: 3px 3px 3px 3px #10100142;
+    border-radius: 15px;
 }
 
 /* ===== CABECERA ===== */
-.header-form-course-teacher {
+.header-form-lesson-teacher {
     margin-bottom: 1.5rem;
 }
 
-.title-create-course {
+.title-create-lesson {
     font-size: 2rem;
     font-weight: bold;
-    color: #0cc2ff;
+    color: #17404e;
     margin-bottom: 0.5rem;
 }
 
-.paragraph-create-course {
+.paragraph-create-lesson {
     color: #666;
     font-size: 1rem;
 }
 
 /* ===== CAMPOS DE FORMULARIO ===== */
-.container-label-input-create-course {
+.container-label-input-create-lesson {
     position: relative;
     margin-top: 20px;
     width: 100%;
@@ -49,20 +52,20 @@
     gap: 0.4rem;
 }
 
-.container-label-input-create-course label {
+.container-label-input-create-lesson label {
     font-weight: 600;
     font-size: 0.95rem;
     text-align: left;
     color: #444;
 }
 
-.container-label-input-create-course input,
-.container-label-input-create-course textarea,
-.container-label-input-create-course select {
+.container-label-input-create-lesson input,
+.container-label-input-create-lesson textarea,
+.container-label-input-create-lesson select {
     width: 100%;
     padding: 12px;
     border-radius: 10px;
-    border: 2px solid #2b29293d;
+    border: 2px solid #fff;
     font-size: 1rem;
     color: #333;
     background-color: transparent;
@@ -70,79 +73,43 @@
     box-sizing: border-box;
 }
 
-.container-label-input-create-course input:focus,
-.container-label-input-create-course textarea:focus,
-.container-label-input-create-course select:focus {
+.container-label-input-create-lesson input:focus,
+.container-label-input-create-lesson textarea:focus,
+.container-label-input-create-lesson select:focus {
     outline: none;
     border-color: #007bff;
 }
 
-.input-course-error {
+.input-lesson-error {
     border-color: #fd6666 !important;
 }
 
-.text-error-course {
+.text-error-lesson {
     color: #fd6666;
     font-size: 0.85rem;
 }
 
-/* ===== PALETA DE COLORES ===== */
-.preview-palette-course {
+/* ===== OPCIONES DE RESPUESTA ===== */
+.options-section {
     display: flex;
-    gap: 4px;
-    margin-bottom: 12px;
-    margin-top: 6px;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.preview-palette-course span {
-    width: 25px;
-    height: 25px;
-    border-radius: 6px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* ===== OPCIONES DE PALETA ===== */
-.select-palette-options-course {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.palette-option-button {
+.options-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 3px;
-    padding: 6px;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
 }
 
-.palette-option-button span {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.palette-option-button:hover {
-    transform: scale(1.05);
-    background-color: #f1f1f1;
-}
-
-.palette-selected {
-    border-color: #007bff;
-    box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+.option-item {
+    display: flex;
+    gap: 0.5rem;
 }
 
 /* ===== BOTÓN DE ENVÍO ===== */
-.btn-send-form-course-teacher {
-    background-image: linear-gradient(to right, #16222A 0%, #3A6073  51%, #16222A  100%);
+.btn-send-form-lesson {
+    background-image: linear-gradient(to right, #16222A 0%, #3A6073 51%, #16222A 100%);
     padding: 15px 45px;
     text-align: center;
     text-transform: uppercase;
@@ -156,9 +123,10 @@
     font-size: 18px;
     border: none;
     font-weight: 600;
+    margin-top: 1.5rem;
 }
 
-.btn-send-form-course-teacher:hover {
+.btn-send-form-lesson:hover {
     background-position: right center;
     color: #fff;
     transform: translateY(-2px);
@@ -167,22 +135,22 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-    .envoltura-form-teacher {
+    .envoltura-form-lesson {
         padding: 1.5rem;
     }
-    .title-create-course {
+    .title-create-lesson {
         font-size: 1.8rem;
     }
 }
 
 @media (max-width: 480px) {
-    .envoltura-form-teacher {
+    .envoltura-form-lesson {
         padding: 1rem;
     }
-    .title-create-course {
+    .title-create-lesson {
         font-size: 1.6rem;
     }
-    .btn-send-form-course-teacher {
+    .btn-send-form-lesson {
         font-size: 16px;
         padding: 0.8rem;
     }

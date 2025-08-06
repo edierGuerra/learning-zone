@@ -43,6 +43,7 @@ const initSession = async (): Promise<boolean> => {
     const roleUser = await GetRoleUserAPI();
     authStorage.setRole(roleUser);
     setRole(roleUser);
+    alert(roleUser)
 
     if (roleUser === "student") {
       const data = await GetStudentAPI();
@@ -56,11 +57,11 @@ const initSession = async (): Promise<boolean> => {
       };
       authStorage.setUser(userData);
       setUser(userData);
-    } else {
+    }else if(roleUser === 'teacher') {
       const data = await GetTeacherAPI();
+      console.log(data.email)
       const userData: TUser = {
         id: data.id,
-        numIdentification: data.identification_number,
         name: data.names,
         lastNames: data.last_names,
         email: data.email,
@@ -71,10 +72,10 @@ const initSession = async (): Promise<boolean> => {
       setUser(userData);
     }
 
-    const userNotifications = await GetNotificationsAPI();
+/*     const userNotifications = await GetNotificationsAPI();
     authStorage.setNotifications(userNotifications);
     setNotifications(userNotifications);
-
+ */
     return true;
 
   } catch (error) {
@@ -120,6 +121,7 @@ const initSession = async (): Promise<boolean> => {
     setRole(null);
     setToken(null);
     setNotifications([]);
+    authStorage.removeRole()
 
     toast.success("Sesión cerrada");
     handleBtnNavigate("/");

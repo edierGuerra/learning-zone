@@ -4,7 +4,6 @@ import { authStorage } from "../shared/Utils/authStorage"; // Asegúrate de que 
 
 export default function RoleRedirect() {
   const navigate = useNavigate();
-  alert('eeee')
 
   useEffect(() => {
     // Opción 1: desde localStorage directamente
@@ -13,7 +12,7 @@ export default function RoleRedirect() {
 
 
     if (role === "teacher") {
-      navigate("/teacher/home", { replace: true });
+      navigate("/teacher/home-teacher", { replace: true });
     } else if (role === "student") {
       navigate("/student/home-student", { replace: true });
     } else {

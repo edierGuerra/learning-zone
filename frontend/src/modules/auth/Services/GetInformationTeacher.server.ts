@@ -1,54 +1,54 @@
-/* Servicio que obtiene los datos del profesor desde el backend usando el token */
 import axios from "../../../api/axiosInstance";
 import type { TTeacher } from "../../types/User";
 
 const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 
-// Estructura esperada para los datos del profesor
+/**
+ * Estructura de los datos específicos del profesor que retorna el backend.
+ */
 type TTeacherDataResponse = {
-    id: TTeacher['id'];
-    identification_number: TTeacher['numIdentification'];
-    names: TTeacher['name'];
-    last_names: TTeacher['lastNames'];
-    email: TTeacher['email'];
-    specialization: TTeacher['specialization'];
-};
-
-// Estructura completa de la respuesta del API
-type TeacherAPIResponse = {
-    status: number;
-    message: string;
-    user_data: TTeacherDataResponse;
-    prefix_profile: string;
+  id: TTeacher['id'];
+  names: TTeacher['name'];
+  last_names: TTeacher['lastNames'];
+  email: TTeacher['email'];
+  specialization: TTeacher['specialization'];
+  prefix_profile: string;
 };
 
 /**
- * Obtiene la información del profesor autenticado desde el backend.
- * Valida status code y estructura de la respuesta.
+ * Estructura esperada de la respuesta del backend para el endpoint del profesor.
  */
-export async function GetTeacherAPI(): Promise<TTeacherDataResponse & { prefix_profile: string }> {
-    try {
-        const response = await axios.get(VITE_TEACHER_ENDPOINT);
+/* type TeacherAPIResponse = {
+  status: number;
+  message: string;
+  data: TTeacherDataResponse;
+}; */
 
-        // Validar código de respuesta
-        if (response.status !== 200) {
-            throw new Error(`HTTP ${response.status}: ${response.data?.message || "Error desconocido"}`);
-        }
+/**
+ * Servicio que obtiene la información del profesor autenticado desde el backend.
+ * Lanza errores en caso de respuesta inválida o fallo en el endpoint.
+ */
+export async function GetTeacherAPI(): Promise<TTeacherDataResponse> {
+  try {
+    const response = await axios.get(VITE_TEACHER_ENDPOINT);
 
-        // Validar estructura
-        const data = response.data as TeacherAPIResponse;
-        if (!data.user_data || typeof data.prefix_profile !== "string") {
-            throw new Error("Respuesta del servidor inválida: falta información del profesor");
-        }
-
-        // Devolver datos combinados en un solo objeto plano
-        return {
-            ...data.user_data,
-            prefix_profile: data.prefix_profile,
-        };
-
-    } catch (error) {
-        console.error("Error en GetTeacherAPI:", error);
-        throw error;
+    // Validar código de estado HTTP
+    if (response.status !== 200) {
+      throw new Error(
+        `HTTP ${response.status}: ${response.data?.message || "Error inesperado del servidor"}`
+      );
     }
+    console.log(response)
+
+    const data = response.data as TTeacherDataResponse;
+
+    // Validación superficial de estructura (mejor usar zod o similar si es crítico)
+    if (!data || typeof data !== "object") {
+      throw new Error("Respuesta del servidor inválida: datos del profesor no presentes");
+    }
+    return data
+  } catch (error) {
+    console.error("Error al obtener los datos del profesor:", error);
+    throw error;
+  }
 }

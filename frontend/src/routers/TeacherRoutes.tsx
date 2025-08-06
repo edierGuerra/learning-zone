@@ -14,6 +14,8 @@ import NotificationCenter from "../modules/teacher/pages/NotificationCenter";
 import TeacherHome from "../modules/teacher/pages/TeacherHome";
 import LessonEditor from "../modules/teacher/components/LessonEditor";
 import LessonCreate from "../modules/teacher/components/LessonCreator";
+import TeacherDashboard from "../modules/teacher/components/TeacherDashboard";
+import CourseCreator from "../modules/teacher/components/CourseCreator";
 
 // COMPONENTE PRINCIPAL
 /**
@@ -31,17 +33,16 @@ export default function TeacherRoutes() {
   return (
     <Routes>
       {/* Home */}
-      <Route path="home-teacher" element={<TeacherHome />} /> {/* Page del teacher */}
-      <Route path="/profile-teacher" element={<TeacherPage/>}/> {/* Perfil del profesor */}
+      <Route path="home-teacher" element={<TeacherDashboard />} /> {/* Page del teacher */}
 
 
       {/* Gestión de cursos */}
       <Route path="/courses" element={<TeacherHome />} />
-      <Route path="/courses/create" element={<div>Crear nuevo curso</div>} />
+      <Route path="/courses/create" element={<CourseCreator/>} />
       <Route path="/courses/:courseId" element={<CourseManagement/>} />
       <Route path="/courses/:courseId/edit" element={<div>Gestionar lecciones</div>} />
 
-      <Route path="courses/lessons/create" element={<LessonCreate />} />
+      <Route path="courses/:courseId/lessons/create" element={<LessonCreate />} />
       <Route path="courses/:courseId/lessons/:lessonId/edit" element={<LessonEditor/>}/>
 
       {/* Gestión de estudiantes */}

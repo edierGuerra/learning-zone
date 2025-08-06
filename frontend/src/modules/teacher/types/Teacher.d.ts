@@ -1,9 +1,11 @@
 // types/Teacher.ts
 import type { TCourse, TEvaluation, TContent } from "../../courses/types/CourseStudent";
+import type { TTeacher } from "../../types/User";
 
 /* CURSO - Response del backend */
 export type TCourseTeacherResponse = Pick<TCourse, 'id' | 'name' | 'description' | 'image' | 'category' | 'name_palette' | 'palette'> & {
   is_published: boolean;
+  teacher_id:TTeacher['id']
 };
 
 /* CURSO - Envío al backend */

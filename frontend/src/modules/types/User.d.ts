@@ -58,7 +58,6 @@ export type TTeacherProfileToken = {
 
 export type TTeacherProfile = {
   id: TTeacher['id'];
-  numIdentification: TTeacher['numIdentification'];
   name: TTeacher['name'];
   lastNames: TTeacher['lastNames'];
   email: TTeacher['email'];

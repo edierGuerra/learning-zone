@@ -8,6 +8,7 @@ import UpdateIsPublishedAPI from '../services/Course/UpdateIsPublished.server';
 import DeleteCourseAPI from '../services/Course/DeleteCourse.serve';
 import toast from 'react-hot-toast';
 import GetCourseTeacherAPI from '../services/Course/GetCourseTeacher.server';
+import '../styles/CourseManagement.css'
 
 export default function CourseManagement() {
   const { lessons, loadInfoCourse, course } = useTeacherCourseContext();
@@ -16,8 +17,8 @@ export default function CourseManagement() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadInfoCourse(idCourse);
-  }, [idCourse, loadInfoCourse]);
+    if(!course) loadInfoCourse(idCourse);
+  }, []);
 
   const handleClickAggLesson = () => {
     authStorage.removeFormLessonInfo();
@@ -63,13 +64,12 @@ export default function CourseManagement() {
       }}
     >
       <header className="header-crud-course-teacher">
-        <div className='container-info-course'>
-          <img
-            className="image-course-hedader-teacher"
+        <img
+            className="image-course-header-teacher"
             src={course?.image}
             alt={`Imagen del curso ${course?.name}`}
-            style={{ borderBottom: `3px solid ${palette.accent}` }}
           />
+        <div className='container-info-course'>
           <span className='category-management-course' style={{ color: palette.accent }}>
             {course?.category}
           </span>
@@ -119,6 +119,7 @@ export default function CourseManagement() {
       </header>
 
       <button
+        className='btn-add-lesson-course'
         onClick={handleClickAggLesson}
         style={{
           backgroundColor: palette.brand,

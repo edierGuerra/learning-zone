@@ -14,8 +14,7 @@ type GetCoursesAPIResponse = {
 
 export default async function GetCoursesTeacherAPI(): Promise<TCoursesTeachers> {
     try {
-        const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/courses`);
-
+        const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/courses/`);
         // Validar status code
         if (response.status !== 200) {
             throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
@@ -23,11 +22,10 @@ export default async function GetCoursesTeacherAPI(): Promise<TCoursesTeachers> 
 
         // Validar estructura de respuesta
         const responseData = response.data as GetCoursesAPIResponse;
-        if (!responseData.courses || !Array.isArray(responseData.courses)) {
+        if (!responseData || !Array.isArray(responseData)) {
             throw new Error('Respuesta del servidor inválida: estructura de datos incorrecta');
         }
-
-        return responseData.courses;
+        return responseData;
 
     } catch (error) {
         console.error('Error en GetCourses:', error);

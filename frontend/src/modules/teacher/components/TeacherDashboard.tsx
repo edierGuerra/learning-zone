@@ -1,17 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { IoIosAdd } from "react-icons/io";
 import '../styles/TeacherDashboard.css';
 import { useTeacherCourseContext } from '../hooks/useCourseTeacher';
 import CardCourseTeacher from './CardCourseTeacher';
 import { useUser } from '../../auth/Hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { authStorage } from '../../../shared/Utils/authStorage';
 
 export default function TeacherDashboard() {
+  const navigate = useNavigate()
+
   const {courses} = useTeacherCourseContext()
   const {user} = useUser()
+  useEffect(() => {
+  console.log("DASHBOARD: courses", courses);
+}, [courses]);
+  authStorage.removeCourseTeacher()
+
+
+  /* Funcion del boton que permite renderizar el formulario del crear curso */
+  const handleClickBtnAddCourse =()=>{
+    /* Redirigir a crear curso */
+    navigate('/teacher/courses/create')
+
+
+  }
 
   return (
     <div className="container-teacher-dashboard">
-      <h2 className='title-welcome-teacher'>Bienvenido {user?.name}</h2>
-      <button className='btn-space-teacher'>Mi Espacio</button>
+      <div className="header-teacher-dashboard">
+        <button className='btn-space-teacher'>Mi Espacio</button>
+        <h2 className='title-welcome-teacher'>Bienvenido {user?.name}</h2>
+        <button className='btn-add-course' onClick={()=>handleClickBtnAddCourse()}>{<IoIosAdd />}</button>
+      </div>
       {/* Contenedor de cursos */}
 
       <div className='container-courses-teacher'>

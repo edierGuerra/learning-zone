@@ -7,7 +7,7 @@ const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 type TCreateLessonAPIResponse = {
   status: number;
   message: string;
-  id_course: TCourseTeacherResponse['id']; // Asumimos que esto es `number`
+  id_course: TCourseTeacherResponse['id'];
 };
 
 export default async function CreateCourseAPI(course: TCourseTeacherSend): Promise<TCourseTeacherResponse['id']> {
@@ -27,6 +27,7 @@ export default async function CreateCourseAPI(course: TCourseTeacherSend): Promi
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log(response)
 
     if (response.status !== 200) {
       throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);

@@ -155,7 +155,9 @@ export function useFormCreateLessons() {
       const lessonCreated = await CreateLessonAPI({idCourse,lessonContent});
 
       /** Obtiene el ID de la lección recién creada */
-      const idLesson = lessonCreated;
+      const idLesson = lessonCreated.id;
+      /* aObtiene el nombre de la leccion recien creada, para mostrarla cuando se ejecute el servicio de la evaluacion */
+      const nameLesson= lessonCreated.name;
       if (!idLesson) throw new Error("No se pudo obtener el ID de la lección");
 
       /** Prepara datos de evaluación */
@@ -179,6 +181,8 @@ export function useFormCreateLessons() {
       }
       setSubmitSuccess(true);
       resetForm();
+      /* MEnsaje */
+      toast.success(`leccion ${nameLesson} Creada exitosamente`)
       toast.success(createEvaluation.message)
 
 

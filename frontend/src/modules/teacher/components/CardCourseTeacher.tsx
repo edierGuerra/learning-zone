@@ -2,6 +2,7 @@ import { GrStatusGood } from "react-icons/gr";
 import { RiProgress8Line } from "react-icons/ri";
 import type { TCourse } from "../../courses/types/CourseStudent";
 import { useNavigate } from "react-router-dom";
+import '../styles/CardCourseCreator.css'
 
 type CardCourseProps = {
   id: number;
@@ -43,7 +44,6 @@ export default function CardCourseTeacher({
         className="image-course-card-teacher"
         src={image}
         alt={`Imagen del curso ${name}`}
-        style={{ borderBottom: `1px solid ${palette.accent}` }}
       />
 
       {/* Título del curso */}

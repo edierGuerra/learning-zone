@@ -13,7 +13,10 @@ const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 type TCreateLessonAPIResponse={
     status:number
     message: string;
-    id_lesson: TLessonTeacherResponse['id'];
+    lesson :{
+        id: TLessonTeacherResponse['id'];
+        name:TLessonTeacherResponse['name']
+    }
 };
 
 type TCreateLessonAPIProps = {
@@ -23,7 +26,7 @@ type TCreateLessonAPIProps = {
 };
 
 
-export default async function CreateLessonAPI({ idCourse, lessonContent}:TCreateLessonAPIProps): Promise<TLessonTeacherResponse['id']> {
+export default async function CreateLessonAPI({ idCourse, lessonContent}:TCreateLessonAPIProps): Promise<TLessonTeacherResponse> {
     try {
         const formData = new FormData();
         formData.append("name", lessonContent.name);
@@ -47,11 +50,11 @@ export default async function CreateLessonAPI({ idCourse, lessonContent}:TCreate
 
         // Validar estructura de respuesta
         const responseData = response.data as TCreateLessonAPIResponse;
-        if (!responseData.id_lesson || !Array.isArray(responseData.id_lesson)) {
+        if (!responseData.lesson || !Array.isArray(responseData.message)) {
             throw new Error('Respuesta del servidor inválida: estructura de datos incorrecta');
         }
 
-        return responseData.id_lesson;
+        return responseData.lesson;
 
     } catch (error) {
         console.error('Error en GetCourses:', error);

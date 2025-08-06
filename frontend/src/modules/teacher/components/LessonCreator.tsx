@@ -1,4 +1,4 @@
-"use client"; // Habilita renderizado del lado del cliente (útil en Next.js)
+"use client";
 
 import {
   BookOpen,
@@ -23,11 +23,14 @@ import {
   SelectContent,
   SelectTrigger,
   SelectValue
-} from "../../../shared/Components/ui/index"; // usa alias limpio
+} from "../../../shared/Components/ui/index";
+
+
 
 import { useEffect } from "react";
 import { authStorage } from "../../../shared/Utils/authStorage";
-import { useFormUpdateLessons } from "../hooks/useFormUpdateLesson";
+import { useFormCreateLessons } from "../hooks/useFormCreateLessons";
+import "../styles/LessonCreator.css"; // 🔹 tu nuevo CSS adaptado
 
 export default function LessonCreate() {
   const {
@@ -43,9 +46,8 @@ export default function LessonCreate() {
     handleQuestionTypeChange,
     handleContentTypeChange,
     handleChange,
-  } = useFormUpdateLessons();
+  } = useFormCreateLessons();
 
-  // Al cargar el componente, intentar rellenar los campos desde localStorage
   useEffect(() => {
     const data = authStorage.getFormLessonInfo();
     if (data) {
@@ -54,40 +56,44 @@ export default function LessonCreate() {
   }, [setFormDataLesson]);
 
   return (
-    <div className="form-container">
-      <div className="form-wrapper">
-        <div className="form-header">
-          <h1>Crear Contenido Educativo</h1>
-          <p>Complete el formulario para crear una nueva lección con su evaluación</p>
+    <div className="container-form-lesson-teacher">
+      <div className="envoltura-form-lesson">
+        <div className="header-form-lesson-teacher">
+          <h1 className="title-create-lesson">Crear Lección</h1>
+          <p className="paragraph-create-lesson">
+            Completa la información de la nueva lección y su evaluación.
+          </p>
         </div>
 
         {submitSuccess && (
           <Alert>
             <AlertDescription>
-              ¡Contenido educativo creado exitosamente!
+              ¡Lección creada exitosamente!
             </AlertDescription>
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form-lesson-teacher">
           <Card>
             <CardHeader>
               <CardTitle>
-                <BookOpen />
+                <BookOpen /> Datos de la Lección
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div>
+              {/* Nombre */}
+              <div className="container-label-input-create-lesson">
                 <Label>Nombre de la Lección *</Label>
                 <Input
                   value={formDataLesson.lesson.name}
                   onChange={handleChange("lesson.name")}
-                  className={errors.lesson?.name && "input-error"}
+                  className={errors.lesson?.name ? "input-lesson-error" : ""}
                 />
-                {errors.lesson?.name && <p className="error">{errors.lesson.name}</p>}
+                {errors.lesson?.name && <p className="text-error-lesson">{errors.lesson.name}</p>}
               </div>
 
-              <div>
+              {/* Texto */}
+              <div className="container-label-input-create-lesson">
                 <Label>Texto Complementario</Label>
                 <Textarea
                   value={formDataLesson.lesson.content.text}
@@ -95,7 +101,8 @@ export default function LessonCreate() {
                 />
               </div>
 
-              <div>
+              {/* Tipo de Contenido */}
+              <div className="container-label-input-create-lesson">
                 <Label>Tipo de Contenido *</Label>
                 <Select
                   value={formDataLesson.lesson.content.content_type}
@@ -111,7 +118,8 @@ export default function LessonCreate() {
                 </Select>
               </div>
 
-              <div>
+              {/* Archivo */}
+              <div className="container-label-input-create-lesson">
                 <Label>Contenido *</Label>
                 <Input
                   type="file"
@@ -127,20 +135,16 @@ export default function LessonCreate() {
                       },
                     }))
                   }
-                  className={errors.lesson?.content?.file ? "input-error" : ""}
+                  className={errors.lesson?.content?.file ? "input-lesson-error" : ""}
                 />
-
                 {errors.lesson?.content?.file && (
-                  <p className="error">{errors.lesson.content.file}</p>
-                )}
-
-                {formDataLesson.lesson.content.file && (
-                  <p>Archivo: {formDataLesson.lesson.content.file.name}</p>
+                  <p className="text-error-lesson">{errors.lesson.content.file}</p>
                 )}
               </div>
             </CardContent>
           </Card>
 
+          {/* Evaluación */}
           <Card>
             <CardHeader>
               <CardTitle>
@@ -148,19 +152,19 @@ export default function LessonCreate() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div>
+              <div className="container-label-input-create-lesson">
                 <Label>Pregunta *</Label>
                 <Textarea
                   value={formDataLesson.evaluation.question}
                   onChange={handleChange("evaluation.question")}
-                  className={errors.evaluation?.question && "input-error"}
+                  className={errors.evaluation?.question ? "input-lesson-error" : ""}
                 />
                 {errors.evaluation?.question && (
-                  <p className="error">{errors.evaluation.question}</p>
+                  <p className="text-error-lesson">{errors.evaluation.question}</p>
                 )}
               </div>
 
-              <div>
+              <div className="container-label-input-create-lesson">
                 <Label>Tipo de Pregunta *</Label>
                 <Select
                   value={formDataLesson.evaluation.question_type}
@@ -174,6 +178,7 @@ export default function LessonCreate() {
                 </Select>
               </div>
 
+              {/* Opciones para Multiple Choice */}
               {formDataLesson.evaluation.question_type === "multiple_choice" && (
                 <div className="options-section">
                   <div className="options-header">
@@ -187,7 +192,7 @@ export default function LessonCreate() {
                     <div key={idx} className="option-item">
                       <Input
                         value={opt}
-                        onChange={(e: { target: { value: string; }; }) => updateOption(idx, e.target.value)}
+                        onChange={(e) => updateOption(idx, e.target.value)}
                       />
                       <Button type="button" onClick={() => removeOption(idx)}>
                         <Trash2 />
@@ -195,9 +200,11 @@ export default function LessonCreate() {
                     </div>
                   ))}
 
-                  {errors.evaluation?.options && <p className="error">{errors.evaluation.options}</p>}
+                  {errors.evaluation?.options && (
+                    <p className="text-error-lesson">{errors.evaluation.options}</p>
+                  )}
 
-                  <div>
+                  <div className="container-label-input-create-lesson">
                     <Label>Respuesta Correcta *</Label>
                     <Select
                       value={formDataLesson.evaluation.correct_answer}
@@ -211,7 +218,7 @@ export default function LessonCreate() {
                       </SelectContent>
                     </Select>
                     {errors.evaluation?.correctAnswer && (
-                      <p className="error">{errors.evaluation.correctAnswer}</p>
+                      <p className="text-error-lesson">{errors.evaluation.correctAnswer}</p>
                     )}
                   </div>
                 </div>
@@ -219,9 +226,9 @@ export default function LessonCreate() {
             </CardContent>
           </Card>
 
-          <div className="form-submit">
+          <div className="btn-send-form-lesson">
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Creando..." : "Crear Contenido"}
+              {isSubmitting ? "Creando..." : "Crear Lección"}
             </Button>
           </div>
         </form>

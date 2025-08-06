@@ -11,26 +11,29 @@ type GetCoursesAPIResponse = {
   message: string;
   course: TCourseTeacherResponse;
 };
+export default async function GetCourseTeacherAPI(
+  idCourse: TCourseTeacherResponse['id']
+): Promise<TCourseTeacherResponse> {
+  try {
+    const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/courses/${idCourse}`);
+    console.log('response', response)
 
-export default async function GetCourseTeacherAPI(idCourse:TCourseTeacherResponse['id']): Promise<TCourseTeacherResponse> {
-    try {
-        const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/courses/${idCourse}`);
 
-        // Validar status code
-        if (response.status !== 200) {
-            throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
-        }
-
-        // Validar estructura de respuesta
-        const responseData = response.data as GetCoursesAPIResponse;
-        if (!responseData.course || !Array.isArray(responseData.course)) {
-            throw new Error('Respuesta del servidor inválida: estructura de datos incorrecta');
-        }
-
-        return responseData.course;
-
-    } catch (error) {
-        console.error('Error en GetCourse:', error);
-        throw error;
+    if (response.status !== 200) {
+      throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
     }
+
+    const responseData = response.data as GetCoursesAPIResponse;
+
+
+    if (!responseData.course || typeof responseData.course !== 'object') {
+      throw new Error('Respuesta del servidor inválida: no se encontró el curso');
+    }
+
+
+    return responseData.course;
+  } catch (error) {
+    console.error('Error en GetCourse:', error);
+    throw error;
+  }
 }

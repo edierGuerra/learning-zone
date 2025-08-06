@@ -27,7 +27,7 @@ import {
 
 import { useEffect } from "react";
 import { authStorage } from "../../../shared/Utils/authStorage";
-import { useFormCreateLessons } from "../hooks/useFormCreateLessons";
+import { useFormUpdateLessons } from "../hooks/useFormUpdateLesson";
 
 export default function LessonEditor() {
   const {
@@ -43,7 +43,7 @@ export default function LessonEditor() {
     handleQuestionTypeChange,
     handleContentTypeChange,
     handleChange,
-  } = useFormCreateLessons();
+  } = useFormUpdateLessons();
 
   // Al cargar el componente, intentar rellenar los campos desde localStorage
   useEffect(() => {

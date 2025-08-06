@@ -1,9 +1,14 @@
+import logging
 import os
 import cloudinary
 from uuid import uuid4
 from fastapi import UploadFile
 import cloudinary.uploader
 from config import settings
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 cloudinary.config(
     cloud_name=settings.cloud_name,
@@ -13,7 +18,8 @@ cloudinary.config(
 )
 
 
-# -- Funciones de utilidad para manejar archivos y Cloudinary
+# -- Funciones de utilidad para maneja
+# r archivos y Cloudinary
 async def save_and_upload_file(
     file: UploadFile, upload_folder: str = "uploads", public_id: str = None
 ) -> str:
@@ -75,15 +81,60 @@ async def update_file_on_cloudinary(file: UploadFile, public_id: str) -> str:
     return url
 
 
-async def delete_file_from_cloudinary(public_id: str) -> None:
+async def delete_file_from_cloudinary(
+    public_id: str, resource_type: str = "image"
+) -> None:
     """
     Elimina un archivo de Cloudinary usando su public_id.
     :param public_id: ID público del archivo en Cloudinary a eliminar.
+    :param resource_type: Tipo de recurso ('image', 'video', 'raw', etc.). Por defecto 'image'.
     """
     try:
-        cloudinary.uploader.destroy(public_id, resource_type="auto")
+        # Intenta eliminar con el tipo especificado
+        result = cloudinary.uploader.destroy(public_id, resource_type=resource_type)
+
+        # Si no se encuentra con el tipo especificado, intenta con otros tipos comunes
+        if result.get("result") == "not found" and resource_type == "image":
+            logger.info(
+                f"No se encontró como imagen, intentando con otros tipos para: {public_id}"
+            )
+
+            # Intenta con video
+            result = cloudinary.uploader.destroy(public_id, resource_type="video")
+            if result.get("result") == "not found":
+                # Intenta con raw (documentos, etc.)
+                result = cloudinary.uploader.destroy(public_id, resource_type="raw")
+
+        logger.info(f"Resultado de eliminación de Cloudinary: {result}")
+
     except Exception as e:
-        print(f"Error al eliminar el archivo de Cloudinary: {e}")
+        logger.error(f"Error al eliminar el archivo de Cloudinary: {e}")
+
+
+async def delete_file_from_cloudinary_auto(public_id: str) -> bool:
+    """
+    Elimina un archivo de Cloudinary detectando automáticamente el tipo de recurso.
+    :param public_id: ID público del archivo en Cloudinary a eliminar.
+    :return: True si se eliminó exitosamente, False en caso contrario.
+    """
+    resource_types = ["image", "video", "raw"]
+
+    for resource_type in resource_types:
+        try:
+            result = cloudinary.uploader.destroy(public_id, resource_type=resource_type)
+            if result.get("result") == "ok":
+                logger.info(
+                    f"Archivo eliminado exitosamente como {resource_type}: {public_id}"
+                )
+                return True
+        except Exception as e:
+            logger.warning(f"Error al intentar eliminar como {resource_type}: {e}")
+            continue
+
+    logger.error(
+        f"No se pudo eliminar el archivo con ningún tipo de recurso: {public_id}"
+    )
+    return False
 
 
 # -- Otras funciones de utilidad --

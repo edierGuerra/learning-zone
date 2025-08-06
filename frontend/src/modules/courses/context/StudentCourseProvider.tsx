@@ -27,6 +27,7 @@ import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
 import { StudentCourseContext } from "./StudentCourseContext";
 import type { TLessonTeacherResponse } from "../../teacher/types/Teacher";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../auth/Hooks/useAuth";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -35,6 +36,8 @@ type Props = {
 
 // Provider principal que controla todo lo relacionado con la sesión del estudiante
 export const StudentCourseProvider = ({ children }: Props) => {
+
+  const { role } = useUser()
   const navigate = useNavigate()
   const [courses, setCourses] = useState<TCoursesStudents>([]);
   const [lessons, setLessons] = useState<TLessonsStudent>([]);
@@ -54,6 +57,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
     const storedPaletteColors = authStorage.getPaletteColors(); // Trae evaluacion guardado si existe */
     const token = authStorage.getToken();
     if (token && storedCourses.length ===0) {
+      if (role !== "student") return; // 👈 evitar que se ejecute si no es estudiante
       // Si no existen cursos, ejecutar el servicio que envía el token al backend y obtiene los cursos del estudiante
       const infoCourses = async () => {
         // Accediendo al backend y obteniendo los cursos

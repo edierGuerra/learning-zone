@@ -34,59 +34,49 @@ export const TeacherCourseProvider = ({ children }: Props) => {
   const [palette, setPalette] = useState<TColorPalette | null>(null);
   // Carga inicial: verifica si hay cursos guardados en localStorage
   useEffect(() => {
-    const storedCourses = authStorage.getCoursesTeacher(); // Trae cursos guardado si existe
-    const storedCourse = authStorage.getCourseTeacher(); // Trae cursos guardado si existe
-    const storedLessons = authStorage.getLessonsTeacher() /* Trae las lecciones guardadas si existen */
-    const storedPaletteColors = authStorage.getPaletteColors(); // Trae palette guardado si existe */
+    const storedCourses = authStorage.getCoursesTeacher();
+    const storedCourse = authStorage.getCourseTeacher();
+    const storedLessons = authStorage.getLessonsTeacher();
+    const storedPaletteColors = authStorage.getPaletteColors();
     const token = authStorage.getToken();
-    if (token && storedCourses.length ===0) {
-      // Si no existen cursos, ejecutar el servicio que envía el token al backend y obtiene los cursos del estudiante
+
+    if (token && (!storedCourses || storedCourses.length === 0)) {
+      // Solo llama a la API si no hay cursos en localStorage
       const infoCourses = async () => {
-        // Accediendo al backend y obteniendo los cursos
+        console.log('se va ejecutar');
         const dataCourses = await GetCoursesTeacherAPI();
-        // Almacenando los cursos del profesor en el localStorage
+        console.log("Cursos obtenidos:", dataCourses);
         authStorage.setCoursesTeacher(dataCourses);
-        /* Setear los cursos en el estado */
         setCourses(dataCourses);
       };
-
       infoCourses();
-    }
-
-    // Si hay sesión guardada, se setean los valores
-    if (storedPaletteColors) {
-      setPalette(storedPaletteColors);
-    }
-    // Si hay sesión guardada, se setean los valores
-    if (storedCourses) {
+    } else if (storedCourses) {
+      // Solo usa localStorage si hay cursos guardados
       setCourses(storedCourses);
     }
-    if (storedCourse) {
-      setCourse(storedCourse);
-    }
 
-    // Si hay sesión guardada, se setean los valores
-    if (storedLessons) {
-      setLessons(storedLessons);
-    }
+    if (storedPaletteColors) setPalette(storedPaletteColors);
+    if (storedCourse) setCourse(storedCourse);
+    if (storedLessons) setLessons(storedLessons);
   }, []);
 
 
 
-
+useEffect(() => {
   const storageLessons = authStorage.getLessonsTeacher()
-  useEffect(()=>{
-    if(storageLessons!.length >0){
-      setLessons(storageLessons!)
-    }
-  },[])
+  if (storageLessons && storageLessons.length > 0) {
+    setLessons(storageLessons)
+  }
+}, [])
+
   /* Funcion que se encarga de solicitar la infor de un curso */
   const loadInfoCourse =async (idCourse:TCourseTeacherResponse['id'])=>{
+    alert('se ejecuta load')
     const response = await GetCourseTeacherAPI(idCourse)
     /* Setear en el estado */
+    authStorage.setCourseTeacher(response)
     setCourse(response)
     /* Setear en el localStorage */
-    authStorage.setCourseTeacher(response)
 
 
 

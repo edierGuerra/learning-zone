@@ -18,18 +18,14 @@ export default function useNotifications(pollingInterval=4000 ) {
 
     // Activar polling (peticion automatica) automático con useEffect
     const token = authStorage.getToken();
-
     useEffect(() => {
+    const role = authStorage.getRole();
 
-        if(token ){
-            // Llama al cargar
-            refreshNotifications();
-            const timer = setInterval(refreshNotifications, pollingInterval);
-            // Llama cada [pollingInterval] milisegundos
+    if (token && role === "student") {
+        refreshNotifications(); // Solo si es estudiante
+        const timer = setInterval(refreshNotifications, pollingInterval);
         return () => clearInterval(timer);
-
     }
-
     }, []);
 
     const deleteItemNotification= async(idItemNotification:number)=>{

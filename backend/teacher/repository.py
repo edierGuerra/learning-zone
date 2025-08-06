@@ -207,6 +207,28 @@ class TeacherRepo:
         logger.info(f"Lección con ID {lesson_id} obtenida exitosamente.")
         return result.scalar_one_or_none()
 
+    async def delete_lesson(self, lesson_id: int) -> None:
+        """
+        Elimina una lección por su ID.
+        :param lesson_id: ID de la lección a eliminar.
+        """
+        stmt = select(Lesson).where(Lesson.id == lesson_id)
+        result = await self.db.execute(stmt)
+        lesson = result.scalar_one_or_none()
+
+        if not lesson:
+            logger.error(f"Lección con ID {lesson_id} no encontrada.")
+            raise ValueError("Lección no encontrada")
+
+        # Eliminar contenidos asociados y sus archivos si es necesario
+        for content in lesson.contents:
+            await delete_file_from_cloudinary(content.content)
+            await self.db.delete(content)
+
+        await self.db.delete(lesson)
+        await self.db.commit()
+        logger.info(f"Lección ID {lesson_id} eliminada exitosamente.")
+
     # --- Métodos de Evaluaciones ---
 
     async def get_lessons_by_course(self, course_id: int) -> list[Lesson]:

@@ -139,7 +139,14 @@ class TeacherServices:
 
         return lesson_data
 
-    # --- Métodos de Evaluaciones ---
+    async def delete_lesson(self, lesson_id: int) -> dict:
+        """
+        Elimina una lección por su ID.
+        :param lesson_id: ID de la lección a eliminar.
+        :return: Mensaje de confirmación.
+        """
+        await self.repo.delete_lesson(lesson_id)
+        return {"message": "Lección eliminada exitosamente."}
 
     async def get_lesson_by_id(self, lesson_id: int):
         """
@@ -153,6 +160,7 @@ class TeacherServices:
         return lesson
 
     # --- Métodos de Evaluaciones ---
+
     async def create_evaluation(self, data: dict):
         """
         Crea una evaluación considerando el tipo de pregunta.

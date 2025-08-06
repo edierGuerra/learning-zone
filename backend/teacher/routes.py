@@ -345,7 +345,7 @@ async def update_evaluation(
 # --- Rutas de notificaciones ---
 
 
-@router.post("notifications/", dependencies=[Depends(bearer_scheme)])
+@router.post("/notifications/", dependencies=[Depends(bearer_scheme)])
 async def create_notifications(
     notification_data: NotificationCreate,
     services: NotificationService = Depends(get_notification_services),
@@ -396,3 +396,54 @@ async def get_notifications(
     Obtiene todas las notificaciones para un profesor específico.
     """
     return await services.get_notifications_by_teacher_id(teacher.id)
+
+
+# --- Rutas de estudiantes ---
+@router.post(
+    "/students/identifications",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def register_student_identification(
+    file: UploadFile = File(...),
+    services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Registra números de identificación de estudiantes desde un archivo.
+    Acepta archivos de formato: .txt, .xlsx, .docx
+    """
+    # Validar tipo de archivo
+    allowed_types = [
+        "text/plain",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
+
+    allowed_extensions = [".txt", ".xlsx", ".docx"]
+    file_extension = file.filename.lower().split(".")[-1] if file.filename else ""
+
+    if (
+        file.content_type not in allowed_types
+        and f".{file_extension}" not in allowed_extensions
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Formato de archivo no soportado. Solo se permiten archivos .txt, .xlsx, .docx",
+        )
+
+    try:
+        result = await services.register_students(file)
+        return {
+            "message": f"Proceso completado. {result['processed']} números procesados, "
+            f"{result['successful']} registrados exitosamente, "
+            f"{result['duplicates']} duplicados omitidos, "
+            f"{result['errors']} errores.",
+            "details": result,
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error interno del servidor: {str(e)}"
+        )

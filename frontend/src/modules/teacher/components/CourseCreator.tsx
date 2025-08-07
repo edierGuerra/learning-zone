@@ -13,6 +13,7 @@ import '../styles/CourseCreator.css';
 import { useFormCreateCourse } from "../hooks/Courses/useFormCreateCourse";
 import { COURSE_CATEGORY_LABELS } from "../../../shared/constant/CategoriesCourses";
 import { educationalPalettes, type TPaletteNames } from "../../../shared/theme/ColorPalettesCourses";
+import { useState } from "react";
 
 export default function CourseCreator() {
   const {
@@ -25,6 +26,8 @@ export default function CourseCreator() {
     handlePaletteChange,
     handleSubmit
   } = useFormCreateCourse();
+
+  const [viewpalettes, setViewpalettes] = useState(false);
 
   return (
     <div className="container-form-course-teacher">
@@ -85,33 +88,17 @@ export default function CourseCreator() {
             {/* Paleta de colores */}
             <div className="container-label-input-create-course">
               <Label>Paleta de Colores *</Label>
-              <p
-                key={formData.palette}
-                style={{
-                  background: `linear-gradient(40deg, ${formData.paletteColors.brand}, ${formData.paletteColors.surface}, ${formData.paletteColors.text}, ${formData.paletteColors.accent})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  fontSize: '22px',
-                  fontWeight: "bold",
-                  justifySelf: 'center',
-                  padding: '12px',
-                  borderRadius: '40px',
-                  borderLeft: `2px solid ${formData.paletteColors.accent}`,
-                  borderRight: `2px solid ${formData.paletteColors.brand}`,
-                  borderTop: `2px solid ${formData.paletteColors.surface}`,
-                  borderBottom: `2px solid ${formData.paletteColors.text}`,
-                }}
-              >
-                {formData.palette}
-              </p>
 
-              <div className="preview-palette-course">
-                <span style={{ backgroundColor: formData.paletteColors.brand }}></span>
-                <span style={{ backgroundColor: formData.paletteColors.surface }}></span>
-                <span style={{ backgroundColor: formData.paletteColors.text }}></span>
-                <span style={{ backgroundColor: formData.paletteColors.accent }}></span>
+              <div className="container-prev-btn-view">
+                <button className="btn-view-palette" onClick={()=>setViewpalettes(!viewpalettes)}>Ver paletas</button>
+                <div className="preview-palette-course">
+                  <span style={{ backgroundColor: formData.paletteColors.brand }}></span>
+                  <span style={{ backgroundColor: formData.paletteColors.surface }}></span>
+                  <span style={{ backgroundColor: formData.paletteColors.text }}></span>
+                  <span style={{ backgroundColor: formData.paletteColors.accent }}></span>
+                </div>
               </div>
-
+              {viewpalettes &&
               <div className="select-palette-options-course">
                 {Object.entries(educationalPalettes).map(([name, colors]) => (
                   <button
@@ -127,6 +114,8 @@ export default function CourseCreator() {
                   </button>
                 ))}
               </div>
+
+              }
             </div>
 
             {/* Imagen */}

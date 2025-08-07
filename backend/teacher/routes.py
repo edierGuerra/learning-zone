@@ -12,7 +12,12 @@ from fastapi.security import HTTPBearer
 from routes.notifications_routes import get_notification_services
 from schemas.lesson_schemas import LessonPResponse
 from schemas.notification_schemas import NotificationCreate, NotificationResponse
-from teacher.schemas import EvaluationCreate, EvaluationUpdate, LessonCResponse
+from teacher.schemas import (
+    EvaluationCreate,
+    EvaluationUpdate,
+    IdentificationCreate,
+    LessonCResponse,
+)
 from services.notification_services import NotificationService
 from teacher.model import Teacher
 from .service import TeacherServices
@@ -25,8 +30,30 @@ from .utils import generate_profile_prefix
 
 router = APIRouter(prefix="/api/v1/teachers", tags=["Teacher"])
 
-
 bearer_scheme = HTTPBearer()
+
+
+# ---- Rutas de autenticación ----
+@router.post(
+    "/student",
+    status_code=status.HTTP_201_CREATED,
+    description="Autentica a un estudiante y devuelve su información.",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def authenticate_student(
+    data: IdentificationCreate,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Autentica a un estudiante y devuelve un mensaje de éxito
+    """
+    new_ident = await teacher_services.add_identification(data.n_identification)
+    return {
+        "message": "Identificación registrada exitosamente",
+        "id": new_ident.id,
+        "n_identification": new_ident.n_identification,
+    }
 
 
 # ---- Rutas de Cursos ----

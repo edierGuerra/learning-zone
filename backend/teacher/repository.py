@@ -32,6 +32,28 @@ class TeacherRepo:
     def __init__(self, db: AsyncSession):
         self.db = db
 
+    # --- Metodos de autenticación ---
+    async def add_identification(self, n_identification: int):
+        # verifica si el estudiante existe
+
+        stmt = select(Identification).where(
+            Identification.n_identification == n_identification
+        )
+        result = await self.db.execute(stmt)
+        existing = result.scalar_one_or_none()
+
+        if existing:
+            raise HTTPException(
+                status_code=400, detail="La identificación ya está registrada."
+            )
+
+        new_ident = Identification(n_identification=n_identification)
+        self.db.add(new_ident)
+        await self.db.commit()
+        await self.db.refresh(new_ident)
+        logger.info(f"Estudiante con ID {n_identification} autenticado exitosamente.")
+        return new_ident
+
     # --- Métodos de Cursos ---
 
     async def create_course(self, course: dict) -> Course:
@@ -184,6 +206,8 @@ class TeacherRepo:
             content_url = await save_and_upload_file(
                 content_data["content"], public_id=new_lesson.id
             )
+        else:
+            content_url = None
 
         new_content = Content(
             lesson_id=new_lesson.id,

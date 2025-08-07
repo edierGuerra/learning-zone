@@ -15,6 +15,12 @@ class CourseServices:
         """
         Retorna los cursos del estudiante si existen, de lo contrario retorna una lista vacía.
         """
-        return await self.course_repository.get_courses_by_student_id(
-            id_student, self.student_repository
+        courses = []
+        all_courses = await self.course_repository.get_courses_by_student_id(
+            id_student, student_repo=self.student_repository
         )
+        if all_courses:
+            for course in all_courses:
+                if course.get("published"):
+                    courses.append(course)
+        return courses

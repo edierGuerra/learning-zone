@@ -87,7 +87,7 @@ async def update_course(
     course_id: int,
     name: str = Form(None),
     description: str = Form(None),
-    image: UploadFile = File(None),
+    image: Optional[UploadFile] = File(None),
     teacher_services: TeacherServices = Depends(get_teacher_services),
     teacher: Teacher = Depends(get_current_teacher),
 ):
@@ -99,6 +99,8 @@ async def update_course(
         name = None
     if description == "":
         description = None
+    if image == "":
+        image = None
     course = await teacher_services.get_course_by_id(course_id)
     if not course:
         return {"message": "Curso no encontrado."}

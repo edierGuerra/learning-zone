@@ -1,7 +1,15 @@
+import json
 import logging
-from fastapi import HTTPException
+from fastapi import HTTPException, UploadFile
+
+from models.evaluation_model import QuestionType
+from models.lesson_model import Lesson
 from .repository import TeacherRepo
-from teacher.utils import save_and_upload_file, update_file_on_cloudinary
+from .utils import (
+    read_student_identification,
+    save_and_upload_file,
+    update_file_on_cloudinary,
+)
 from models.course_model import Course
 
 logging.basicConfig(level=logging.INFO)
@@ -11,6 +19,13 @@ logger = logging.getLogger(__name__)
 class TeacherServices:
     def __init__(self, repo: TeacherRepo):
         self.repo = repo
+
+    # --- Métodos de autenticación---
+    async def add_identification(self, n_identification: int) -> int:
+        """
+        Crea un nuevo id del estudiante por medio de un profesor.
+        """
+        return await self.repo.add_identification(n_identification)
 
     # --- Métodos de Cursos ---
     async def create_course(self, course: dict) -> dict:
@@ -102,19 +117,61 @@ class TeacherServices:
                 status_code=400, detail="Archivo requerido para contenido multimedia."
             )
 
-        content_url = ""
-        if content.get("file"):
-            content_url = await save_and_upload_file(content["file"])
+        # if content.get("file"):
+        #     content_url = await save_and_upload_file(content["file"])
 
         return await self.repo.create_lesson_with_content(
             name=lesson["name"],
             id_course=lesson["id_course"],
             content_data={
                 "content_type": content["content_type"],
-                "content": content_url,
+                "content": content.get("file"),  # Puede ser None si es texto
                 "text": content["text"],
             },
         )
+
+    async def get_lessons_by_course(self, course_id: int) -> list:
+        """
+        Obtiene todas las lecciones de un curso por su ID.
+        :param course_id: ID del curso.
+        :return: Lista de lecciones.
+        """
+        lessons = await self.repo.get_lessons_by_course(course_id)
+
+        lesson_data = []
+        for lesson in lessons:
+            first_content = lesson.contents[0] if lesson.contents else None
+
+            # Creamos un dict manualmente que coincida con el esquema `LessonCResponse`
+            lesson_data.append(
+                {
+                    "id": lesson.id,
+                    "name": lesson.name,
+                    "content": first_content,  # Puede ser None si no tiene contenido aún
+                }
+            )
+
+        return lesson_data
+
+    async def update_lesson(
+        self, lesson_id: int, lesson_data: dict, content_data: dict
+    ) -> Lesson:
+        """
+        Actualiza una lección existente.
+        :param lesson_id: ID de la lección a actualizar.
+        :param lesson_data: Datos actualizados de la lección.
+        :return: La lección actualizada.
+        """
+        return await self.repo.update_lesson(lesson_id, lesson_data, content_data)
+
+    async def delete_lesson(self, lesson_id: int) -> dict:
+        """
+        Elimina una lección por su ID.
+        :param lesson_id: ID de la lección a eliminar.
+        :return: Mensaje de confirmación.
+        """
+        await self.repo.delete_lesson(lesson_id)
+        return {"message": "Lección eliminada exitosamente."}
 
     async def get_lesson_by_id(self, lesson_id: int):
         """
@@ -128,6 +185,7 @@ class TeacherServices:
         return lesson
 
     # --- Métodos de Evaluaciones ---
+
     async def create_evaluation(self, data: dict):
         """
         Crea una evaluación considerando el tipo de pregunta.
@@ -151,3 +209,113 @@ class TeacherServices:
                 )
 
         return await self.repo.create_evaluation_for_lesson(data)
+
+    async def get_evaluation_by_lesson_id(self, lesson_id: int):
+        """
+        Obtiene una evaluación por el ID de la lección.
+        :param lesson_id: ID de la lección.
+        :return: Objeto Evaluation.
+        """
+        evaluation = await self.repo.get_evaluation_by_lesson_id(lesson_id)
+        if not evaluation:
+            raise HTTPException(status_code=404, detail="Evaluación no encontrada")
+        return evaluation
+
+    # async def update_evaluation(self, evaluation_id: int, data: dict):
+    #     """
+    #     Actualiza una evaluación existente.
+    #     :param evaluation_id: ID de la evaluación a actualizar.
+    #     :param data: Datos actualizados de la evaluación.
+    #     :return: La evaluación actualizada.
+    #     """
+    #     return await self.repo.update_evaluation(evaluation_id, data)
+
+    async def update_evaluation(self, evaluation_id: int, data: dict):
+        """
+        Actualiza una evaluación considerando el tipo de pregunta y evitando errores
+        al cambiar entre open_question y multiple_choice.
+        """
+        # Si pasa de OPEN_QUESTION a MULTIPLE_CHOICE
+        if data.get("question_type") == QuestionType.MULTIPLE_CHOICE:
+            # Validar opciones
+            options = data.get("options")
+            if not options or not isinstance(options, list) or len(options) < 2:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Debes enviar al menos dos opciones válidas como lista.",
+                )
+            if not data.get("correct_answer"):
+                raise HTTPException(
+                    status_code=400,
+                    detail="La respuesta correcta es requerida para preguntas de opción múltiple.",
+                )
+            # Serializar a JSON para almacenar en DB
+            data["options"] = json.dumps(options)
+
+        # Si pasa de MULTIPLE_CHOICE a OPEN_QUESTION
+        elif data.get("question_type") == QuestionType.OPEN_QUESTION:
+            data["options"] = None
+            data["correct_answer"] = None
+
+        # Si no cambia el tipo pero envía lista, asegurar serialización
+        elif isinstance(data.get("options"), list):
+            data["options"] = json.dumps(data["options"])
+
+        return await self.repo.update_evaluation(evaluation_id, data)
+
+    # --- Métodos de Notificaciones ---
+    async def get_notifications_by_teacher_id(self, teacher_id: int):
+        """
+        Obtiene las notificaciones asociadas a un profesor.
+        :param teacher_id: ID del profesor.
+        :return: Lista de notificaciones.
+        """
+        notifications = await self.repo.get_notifications_by_teacher_id(teacher_id)
+        if not notifications:
+            raise HTTPException(
+                status_code=404, detail="No se encontraron notificaciones."
+            )
+        return notifications
+
+    # --- Métodos de Estudiantes ---
+    async def register_students(self, file: UploadFile) -> dict:
+        """
+        Registra estudiantes en el sistema desde un archivo.
+        :param file: Archivo con números de identificación
+        :return: Diccionario con estadísticas del proceso
+        """
+        try:
+            identification_numbers = await read_student_identification(file)
+
+            results = {
+                "processed": len(identification_numbers),
+                "successful": 0,
+                "duplicates": 0,
+                "errors": 0,
+                "details": [],
+            }
+
+            for id_number in identification_numbers:
+                result = await self.repo.register_identification(id_number)
+
+                if result["success"]:
+                    results["successful"] += 1
+                elif result["reason"] == "duplicate":
+                    results["duplicates"] += 1
+                else:
+                    results["errors"] += 1
+
+                results["details"].append(result)
+
+            logger.info(
+                f"Proceso completado: {results['successful']} registrados, "
+                f"{results['duplicates']} duplicados, {results['errors']} errores"
+            )
+
+            return results
+
+        except Exception as e:
+            logger.error(f"Error en register_students: {e}")
+            raise HTTPException(
+                status_code=500, detail=f"Error procesando archivo: {str(e)}"
+            )

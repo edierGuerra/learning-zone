@@ -1,6 +1,12 @@
 from pydantic import BaseModel, model_validator
 from typing import List, Optional
 
+from models.evaluation_model import QuestionType
+
+
+class IdentificationCreate(BaseModel):
+    n_identification: int
+
 
 class TeacherSchema(BaseModel):
     id: int
@@ -15,7 +21,7 @@ class LessonCreate(BaseModel):
 
 
 class EvaluationCreate(BaseModel):
-    question_type: str
+    question_type: QuestionType
     question: str
     options: Optional[List[str]] = None
     correct_answer: Optional[str] = None
@@ -25,7 +31,7 @@ class EvaluationCreate(BaseModel):
         """
         Valida los campos en función del tipo de pregunta.
         """
-        if self.question_type == "multiple_choice":
+        if self.question_type == QuestionType.MULTIPLE_CHOICE:
             if not self.options or len(self.options) < 2:
                 raise ValueError(
                     "Las preguntas de opción múltiple requieren al menos dos opciones."
@@ -34,7 +40,62 @@ class EvaluationCreate(BaseModel):
                 raise ValueError(
                     "Las preguntas de opción múltiple requieren una respuesta correcta."
                 )
-        elif self.question_type == "open_question":
+        elif self.question_type == QuestionType.OPEN_QUESTION:
             object.__setattr__(self, "options", None)
             object.__setattr__(self, "correct_answer", None)
         return self
+
+
+class EvaluationUpdate(BaseModel):
+    question_type: QuestionType
+    question: Optional[str] = None
+    options: Optional[list[str]] = None
+    correct_answer: Optional[str] = None
+
+    @model_validator(mode="after")
+    def validate_based_on_type(self):
+        """
+        Valida los campos solo si question_type está presente.
+        """
+        if self.question_type == QuestionType.MULTIPLE_CHOICE:
+            if self.options is not None:
+                if not self.options or len(self.options) < 2:
+                    raise ValueError(
+                        "Las preguntas de opción múltiple requieren al menos dos opciones."
+                    )
+            if self.correct_answer is not None and not self.correct_answer.strip():
+                raise ValueError(
+                    "Las preguntas de opción múltiple requieren una respuesta correcta."
+                )
+        elif self.question_type == QuestionType.OPEN_QUESTION:
+            object.__setattr__(self, "options", None)
+            object.__setattr__(self, "correct_answer", None)
+        return self
+
+
+class ContentSchema(BaseModel):
+    id: int
+    content_type: str
+    content: Optional[str] = None
+    text: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class LessonCResponse(BaseModel):
+    id: int
+    name: str
+    contents: List[ContentSchema]
+
+    class Config:
+        from_attributes = True
+
+
+# async def create_evaluation_for_lesson(
+#     course_id: int,
+#     lesson_id: int,
+#     question_type: QuestionType = Form(...),
+#     question: str = Form(...),
+#     options: Optional[str] = Form(None),  # String JSON del frontend
+#     correct_answer: Optional[str] = Form(None),

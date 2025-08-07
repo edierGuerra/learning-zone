@@ -4,6 +4,10 @@ from typing import List, Optional
 from models.evaluation_model import QuestionType
 
 
+class IdentificationCreate(BaseModel):
+    n_identification: int
+
+
 class TeacherSchema(BaseModel):
     id: int
     name: str

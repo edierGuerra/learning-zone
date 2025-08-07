@@ -16,6 +16,13 @@ class TeacherServices:
     def __init__(self, repo: TeacherRepo):
         self.repo = repo
 
+    # --- Métodos de autenticación---
+    async def add_identification(self, n_identification: int) -> int:
+        """
+        Crea un nuevo id del estudiante por medio de un profesor.
+        """
+        return await self.repo.add_identification(n_identification)
+
     # --- Métodos de Cursos ---
     async def create_course(self, course: dict) -> dict:
         """

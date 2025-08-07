@@ -1,11 +1,15 @@
 import json
 import logging
-from fastapi import HTTPException
+from fastapi import HTTPException, UploadFile
 
 from models.evaluation_model import QuestionType
 from models.lesson_model import Lesson
 from .repository import TeacherRepo
-from teacher.utils import save_and_upload_file, update_file_on_cloudinary
+from .utils import (
+    read_student_identification,
+    save_and_upload_file,
+    update_file_on_cloudinary,
+)
 from models.course_model import Course
 
 logging.basicConfig(level=logging.INFO)
@@ -272,3 +276,46 @@ class TeacherServices:
                 status_code=404, detail="No se encontraron notificaciones."
             )
         return notifications
+
+    # --- Métodos de Estudiantes ---
+    async def register_students(self, file: UploadFile) -> dict:
+        """
+        Registra estudiantes en el sistema desde un archivo.
+        :param file: Archivo con números de identificación
+        :return: Diccionario con estadísticas del proceso
+        """
+        try:
+            identification_numbers = await read_student_identification(file)
+
+            results = {
+                "processed": len(identification_numbers),
+                "successful": 0,
+                "duplicates": 0,
+                "errors": 0,
+                "details": [],
+            }
+
+            for id_number in identification_numbers:
+                result = await self.repo.register_identification(id_number)
+
+                if result["success"]:
+                    results["successful"] += 1
+                elif result["reason"] == "duplicate":
+                    results["duplicates"] += 1
+                else:
+                    results["errors"] += 1
+
+                results["details"].append(result)
+
+            logger.info(
+                f"Proceso completado: {results['successful']} registrados, "
+                f"{results['duplicates']} duplicados, {results['errors']} errores"
+            )
+
+            return results
+
+        except Exception as e:
+            logger.error(f"Error en register_students: {e}")
+            raise HTTPException(
+                status_code=500, detail=f"Error procesando archivo: {str(e)}"
+            )

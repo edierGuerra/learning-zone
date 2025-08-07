@@ -430,3 +430,40 @@ class TeacherRepo:
             f"Se encontraron {len(notifications)} notificaciones para el profesor ID {teacher_id}."
         )
         return notifications
+
+    async def register_identification(self, id_number: str) -> dict:
+        """
+        Registra la identificación de un estudiante, manejando duplicados correctamente.
+        :param id_number: Número de identificación a registrar
+        :return: Diccionario con resultado de la operación
+        """
+        try:
+            # Verificar si ya existe
+            existing = await self.db.execute(
+                select(Identification).where(
+                    Identification.n_identification == id_number
+                )
+            )
+
+            if existing.scalar_one_or_none():
+                logger.info(f"Número de identificación ya existe: {id_number}")
+                return {"success": False, "reason": "duplicate", "id_number": id_number}
+
+            # Crear nueva identificación
+            identification = Identification(n_identification=id_number)
+            self.db.add(identification)
+            await self.db.commit()
+            await self.db.refresh(identification)
+
+            logger.info(f"Identificación registrada exitosamente: {id_number}")
+            return {"success": True, "reason": "created", "id_number": id_number}
+
+        except Exception as e:
+            logger.error(f"Error al registrar identificación {id_number}: {e}")
+            await self.db.rollback()
+            return {
+                "success": False,
+                "reason": "error",
+                "id_number": id_number,
+                "error": str(e),
+            }

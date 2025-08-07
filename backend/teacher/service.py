@@ -66,7 +66,8 @@ class TeacherServices:
             course_data["image"] = await update_file_on_cloudinary(
                 course_data["image"], public_id=public_id
             )
-        return await self.repo.update_course(course_id, course_data)
+        courses = await self.repo.update_course(course_id, course_data)
+        return courses.id
 
     async def delete_course(self, course_id: int) -> dict:
         """

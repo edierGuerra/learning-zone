@@ -2,6 +2,10 @@ from repository.course_repository import CourseRepository
 from repository.student_repository import StudentRepository
 from typing import List
 from models.course_model import Course
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class CourseServices:
@@ -20,7 +24,9 @@ class CourseServices:
             id_student, student_repo=self.student_repository
         )
         if all_courses:
+            logger.info("Cursos encontrados")
             for course in all_courses:
                 if course.get("published"):
+                    logger.info(f"Curso publicado ID: {course.id}")
                     courses.append(course)
-        return courses
+            return courses

@@ -28,6 +28,11 @@ import json
 from .oauth import get_current_teacher
 from .utils import generate_profile_prefix
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/api/v1/teachers", tags=["Teacher"])
 
 bearer_scheme = HTTPBearer()
@@ -365,7 +370,7 @@ async def create_evaluation_for_lesson(
 async def get_evaluation(
     id_lesson: int,
     teacher_services: TeacherServices = Depends(get_teacher_services),
-    id_course: int = None,
+    id_course: Optional[int] = None,
 ):
     """Obtiene una evaluación por el ID de la lección."""
     return await teacher_services.get_evaluation_by_lesson_id(lesson_id=id_lesson)
@@ -385,18 +390,40 @@ async def update_evaluation(
     Actualiza una evaluación existente. Permite modificar solo la pregunta, solo las opciones,
     solo el correct_answer, o cualquier combinación de estos campos.
     """
-    evaluation_data = evaluation.model_dump(exclude_unset=True)
+    try:
+        status: int = 000
+        message: str = ""
 
-    update_evaluation = await teacher_services.get_evaluation_by_lesson_id(lesson_id)
+        evaluation_data = evaluation.model_dump(exclude_unset=True)
 
-    if not update_evaluation:
-        raise HTTPException(status_code=404, detail="Evaluación no encontrada.")
+        update_evaluation = await teacher_services.get_evaluation_by_lesson_id(
+            lesson_id
+        )
 
-    updated_eval = await teacher_services.update_evaluation(
-        update_evaluation.id, evaluation_data
-    )
+        if not update_evaluation:
+            raise HTTPException(status_code=404, detail="Evaluación no encontrada.")
 
-    return {"message": "Evaluación actualizada con éxito", "evaluation": updated_eval}
+        updated_eval = await teacher_services.update_evaluation(
+            update_evaluation.id, evaluation_data
+        )
+
+        if updated_eval:
+            status = 200
+            message = "Evaluación actualizada con éxito"
+            logger.info(f"Evaluación actualizada: {updated_eval.id}")
+
+        elif not updated_eval:
+            status = 404
+            message = "No se pudo actualizar la evaluación"
+            logger.error(f"Error al actualizar evaluación: {update_evaluation.id}")
+
+        else:
+            status = 404
+            message = "No se encontró la evaluación"
+        return {"status": status, "message": message}
+    except HTTPException as e:
+        logger.error(f"HTTPException: {e.detail}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # --- Rutas de notificaciones ---

@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from dependencies.course_dependencie import get_course_services
 from services.course_services import CourseServices
-from core.security import get_current_student
-from models.student_model import Student
 
 
 router = APIRouter(prefix="/api/v1/student/courses", tags=["Courses"])
@@ -10,7 +8,7 @@ router = APIRouter(prefix="/api/v1/student/courses", tags=["Courses"])
 
 @router.get("/")
 async def get_courses(
-    student: Student = Depends(get_current_student),
+    # student: Student = Depends(get_current_student),
     course_services: CourseServices = Depends(get_course_services),
 ):
     """
@@ -27,7 +25,7 @@ async def get_courses(
     Nota:
     La lista de cursos es rotornada dentro de un JSON.
     """
-    courses = await course_services.get_courses_by_student_id(student.id)
+    courses = await course_services.get_courses_by_student_id(1)
 
     if not courses:
         raise HTTPException(

@@ -25,7 +25,7 @@ import { authStorage } from '../../../../shared/Utils/authStorage';
 // Hook personalizado para manejar el formulario de creación de cursos
 // -------------------------------------------------
 export function useFormCreateCourse() {
-  const {loadInfoCourse}=useTeacherCourseContext()
+  const { loadInfoCourse, refreshCoursesTeacher } = useTeacherCourseContext();
   const navigate = useNavigate(); // Hook de React Router para redirigir al usuario
 
   // ----------------------
@@ -136,11 +136,15 @@ export function useFormCreateCourse() {
 
     // Paso 4: Intentar enviar
     try {
-      const response = await CreateCourseAPI(coursesend); // Llamada al API
-      toast.success(`Curso ${coursesend.name} creado exitosamente`); // Notificación positiva
-      setSubmitSuccess(true); // Marca el envío como exitoso
-      await loadInfoCourse(response)
-      navigate(`/teacher/courses/${response}`); // Redirige al nuevo curso
+      const idCourse = await CreateCourseAPI(coursesend); // Llamada al API
+      if (idCourse) {
+        toast.success("¡Curso creado exitosamente!");
+        // Limpiar cache de cursos para mostrar el nuevo curso
+        authStorage.removeCoursesTeacher();
+        await refreshCoursesTeacher();
+        setSubmitSuccess(true);
+        navigate(`/teacher/courses/${idCourse}`);
+      }
     } catch (error) {
       toast.error("Ocurrió un error al crear el curso"); // Notificación de error
       console.error(error); // Log en consola para depuración

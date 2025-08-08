@@ -88,7 +88,25 @@
     color: #fd6666;
     font-size: 0.85rem;
 }
+.select-native {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: white;
+    font-size: 0.875rem;
+    min-height: 2.5rem;
+}
 
+.select-native:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.select-native option {
+    padding: 0.5rem;
+}
 /* ===== OPCIONES DE RESPUESTA ===== */
 .options-section {
     display: flex;

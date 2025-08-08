@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  BookOpen,
-  ClipboardCheck,
   Plus,
   Trash2
 } from "lucide-react";
@@ -12,17 +10,10 @@ import {
   Input,
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
   Textarea,
   Label,
   Alert,
   AlertDescription,
-  Select,
-  SelectItem,
-  SelectContent,
-  SelectTrigger,
-  SelectValue
 } from "../../../shared/Components/ui/index";
 
 
@@ -67,19 +58,12 @@ export default function LessonCreate() {
 
         {submitSuccess && (
           <Alert>
-            <AlertDescription>
-              ¡Lección creada exitosamente!
-            </AlertDescription>
+            <AlertDescription>¡Lección creada exitosamente!</AlertDescription>
           </Alert>
         )}
 
         <form onSubmit={handleSubmit} className="form-lesson-teacher">
           <Card>
-            <CardHeader>
-              <CardTitle>
-                <BookOpen /> Datos de la Lección
-              </CardTitle>
-            </CardHeader>
             <CardContent>
               {/* Nombre */}
               <div className="container-label-input-create-lesson">
@@ -89,7 +73,9 @@ export default function LessonCreate() {
                   onChange={handleChange("lesson.name")}
                   className={errors.lesson?.name ? "input-lesson-error" : ""}
                 />
-                {errors.lesson?.name && <p className="text-error-lesson">{errors.lesson.name}</p>}
+                {errors.lesson?.name && (
+                  <p className="text-error-lesson">{errors.lesson.name}</p>
+                )}
               </div>
 
               {/* Texto */}
@@ -104,18 +90,17 @@ export default function LessonCreate() {
               {/* Tipo de Contenido */}
               <div className="container-label-input-create-lesson">
                 <Label>Tipo de Contenido *</Label>
-                <Select
+                <select
                   value={formDataLesson.lesson.content.content_type}
-                  onValueChange={handleContentTypeChange}
+                  onChange={(e) =>
+                    handleContentTypeChange(e.target.value as any)
+                  }
+                  className="select-native"
                 >
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="text">Texto</SelectItem>
-                    <SelectItem value="video">Video</SelectItem>
-                    <SelectItem value="html">HTML</SelectItem>
-                    <SelectItem value="image">Imagen</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <option value="text">Texto</option>
+                  <option value="video">Video</option>
+                  <option value="image">Imagen</option>
+                </select>
               </div>
 
               {/* Archivo */}
@@ -135,10 +120,14 @@ export default function LessonCreate() {
                       },
                     }))
                   }
-                  className={errors.lesson?.content?.file ? "input-lesson-error" : ""}
+                  className={
+                    errors.lesson?.content?.file ? "input-lesson-error" : ""
+                  }
                 />
                 {errors.lesson?.content?.file && (
-                  <p className="text-error-lesson">{errors.lesson.content.file}</p>
+                  <p className="text-error-lesson">
+                    {errors.lesson.content.file}
+                  </p>
                 )}
               </div>
             </CardContent>
@@ -146,40 +135,39 @@ export default function LessonCreate() {
 
           {/* Evaluación */}
           <Card>
-            <CardHeader>
-              <CardTitle>
-                <ClipboardCheck /> Datos de la Evaluación
-              </CardTitle>
-            </CardHeader>
             <CardContent>
               <div className="container-label-input-create-lesson">
                 <Label>Pregunta *</Label>
                 <Textarea
                   value={formDataLesson.evaluation.question}
                   onChange={handleChange("evaluation.question")}
-                  className={errors.evaluation?.question ? "input-lesson-error" : ""}
+                  className={
+                    errors.evaluation?.question ? "input-lesson-error" : ""
+                  }
                 />
                 {errors.evaluation?.question && (
-                  <p className="text-error-lesson">{errors.evaluation.question}</p>
+                  <p className="text-error-lesson">
+                    {errors.evaluation.question}
+                  </p>
                 )}
               </div>
-
+              {/* Tipo de Pregunta */}
               <div className="container-label-input-create-lesson">
                 <Label>Tipo de Pregunta *</Label>
-                <Select
+                <select
                   value={formDataLesson.evaluation.question_type}
-                  onValueChange={handleQuestionTypeChange}
+                  onChange={(e) =>
+                    handleQuestionTypeChange(e.target.value as any)
+                  }
+                  className="select-native"
                 >
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="open_question">Abierta</SelectItem>
-                    <SelectItem value="multiple_choice">Cerrada</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <option value="open_question">Abierta</option>
+                  <option value="multiple_choice">Cerrada</option>
+                </select>
               </div>
-
               {/* Opciones para Multiple Choice */}
-              {formDataLesson.evaluation.question_type === "multiple_choice" && (
+              {formDataLesson.evaluation.question_type ===
+                "multiple_choice" && (
                 <div className="options-section">
                   <div className="options-header">
                     <Label>Opciones</Label>
@@ -201,26 +189,31 @@ export default function LessonCreate() {
                   ))}
 
                   {errors.evaluation?.options && (
-                    <p className="text-error-lesson">{errors.evaluation.options}</p>
+                    <p className="text-error-lesson">
+                      {errors.evaluation.options}
+                    </p>
                   )}
 
-                  <div className="container-label-input-create-lesson">
-                    <Label>Respuesta Correcta *</Label>
-                    <Select
-                      value={formDataLesson.evaluation.correct_answer}
-                      onValueChange={handleChange("evaluation.correct_answer")}
-                    >
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {formDataLesson.evaluation.options?.map((opt, idx) => (
-                          <SelectItem key={idx} value={opt}>{opt}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.evaluation?.correctAnswer && (
-                      <p className="text-error-lesson">{errors.evaluation.correctAnswer}</p>
-                    )}
-                  </div>
+                <div className="container-label-input-create-lesson">
+                  <Label>Respuesta Correcta *</Label>
+                  <select
+                    value={formDataLesson.evaluation.correct_answer}
+                    onChange={(e) => handleChange("evaluation.correct_answer")(e)}
+                    className="select-native"
+                  >
+                    <option value="">Selecciona la respuesta correcta</option>
+                    {formDataLesson.evaluation.options?.map((opt, idx) => (
+                      <option key={idx} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.evaluation?.correctAnswer && (
+                    <p className="text-error-lesson">
+                      {errors.evaluation.correctAnswer}
+                    </p>
+                  )}
+                </div>
                 </div>
               )}
             </CardContent>

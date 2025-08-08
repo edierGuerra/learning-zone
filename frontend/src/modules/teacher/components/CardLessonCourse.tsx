@@ -3,7 +3,11 @@ import { useTeacherCourseContext } from "../hooks/useCourseTeacher";
 import type { TCourseTeacherResponse, TLessonTeacherResponse } from "../types/Teacher";
 import DeleteLessonAPI from "../services/Lesson/DeleteLesson.server";
 import toast from "react-hot-toast";
-
+/* icons */
+import { FiEdit3 } from "react-icons/fi";
+import { MdOutlineDelete } from "react-icons/md";
+import { authStorage } from "../../../shared/Utils/authStorage";
+import '../styles/CardLessonCourse.css';
 type CardLessonCourseProps = {
   idLesson: TLessonTeacherResponse['id'];
   idCourse: TCourseTeacherResponse['id'];
@@ -11,7 +15,7 @@ type CardLessonCourseProps = {
 };
 
 export default function CardLessonCourse({ idCourse, idLesson, name }: CardLessonCourseProps) {
-  const { loadLesson, course } = useTeacherCourseContext();
+  const { loadLesson, course , loadLessonsCourse} = useTeacherCourseContext();
   const navigate = useNavigate();
 
   const palette = course?.palette || {
@@ -27,9 +31,23 @@ export default function CardLessonCourse({ idCourse, idLesson, name }: CardLesso
   };
 
   const handleClickDelete = async () => {
-    await DeleteLessonAPI({ idCourse, idLesson });
-    toast.success('Eliminación correcta');
-    navigate(`/teacher/courses/${idCourse}`);
+    if (!window.confirm('¿Estás seguro de que quieres eliminar esta lección?')) {
+      return;
+    }
+
+    try {
+      await DeleteLessonAPI({ idCourse, idLesson });
+
+      // Limpiar cache de lecciones después de eliminar
+      authStorage.clearLessonsData();
+
+      // Recargar lecciones del curso
+      await loadLessonsCourse(idCourse);
+      toast.success('Lección eliminada correctamente');
+    } catch (error) {
+      console.error('Error al eliminar lección:', error);
+      toast.error('Error al eliminar la lección');
+    }
   };
 
   return (
@@ -53,14 +71,14 @@ export default function CardLessonCourse({ idCourse, idLesson, name }: CardLesso
           className="btn-edit-lesson"
           onClick={handleClickBtnEdit}
         >
-          ✏️ Editar
+          <FiEdit3 />
         </button>
 
         <button
           className="btn-delete-lesson"
           onClick={handleClickDelete}
         >
-          🗑️ Eliminar
+          <MdOutlineDelete />
         </button>
       </div>
     </div>

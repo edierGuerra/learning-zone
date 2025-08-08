@@ -3,6 +3,7 @@ import { RiProgress8Line } from "react-icons/ri";
 import type { TCourse } from "../../courses/types/CourseStudent";
 import { useNavigate } from "react-router-dom";
 import '../styles/CardCourseCreator.css'
+import { COURSE_CATEGORY_LABELS } from "../../../shared/constant/CategoriesCourses";
 
 type CardCourseProps = {
   id: number;
@@ -28,6 +29,9 @@ export default function CardCourseTeacher({
   const handleClickCourseTeacher = () => {
     navigate(`/teacher/courses/${id}`);
   };
+  const categoryLabel = Object.entries(COURSE_CATEGORY_LABELS).map(([key, label]) => (
+    category === key ? label : null
+  ));
 
   return (
     <div
@@ -63,7 +67,9 @@ export default function CardCourseTeacher({
       </p>
 
       {/* Categoría */}
-      <span className="category-course-teacher">{category}</span>
+      <span className="category-course-teacher">
+        {categoryLabel}
+      </span>
 
       {/* Publicado o no */}
       <div className="status-course-teacher">

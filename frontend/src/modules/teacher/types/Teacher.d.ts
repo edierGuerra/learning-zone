@@ -84,13 +84,17 @@ export type TFormDataLesson = {
 export interface TTeacherCourseContextType {
   courses: TCourseTeacherResponse[]; // Cursos del profesor
   setCourses: React.Dispatch<React.SetStateAction<TCourseTeacherResponse[]>>;
-  course:TCourseTeacherResponse | null,
-  loadInfoCourse: (idCourse: TCourseTeacherResponse["id"]) => Promise<void>,
+  course: TCourseTeacherResponse | null;
+  loadInfoCourse: (idCourse: TCourseTeacherResponse["id"]) => Promise<void>;
   lessons: TLessonsTeacher; // Lecciones del curso actual
   setLessons?: React.Dispatch<React.SetStateAction<TLessonsTeacher>>; // No se exporta desde el context, pero lo dejo opcional por si lo expones
   formLesson: TFormDataLesson | null; // Estructura con todos los datos de la lección
   loadLessonsCourse: (idCourse: TCourseTeacherResponse["id"]) => Promise<void>;
-  loadLesson: (idCourse: TCourseTeacherResponse["id"], idLesson: number) => Promise<void>;
+  loadLesson: (
+    idCourse: TCourseTeacherResponse["id"],
+    idLesson: number
+  ) => Promise<void>;
   palette: TColorPalette | null;
   setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>;
+  refreshCoursesTeacher: () => Promise<void>;
 }

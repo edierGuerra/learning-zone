@@ -16,6 +16,7 @@ import LessonEditor from "../modules/teacher/components/LessonEditor";
 import LessonCreate from "../modules/teacher/components/LessonCreator";
 import TeacherDashboard from "../modules/teacher/components/TeacherDashboard";
 import CourseCreator from "../modules/teacher/components/CourseCreator";
+import CourseEdit from "../modules/teacher/components/CourseEdit";
 
 // COMPONENTE PRINCIPAL
 /**
@@ -40,7 +41,7 @@ export default function TeacherRoutes() {
       <Route path="/courses" element={<TeacherHome />} />
       <Route path="/courses/create" element={<CourseCreator/>} />
       <Route path="/courses/:courseId" element={<CourseManagement/>} />
-      <Route path="/courses/:courseId/edit" element={<div>Gestionar lecciones</div>} />
+      <Route path="/courses/:courseId/edit" element={<CourseEdit />} />
 
       <Route path="courses/:courseId/lessons/create" element={<LessonCreate />} />
       <Route path="courses/:courseId/lessons/:lessonId/edit" element={<LessonEditor/>}/>

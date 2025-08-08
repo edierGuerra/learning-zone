@@ -13,7 +13,7 @@ const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 type TCreateLessonAPIResponse={
     status:number
     message: string;
-    lesson :{
+    data :{
         id: TLessonTeacherResponse['id'];
         name:TLessonTeacherResponse['name']
     }
@@ -26,38 +26,49 @@ type TCreateLessonAPIProps = {
 };
 
 
-export default async function CreateLessonAPI({ idCourse, lessonContent}:TCreateLessonAPIProps): Promise<TLessonTeacherResponse> {
-    try {
-        const formData = new FormData();
-        formData.append("name", lessonContent.name);
-        formData.append("content_type", lessonContent.content.content_type);
-        formData.append("text", lessonContent.content.text);
-        if (lessonContent.content.file) {
-            formData.append("file", lessonContent.content.file);
-        }
-
-
-        const response = await axios.post(`${VITE_TEACHER_ENDPOINT}/courses/${idCourse}/lessons`, formData, {
-            headers: {
-            "Content-Type": "multipart/form-data",
-            },
-        });
-
-        // Validar status code
-        if (response.status !== 200) {
-            throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
-        }
-
-        // Validar estructura de respuesta
-        const responseData = response.data as TCreateLessonAPIResponse;
-        if (!responseData.lesson || !Array.isArray(responseData.message)) {
-            throw new Error('Respuesta del servidor inválida: estructura de datos incorrecta');
-        }
-
-        return responseData.lesson;
-
-    } catch (error) {
-        console.error('Error en GetCourses:', error);
-        throw error;
+export default async function CreateLessonAPI({
+  idCourse,
+  lessonContent,
+}: TCreateLessonAPIProps): Promise<TCreateLessonAPIResponse['data']> {
+  try {
+    const formData = new FormData();
+    formData.append("name", lessonContent.name);
+    formData.append("content_type", lessonContent.content.content_type);
+    formData.append("text", lessonContent.content.text);
+    if (lessonContent.content.file) {
+      formData.append("file", lessonContent.content.file);
     }
+
+    const response = await axios.post(
+      `${VITE_TEACHER_ENDPOINT}/courses/${idCourse}/lessons`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    console.log(response);
+
+    // Validar status code
+    if (response.status !== 200) {
+      throw new Error(
+        `HTTP ${response.status}: ${response.data?.message || "Error desconocido"}`
+      );
+    }
+
+    // Validar estructura de respuesta
+    const responseData = response.data as TCreateLessonAPIResponse;
+   /*  if (!responseData || !Array.isArray(responseData.message)) {
+      throw new Error(
+        "Respuesta del servidor inválida: estructura de datos incorrecta"
+      );
+      } */
+      console.log(responseData)
+
+    return responseData;
+  } catch (error) {
+    console.error("Error en createLesson:", error);
+    throw error;
+  }
 }

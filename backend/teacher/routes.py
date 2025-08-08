@@ -358,24 +358,26 @@ async def create_evaluation_for_lesson(
 
 
 @router.get(
-    "/lessons/{lesson_id}/evaluations",
+    "/courses/{id_course}/lessons/{id_lesson}/evaluation",
     dependencies=[Depends(bearer_scheme)],
     tags=["Evaluations"],
 )
 async def get_evaluation(
-    lesson_id: int, teacher_services: TeacherServices = Depends(get_teacher_services)
+    id_lesson: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    id_course: int = None,
 ):
     """Obtiene una evaluación por el ID de la lección."""
-    return await teacher_services.get_evaluation_by_lesson_id(lesson_id)
+    return await teacher_services.get_evaluation_by_lesson_id(lesson_id=id_lesson)
 
 
 @router.put(
-    "/evaluations/{evaluation_id}",
+    "/evaluations/{lesson_id}",
     dependencies=[Depends(bearer_scheme)],
     tags=["Evaluations"],
 )
 async def update_evaluation(
-    evaluation_id: int,
+    lesson_id: int,
     evaluation: EvaluationUpdate,
     teacher_services: TeacherServices = Depends(get_teacher_services),
 ):
@@ -385,8 +387,13 @@ async def update_evaluation(
     """
     evaluation_data = evaluation.model_dump(exclude_unset=True)
 
+    update_evaluation = await teacher_services.get_evaluation_by_lesson_id(lesson_id)
+
+    if not update_evaluation:
+        raise HTTPException(status_code=404, detail="Evaluación no encontrada.")
+
     updated_eval = await teacher_services.update_evaluation(
-        evaluation_id, evaluation_data
+        update_evaluation.id, evaluation_data
     )
 
     return {"message": "Evaluación actualizada con éxito", "evaluation": updated_eval}

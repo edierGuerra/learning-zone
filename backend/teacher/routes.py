@@ -256,7 +256,7 @@ async def get_lessons_by_course(
 
 
 @router.get(
-    "/lessons/{lesson_id}",
+    "/courses/lesson/{lesson_id}",
     response_model=LessonCResponse,
     dependencies=[Depends(bearer_scheme)],
     tags=["Lessons"],
@@ -273,7 +273,7 @@ async def get_lesson(
 
 
 @router.put(
-    "/lessons/{lesson_id}",
+    "/courses/lesson/{lesson_id}",
     response_model=LessonCResponse,
     dependencies=[Depends(bearer_scheme)],
     tags=["Lessons"],
@@ -314,7 +314,7 @@ async def update_lesson(
 
 
 @router.delete(
-    "/lessons/{lesson_id}",
+    "/courses/lesson/{lesson_id}",
     description="Elimina la leccion con su contenido y evaluación asociada.",
     dependencies=[Depends(bearer_scheme)],
     tags=["Lessons"],

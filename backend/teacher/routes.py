@@ -141,7 +141,7 @@ async def update_course(
     updated_course = await teacher_services.update_course(
         course_id=course_id, course_data=course_data, public_id=course.name
     )
-    return {"message": "Curso actualizado con exito.", "course": updated_course}
+    return {"message": "Curso actualizado con exito.", "id_course": updated_course}
 
 
 @router.delete(

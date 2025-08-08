@@ -15,6 +15,7 @@ type GetCoursesAPIResponse = {
 export default async function GetCoursesAPI(): Promise<TCoursesStudents> {
     try {
         const response = await axios.get(VITE_GETCOURSES_ENDPOINT);
+        console.log(response)
 
         // Validar status code
         if (response.status !== 200) {

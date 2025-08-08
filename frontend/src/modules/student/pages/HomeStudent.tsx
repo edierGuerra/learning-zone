@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useUser } from '../../auth/Hooks/useAuth';
 import { useStudentCourseContext } from '../../courses/hooks/useCourse';
 import CardCourse from '../components/CardCourse';
@@ -6,8 +7,11 @@ import '../Styles/HomeStudent.css';
 
 export default function HomeStudent() {
   const { user } =useUser();
-  const { courses } = useStudentCourseContext();
-
+  const { courses, refreshCoursesStudent } = useStudentCourseContext();
+  useEffect(() => {
+    // Limpiar datos específicos de cursos individuales al entrar al dashboard
+    refreshCoursesStudent();
+  }, []);
 
   return (
     <div className="container-home-user">

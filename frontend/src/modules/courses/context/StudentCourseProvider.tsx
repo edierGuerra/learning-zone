@@ -63,7 +63,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
         // Accediendo al backend y obteniendo los cursos
         const dataCourses = await GetCoursesAPI();
         // Almacenando los cursos del estudiante en el localStorage
-        authStorage.setCourseStudent(dataCourses);
+        authStorage.setCoursesStudent(dataCourses);
         /* Setear los cursos en el estado */
         setCourses(dataCourses);
       };
@@ -112,6 +112,18 @@ export const StudentCourseProvider = ({ children }: Props) => {
       const porcent = Math.round((number / lessons.length) * 100);
       setProgress(porcent);
     }, [lessons]);
+
+    const refreshCoursesStudent = async () => {
+      const token = authStorage.getToken();
+      if (token) {
+        // Limpiar cache de cursos antes de solicitar nuevos datos
+        authStorage.removeCoursesStudent();
+
+        const dataCourses = await GetCoursesAPI();
+        authStorage.setCoursesStudent(dataCourses);
+        setCourses(dataCourses);
+      }
+    };
 
 
   const storageLessons = authStorage.getLessonsStudents()
@@ -220,35 +232,35 @@ export const StudentCourseProvider = ({ children }: Props) => {
     // El Provider envuelve toda la app y expone el contexto con los valores globales
     <StudentCourseContext.Provider
       value={{
-      setCourses,
-      courses,
-      // Lecciones del curso actual cargado
-      lessons,
-      // Permite modificar las lecciones desde otros componentes (por ejemplo, marcar como completada)
-      setLessons,
-      // Porcentaje de progreso del curso
-      progress,
-      // Lección actual que el estudiante está viendo (estado compartido)
-      content,
-      // Evaluación actual de la lección (preguntas)
-      evaluation,
-      // Función que carga las lecciones de un curso según su id
-      loadLessonsCourse,
-      // Función que carga el contenido de una lección específica
-      loadLessonContent,
-      // Función que carga la evaluación de una lección específica
-      loadLessonEvaluation,
-      progressLessons,
-      loadProgressLessons,
-      /* Funcion que se encarga de llamar otra funcion que carga los datos del contenido y los setea, ademas redirije a la page del contenido */
-      renderContent,
-      /* Funcion que se encarga de llamar otra funcion que carga los datos de la evaluacion y los setea, ademas redirije a la page de la evaluacion */
-      renderEvaluation,
-      /* Leccion que se esta haciendo */
-      currentLesson,
-      setPalette,
-      palette
-
+        setCourses,
+        courses,
+        // Lecciones del curso actual cargado
+        lessons,
+        // Permite modificar las lecciones desde otros componentes (por ejemplo, marcar como completada)
+        setLessons,
+        // Porcentaje de progreso del curso
+        progress,
+        // Lección actual que el estudiante está viendo (estado compartido)
+        content,
+        // Evaluación actual de la lección (preguntas)
+        evaluation,
+        // Función que carga las lecciones de un curso según su id
+        loadLessonsCourse,
+        // Función que carga el contenido de una lección específica
+        loadLessonContent,
+        // Función que carga la evaluación de una lección específica
+        loadLessonEvaluation,
+        progressLessons,
+        loadProgressLessons,
+        /* Funcion que se encarga de llamar otra funcion que carga los datos del contenido y los setea, ademas redirije a la page del contenido */
+        renderContent,
+        /* Funcion que se encarga de llamar otra funcion que carga los datos de la evaluacion y los setea, ademas redirije a la page de la evaluacion */
+        renderEvaluation,
+        /* Leccion que se esta haciendo */
+        currentLesson,
+        setPalette,
+        palette,
+        refreshCoursesStudent
       }}
     >
       {/* Solo renderiza la app si ya se hizo la validación inicial de sesión */}

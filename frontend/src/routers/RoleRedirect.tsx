@@ -1,65 +1,25 @@
-/**
- * Redirige automáticamente a los usuarios según su rol.
- */
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { authStorage } from "../shared/Utils/authStorage"; // Asegúrate de que esta funcione correctamente
 
-import { Navigate } from "react-router-dom";
-import { useUser } from "../modules/auth/Hooks/useAuth";
-
-// COMPONENTE PRINCIPAL
-
-/**
- * RoleRedirect - Redirección principal por roles
- *
- * Redirige según el rol del usuario después del login.
- */
 export default function RoleRedirect() {
-  const { user, role } = useUser();
+  const navigate = useNavigate();
 
-  // Usuario no autenticado
-  if (!user || !role) {
-    return <Navigate to="/" replace />;
-  }
+  useEffect(() => {
+    // Opción 1: desde localStorage directamente
+    const role = authStorage.getRole(); // "teacher" | "student" | undefined/nullclg
+    console.log(role)
 
-  // Redirección según rol
-  switch (role) {
-    case "teacher":
-      return <Navigate to="/teacher/home-teacher" replace />;
 
-    case "student":
-      return <Navigate to="/student/home-student" replace />;
+    if (role === "teacher") {
+      navigate("/teacher/home-teacher", { replace: true });
+    } else if (role === "student") {
+      navigate("/student/home-student", { replace: true });
+    } else {
+      // Si no hay rol, redirige al landing
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
 
-    default:
-      return <Navigate to="/" replace />;
-  }
-}
-
-// ============================================================================
-// REDIRECCIÓN DESDE PÁGINA PRINCIPAL
-// ============================================================================
-
-/**
- * HomeRoleRedirect - Redirección desde página principal
- *
- * Solo redirige si el usuario está logueado.
- * Si no está logueado, permite ver la página normal.
- */
-export function HomeRoleRedirect() {
-  const { user, role } = useUser();
-
-  // Usuario no autenticado - no redirigir
-  if (!user || !role) {
-    return null;
-  }
-
-  // Redirección según rol
-  switch (role) {
-    case "teacher":
-      return <Navigate to="/teacher/home-teacher" replace />;
-
-    case "student":
-      return <Navigate to="/student/home-student" replace />;
-
-    default:
-      return null;
-  }
+  return null; // No renderiza nada, solo redirecciona
 }

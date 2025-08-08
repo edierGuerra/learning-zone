@@ -4,7 +4,6 @@ from typing import List
 from models.course_model import Course
 import logging
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -26,7 +25,7 @@ class CourseServices:
         if all_courses:
             logger.info("Cursos encontrados")
             for course in all_courses:
+                logging.info(f"Curso encontrado: {course.get('name')}")
                 if course.get("published"):
-                    logger.info(f"Curso publicado ID: {course.id}")
                     courses.append(course)
-            return courses
+        return courses

@@ -1,0 +1,60 @@
+.container-card-lesson{
+    max-width: 70%;
+    width: 70%;
+    padding: .8rem;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 12px;
+}
+
+.container-opc-crud-lesson{
+    display: flex;
+    gap: 20px;
+}
+/* ==== BOTONES CRUD LECCIÓN ==== */
+.container-opc-crud-lesson {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+
+}
+
+.btn-edit-lesson {
+    background-color: transparent;
+    /* Verde suave, edición amigable */
+    color: #000000;
+    border-radius: 10px;
+    padding: 0.5rem 1.2rem;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn-edit-lesson:hover {
+    color: #ffc5a4;
+    box-shadow: 0 2px 8px 0 rgba(162, 255, 131, 0.13);
+}
+
+.btn-delete-lesson {
+    background-color: transparent;
+    /* Rojo suave, no invasivo */
+    color: #d32f2f;
+    border-radius: 10px;
+    padding: 0.5rem 1.2rem;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn-delete-lesson:hover {
+    color: #a31010;
+    box-shadow: 0 2px 8px 0 rgba(255, 44, 44, 0.14);
+}

@@ -1,32 +1,50 @@
 // types/Teacher.ts
-import type { TCourse, TEvaluation, TLesson, TContent } from "../../courses/types/Course";
+import type { TCourse, TEvaluation, TContent } from "../../courses/types/CourseStudent";
+import type { TTeacher } from "../../types/User";
 
 /* CURSO - Response del backend */
-export type TCourseTeacherResponse = Pick<TCourse, 'id' | 'name' | 'description' | 'image' | 'category' | 'palette'> & {
+export type TCourseTeacherResponse = Pick<TCourse, 'id' | 'name' | 'description' | 'image' | 'category' | 'name_palette' | 'palette'> & {
   is_published: boolean;
+  teacher_id:TTeacher['id']
 };
 
 /* CURSO - Envío al backend */
-export type TCourseTeacherSend = Pick<TCourse, 'name' | 'description' | 'category' | 'image' | 'palette'>;
+export type TCourseTeacherSend = Pick<TCourse, 'name' | 'description' | 'category' | 'name_palette' | 'image' | 'palette'>;
 
+/* Leccion del teacher que recibe del backend */
 /* LECCIÓN - Response */
 export type TLessonTeacherResponse = {
-  id: TLesson['id'];
-  name: TLesson['name'];
-  content: {
-    contentType: TContent['contentType'];
-    content: TContent['content'];
-    text: TContent['text'];
-  };
+  id: number;
+  name: string;
 };
 export type TLessonsTeacherResponse = TLessonTeacherResponse[];
+
+/* Info de leccion que retorna el backend
+    lesson: {
+      name: "",
+      content: {
+        contentType: "text",
+        file: null,
+        text: "",
+      },
+    },
+*/
+export type TLessonContentResponse ={
+  name:TLessonTeacherResponse['name'],
+  content:{
+    content_type:TContent['contentType']
+    file: File | null
+    text:TContent['text']
+  }
+}
+
 
 /* LECCIÓN - Envío */
 export type TLessonTeacherSend = {
   idCourse:TCourse['id'],
   name: string;
   content: {
-    contentType: TContent['contentType'];
+    content_type: TContent['contentType'];
     text: string;
     file: File | null;
   };
@@ -42,12 +60,10 @@ export type TEvaluationTeacherResponse = {
 
 /* EVALUACIÓN - Envío */
 export type TEvaluationTeacherSend = {
-  idCourse:TCourse['id'],
-  idLesson :TLesson['id'],
-  questionType: TEvaluation['questionType'];
+  question_type: TEvaluation['questionType'];
   question: TEvaluation['question'];
-  options: TEvaluation['options'];
-  correctAnswer?: string;
+  options?: TEvaluation['options'];
+  correct_answer?: string;
 };
 
 /* Cursos múltiples */
@@ -58,3 +74,27 @@ export type TFormDataLesson = {
   lesson: TLessonTeacherSend;
   evaluation: TEvaluationTeacherSend;
 };
+
+
+
+
+/* Tipado del contexto */
+
+
+export interface TTeacherCourseContextType {
+  courses: TCourseTeacherResponse[]; // Cursos del profesor
+  setCourses: React.Dispatch<React.SetStateAction<TCourseTeacherResponse[]>>;
+  course: TCourseTeacherResponse | null;
+  loadInfoCourse: (idCourse: TCourseTeacherResponse["id"]) => Promise<void>;
+  lessons: TLessonsTeacher; // Lecciones del curso actual
+  setLessons?: React.Dispatch<React.SetStateAction<TLessonsTeacher>>; // No se exporta desde el context, pero lo dejo opcional por si lo expones
+  formLesson: TFormDataLesson | null; // Estructura con todos los datos de la lección
+  loadLessonsCourse: (idCourse: TCourseTeacherResponse["id"]) => Promise<void>;
+  loadLesson: (
+    idCourse: TCourseTeacherResponse["id"],
+    idLesson: number
+  ) => Promise<void>;
+  palette: TColorPalette | null;
+  setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>;
+  refreshCoursesTeacher: () => Promise<void>;
+}

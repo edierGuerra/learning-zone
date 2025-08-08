@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 export default function ContentPage() {
     const {content, renderEvaluation,currentLesson,palette} = useStudentCourseContext()
     const handleBtnNavigate = useNavigationHandler();
+    console.log(content)
     if (!palette) return <div>Error: No se pudo cargar la paleta de colores.</div>;
 
 

@@ -47,7 +47,9 @@ async def create_admin():
 
         try:
             hashed = hash_password(password)
-            admin = Teacher(name=name, last_name=apellido, email=email, password=hashed)
+            admin = Teacher(
+                names=name, last_names=apellido, email=email, password=hashed
+            )
             db.add(admin)
             await db.commit()
             await db.refresh(admin)

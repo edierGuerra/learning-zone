@@ -6,13 +6,14 @@ import { GetStudentAPI } from '../../auth/Services/GetInformationStudent.server'
 import { useUser } from '../../auth/Hooks/useAuth';
 import toast from 'react-hot-toast';
 import UpdateStudentAPI from '../services/UpdateStudent.server';
+import type { TStudentProfile } from '../../types/User';
 
 export default function useFormUpdateStudent() {
   const {setUser}= useUser()
   // --- Tipos usados para validación ---
   type UpdateForm = {
-    name: TStuden['name'];
-    lastNames: TStudent['lastNames'];
+    name: TStudentProfile['name'];
+    lastNames: TStudentProfile['lastNames'];
   };
 
   // permite tener un error por cada campo (o ninguno)
@@ -46,8 +47,8 @@ export default function useFormUpdateStudent() {
   };
 
   // --- Estados del formulario ---
-  const [newName, setNewName] = useState<TStudent['name']>(''); // Inicializa con cadena vacía
-  const [newLastNames, setNewLastNames] = useState<TStudent['lastNames']>(''); // Inicializa con cadena vacía
+  const [newName, setNewName] = useState<TStudentProfile['name']>(''); // Inicializa con cadena vacía
+  const [newLastNames, setNewLastNames] = useState<TStudentProfile['lastNames']>(''); // Inicializa con cadena vacía
   const [errors, setErrors] = useState<FormErrors>({}); // Almacena errores del formulario
 
   // --- Efecto que carga los datos desde el localStorage una vez ---
@@ -96,15 +97,15 @@ export default function useFormUpdateStudent() {
         toast.success('Actualizacion exitosa')
         const updateStudent = await GetStudentAPI()
         const dataStudentLocalStorage:TStudentProfile ={
-          id:updateStudent.user_data.id,
-          numIdentification:updateStudent.user_data.identification_number,
-          name:updateStudent.user_data.names,
-          lastNames:updateStudent.user_data.last_names,
-          email: updateStudent.user_data.email,
+          id:updateStudent.id,
+          numIdentification:updateStudent.identification_number,
+          name:updateStudent.names,
+          lastNames:updateStudent.last_names,
+          email: updateStudent.email,
           prefixProfile: updateStudent.prefix_profile
         }
-        setStudent(dataStudentLocalStorage)
-        authStorage.setStudent(dataStudentLocalStorage)
+        setUser(dataStudentLocalStorage)
+        authStorage.setUser(dataStudentLocalStorage)
 
       }else{
         toast.error(response.message || 'No se pudo actualizar tu información.');

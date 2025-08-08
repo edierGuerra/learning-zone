@@ -11,5 +11,8 @@ export default function AppRouter() {
   }
 
   // 👇 Cuando ya esté todo listo, decide si mostrar rutas públicas o privadas
-  return isLoggedIn ? <RoutersPrivates /> : <RoutersPublic />;
+  return isLoggedIn ?
+   <RoutersPrivates />
+
+   : <RoutersPublic />;
 }

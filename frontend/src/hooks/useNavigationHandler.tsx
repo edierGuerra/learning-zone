@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 export type AppRoutes =
+  | '/landing'
   | "/"
   | "/register"
   | "/login"

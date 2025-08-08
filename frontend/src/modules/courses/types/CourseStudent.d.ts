@@ -1,10 +1,12 @@
-import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
+import type { TColorPalette, TPaletteNames } from "../../../shared/theme/ColorPalettesCourses";
+import type { TLessonTeacher } from "../../teacher/types/Teacher";
 
 export type TCourse = {
     id: number;
     name: string;
     description: string;
-    image: string;
+    image: file | string;
+    name_palette :TPaletteNames | ''
     palette: TColorPalette; // Paleta de colores del curso
     category:
         | 'ofimatica'
@@ -34,7 +36,8 @@ export type TProgressCourse  = {
     name_course:TCourse['name'],
     completed_lessons:number,
     all_lessons:number,
-    status:TCourse['status']
+    status:TCourse['status'],
+    palette:TColorPalette
 };
 export type TProgressCourses = TProgressCourse[]
 
@@ -47,15 +50,19 @@ export type TCertificatesStudent ={
     download_url: string,
 }
 
-// Modelo base de una lección
-export interface TLesson {
+// Modelo base de una lección del estudiante
+export interface TLessonStudent {
     id: number;
     name: string;
     progressState: 'blocked' | 'in_progress' | 'complete';
-    idCourse:TCourse['id']
+    idCourse:TCourseStudent['id'],
+    nameCourse:TCourseStudent['name']
 }
 
-export type TLessons = TLesson[];
+
+
+export type TLessonsStudent = TLessonStudent[];
+export type TLessonsTeacher = TLessonTeacher[];
 
 
 
@@ -87,11 +94,11 @@ export type TScore={
 interface TStudentCourseContextType {
     setCourses:React.Dispatch<React.SetStateAction<TCoursesStudents>>;
     courses:TCoursesStudents;
-    lessons: TLessons;
+    lessons: TLessonsStudent;
     setLessons: React.Dispatch<React.SetStateAction<TLessons>>
     progress: number; // porcentaje
     content:TContent | null;
-    currentLesson: TLesson | null;
+    currentLesson: TLessonStudent |TLessonTeacher | null;
     evaluation:TEvaluation | null,
     loadLessonsCourse:(idCourse: TCourse["id"]) => Promise<void>;
     loadLessonContent:(idCourse: TCourse["id"], lesson: TLesson) => Promise<void>;
@@ -102,5 +109,7 @@ interface TStudentCourseContextType {
     renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>;
     palette:TColorPalette | null;
     setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>;
+    refreshCoursesStudent: () => Promise<void>;
+
 
 }

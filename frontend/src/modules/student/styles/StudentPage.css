@@ -40,36 +40,6 @@
 .title-progress{
     color: #fff;
 }
-.progress-course-powerpoint{
-    cursor: pointer;
-    background-color:var(--color-main-powerPoint) ;
-    padding: .6rem;
-    border-radius: 10px;
-    color: #fff;
-    width: 100%;
-    position: relative;
-    text-align: center;
-}
-.progress-course-excel{
-    cursor: pointer;
-    background-color:var(--color-main-excel);
-    padding: .6rem;
-    border-radius: 10px;
-    color: #fff;
-    width: 100%;
-    position: relative;
-    text-align: center;
-}
-.progress-course-word{
-    cursor: pointer;
-    background-color:var(--color-main-word);
-    padding: .6rem;
-    border-radius: 10px;
-    color: #fff;
-    width: 100%;
-    position: relative;
-    text-align: center;
-}
 .span-status-course{
     position: absolute;
     top: 70px;

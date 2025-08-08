@@ -16,16 +16,18 @@ import {
   type TCourse,
   type TCoursesStudents,
   type TEvaluation,
-  type TLesson,
-  type TLessons,
+  type TLessonsStudent,
+  type TLessonStudent,
   type TProgressCourses,
-} from "../types/Course";
+} from "../types/CourseStudent";
 import toast from "react-hot-toast";
 import GetCoursesAPI from "../services/GetCourses";
 import ProgressCoursesAPI from "../../student/services/GetProgressCourses.server";
-import { useNavigationHandler } from "../../../hooks/useNavigationHandler";
 import type { TColorPalette } from "../../../shared/theme/ColorPalettesCourses";
 import { StudentCourseContext } from "./StudentCourseContext";
+import type { TLessonTeacherResponse } from "../../teacher/types/Teacher";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../../auth/Hooks/useAuth";
 
 // Props que recibe el Provider: los hijos que van dentro del contexto
 type Props = {
@@ -34,31 +36,34 @@ type Props = {
 
 // Provider principal que controla todo lo relacionado con la sesión del estudiante
 export const StudentCourseProvider = ({ children }: Props) => {
+
+  const { role } = useUser()
+  const navigate = useNavigate()
   const [courses, setCourses] = useState<TCoursesStudents>([]);
-  const [lessons, setLessons] = useState<TLessons>([]);
+  const [lessons, setLessons] = useState<TLessonsStudent>([]);
   const [progressLessons, setProgressLessons] = useState<TProgressCourses>([]);
   const [progress,setProgress] = useState(0); /* Progreso del curso especifico */
-  const [currentLesson, setCurrentLesson] = useState<TLesson | null>(null); /* Leccion que se esta haciendo */
+  const [currentLesson, setCurrentLesson] = useState<TLessonStudent | TLessonTeacherResponse | null>(null); /* Leccion que se esta haciendo */
   const [content, setContent] = useState<TContent | null>(null); /* Contenido de la leccion */
   const [evaluation, setEvaluation] = useState<TEvaluation | null>(null); /* Evaluacion de la leccion */
   const [palette, setPalette] = useState<TColorPalette | null>(null);
-  const handleBtnNavigate = useNavigationHandler()
   // Carga inicial: verifica si hay cursos guardados en localStorage
   useEffect(() => {
     const storedCourses = authStorage.getCoursesStudent(); // Trae cursos guardado si existe
     const storedContentLesson = authStorage.getContent(); // Trae contenido guardado si existe
-    const storedLessons = authStorage.getLessons() /* Trae las lecciones guardadas si existen */
+    const storedLessons = authStorage.getLessonsStudents() /* Trae las lecciones guardadas si existen */
     const storedLesson = authStorage.getLesson() /* Trae la leccion que se esta haciendo si existe */
     const storedEvaluationLesson = authStorage.getEvaluation(); // Trae evaluacion guardado si existe */
     const storedPaletteColors = authStorage.getPaletteColors(); // Trae evaluacion guardado si existe */
     const token = authStorage.getToken();
     if (token && storedCourses.length ===0) {
+      if (role !== "student") return; // 👈 evitar que se ejecute si no es estudiante
       // Si no existen cursos, ejecutar el servicio que envía el token al backend y obtiene los cursos del estudiante
       const infoCourses = async () => {
         // Accediendo al backend y obteniendo los cursos
         const dataCourses = await GetCoursesAPI();
         // Almacenando los cursos del estudiante en el localStorage
-        authStorage.setCourseStudent(dataCourses);
+        authStorage.setCoursesStudent(dataCourses);
         /* Setear los cursos en el estado */
         setCourses(dataCourses);
       };
@@ -108,8 +113,20 @@ export const StudentCourseProvider = ({ children }: Props) => {
       setProgress(porcent);
     }, [lessons]);
 
+    const refreshCoursesStudent = async () => {
+      const token = authStorage.getToken();
+      if (token) {
+        // Limpiar cache de cursos antes de solicitar nuevos datos
+        authStorage.removeCoursesStudent();
 
-  const storageLessons = authStorage.getLessons()
+        const dataCourses = await GetCoursesAPI();
+        authStorage.setCoursesStudent(dataCourses);
+        setCourses(dataCourses);
+      }
+    };
+
+
+  const storageLessons = authStorage.getLessonsStudents()
   useEffect(()=>{
     if(storageLessons.length >0){
       setLessons(storageLessons)
@@ -119,17 +136,20 @@ export const StudentCourseProvider = ({ children }: Props) => {
   const loadLessonsCourse  = async(idCourse:TCourse['id'])=>{
     try{
         const lessonsRes = await LessonsCourseAPI(idCourse);
+        console.log(lessonsRes)
 
-        const lessonsStorage: TLessons = lessonsRes.map((l) => ({
+        const lessonsStorage: TLessonsStudent = lessonsRes.map((l) => ({
             id: l.id,
             name:l.name,
             progressState:l.progress_state,
-            idCourse:idCourse
+            idCourse:idCourse,
+            nameCourse:l.name
           }));
+        console.log(lessonsStorage)
 
+        authStorage.setLessonsStudents(lessonsStorage)
         setLessons(lessonsStorage) /* Setear las lecciones para poder renderizarlas en el home del curso */
         /* Setear los valores al localstorage */
-        authStorage.setLessons(lessonsStorage)
 
 
     }catch(error){
@@ -138,7 +158,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
     }
   }
   /* Funcion que carga el contenido de la leccion */
-  const loadLessonContent = async (idCourse: TCourse["id"], lesson: TLesson) => {
+  const loadLessonContent = async (idCourse: TCourse["id"], lesson: TLessonStudent) => {
     try{
       const contentRes = await ContentLessonsAPI({idCourse,idLesson: lesson.id})
       /* juntar el nombre de la leccion, con el contenido obtenido del backend */
@@ -163,7 +183,7 @@ export const StudentCourseProvider = ({ children }: Props) => {
   };
 
   /* Funcion que carga la evaluacion de la leccion */
-  const loadLessonEvaluation = async (idCourse: TCourse["id"], idLesson: TLesson['id']) => {
+  const loadLessonEvaluation = async (idCourse: TCourse["id"], idLesson: TLessonStudent['id']) => {
     try{
         const evaluationRes = await EvaluationLessonsAPI({idCourse,idLesson})
         console.log(evaluationRes)
@@ -192,19 +212,19 @@ export const StudentCourseProvider = ({ children }: Props) => {
           };
 
 
-  const renderContent =async(idCourse:TCourse['id'], lesson:TLesson)=>{
+  const renderContent =async(idCourse:TCourse['id'], lesson:TLessonStudent)=>{
     await loadLessonContent(idCourse,lesson);
     /* Rederigir a la page del contenido */
-    handleBtnNavigate('/contentPage')
+    navigate('/student/content-page')
 
   }
 
-  const renderEvaluation =async(idCourse:TCourse['id'], idLesson:TLesson['id'])=>{
+  const renderEvaluation =async(idCourse:TCourse['id'], idLesson:TLessonStudent['id'])=>{
     alert(idCourse)
 
     await loadLessonEvaluation(idCourse,idLesson);
     /* Rederigir a la page del contenido */
-    handleBtnNavigate('/evaluationPage')
+    navigate('/student/evaluation-page')
 
   }
 
@@ -212,35 +232,35 @@ export const StudentCourseProvider = ({ children }: Props) => {
     // El Provider envuelve toda la app y expone el contexto con los valores globales
     <StudentCourseContext.Provider
       value={{
-      setCourses,
-      courses,
-      // Lecciones del curso actual cargado
-      lessons,
-      // Permite modificar las lecciones desde otros componentes (por ejemplo, marcar como completada)
-      setLessons,
-      // Porcentaje de progreso del curso
-      progress,
-      // Lección actual que el estudiante está viendo (estado compartido)
-      content,
-      // Evaluación actual de la lección (preguntas)
-      evaluation,
-      // Función que carga las lecciones de un curso según su id
-      loadLessonsCourse,
-      // Función que carga el contenido de una lección específica
-      loadLessonContent,
-      // Función que carga la evaluación de una lección específica
-      loadLessonEvaluation,
-      progressLessons,
-      loadProgressLessons,
-      /* Funcion que se encarga de llamar otra funcion que carga los datos del contenido y los setea, ademas redirije a la page del contenido */
-      renderContent,
-      /* Funcion que se encarga de llamar otra funcion que carga los datos de la evaluacion y los setea, ademas redirije a la page de la evaluacion */
-      renderEvaluation,
-      /* Leccion que se esta haciendo */
-      currentLesson,
-      setPalette,
-      palette
-
+        setCourses,
+        courses,
+        // Lecciones del curso actual cargado
+        lessons,
+        // Permite modificar las lecciones desde otros componentes (por ejemplo, marcar como completada)
+        setLessons,
+        // Porcentaje de progreso del curso
+        progress,
+        // Lección actual que el estudiante está viendo (estado compartido)
+        content,
+        // Evaluación actual de la lección (preguntas)
+        evaluation,
+        // Función que carga las lecciones de un curso según su id
+        loadLessonsCourse,
+        // Función que carga el contenido de una lección específica
+        loadLessonContent,
+        // Función que carga la evaluación de una lección específica
+        loadLessonEvaluation,
+        progressLessons,
+        loadProgressLessons,
+        /* Funcion que se encarga de llamar otra funcion que carga los datos del contenido y los setea, ademas redirije a la page del contenido */
+        renderContent,
+        /* Funcion que se encarga de llamar otra funcion que carga los datos de la evaluacion y los setea, ademas redirije a la page de la evaluacion */
+        renderEvaluation,
+        /* Leccion que se esta haciendo */
+        currentLesson,
+        setPalette,
+        palette,
+        refreshCoursesStudent
       }}
     >
       {/* Solo renderiza la app si ya se hizo la validación inicial de sesión */}

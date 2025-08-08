@@ -1,22 +1,14 @@
 import { useEffect } from "react";
-import './Styles/StudentPage.css'
-import { useNavigationHandler, type AppRoutes } from "../../../hooks/useNavigationHandler";
-import type { TCourse } from "../../courses/types/Course";
+import '../Styles/StudentPage.css'
 import UpdateInformation from "../components/UpdateInformation";
 import { useUser } from "../../auth/Hooks/useAuth";
 import { useStudentCourseContext } from "../../courses/hooks/useCourse";
+import { useNavigate } from "react-router-dom";
 export default function StudentProfile() {
   const {user} = useUser()
-  const {loadLessonsCourse,loadProgressLessons, progressLessons} = useStudentCourseContext()
+  const {loadProgressLessons, progressLessons} = useStudentCourseContext()
   /* Agrehar en el contexto el loadCertificates */
-  const handleBtnNavigate = useNavigationHandler()
 
-
-  const handleClickCourseProgress =(id:TCourse['id'], nameRoute:string)=>{
-      loadLessonsCourse(id) /* Ejecutar funcion del hook que trae las lecciones */
-      const route:AppRoutes | string = nameRoute
-      handleBtnNavigate(route)/* Redirijir al home del curso */
-  }
 
 
 
@@ -28,6 +20,7 @@ export default function StudentProfile() {
     progressTotal += progressLessons[index].completed_lessons;
 
   }
+  const navigate = useNavigate()
 
   return (
     /* Reemplazar campos por lo del backend */
@@ -39,7 +32,13 @@ export default function StudentProfile() {
               {/* Agg una etiqueta bolteada que diga en progreso o completad */}
               {progressLessons.map((progress)=>(
                 <>
-                  <p key={progress.id_course} onClick={()=>handleClickCourseProgress(progress.id_course,`/courses/${progress.name_course}`)} className={`progress-course-${progress.name_course.toLowerCase()}`}>{progress.name_course} <span className="number-process">{progress.completed_lessons}/{progress.all_lessons}</span><span className="span-status-course" style={{'background':progress.status === 'completed'? '#59A9FF':'#FF7659'}}>{progress.status === 'completed'? 'Completo':'En progreso'}</span></p>
+                  <p key={progress.id_course}
+                  onClick={()=>navigate(`/student/course/${progress.id_course}/${progress.name_course}`) }
+                  style={{'backgroundColor':progress.palette.accent}}>
+                    {progress.name_course}
+                  <span className="number-process">{progress.completed_lessons}/{progress.all_lessons}</span>
+
+                  <span className="span-status-course" style={{'background':progress.status === 'completed'? '#59A9FF':'#FF7659'}}>{progress.status === 'completed'? 'Completo':'En progreso'}</span></p>
 
 
 

@@ -8,12 +8,14 @@ import { useNavigate } from "react-router-dom";
 import type {
   TFormDataLesson,
   TEvaluationTeacherSend,
+  TLessonContentResponse,
 } from "../types/Teacher";
 
 /** Servicios para crear lección y evaluación */
 import CreateLessonAPI from "../services/Lesson/CreateLesson.server";
 import { CreateEvaluacionAPI } from "../services/Evaluation/CreateEvaluation.server";
 import toast from "react-hot-toast";
+import { authStorage } from "../../../shared/Utils/authStorage";
 
 /** Define los posibles errores del formulario */
 type FormErrors = {
@@ -31,9 +33,12 @@ type FormErrors = {
 };
 
 /** Hook personalizado para manejar la creación de lecciones y evaluaciones */
-export function useFormLessons() {
+export function useFormCreateLessons() {
   /** Obtiene el ID del curso desde los parámetros de la ruta */
-  const { id_course } = useParams<{ id_course: string }>();
+  const { courseId } = useParams<{ courseId: string }>();
+  const idCourse = Number(courseId)
+
+
   const navigate = useNavigate(); // dentro del hook
 
   /** Estado inicial del formulario, sin IDs ya que se generan en backend */
@@ -44,16 +49,16 @@ export function useFormLessons() {
     lesson: {
       name: "",
       content: {
-        contentType: "text",
+        content_type: "text",
         file: null,
         text: "",
       },
     },
     evaluation: {
-      questionType: "open_question",
+      question_type: "open_question",
       question: "",
       options: [],
-      correctAnswer: "",
+      correct_answer: "",
     },
   });
 
@@ -76,7 +81,8 @@ export function useFormLessons() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     const { name, content } = formDataLesson.lesson;
-    const { questionType, question, options, correctAnswer } = formDataLesson.evaluation;
+    const { question_type, question, options, correct_answer } = formDataLesson.evaluation;
+
 
     /** Valida nombre de la lección */
     if (!name.trim()) {
@@ -103,7 +109,7 @@ export function useFormLessons() {
     }
 
     /** Si es pregunta de selección múltiple, valida opciones */
-    if (questionType === "multiple_choice" && Array.isArray(options)) {
+    if ( question_type === "multiple_choice" && Array.isArray(options)) {
       if (options.length < 2) {
         newErrors.evaluation = {
           ...newErrors.evaluation,
@@ -118,7 +124,7 @@ export function useFormLessons() {
         };
       }
 
-      if (!correctAnswer || !options.includes(correctAnswer)) {
+      if (!correct_answer || !options.includes(correct_answer)) {
         newErrors.evaluation = {
           ...newErrors.evaluation,
           correctAnswer: ERROR_MESSAGES.invalidAnswer,
@@ -141,48 +147,44 @@ export function useFormLessons() {
 
     try {
       const { name, content } = formDataLesson.lesson;
+      const lessonContent:TLessonContentResponse ={
+        name:name,
+        content:content
 
+      }
+      console.log(lessonContent)
       /** Crea la lección */
-      const lessonCreated = await CreateLessonAPI({
-        idCourse: Number(id_course),
-        name,
-        content: {
-          contentType: content.contentType,
-          text: content.text,
-          file: content.file,
-        },
-      });
+      const lessonCreated = await CreateLessonAPI({idCourse,lessonContent});
 
       /** Obtiene el ID de la lección recién creada */
-      const id_lesson = lessonCreated;
-      if (!id_lesson) throw new Error("No se pudo obtener el ID de la lección");
+      const idLesson = lessonCreated.id;
+      /* aObtiene el nombre de la leccion recien creada, para mostrarla cuando se ejecute el servicio de la evaluacion */
+      const nameLesson= lessonCreated.name;
+      if (!idLesson) throw new Error("No se pudo obtener el ID de la lección");
 
       /** Prepara datos de evaluación */
-      const { questionType, question, options, correctAnswer } = formDataLesson.evaluation;
+      const { question_type, question, options, correct_answer } = formDataLesson.evaluation;
 
-      const evaluationData: TEvaluationTeacherSend = {
-        idCourse: Number(id_course),
-        idLesson: id_lesson,
-        questionType,
+      const evaluation: TEvaluationTeacherSend = {
+        question_type,
         question,
         options: options ?? [],
-        ...(questionType === "multiple_choice" ? { correctAnswer } : {}),
+        ...(question_type === "multiple_choice" ? { correct_answer } : {}),
       };
 
       /** Crea la evaluación */
-      const createEvaluation = await CreateEvaluacionAPI(evaluationData);
+      const createEvaluation = await CreateEvaluacionAPI({idLesson, idCourse,evaluation});
 
       /** Marca éxito y resetea formulario */
-      if(createEvaluation){
-          navigate(`/teacher/courses/${id_course}/lessons`);
-
-
+      if (lessonCreated && createEvaluation) {
+        toast.success("Lección y evaluación creadas exitosamente");
+        // Limpiar cache de lecciones para forzar recarga
+        authStorage.clearLessonsData();
+        authStorage.removeFormLessonInfo();
+        setSubmitSuccess(true);
+        navigate(`/teacher/courses/${idCourse}`);
       }
-      setSubmitSuccess(true);
       resetForm();
-      toast.success(createEvaluation.message)
-
-
       /* Redirijir al curso  */
     } catch (err) {
       console.error("Error al guardar los datos", err);
@@ -197,13 +199,14 @@ export function useFormLessons() {
       setFormDataLesson({
         lesson: {
           name: "",
-          content: { contentType: "text", file: null, text: "" },
+          content: { content_type: "text", file: null, text: "" },
         },
         evaluation: {
-          questionType: "open_question",
+          question_type: "open_question",
           question: "",
           options: [],
-          correctAnswer: "",
+          correct_answer: "",
+
         },
       });
       setSubmitSuccess(false);
@@ -226,14 +229,14 @@ export function useFormLessons() {
     setFormDataLesson((prev) => {
       const opciones = [...(prev.evaluation.options ?? [])];
       const nuevasOpciones = opciones.filter((_, i) => i !== index);
-      const esLaCorrecta = opciones[index] === prev.evaluation.correctAnswer;
+      const esLaCorrecta = opciones[index] === prev.evaluation.correct_answer;
 
       return {
         ...prev,
         evaluation: {
           ...prev.evaluation,
           options: nuevasOpciones,
-          correctAnswer: esLaCorrecta ? "" : prev.evaluation.correctAnswer,
+          correctAnswer: esLaCorrecta ? "" : prev.evaluation.correct_answer,
         },
       };
     });
@@ -252,38 +255,77 @@ export function useFormLessons() {
           ...prev.evaluation,
           options: nuevas,
           correctAnswer:
-            prev.evaluation.correctAnswer === anterior ? value : prev.evaluation.correctAnswer,
+            prev.evaluation.correct_answer === anterior ? value : prev.evaluation.correct_answer,
         },
       };
     });
   };
 
   /** Cambia el tipo de pregunta */
-  const handleQuestionTypeChange = (value: TFormDataLesson['evaluation']['questionType']) => {
+  const handleQuestionTypeChange = (
+    value: TFormDataLesson["evaluation"]["question_type"]
+  ) => {
     setFormDataLesson((prev) => ({
       ...prev,
       evaluation: {
         ...prev.evaluation,
-        questionType: value,
+        question_type: value, // ✅ Usar question_type en lugar de questionType
         options: value === "multiple_choice" ? ["", ""] : [],
-        correctAnswer: "",
+        correct_answer: "", // ✅ Usar correct_answer en lugar de correctAnswer
       },
     }));
   };
 
   /** Cambia el tipo de contenido de la lección */
-  const handleContentTypeChange = (value: TFormDataLesson['lesson']['content']['contentType']) => {
+  const handleContentTypeChange = (
+    value: TFormDataLesson["lesson"]["content"]["content_type"]
+  ) => {
     setFormDataLesson((prev) => ({
       ...prev,
       lesson: {
         ...prev.lesson,
         content: {
           ...prev.lesson.content,
-          contentType: value,
+          content_type: value, // ✅ Usar content_type en lugar de contentType
         },
       },
     }));
   };
+    /**
+   * Esta función se usa para manejar cambios en los campos del formulario.
+   * Por ejemplo: cuando el usuario escribe en el input del nombre de la lección.
+   *
+   * path = la ruta del campo (ej: "lesson.name" o "lesson.content.text")
+   */
+  const handleChange =
+    (path: string) =>
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
+    ) => {
+      const value = e.target.value; // el valor que escribió el usuario
+
+      // Creamos una copia del estado actual para modificarlo sin romper nada
+      const updated = { ...formDataLesson };
+
+      // Convertimos la ruta "lesson.name" en ["lesson", "name"]
+      const keys = path.split(".");
+
+      // Aquí vamos bajando por el objeto hasta llegar al campo que queremos cambiar
+      let current = updated as Record<string, any>;
+      for (let i = 0; i < keys.length - 1; i++) {
+        current = current[keys[i]];
+      }
+
+      // Finalmente, actualizamos el valor del campo
+      current[keys[keys.length - 1]] = value;
+
+      // Guardamos el nuevo estado en React
+      setFormDataLesson(updated);
+    };
+
+
 
   /** Retorna funciones y estados útiles */
   return {
@@ -298,5 +340,6 @@ export function useFormLessons() {
     updateOption,
     handleQuestionTypeChange,
     handleContentTypeChange,
+    handleChange,
   };
 }

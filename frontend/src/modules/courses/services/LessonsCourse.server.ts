@@ -1,14 +1,13 @@
 /* Servicio que se conecta al backend para solicitar las lecciones de un cursos de un estudiante  */
 import axios from '../../../api/axiosInstance';
-import type {TCourse,TLesson } from '../types/Course';
+import type {TCourse, TLessonStudent } from '../types/CourseStudent';
 
 const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
 
 type TContentLessonsAPIResponse = {
-    id: TLesson['id'],
-    name: TLesson['name'],
-    progress_state: TLesson['progressState']
-    category: TCourse['category']
+    id: TLessonStudent['id'],
+    name: TLessonStudent['name'],
+    progress_state: TLessonStudent['progressState']
 }
 
 // Tipo para la respuesta esperada según el estándar
@@ -33,7 +32,6 @@ export default async function LessonsCourseAPI(idCourse: TCourse['id']): Promise
             throw new Error('Respuesta del servidor inválida: estructura de lecciones incorrecta');
         }
 
-        console.log(responseData.lessons);
         return responseData.lessons;
 
     } catch (error) {

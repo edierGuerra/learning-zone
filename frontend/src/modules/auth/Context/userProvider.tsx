@@ -27,88 +27,90 @@ export const UserProvider = ({ children }: Props) => {
   const [notifications, setNotifications] = useState<TNotifications>([]);
   const [isReady, setIsReady] = useState(false);
 
-  // Carga inicial: verifica si hay sesión guardada
+  /**
+   * initSession
+   * -----------
+   * Sincroniza el estado global del usuario después del login exitoso.
+   * Lee el token desde localStorage, obtiene el rol desde el backend,
+   * y carga la información correspondiente del usuario y sus notificaciones.
+   * Esta función debe llamarse inmediatamente después de guardar el token.
+   */
+const initSession = async (): Promise<boolean> => {
+  const storedToken = authStorage.getToken();
+  if (!storedToken) return false;
+
+  try {
+    const roleUser = await GetRoleUserAPI();
+    authStorage.setRole(roleUser);
+    setRole(roleUser);
+    alert(roleUser)
+
+    if (roleUser === "student") {
+      const data = await GetStudentAPI();
+      const userData: TUser = {
+        id: data.id,
+        numIdentification: data.identification_number,
+        name: data.names,
+        lastNames: data.last_names,
+        email: data.email,
+        prefixProfile: data.prefix_profile
+      };
+      authStorage.setUser(userData);
+      setUser(userData);
+    }else if(roleUser === 'teacher') {
+      const data = await GetTeacherAPI();
+      console.log(data.email)
+      const userData: TUser = {
+        id: data.id,
+        name: data.names,
+        lastNames: data.last_names,
+        email: data.email,
+        specialization: data.specialization,
+        prefixProfile: data.prefix_profile
+      };
+      authStorage.setUser(userData);
+      setUser(userData);
+    }
+
+/*     const userNotifications = await GetNotificationsAPI();
+    authStorage.setNotifications(userNotifications);
+    setNotifications(userNotifications);
+ */
+    return true;
+
+  } catch (error) {
+    console.error("Error al inicializar sesión:", error);
+    return false;
+  }
+};
+
+  // Carga inicial: verifica si hay sesión guardada o incompleta
   useEffect(() => {
     const storedToken = authStorage.getToken();
     const storedUser = authStorage.getUser();
     const storedNotifications = authStorage.getNotifications();
     const storedRole = authStorage.getRole();
 
-    // Si hay token pero no usuario, obtener información del backend
-    if (storedToken && !storedUser && !storedRole) {
-      const loadUserInfo = async () => {
-        try {
-          /* Solicitar el rol al backend en enviando el token  */
-          const roleUser = await GetRoleUserAPI();
-          setRole(roleUser);
-          authStorage.setRole(roleUser)
-
-          if (roleUser === 'student') {
-            const dataStudent = await GetStudentAPI();
-
-            // Convertir datos del estudiante a TUser
-            const userData: TUser = {
-                id: dataStudent.id,
-                numIdentification: dataStudent.identification_number,
-                name: dataStudent.names,
-                lastNames: dataStudent.last_names,
-                email: dataStudent.email,
-                prefixProfile: dataStudent.prefix_profile
-            };
-
-            // Guardar en localStorage y contexto
-            authStorage.setUser(userData);
-            setUser(userData);
-        }else{
-            const dataTeacher = await GetTeacherAPI();
-
-            // Convertir datos del estudiante
-            const userData: TUser = {
-              id: dataTeacher.id,
-              numIdentification:dataTeacher.identification_number,
-              name:dataTeacher.names,
-              lastNames:dataTeacher.last_names,
-              email:dataTeacher.email,
-              specialization:dataTeacher.specialization,
-              prefixProfile:dataTeacher.prefix_profile
-            };
-            // Guardar en localStorage
-            authStorage.setUser(userData);
-            setUser(userData);
-
-          }
-
-
-          // Cargar notificaciones
-          const dataNotifications = await GetNotificationsAPI();
-
-          authStorage.setNotifications(dataNotifications);
-
-          // Actualizar estado
-          setNotifications(dataNotifications);
-        } catch (error) {
-          console.error('Error cargando información del usuario:', error);
-        }
-      };
-
-      loadUserInfo();
+    // Si hay token pero no se ha cargado toda la información, ejecutar initSession
+    if (storedToken && (!storedUser || !storedRole)) {
+      initSession();
     }
 
-    // Si hay sesión guardada, restaurar
+    // Si ya todo está guardado, restaurar directamente al contexto
     if (storedUser && storedToken && storedNotifications && storedRole) {
       setUser(storedUser);
       setToken(storedToken);
       setNotifications(storedNotifications);
-      setRole(storedRole)
+      setRole(storedRole);
     }
 
     setIsReady(true);
   }, []);
 
-  // Verificar si el usuario está logueado
+  // Verifica si el usuario está logueado
   const isLoggedIn = !!user && !!role;
 
-  // Función que cierra sesión
+  // Cierra sesión y limpia todo
   const logout = () => {
     authStorage.removeToken();
     authStorage.removeUser();
@@ -119,28 +121,32 @@ export const UserProvider = ({ children }: Props) => {
     setRole(null);
     setToken(null);
     setNotifications([]);
+    authStorage.removeRole()
 
-    toast.success('Sesión cerrada');
+    toast.success("Sesión cerrada");
     handleBtnNavigate("/");
   };
 
   const numberNotifications = notifications.length;
 
   return (
-    <UserContext.Provider value={{
-      user,
-      role,
-      token,
-      logout,
-      isLoggedIn,
-      isReady,
-      setUser,
-      setToken,
-      setRole,
-      setNotifications,
-      notifications,
-      numberNotifications
-    }}>
+    <UserContext.Provider
+      value={{
+        user,
+        role,
+        token,
+        logout,
+        isLoggedIn,
+        isReady,
+        setUser,
+        setToken,
+        setRole,
+        setNotifications,
+        notifications,
+        numberNotifications,
+        initSession // Se expone al contexto para uso posterior
+      }}
+    >
       {isReady ? children : null}
     </UserContext.Provider>
   );

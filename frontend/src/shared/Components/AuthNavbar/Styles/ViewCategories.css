@@ -25,6 +25,8 @@
   color: #fff;
   transition: 0.3s ease-in-out;
   font-size: 0.95rem;
+  background-color: rgb(18, 56, 92);
+  box-shadow: 10px 5px 5px  #868181;
 }
 
 .btn-category:hover {

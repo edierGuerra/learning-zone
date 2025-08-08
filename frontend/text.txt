@@ -31,3 +31,6 @@ npm install lottie-react
 Para google maps
     npm install @react-google-maps/api
     npm install --save @types/google.maps
+
+Instala Framer Motion y React Icons
+npm install framer-motion react-icons

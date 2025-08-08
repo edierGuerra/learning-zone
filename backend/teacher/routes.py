@@ -84,7 +84,7 @@ async def create_course(
         "teacher_id": teacher.id,
     }
     new_course = await teacher_services.create_course(course=course_data)
-    return {"message": "Curso creado con exito.", "course": new_course}
+    return {"message": "Curso creado con exito.", "id_course": new_course}
 
 
 @router.get(
@@ -196,12 +196,12 @@ async def get_teacher_info(teacher: Teacher = Depends(get_current_teacher)):
     """Obtiene la información del profesor actual."""
     return {
         "id": teacher.id,
-        "name": teacher.name,
+        "names": teacher.names,
         "email": teacher.email,
         "specialization": teacher.specialization,
-        "last_name": teacher.last_name,
+        "last_names": teacher.last_names,
         "prefix_profile": generate_profile_prefix(
-            name=teacher.name, last_name=teacher.last_name
+            name=teacher.names, last_name=teacher.last_names
         ),
     }
 

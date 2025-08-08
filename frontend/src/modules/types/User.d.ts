@@ -58,7 +58,6 @@ export type TTeacherProfileToken = {
 
 export type TTeacherProfile = {
   id: TTeacher['id'];
-  numIdentification: TTeacher['numIdentification'];
   name: TTeacher['name'];
   lastNames: TTeacher['lastNames'];
   email: TTeacher['email'];
@@ -99,4 +98,6 @@ export type TUserContext = {
   notifications: TNotifications;
   setNotifications: React.Dispatch<React.SetStateAction<TNotifications>>;
   numberNotifications: number;
+  initSession: ()=>Promise<boolean>
+
 };

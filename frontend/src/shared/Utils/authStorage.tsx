@@ -1,17 +1,40 @@
 // PARA MAYOR SEGURIDAD MIGRAR ESTO A COOKIES
 // Importa los tipos de datos definidos para el usuario y su token
-import type { TComment, TStudentAllComents } from "../../modules/courses/comments/types";
-import type { TContent, TCoursesStudents, TCoursesTeachers, TEvaluation, TLesson, TLessons } from "../../modules/courses/types/Course";
+import type {
+  TComment,
+  TStudentAllComents,
+} from "../../modules/courses/comments/types";
+import type {
+  TContent,
+  TCoursesStudents,
+  TEvaluation,
+  TLessonsStudent,
+  TLessonsTeacher,
+  TLessonStudent,
+} from "../../modules/courses/types/CourseStudent";
 import type { TNotifications } from "../../modules/notifications/types/Notifications";
-import type { TStudent, TStudentConsent, TStudentProfile, TStudentProfileToken, TUser, TUserRole } from "../../modules/types/User";
+import type {
+  TCoursesTeachers,
+  TCourseTeacherResponse,
+  TFormDataLesson,
+  TLessonTeacherResponse,
+} from "../../modules/teacher/types/Teacher";
+import type {
+  TStudent,
+  TStudentConsent,
+  TStudentProfile,
+  TStudentProfileToken,
+  TUser,
+  TUserRole,
+} from "../../modules/types/User";
 import type { TColorPalette } from "../theme/ColorPalettesCourses";
 
 // Objeto que encapsula el acceso al almacenamiento local (localStorage)
 export const authStorage = {
-  setCookieConsentGiven :(consentObject:TStudentConsent)=>
-    localStorage.setItem('cookieConsentGiven',JSON.stringify(consentObject)),
+  setCookieConsentGiven: (consentObject: TStudentConsent) =>
+    localStorage.setItem("cookieConsentGiven", JSON.stringify(consentObject)),
 
-  getCookieConsentGiven:():TStudentConsent | null =>{
+  getCookieConsentGiven: (): TStudentConsent | null => {
     try {
       const raw = localStorage.getItem("cookieConsentGiven");
       return raw ? (JSON.parse(raw) as TStudentConsent) : null;
@@ -20,15 +43,14 @@ export const authStorage = {
       return null;
     }
   },
-  removeCookieConsentGiven:()=>localStorage.removeItem('CookieConsentGiven'),
+  removeCookieConsentGiven: () => localStorage.removeItem("CookieConsentGiven"),
 
   // ============================================================================
   // USUARIO UNIFICADO (ESTUDIANTE O MAESTRO)
   // ============================================================================
 
   // Guarda el usuario unificado (estudiante o maestro)
-  setUser: (user: TUser) =>
-    localStorage.setItem("user", JSON.stringify(user)),
+  setUser: (user: TUser) => localStorage.setItem("user", JSON.stringify(user)),
 
   // Recupera el usuario unificado desde localStorage
   getUser: (): TUser | null => {
@@ -49,8 +71,7 @@ export const authStorage = {
   // ============================================================================
 
   // Guarda el rol del usuario
-  setRole: (role: TUserRole) =>
-    localStorage.setItem("role", role),
+  setRole: (role: TUserRole) => localStorage.setItem("role", role),
 
   // Recupera el rol del usuario desde localStorage
   getRole: (): TUserRole | null => {
@@ -64,9 +85,9 @@ export const authStorage = {
   // Elimina el usuario del localStorage (compatibilidad)
   removeStudent: () => localStorage.removeItem("student"),
 
-  setAllStudents:(allStudents:TStudentAllComents[])=>
-    localStorage.setItem('allStudents',JSON.stringify(allStudents)),
-  getAllStudents:():TStudentAllComents[] | null =>{
+  setAllStudents: (allStudents: TStudentAllComents[]) =>
+    localStorage.setItem("allStudents", JSON.stringify(allStudents)),
+  getAllStudents: (): TStudentAllComents[] | null => {
     try {
       const raw = localStorage.getItem("allStudents");
       return raw ? (JSON.parse(raw) as TStudentAllComents[]) : null;
@@ -74,13 +95,12 @@ export const authStorage = {
       console.error("El JSON está mal formado :", e);
       return null;
     }
-
   },
-  removeAllStudents:() => localStorage.removeItem('allStudents'),
+  removeAllStudents: () => localStorage.removeItem("allStudents"),
 
-  setComments:(comments:TComment[])=>
-    localStorage.setItem('comments',JSON.stringify(comments)),
-  getComments:():TComment[] | null =>{
+  setComments: (comments: TComment[]) =>
+    localStorage.setItem("comments", JSON.stringify(comments)),
+  getComments: (): TComment[] | null => {
     try {
       const raw = localStorage.getItem("comments");
       return raw ? (JSON.parse(raw) as TComment[]) : null;
@@ -88,12 +108,11 @@ export const authStorage = {
       console.error("El JSON está mal formado :", e);
       return null;
     }
-
   },
-  removeComments:() => localStorage.removeItem('comments'),
+  removeComments: () => localStorage.removeItem("comments"),
 
   // Guarda el token de autenticación
-  setToken: (token: TStudentProfileToken['token']) =>
+  setToken: (token: TStudentProfileToken["token"]) =>
     localStorage.setItem("token", token),
 
   getToken: (): string | null => localStorage.getItem("token"),
@@ -101,13 +120,13 @@ export const authStorage = {
   removeToken: () => localStorage.removeItem("token"),
 
   // Token de request email
-  setRequestEmailToken: (token: TStudentProfileToken['token']) =>
+  setRequestEmailToken: (token: TStudentProfileToken["token"]) =>
     localStorage.setItem("RequestEmailToken", token),
 
-  getRequestEmailToken: (): string | null => localStorage.getItem("RequestEmailToken"),
+  getRequestEmailToken: (): string | null =>
+    localStorage.getItem("RequestEmailToken"),
 
   removeRequestEmailToken: () => localStorage.removeItem("RequestEmailToken"),
-
 
   // Email
   setEmail: (email: TStudentProfile["email"]) =>
@@ -128,17 +147,9 @@ export const authStorage = {
 
   removeIdAutoIncrementStudent: () =>
     localStorage.removeItem("idAutoIncrementStudent"),
-/*
-  setNameStudent:(name:TStudent['name'])=>
-    localStorage.setItem('name', name),
-
-  getNameStudent:(): TStudent['name'] | null =>
-    localStorage.getItem('name'),
-
-  removeNameStudent :()=> localStorage.removeItem('name'), */
 
   setNotifications: (notifications: TNotifications) => {
-    localStorage.setItem('notifications', JSON.stringify(notifications));
+    localStorage.setItem("notifications", JSON.stringify(notifications));
   },
 
   getNotifications: (): TNotifications => {
@@ -151,12 +162,12 @@ export const authStorage = {
     }
   },
 
-  removeNotifications: () => localStorage.removeItem('notifications'),
+  removeNotifications: () => localStorage.removeItem("notifications"),
 
-  setCourseStudent:(courses:TCoursesStudents)=>{
-    localStorage.setItem('coursesStudent',JSON.stringify(courses))
+  setCoursesStudent: (courses: TCoursesStudents) => {
+    localStorage.setItem("coursesStudent", JSON.stringify(courses));
   },
-  getCoursesStudent:():TCoursesStudents =>{
+  getCoursesStudent: (): TCoursesStudents => {
     try {
       const raw = localStorage.getItem("coursesStudent");
       return raw ? (JSON.parse(raw) as TCoursesStudents) : [];
@@ -164,14 +175,13 @@ export const authStorage = {
       console.error("El JSON está mal formado:", e);
       return [];
     }
-
   },
-  removeCoursesStudent:()=>localStorage.removeItem('coursesStudent'),
+  removeCoursesStudent: () => localStorage.removeItem("coursesStudent"),
 
-  setCoursesTeacher:(courses:TCoursesTeachers)=>{
-    localStorage.setItem('coursesStudent',JSON.stringify(courses))
+  setCoursesTeacher: (courses: TCoursesTeachers) => {
+    localStorage.setItem("coursesTeacher", JSON.stringify(courses));
   },
-  getCoursesTeacher:():TCoursesTeachers =>{
+  getCoursesTeacher: (): TCoursesTeachers => {
     try {
       const raw = localStorage.getItem("coursesTeacher");
       return raw ? (JSON.parse(raw) as TCoursesTeachers) : [];
@@ -179,33 +189,78 @@ export const authStorage = {
       console.error("El JSON está mal formado:", e);
       return [];
     }
-
   },
-  removeCoursesTeacher:()=>localStorage.removeItem('coursesTeacher'),
+  removeCoursesTeacher: () => localStorage.removeItem("coursesTeacher"),
 
-
-  setLessons:(lessons:TLessons)=>{
-    localStorage.setItem('lessons',JSON.stringify(lessons))
+  setCourseTeacher: (course: TCourseTeacherResponse) => {
+    localStorage.setItem("courseTeacher", JSON.stringify(course));
   },
-  getLessons:():TLessons =>{
+  getCourseTeacher: (): TCourseTeacherResponse | null => {
     try {
-      const raw = localStorage.getItem("lessons");
-      return raw ? (JSON.parse(raw) as TLessons) : [];
+      const raw = localStorage.getItem("courseTeacher");
+      return raw ? (JSON.parse(raw) as TCourseTeacherResponse) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado:", e);
+      return null;
+    }
+  },
+
+  removeCourseTeacher: () => localStorage.removeItem("courseTeacher"),
+
+  setLessonsStudents: (lessons: TLessonsStudent) => {
+    localStorage.setItem("lessonsStudent", JSON.stringify(lessons));
+  },
+  getLessonsStudents: (): TLessonsStudent => {
+    try {
+      const raw = localStorage.getItem("lessonsStudent");
+      return raw ? (JSON.parse(raw) as TLessonsStudent) : [];
     } catch (e) {
       console.error("El JSON está mal formado:", e);
       return [];
     }
   },
-  removeLessons:()=>localStorage.removeItem('lessons'),
+  removeLessonsStudents: () => localStorage.removeItem("lessonsStudent"),
 
-  setLesson: (lesson: TLesson) =>
-    localStorage.setItem("lesson", JSON.stringify(lesson)),
+  setLessonsTeacher: (lesson: TLessonsTeacher) =>
+    localStorage.setItem("lessonsTeacher", JSON.stringify(lesson)),
 
   // Recupera el objeto de contenido desde localStorage
-  getLesson: (): TLesson | null => {
+  getLessonsTeacher: (): TLessonsTeacher | null => {
+    try {
+      const raw = localStorage.getItem("lessonsTeacher");
+      return raw ? (JSON.parse(raw) as TLessonsTeacher) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado :", e);
+      return null;
+    }
+  },
+  // Elimina el content del localStorage
+  removeLessonsTeacher: () => localStorage.removeItem("lessonsTeacher"),
+
+  setFormLessonInfo: (formInfoLesson: TFormDataLesson) =>
+    localStorage.setItem("formLesson", JSON.stringify(formInfoLesson)),
+
+  getFormLessonInfo: (): TFormDataLesson | null => {
+    try {
+      const raw = localStorage.getItem("formLesson");
+      return raw ? (JSON.parse(raw) as TFormDataLesson) : null;
+    } catch (e) {
+      console.error("El JSON está mal formado:", e);
+      return null;
+    }
+  },
+
+  removeFormLessonInfo: () => localStorage.removeItem("formLesson"),
+
+  setLesson: (lesson: TLessonStudent | TLessonTeacherResponse | null) =>
+    localStorage.setItem("lesson", JSON.stringify(lesson)),
+  // Recupera el objeto de contenido desde localStorage
+  getLesson: (): TLessonStudent | TLessonTeacherResponse | null => {
     try {
       const raw = localStorage.getItem("lesson");
-      return raw ? (JSON.parse(raw) as TLesson) : null;
+      return raw
+        ? (JSON.parse(raw) as TLessonStudent | TLessonTeacherResponse | null)
+        : null;
     } catch (e) {
       console.error("El JSON está mal formado :", e);
       return null;
@@ -249,8 +304,8 @@ export const authStorage = {
   // Elimina la evaluation del localStorage
   removeEvaluation: () => localStorage.removeItem("evaluation"),
 
-  setPaletteColors :(palette:TColorPalette)=>
-    localStorage.setItem('paletteColors',JSON.stringify(palette)),
+  setPaletteColors: (palette: TColorPalette) =>
+    localStorage.setItem("paletteColors", JSON.stringify(palette)),
   // Recupera el objeto de de la paleta de colores desde localStorage
   getPaletteColors: (): TColorPalette | null => {
     try {
@@ -262,7 +317,107 @@ export const authStorage = {
     }
   },
 
-   // Elimina la paleta de colores  del localStorage
+  // Elimina la paleta de colores  del localStorage
   removePaletteColors: () => localStorage.removeItem("paletteColors"),
 
+  // ============================================================================
+  // FUNCIONES DE LIMPIEZA MASIVA PARA EVITAR RENDERIZACIÓN DE DATOS ANTIGUOS
+  // ============================================================================
+
+  /**
+   * Limpia todos los datos relacionados con cursos del teacher
+   * Útil al cambiar de curso o después de operaciones CRUD para evitar mostrar datos obsoletos
+   */
+  clearTeacherCourseData: () => {
+    localStorage.removeItem("courseTeacher"); // Información del curso actual
+    localStorage.removeItem("lessonsTeacher"); // Lecciones del curso
+    localStorage.removeItem("lesson"); // Lección individual
+    localStorage.removeItem("content"); // Contenido de lección
+    localStorage.removeItem("evaluation"); // Evaluación de lección
+    localStorage.removeItem("formLesson"); // Datos del formulario de lección
+  },
+
+  /**
+   * Limpia todos los datos relacionados con cursos del student
+   * Útil al cambiar de curso o después de operaciones CRUD para evitar mostrar datos obsoletos
+   */
+  clearStudentCourseData: () => {
+    localStorage.removeItem("coursesStudent"); // Lista de cursos del estudiante
+    localStorage.removeItem("lessonsStudent"); // Lecciones del estudiante
+    localStorage.removeItem("lesson"); // Lección individual
+    localStorage.removeItem("content"); // Contenido de lección
+    localStorage.removeItem("evaluation"); // Evaluación de lección
+    localStorage.removeItem("comments"); // Comentarios del curso
+  },
+
+  /**
+   * Limpia solo los datos de lecciones (teacher y student)
+   * Útil después de crear, actualizar o eliminar lecciones
+   */
+  clearLessonsData: () => {
+    localStorage.removeItem("lessonsTeacher"); // Lecciones del teacher
+    localStorage.removeItem("lessonsStudent"); // Lecciones del student
+    localStorage.removeItem("lesson"); // Lección individual
+    localStorage.removeItem("content"); // Contenido de lección
+    localStorage.removeItem("evaluation"); // Evaluación de lección
+  },
+
+  /**
+   * Limpia todos los datos de cursos (teacher y student)
+   * Útil al hacer logout o cambiar de usuario
+   */
+  clearAllCoursesData: () => {
+    localStorage.removeItem("coursesTeacher"); // Lista de cursos del teacher
+    localStorage.removeItem("coursesStudent"); // Lista de cursos del student
+    localStorage.removeItem("courseTeacher"); // Curso individual del teacher
+    localStorage.removeItem("lessonsTeacher"); // Lecciones del teacher
+    localStorage.removeItem("lessonsStudent"); // Lecciones del student
+    localStorage.removeItem("lesson"); // Lección individual
+    localStorage.removeItem("content"); // Contenido de lección
+    localStorage.removeItem("evaluation"); // Evaluación de lección
+    localStorage.removeItem("formLesson"); // Datos del formulario de lección
+    localStorage.removeItem("comments"); // Comentarios
+  },
+
+  /**
+   * Limpia datos específicos de una lección individual
+   * Útil al navegar entre lecciones o después de modificar una lección
+   */
+  clearLessonData: () => {
+    localStorage.removeItem("lesson"); // Lección individual
+    localStorage.removeItem("content"); // Contenido de lección
+    localStorage.removeItem("evaluation"); // Evaluación de lección
+  },
+
+  /**
+   * Limpia todos los datos de comentarios
+   * Útil al cambiar de curso o después de operaciones en comentarios
+   */
+  clearCommentsData: () => {
+    localStorage.removeItem("comments"); // Comentarios del curso
+    localStorage.removeItem("allStudents"); // Lista de estudiantes que comentaron
+  },
+
+  /**
+   * Función de limpieza completa (excepto autenticación)
+   * Útil para resetear toda la aplicación manteniendo al usuario logueado
+   */
+  clearAllDataExceptAuth: () => {
+    // Mantener datos de autenticación
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    const role = localStorage.getItem("role");
+    const email = localStorage.getItem("email");
+    const consent = localStorage.getItem("cookieConsentGiven");
+
+    // Limpiar todo el localStorage
+    localStorage.clear();
+
+    // Restaurar datos de autenticación
+    if (token) localStorage.setItem("token", token);
+    if (user) localStorage.setItem("user", user);
+    if (role) localStorage.setItem("role", role);
+    if (email) localStorage.setItem("email", email);
+    if (consent) localStorage.setItem("cookieConsentGiven", consent);
+  },
 };

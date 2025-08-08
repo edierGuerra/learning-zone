@@ -3,7 +3,6 @@ import '../Styles/Login.css'; // Asegúrate de que este archivo exista
 /* import { GrView } from 'react-icons/gr';
 import { GrFormViewHide } from 'react-icons/gr'; */
 import useFormLogin from '../Hooks/useFormLogin';
-import { useEffect } from 'react';
 
 export default function Login() {
   const {email,
@@ -13,19 +12,10 @@ export default function Login() {
       showPassword,
       handleBtnNavigate,
       /* togglePasswordVisibility, */
-      handleSubmitLogin, errors, viewSucessMessage} = useFormLogin()
-
-  useEffect(() => {
-    if (viewSucessMessage) {
-      const timeout = setTimeout(() => {
-        window.location.href = '/';
-      }, 3000);
-
-      return () => clearTimeout(timeout); // limpieza si desmonta antes
-    }
-  }, [viewSucessMessage]);
-
-
+      handleSubmitLogin,
+      errors,
+      viewSucessMessage
+    } = useFormLogin()
 
   return (
     <>

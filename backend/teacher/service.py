@@ -68,8 +68,6 @@ class TeacherServices:
             )
         courses = await self.repo.update_course(course_id, course_data)
         return courses.id
-        # course = await self.repo.update_course(course_id, course_data)
-        # return course.id
 
     async def delete_course(self, course_id: int) -> dict:
         """

@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 import json
 
+from models.student_model import Student
 from models.identification_model import Identification
 
 from .utils import save_and_upload_file
@@ -66,6 +67,17 @@ class TeacherRepo:
             logger.info(f"Creando curso con los datos: {course}")
             new_course = Course(**course)
             self.db.add(new_course)
+
+            stmt = await self.db.execute(
+                select(Student).options(selectinload(Student.courses))
+            )
+            students = stmt.scalars().all()
+            for student in students:
+                student.courses.append(new_course)
+                logger.info(
+                    f"Estudiante con ID {student.id} agregado al curso con ID: {new_course.id}"
+                )
+
             await self.db.commit()
             await self.db.refresh(new_course)
             logger.info(f"Curso creado exitosamente con ID: {new_course.id}")

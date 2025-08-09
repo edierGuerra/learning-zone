@@ -3,6 +3,7 @@
 """Repositorio con todos los procesos"""
 
 # Modulos externos
+from typing import Optional
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -369,7 +370,7 @@ class TeacherRepo:
         await self.db.refresh(new_eval)
         return new_eval
 
-    async def get_evaluation_by_lesson_id(self, lesson_id: int):
+    async def get_evaluation_by_lesson_id(self, lesson_id: int) -> Optional[Evaluation]:
         """
         Obtiene una evaluación por el ID de la lección.
         :param lesson_id: ID de la lección.

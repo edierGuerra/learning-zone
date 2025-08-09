@@ -244,7 +244,7 @@ class TeacherRepo:
         stmt = (
             select(Lesson)
             .where(Lesson.id == lesson_id)
-            .options(selectinload(Lesson.contents))  # precarga el contenido asociado
+            .options(selectinload(Lesson.content))  # precarga el contenido asociado
         )
         result = await self.db.execute(stmt)
 
@@ -266,7 +266,7 @@ class TeacherRepo:
         stmt = (
             select(Lesson)
             .where(Lesson.id == lesson_id)
-            .options(selectinload(Lesson.contents))
+            .options(selectinload(Lesson.content))
         )
         result = await self.db.execute(stmt)
         lesson = result.scalar_one_or_none()
@@ -275,30 +275,31 @@ class TeacherRepo:
             logger.error(f"Lección con ID {lesson_id} no encontrada.")
             raise HTTPException(status_code=404, detail="Lección no encontrada")
 
-        for key, value in lesson_data.items():
-            logger.info(f"Actualizando {key} a {value} para la lección ID {lesson_id}")
-            setattr(lesson, key, value)
-
-        # Actualizar contenido si se proporciona
-        if content_data:
-            content = lesson.contents[0] if lesson.contents else None
-            if not content:
-                raise HTTPException(
-                    status_code=404, detail="Contenido no encontrado en la lección"
+        if lesson_data:
+            for key, value in lesson_data.items():
+                logger.info(
+                    f"Actualizando {key} a {value} para la lección ID {lesson_id}"
                 )
+                setattr(lesson, key, value)
 
-            if "content_type" in content_data:
-                content.content_type = content_data["content_type"]
+        content = lesson.content
+        if content is None:
+            raise HTTPException(
+                status_code=404, detail="La lección no tiene contenido para actualizar."
+            )
 
-            if "text" in content_data:
-                content.text = content_data["text"]
-                content.content = content_data["text"]
+        if "content_type" in content_data:
+            content.content_type = content_data["content_type"]
 
-            if "file" in content_data:
-                url = await update_file_on_cloudinary(
-                    content_data["file"], public_id=lesson_id
-                )
-                content.content = url
+        if "text" in content_data:
+            content.text = content_data["text"]
+            content.content = content_data["text"]
+
+        if "file" in content_data:
+            url = await update_file_on_cloudinary(
+                content_data["file"], public_id=lesson_id
+            )
+            content.content = url
 
         await self.db.commit()
         await self.db.refresh(lesson)

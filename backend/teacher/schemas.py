@@ -86,7 +86,7 @@ class ContentSchema(BaseModel):
 class LessonCResponse(BaseModel):
     id: int
     name: str
-    contents: List[ContentSchema]
+    content: Optional[ContentSchema] = None
 
     class Config:
         from_attributes = True

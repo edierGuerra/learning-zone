@@ -19,7 +19,6 @@ if TYPE_CHECKING:
 
 
 class TypeContent(enum.Enum):
-    TEXT = "text"
     IMAGE = "image"
     VIDEO = "video"
 
@@ -27,9 +26,8 @@ class TypeContent(enum.Enum):
 class Content(Base):
     __tablename__ = "contents"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    # content_type: Mapped[str] = mapped_column(String(50))  # tipo
     content_type: Mapped[TypeContent] = mapped_column(
-        SqlEnum(TypeContent), nullable=False, default=TypeContent.TEXT
+        SqlEnum(TypeContent), nullable=False, default=TypeContent.IMAGE
     )
     content: Mapped[str] = mapped_column(Text, nullable=False)
 
@@ -37,8 +35,8 @@ class Content(Base):
 
     # Claves foraneas
     lesson_id: Mapped[int] = mapped_column(
-        ForeignKey("lessons.id")
-    )  # lesson_id (foreign key)
+        ForeignKey("lessons.id"), nullable=False, unique=True
+    )
 
     # Relaciones
-    lesson: Mapped["Lesson"] = relationship(back_populates="contents")
+    lesson: Mapped["Lesson"] = relationship(back_populates="content")

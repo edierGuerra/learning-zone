@@ -141,7 +141,7 @@ class TeacherServices:
 
         lesson_data = []
         for lesson in lessons:
-            first_content = lesson.contents[0] if lesson.contents else None
+            first_content = lesson.content
 
             # Creamos un dict manualmente que coincida con el esquema `LessonCResponse`
             lesson_data.append(

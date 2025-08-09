@@ -321,7 +321,7 @@ class TeacherRepo:
             raise ValueError("Lección no encontrada")
 
         # Eliminar contenidos asociados y sus archivos si es necesario
-        for content in lesson.contents:
+        for content in lesson.content:
             await delete_file_from_cloudinary(content.content)
             await self.db.delete(content)
 
@@ -341,7 +341,7 @@ class TeacherRepo:
         stmt = (
             select(Lesson)
             .where(Lesson.id_course == course_id)
-            .options(selectinload(Lesson.contents))  # precarga el contenido asociado
+            .options(selectinload(Lesson.content))  # precarga el contenido asociado
         )
         result = await self.db.execute(stmt)
         lessons = result.scalars().all()

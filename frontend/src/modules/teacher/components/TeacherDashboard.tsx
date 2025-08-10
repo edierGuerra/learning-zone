@@ -22,8 +22,6 @@ export default function TeacherDashboard() {
   const handleClickBtnAddCourse =()=>{
     /* Redirigir a crear curso */
     navigate('/teacher/courses/create')
-
-
   }
 
   return (

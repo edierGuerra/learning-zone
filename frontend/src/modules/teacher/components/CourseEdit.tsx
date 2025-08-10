@@ -41,7 +41,9 @@ export default function CourseEdit() {
       <div className="envoltura-form-teacher">
         <div className="header-form-course-teacher">
           <h1 className="title-update-course">Actualizar Curso</h1>
-          <p className="paragraph-update-course">Edita la información del curso.</p>
+          <p className="paragraph-update-course">
+            Edita la información del curso.
+          </p>
         </div>
 
         {submitSuccess && (
@@ -68,17 +70,23 @@ export default function CourseEdit() {
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   className={errors.name && "input-course-error"}
                 />
-                {errors.name && <p className="text-error-course">{errors.name}</p>}
+                {errors.name && (
+                  <p className="text-error-course">{errors.name}</p>
+                )}
               </div>
 
               <div>
                 <Label>Descripción *</Label>
                 <Textarea
                   value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
                   className={errors.description && "input-course-error"}
                 />
-                {errors.description && <p className="text-error-course">{errors.description}</p>}
+                {errors.description && (
+                  <p className="text-error-course">{errors.description}</p>
+                )}
               </div>
 
               <div>
@@ -93,20 +101,47 @@ export default function CourseEdit() {
                 <Label>Paleta de Colores</Label>
                 <div>
                   <p>Nombre: {formData.palette}</p>
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    <span style={{ width: '30px', height: '30px', backgroundColor: formData.paletteColors.brand }}></span>
-                    <span style={{ width: '30px', height: '30px', backgroundColor: formData.paletteColors.surface }}></span>
-                    <span style={{ width: '30px', height: '30px', backgroundColor: formData.paletteColors.text }}></span>
-                    <span style={{ width: '30px', height: '30px', backgroundColor: formData.paletteColors.accent }}></span>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <span
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        backgroundColor: formData.paletteColors.brand,
+                      }}
+                    ></span>
+                    <span
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        backgroundColor: formData.paletteColors.surface,
+                      }}
+                    ></span>
+                    <span
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        backgroundColor: formData.paletteColors.text,
+                      }}
+                    ></span>
+                    <span
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        backgroundColor: formData.paletteColors.accent,
+                      }}
+                    ></span>
                   </div>
                 </div>
               </div>
 
               <div>
                 <Label>Actualizar Imagen (opcional)</Label>
+                <img style={{ width: "100px", height: "100px" }} src={`${formData.image}`} alt="" />
                 <Input
                   type="file"
-                  onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
+                  onChange={(e) =>
+                    handleImageChange(e.target.files?.[0] ?? null)
+                  }
                 />
               </div>
             </CardContent>

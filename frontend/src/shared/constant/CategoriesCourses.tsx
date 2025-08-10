@@ -1,4 +1,5 @@
 export const COURSE_CATEGORY_LABELS: Record<string, string> = {
+  todo:'Todo',
   ofimatica: 'Ofimática',
   electronica: 'Electrónica',
   programacion: 'Programación',

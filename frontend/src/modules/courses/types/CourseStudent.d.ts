@@ -109,6 +109,7 @@ interface TStudentCourseContextType {
     renderEvaluation:(idCourse: TCourse["id"], idLesson: TLesson['id'])=> Promise<void>;
     palette:TColorPalette | null;
     setPalette: React.Dispatch<React.SetStateAction<TColorPalette | null>>;
+    refreshCoursesStudent: () => Promise<void>;
 
 
 }

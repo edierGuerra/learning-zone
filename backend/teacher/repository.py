@@ -3,18 +3,24 @@
 """Repositorio con todos los procesos"""
 
 # Modulos externos
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 import json
 
+from models.identification_model import Identification
+
+from .utils import save_and_upload_file
+
 # Modulos internos
-from models.evaluation_model import Evaluation
+from models.evaluation_model import Evaluation, QuestionType
 from models.course_model import Course
 from models.lesson_model import Lesson
 from teacher.model import Teacher
 from teacher.utils import delete_file_from_cloudinary
+from teacher.utils import update_file_on_cloudinary
 from models.content_model import Content, TypeContent
 
 
@@ -26,7 +32,30 @@ class TeacherRepo:
     def __init__(self, db: AsyncSession):
         self.db = db
 
+    # --- Metodos de autenticación ---
+    async def add_identification(self, n_identification: int):
+        # verifica si el estudiante existe
+
+        stmt = select(Identification).where(
+            Identification.n_identification == n_identification
+        )
+        result = await self.db.execute(stmt)
+        existing = result.scalar_one_or_none()
+
+        if existing:
+            raise HTTPException(
+                status_code=400, detail="La identificación ya está registrada."
+            )
+
+        new_ident = Identification(n_identification=n_identification)
+        self.db.add(new_ident)
+        await self.db.commit()
+        await self.db.refresh(new_ident)
+        logger.info(f"Estudiante con ID {n_identification} autenticado exitosamente.")
+        return new_ident
+
     # --- Métodos de Cursos ---
+
     async def create_course(self, course: dict) -> Course:
         """
         Crea un nuevo curso en la base de datos.
@@ -160,6 +189,7 @@ class TeacherRepo:
         return result.scalar_one_or_none()
 
     # --- Métodos de Lecciones ---
+
     async def create_lesson_with_content(
         self, name: str, id_course: int, content_data: dict
     ):
@@ -172,10 +202,17 @@ class TeacherRepo:
         self.db.add(new_lesson)
         await self.db.flush()  # Permite obtener el ID antes de commit
 
+        if content_data.get("content"):
+            content_url = await save_and_upload_file(
+                content_data["content"], public_id=new_lesson.id
+            )
+        else:
+            content_url = None
+
         new_content = Content(
             lesson_id=new_lesson.id,
             content_type=TypeContent(content_data["content_type"]),
-            content=content_data["content"],
+            content=content_url,
             text=content_data["text"],
         )
         self.db.add(new_content)
@@ -191,15 +228,120 @@ class TeacherRepo:
         :return: Objeto Lesson.
         """
         logger.info(f"Obteniendo lección con ID {lesson_id}")
-        stmt = select(Lesson).where(Lesson.id == lesson_id)
+
+        stmt = (
+            select(Lesson)
+            .where(Lesson.id == lesson_id)
+            .options(selectinload(Lesson.contents))  # precarga el contenido asociado
+        )
         result = await self.db.execute(stmt)
+
         if not result:
             logger.error(f"Lección con ID {lesson_id} no encontrada.")
             return None
         logger.info(f"Lección con ID {lesson_id} obtenida exitosamente.")
         return result.scalar_one_or_none()
 
+    async def update_lesson(
+        self, lesson_id: int, lesson_data: dict, content_data: dict
+    ) -> Lesson:
+        """
+        Actualiza una lección existente.
+        :param lesson_id: ID de la lección a actualizar.
+        :param lesson_data: Datos actualizados de la lección.
+        :return: La lección actualizada.
+        """
+        stmt = (
+            select(Lesson)
+            .where(Lesson.id == lesson_id)
+            .options(selectinload(Lesson.contents))
+        )
+        result = await self.db.execute(stmt)
+        lesson = result.scalar_one_or_none()
+
+        if not lesson:
+            logger.error(f"Lección con ID {lesson_id} no encontrada.")
+            raise HTTPException(status_code=404, detail="Lección no encontrada")
+
+        for key, value in lesson_data.items():
+            logger.info(f"Actualizando {key} a {value} para la lección ID {lesson_id}")
+            setattr(lesson, key, value)
+
+        # Actualizar contenido si se proporciona
+        if content_data:
+            content = lesson.contents[0] if lesson.contents else None
+            if not content:
+                raise HTTPException(
+                    status_code=404, detail="Contenido no encontrado en la lección"
+                )
+
+            if "content_type" in content_data:
+                content.content_type = content_data["content_type"]
+
+            if "text" in content_data:
+                content.text = content_data["text"]
+                content.content = content_data["text"]
+
+            if "file" in content_data:
+                url = await update_file_on_cloudinary(
+                    content_data["file"], public_id=lesson_id
+                )
+                content.content = url
+
+        await self.db.commit()
+        await self.db.refresh(lesson)
+        logger.info(f"Lección ID {lesson_id} actualizada exitosamente.")
+        return lesson
+
+    async def delete_lesson(self, lesson_id: int) -> None:
+        """
+        Elimina una lección por su ID.
+        :param lesson_id: ID de la lección a eliminar.
+        """
+        stmt = select(Lesson).where(Lesson.id == lesson_id)
+        result = await self.db.execute(stmt)
+        lesson = result.scalar_one_or_none()
+
+        if not lesson:
+            logger.error(f"Lección con ID {lesson_id} no encontrada.")
+            raise ValueError("Lección no encontrada")
+
+        # Eliminar contenidos asociados y sus archivos si es necesario
+        for content in lesson.contents:
+            await delete_file_from_cloudinary(content.content)
+            await self.db.delete(content)
+
+        await self.db.delete(lesson)
+        await self.db.commit()
+        logger.info(f"Lección ID {lesson_id} eliminada exitosamente.")
+
     # --- Métodos de Evaluaciones ---
+
+    async def get_lessons_by_course(self, course_id: int) -> list[Lesson]:
+        """
+        Obtiene todas las lecciones de un curso por su ID.
+        :param course_id: ID del curso.
+        :return: Lista de lecciones.
+        """
+        logger.info(f"Obteniendo lecciones para el curso con ID {course_id}")
+        stmt = (
+            select(Lesson)
+            .where(Lesson.id_course == course_id)
+            .options(selectinload(Lesson.contents))  # precarga el contenido asociado
+        )
+        result = await self.db.execute(stmt)
+        lessons = result.scalars().all()
+
+        if not lessons:
+            logger.warning(f"No se encontraron lecciones para el curso ID {course_id}.")
+        else:
+            logger.info(
+                f"Se encontraron {len(lessons)} lecciones para el curso ID {course_id}."
+            )
+        return lessons
+
+    # --- Métodos de Evaluaciones ---
+
     async def create_evaluation_for_lesson(self, evaluation_data: dict):
         """
         Crea una evaluación asociada a una lección.
@@ -213,3 +355,115 @@ class TeacherRepo:
         await self.db.commit()
         await self.db.refresh(new_eval)
         return new_eval
+
+    async def get_evaluation_by_lesson_id(self, lesson_id: int):
+        """
+        Obtiene una evaluación por el ID de la lección.
+        :param lesson_id: ID de la lección.
+        :return: Objeto Evaluation.
+        """
+        stmt = select(Evaluation).where(Evaluation.lesson_id == lesson_id)
+        result = await self.db.execute(stmt)
+        evaluation = result.scalar_one_or_none()
+        if not evaluation:
+            logger.error(f"Evaluación para lección ID {lesson_id} no encontrada.")
+            return None
+        logger.info(f"Evaluación para lección ID {lesson_id} obtenida exitosamente.")
+        return evaluation
+
+    async def update_evaluation(self, evaluation_id: int, evaluation_data: dict):
+        """
+        Actualiza una evaluación existente.
+        :param evaluation_id: ID de la evaluación a actualizar.
+        :param evaluation_data: Datos actualizados de la evaluación.
+        :return: La evaluación actualizada.
+        """
+        stmt = select(Evaluation).where(Evaluation.id == evaluation_id)
+        result = await self.db.execute(stmt)
+        evaluation = result.scalar_one_or_none()
+
+        if not evaluation:
+            logger.error(f"Evaluación con ID {evaluation_id} no encontrada.")
+            raise ValueError("Evaluación no encontrada")
+
+        if (
+            evaluation.options
+            and evaluation_data["question_type"] == QuestionType.OPEN_QUESTION
+        ):
+            logger.warning(
+                "La evaluación es de tipo pregunta abierta, se eliminarán las opciones y la respuesta correcta."
+            )
+            evaluation_data["options"] = None
+            evaluation_data["correct_answer"] = None
+        for key, value in evaluation_data.items():
+            logger.info(
+                f"Actualizando {key} a {value} para la evaluación ID {evaluation_id}"
+            )
+            setattr(evaluation, key, value)
+
+        await self.db.commit()
+        await self.db.refresh(evaluation)
+        logger.info(f"Evaluación ID {evaluation_id} actualizada exitosamente.")
+        return evaluation
+
+    # --- Metodos de Notificaciones ---
+    async def get_notifications_by_teacher_id(self, teacher_id: int):
+        """
+        Obtiene las notificaciones asociadas a un profesor.
+        :param teacher_id: ID del profesor.
+        :return: Lista de notificaciones.
+        """
+        stmt = (
+            select(Teacher)
+            .where(Teacher.id == teacher_id)
+            .options(selectinload(Teacher.notifications))
+        )
+        result = await self.db.execute(stmt)
+        teacher = result.scalar_one_or_none()
+
+        if not teacher:
+            logger.error(f"Profesor con ID {teacher_id} no encontrado.")
+            return []
+
+        notifications = teacher.notifications
+        logger.info(
+            f"Se encontraron {len(notifications)} notificaciones para el profesor ID {teacher_id}."
+        )
+        return notifications
+
+    async def register_identification(self, id_number: str) -> dict:
+        """
+        Registra la identificación de un estudiante, manejando duplicados correctamente.
+        :param id_number: Número de identificación a registrar
+        :return: Diccionario con resultado de la operación
+        """
+        try:
+            # Verificar si ya existe
+            existing = await self.db.execute(
+                select(Identification).where(
+                    Identification.n_identification == id_number
+                )
+            )
+
+            if existing.scalar_one_or_none():
+                logger.info(f"Número de identificación ya existe: {id_number}")
+                return {"success": False, "reason": "duplicate", "id_number": id_number}
+
+            # Crear nueva identificación
+            identification = Identification(n_identification=id_number)
+            self.db.add(identification)
+            await self.db.commit()
+            await self.db.refresh(identification)
+
+            logger.info(f"Identificación registrada exitosamente: {id_number}")
+            return {"success": True, "reason": "created", "id_number": id_number}
+
+        except Exception as e:
+            logger.error(f"Error al registrar identificación {id_number}: {e}")
+            await self.db.rollback()
+            return {
+                "success": False,
+                "reason": "error",
+                "id_number": id_number,
+                "error": str(e),
+            }

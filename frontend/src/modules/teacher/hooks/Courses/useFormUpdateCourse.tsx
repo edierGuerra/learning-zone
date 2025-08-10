@@ -1,29 +1,35 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import { educationalPalettes, type TColorPalette, type TPaletteNames } from "../../../../shared/theme/ColorPalettesCourses";
 import type { TCourseTeacherSend } from "../../types/Teacher";
 import type { TCourse } from "../../../courses/types/CourseStudent";
 import CreateCourseAPI from "../../services/Course/CreateCourse.server";
+import UpdateCourseAPI from "../../services/Course/UpdateCourse.server";
+import { useTeacherCourseContext } from "../useCourseTeacher";
+import { authStorage } from "../../../../shared/Utils/authStorage";
 
 export function useFormUpdateCourse() {
+  const { courseId } = useParams();
+  const { refreshCoursesTeacher, loadInfoCourse, course } = useTeacherCourseContext();
+  const id_course = Number(courseId);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<{
     name: string;
     description: string;
     category: TCourse["category"];
-    image: File | null;
+    image: File | null | string;
     palette: TPaletteNames;
     paletteColors: TColorPalette;
   }>({
-    name: "",
-    description: "",
-    category: "otro", // por defecto
-    image: null,
-    palette: "vibrantLearning",
-    paletteColors: educationalPalettes["vibrantLearning"]
+    name: course?.name!,
+    description:course?.description!,
+    category: course?.category!, // por defecto
+    image: course?.image!,
+    palette: course?.name_palette || "vibrantLearning",
+    paletteColors: educationalPalettes[course?.name_palette || "vibrantLearning"]
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof typeof formData, string>>>({});
@@ -86,15 +92,26 @@ export function useFormUpdateCourse() {
       name_palette: formData.palette,
       palette: formData.paletteColors
     };
+    console.log("courseToSend", courseToSend);
 
     try {
-      const courseId = await CreateCourseAPI(courseToSend);
-      setSubmitSuccess(true);
-      toast.success("Curso creado exitosamente");
-      navigate(`/teacher/courses/${courseId}`);
+      const idCourse = await UpdateCourseAPI(id_course, courseToSend);
+
+      if (idCourse) {
+        toast.success("¡Curso actualizado exitosamente!");
+
+        // Limpiar cache para mostrar cambios
+        authStorage.removeCoursesTeacher();
+        authStorage.removeCourseTeacher();
+
+        await refreshCoursesTeacher();
+        await loadInfoCourse(idCourse);
+        setSubmitSuccess(true);
+        navigate(`/teacher/courses/${idCourse}`);
+      }
     } catch (err) {
-      toast.error("Error al crear el curso");
-      console.error("CreateCourseAPI Error:", err);
+      toast.error("Error al actualizar el curso");
+      console.error("UpdateCourseAPI Error:", err);
     } finally {
       setIsSubmitting(false);
     }

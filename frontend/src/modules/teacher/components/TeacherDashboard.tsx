@@ -10,12 +10,19 @@ import { authStorage } from '../../../shared/Utils/authStorage';
 export default function TeacherDashboard() {
   const navigate = useNavigate()
 
-  const {courses} = useTeacherCourseContext()
+  const { courses, refreshCoursesTeacher } = useTeacherCourseContext();
   const {user} = useUser()
+
   useEffect(() => {
-  console.log("DASHBOARD: courses", courses);
-}, [courses]);
-  authStorage.removeCourseTeacher()
+    // Limpiar datos específicos de cursos individuales al entrar al dashboard
+    // Mantener la lista de cursos pero limpiar detalles específicos
+    authStorage.clearTeacherCourseData();
+
+    // Solo refrescar si no hay cursos cargados
+    if (!courses.length) {
+      refreshCoursesTeacher();
+    }
+  }, []);
 
 
   /* Funcion del boton que permite renderizar el formulario del crear curso */

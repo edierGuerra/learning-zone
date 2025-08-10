@@ -6,18 +6,23 @@ Este modulo contiene todas la rutas con las diferentes operaciones que puede rea
 
 from fastapi import APIRouter, Depends, Form, UploadFile, File, status, HTTPException
 from fastapi.responses import JSONResponse
-from typing import Optional
+from typing import Optional, List
 from fastapi.security import HTTPBearer
 
 from routes.notifications_routes import get_notification_services
 from schemas.lesson_schemas import LessonPResponse
-from schemas.notification_schemas import NotificationCreate
+from schemas.notification_schemas import NotificationCreate, NotificationResponse
+from teacher.schemas import (
+    EvaluationCreate,
+    EvaluationUpdate,
+    IdentificationCreate,
+    LessonCResponse,
+)
 from services.notification_services import NotificationService
 from teacher.model import Teacher
 from .service import TeacherServices
 from models.course_model import CourseCategoryEnum
 from models.content_model import TypeContent
-from models.evaluation_model import QuestionType
 from .dependencies import get_teacher_services
 import json
 from .oauth import get_current_teacher
@@ -25,8 +30,30 @@ from .utils import generate_profile_prefix
 
 router = APIRouter(prefix="/api/v1/teachers", tags=["Teacher"])
 
-
 bearer_scheme = HTTPBearer()
+
+
+# ---- Rutas de autenticación ----
+@router.post(
+    "/student",
+    status_code=status.HTTP_201_CREATED,
+    description="Autentica a un estudiante y devuelve su información.",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def authenticate_student(
+    data: IdentificationCreate,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Autentica a un estudiante y devuelve un mensaje de éxito
+    """
+    new_ident = await teacher_services.add_identification(data.n_identification)
+    return {
+        "message": "Identificación registrada exitosamente",
+        "id": new_ident.id,
+        "n_identification": new_ident.n_identification,
+    }
 
 
 # ---- Rutas de Cursos ----
@@ -87,7 +114,7 @@ async def update_course(
     course_id: int,
     name: str = Form(None),
     description: str = Form(None),
-    image: UploadFile = File(None),
+    image: Optional[UploadFile] = File(None),
     teacher_services: TeacherServices = Depends(get_teacher_services),
     teacher: Teacher = Depends(get_current_teacher),
 ):
@@ -99,6 +126,8 @@ async def update_course(
         name = None
     if description == "":
         description = None
+    if image == "":
+        image = None
     course = await teacher_services.get_course_by_id(course_id)
     if not course:
         return {"message": "Curso no encontrado."}
@@ -112,7 +141,7 @@ async def update_course(
     updated_course = await teacher_services.update_course(
         course_id=course_id, course_data=course_data, public_id=course.name
     )
-    return {"message": "Curso actualizado con exito.", "course": updated_course}
+    return {"message": "Curso actualizado con exito.", "id_course": updated_course}
 
 
 @router.delete(
@@ -204,14 +233,84 @@ async def create_lesson_for_course(
 
 
 @router.get(
-    "/lessons/{lesson_id}", dependencies=[Depends(bearer_scheme)], tags=["Lessons"]
+    "/courses/{course_id}/lessons",
+    description="Obtiene todas las lecciones de un curso por su ID.",
+    response_model=List[LessonPResponse],
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Lessons"],
+)
+async def get_lessons_by_course(
+    course_id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Obtiene todas las lecciones de un curso por su ID.
+    Solo accesible para el profesor que creó el curso.
+    """
+    lessons = await teacher_services.get_lessons_by_course(course_id)
+    if not lessons:
+        raise HTTPException(
+            status_code=404, detail="No se encontraron lecciones para este curso."
+        )
+    return lessons
+
+
+@router.get(
+    "/lessons/{lesson_id}",
+    response_model=LessonCResponse,
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Lessons"],
 )
 async def get_lesson(
     lesson_id: int,
     teacher_services: TeacherServices = Depends(get_teacher_services),
 ):
-    """Obtiene una lección por su ID."""
-    return await teacher_services.get_lesson_by_id(lesson_id)
+    """Obtiene una lección por su ID y devuelve su contenido (LessonCResponse)"""
+    lesson = await teacher_services.get_lesson_by_id(lesson_id)
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Lección no encontrada.")
+    return lesson
+
+
+@router.put(
+    "/lessons/{lesson_id}",
+    response_model=LessonCResponse,
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Lessons"],
+)
+async def update_lesson(
+    lesson_id: int,
+    name: Optional[str] = Form(None),
+    content_type: Optional[TypeContent] = Form(None),
+    text: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None),
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Actualiza una lección existente. Permite modificar solo el nombre, el contenido o ambos.
+    Si se proporciona un archivo, se subirá y actualizará el contenido.
+    """
+    lesson_data = {}
+    content_data = {}
+
+    if name is not None:
+        lesson_data["name"] = name
+    if content_type is not None:
+        content_data["content_type"] = content_type
+    if text is not None:
+        content_data["text"] = text
+    if file is not None:
+        content_data["file"] = file
+
+    if not lesson_data and not content_data:
+        raise HTTPException(
+            status_code=400,
+            detail="Debes proporcionar al menos un campo para actualizar.",
+        )
+    update_lesson = await teacher_services.update_lesson(
+        lesson_id, lesson_data, content_data
+    )
+    return update_lesson
 
 
 # --- Rutas de evaluaciones ----
@@ -222,68 +321,60 @@ async def get_lesson(
 async def create_evaluation_for_lesson(
     course_id: int,
     lesson_id: int,
-    question_type: QuestionType = Form(...),
-    question: str = Form(...),
-    options: str = Form(...),  # String JSON del frontend
-    correct_answer: Optional[str] = Form(None),
+    evaluation: EvaluationCreate,
     teacher_services: TeacherServices = Depends(get_teacher_services),
 ):
     """
     Crea una evaluación para una lección.
     Si es de tipo open_question, se ignoran opciones y correct_answer.
     """
-    # Parsea las opciones si es de opción múltiple
-    # Validar y parsear las opciones solo si es multiple_choice
-    parsed_options = None
-    if question_type == QuestionType.MULTIPLE_CHOICE:
-        if options:
-            try:
-                options = json.dumps(options)
-                parsed_options = json.loads(options)
-                if not isinstance(parsed_options, list) or len(parsed_options) < 2:
-                    raise HTTPException(
-                        status_code=400,
-                        detail="Debes enviar al menos dos opciones válidas como lista.",
-                    )
-            except json.JSONDecodeError:
-                raise HTTPException(
-                    status_code=400,
-                    detail='El campo \'options\' debe ser un JSON válido (ej: ["a", "b"]).',
-                )
-        else:
-            raise HTTPException(
-                status_code=400,
-                detail="El campo 'options' es requerido para preguntas de opción múltiple.",
-            )
+    evaluation_data = evaluation.model_dump()
+    evaluation_data["lesson_id"] = lesson_id
 
-        if not correct_answer:
-            raise HTTPException(
-                status_code=400,
-                detail="El campo 'correct_answer' es requerido para preguntas de opción múltiple.",
-            )
+    await teacher_services.create_evaluation(evaluation_data)
 
-    # Preparar el payload de creación
-    evaluation_data = {
-        "lesson_id": lesson_id,
-        "question_type": question_type,
-        "question": question,
-        "options": (
-            parsed_options if question_type == QuestionType.MULTIPLE_CHOICE else None
-        ),
-        "correct_answer": (
-            correct_answer if question_type == QuestionType.MULTIPLE_CHOICE else None
-        ),
-    }
+    return {"message": "Evaluación creada con éxito"}
 
-    new_eval = await teacher_services.create_evaluation(evaluation_data)
 
-    return {"message": "Evaluación creada con éxito", "evaluation": new_eval}
+@router.get(
+    "/lessons/{lesson_id}/evaluations",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Evaluations"],
+)
+async def get_evaluation(
+    lesson_id: int, teacher_services: TeacherServices = Depends(get_teacher_services)
+):
+    """Obtiene una evaluación por el ID de la lección."""
+    return await teacher_services.get_evaluation_by_lesson_id(lesson_id)
+
+
+@router.put(
+    "/evaluations/{evaluation_id}",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Evaluations"],
+)
+async def update_evaluation(
+    evaluation_id: int,
+    evaluation: EvaluationUpdate,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+):
+    """
+    Actualiza una evaluación existente. Permite modificar solo la pregunta, solo las opciones,
+    solo el correct_answer, o cualquier combinación de estos campos.
+    """
+    evaluation_data = evaluation.model_dump(exclude_unset=True)
+
+    updated_eval = await teacher_services.update_evaluation(
+        evaluation_id, evaluation_data
+    )
+
+    return {"message": "Evaluación actualizada con éxito", "evaluation": updated_eval}
 
 
 # --- Rutas de notificaciones ---
 
 
-@router.post("notifications/", dependencies=[Depends(bearer_scheme)])
+@router.post("/notifications/", dependencies=[Depends(bearer_scheme)])
 async def create_notifications(
     notification_data: NotificationCreate,
     services: NotificationService = Depends(get_notification_services),
@@ -318,3 +409,70 @@ async def create_notifications(
         teacher_id=teacher.id, notification_data=notification_data
     )
     return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+
+
+@router.get(
+    "/notifications/",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Notifications"],
+    response_model=List[NotificationResponse],
+)
+async def get_notifications(
+    services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Obtiene todas las notificaciones para un profesor específico.
+    """
+    return await services.get_notifications_by_teacher_id(teacher.id)
+
+
+# --- Rutas de estudiantes ---
+@router.post(
+    "/students/identifications",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def register_student_identification(
+    file: UploadFile = File(...),
+    services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Registra números de identificación de estudiantes desde un archivo.
+    Acepta archivos de formato: .txt, .xlsx, .docx
+    """
+    # Validar tipo de archivo
+    allowed_types = [
+        "text/plain",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
+
+    allowed_extensions = [".txt", ".xlsx", ".docx"]
+    file_extension = file.filename.lower().split(".")[-1] if file.filename else ""
+
+    if (
+        file.content_type not in allowed_types
+        and f".{file_extension}" not in allowed_extensions
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Formato de archivo no soportado. Solo se permiten archivos .txt, .xlsx, .docx",
+        )
+
+    try:
+        result = await services.register_students(file)
+        return {
+            "message": f"Proceso completado. {result['processed']} números procesados, "
+            f"{result['successful']} registrados exitosamente, "
+            f"{result['duplicates']} duplicados omitidos, "
+            f"{result['errors']} errores.",
+            "details": result,
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error interno del servidor: {str(e)}"
+        )

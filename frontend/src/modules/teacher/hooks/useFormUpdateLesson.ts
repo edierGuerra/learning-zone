@@ -10,6 +10,7 @@ import type {
 
 import UpdateLessonAPI from "../services/Lesson/UpdateLesson.server";
 import UpdateEvaluationAPI from "../services/Evaluation/UpdateEvaluation.server";
+import { authStorage } from "../../../shared/Utils/authStorage";
 
 /** Define los posibles errores del formulario */
 type FormErrors = {
@@ -137,6 +138,9 @@ export function useFormUpdateLessons() {
 
       if (updatedLesson && updatedEvaluation) {
         toast.success("Lección y evaluación actualizadas con éxito");
+        // Limpiar cache de lecciones para mostrar cambios
+        authStorage.clearLessonsData();
+        authStorage.removeFormLessonInfo();
         setSubmitSuccess(true);
         navigate(`/teacher/courses/${idCourse}/lessons`);
       }

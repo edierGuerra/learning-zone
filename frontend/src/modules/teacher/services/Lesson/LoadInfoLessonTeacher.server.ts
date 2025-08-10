@@ -24,6 +24,7 @@ export default async function LoadInfoLessonTeacherAPI({idCourse, idLesson}:TGet
         const id_course = idCourse
         const id_lesson = idLesson
         const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/courses/${id_course}/lessons/${id_lesson}`);
+        console.log(response)
 
         // Validar status code
         if (response.status !== 200) {

@@ -34,6 +34,7 @@ export default async function UpdateCourseAPI(
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log(response)
 
     // Validamos que el estado HTTP sea exitoso
     if (response.status !== 200) {

@@ -15,6 +15,7 @@ import type {
 import CreateLessonAPI from "../services/Lesson/CreateLesson.server";
 import { CreateEvaluacionAPI } from "../services/Evaluation/CreateEvaluation.server";
 import toast from "react-hot-toast";
+import { authStorage } from "../../../shared/Utils/authStorage";
 
 /** Define los posibles errores del formulario */
 type FormErrors = {
@@ -151,6 +152,7 @@ export function useFormCreateLessons() {
         content:content
 
       }
+      console.log(lessonContent)
       /** Crea la lección */
       const lessonCreated = await CreateLessonAPI({idCourse,lessonContent});
 
@@ -174,18 +176,15 @@ export function useFormCreateLessons() {
       const createEvaluation = await CreateEvaluacionAPI({idLesson, idCourse,evaluation});
 
       /** Marca éxito y resetea formulario */
-      if(createEvaluation){
-          navigate(`/teacher/courses/${idCourse}/lessons`);
-
-
+      if (lessonCreated && createEvaluation) {
+        toast.success("Lección y evaluación creadas exitosamente");
+        // Limpiar cache de lecciones para forzar recarga
+        authStorage.clearLessonsData();
+        authStorage.removeFormLessonInfo();
+        setSubmitSuccess(true);
+        navigate(`/teacher/courses/${idCourse}`);
       }
-      setSubmitSuccess(true);
       resetForm();
-      /* MEnsaje */
-      toast.success(`leccion ${nameLesson} Creada exitosamente`)
-      toast.success(createEvaluation.message)
-
-
       /* Redirijir al curso  */
     } catch (err) {
       console.error("Error al guardar los datos", err);
@@ -263,27 +262,31 @@ export function useFormCreateLessons() {
   };
 
   /** Cambia el tipo de pregunta */
-  const handleQuestionTypeChange = (value: TFormDataLesson['evaluation']['question_type']) => {
+  const handleQuestionTypeChange = (
+    value: TFormDataLesson["evaluation"]["question_type"]
+  ) => {
     setFormDataLesson((prev) => ({
       ...prev,
       evaluation: {
         ...prev.evaluation,
-        questionType: value,
+        question_type: value, // ✅ Usar question_type en lugar de questionType
         options: value === "multiple_choice" ? ["", ""] : [],
-        correctAnswer: "",
+        correct_answer: "", // ✅ Usar correct_answer en lugar de correctAnswer
       },
     }));
   };
 
   /** Cambia el tipo de contenido de la lección */
-  const handleContentTypeChange = (value: TFormDataLesson['lesson']['content']['content_type']) => {
+  const handleContentTypeChange = (
+    value: TFormDataLesson["lesson"]["content"]["content_type"]
+  ) => {
     setFormDataLesson((prev) => ({
       ...prev,
       lesson: {
         ...prev.lesson,
         content: {
           ...prev.lesson.content,
-          contentType: value,
+          content_type: value, // ✅ Usar content_type en lugar de contentType
         },
       },
     }));
@@ -294,29 +297,33 @@ export function useFormCreateLessons() {
    *
    * path = la ruta del campo (ej: "lesson.name" o "lesson.content.text")
    */
-  const handleChange = (path: string) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const value = e.target.value; // el valor que escribió el usuario
+  const handleChange =
+    (path: string) =>
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
+    ) => {
+      const value = e.target.value; // el valor que escribió el usuario
 
-    // Creamos una copia del estado actual para modificarlo sin romper nada
-    const updated = { ...formDataLesson };
+      // Creamos una copia del estado actual para modificarlo sin romper nada
+      const updated = { ...formDataLesson };
 
-    // Convertimos la ruta "lesson.name" en ["lesson", "name"]
-    const keys = path.split(".");
+      // Convertimos la ruta "lesson.name" en ["lesson", "name"]
+      const keys = path.split(".");
 
-    // Aquí vamos bajando por el objeto hasta llegar al campo que queremos cambiar
-    let current = updated as Record<string, any>;
-    for (let i = 0; i < keys.length - 1; i++) {
-      current = current[keys[i]];
-    }
+      // Aquí vamos bajando por el objeto hasta llegar al campo que queremos cambiar
+      let current = updated as Record<string, any>;
+      for (let i = 0; i < keys.length - 1; i++) {
+        current = current[keys[i]];
+      }
 
-    // Finalmente, actualizamos el valor del campo
-    current[keys[keys.length - 1]] = value;
+      // Finalmente, actualizamos el valor del campo
+      current[keys[keys.length - 1]] = value;
 
-    // Guardamos el nuevo estado en React
-    setFormDataLesson(updated);
-  };
+      // Guardamos el nuevo estado en React
+      setFormDataLesson(updated);
+    };
 
 
 

@@ -5,7 +5,6 @@ import logging
 from sqlalchemy import update, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
-from models.course_model import Course
 from models.course_student_model import CourseStudentAssociation, StateCourse
 from repository.student_repository import StudentRepository
 
@@ -19,7 +18,7 @@ class CourseRepository:
 
     async def get_courses_by_student_id(
         self, id_student: int, student_repo: StudentRepository
-    ) -> List[Course]:
+    ) -> List[dict]:
         """
         ## Obtener cursos por el id del estudiante
 
@@ -53,6 +52,7 @@ class CourseRepository:
                         "category": course.category,
                         "palette": course.palette,
                         "status": status_course.status,
+                        "published": course.is_published,
                     }
                 )
             return list(courses)

@@ -107,6 +107,26 @@
 }
 
 /* ===== PALETA DE COLORES ===== */
+
+.container-prev-btn-view{
+    display: flex;
+    justify-content: space-between;
+}
+.btn-view-palette{
+    background-color: rgb(255, 255, 255);
+    padding: .4rem;
+    border-radius: 10px;
+    box-shadow: 2px 3px 4px 1px #1010118c;
+}
+.btn-view-palette:hover {
+    transform: rotateY(370deg); /* 🔹 Unidades obligatorias */
+    background-color: rgb(255, 255, 255);
+    padding: 0.4rem;
+    border-radius: 10px;
+    box-shadow: 2px 3px 4px 1px #1010118c;
+    transition: transform 0.3s ease, background-color 0.3s ease; /* 🔹 Animación suave */
+}
+
 .preview-palette-course {
   display: flex;
   gap: 4px;
@@ -122,32 +142,38 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+
 /* ===== OPCIONES DE PALETA ===== */
 .select-palette-options-course {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 0.2fr);
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: 20dvh;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--color-primary-blue) var(--color-neutral-light-gray);
 }
 
 .palette-option-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 3px;
-  padding: 6px;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  background-color: #f8f9fa;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    padding: 6px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: transparent;
+
 }
 
 .palette-option-button span {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .palette-option-button:hover {

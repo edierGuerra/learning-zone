@@ -64,38 +64,53 @@ export const TeacherCourseProvider = ({ children }: Props) => {
 
 useEffect(() => {
   const storageLessons = authStorage.getLessonsTeacher()
+  alert('se ejecuta useef')
   if (storageLessons && storageLessons.length > 0) {
     setLessons(storageLessons)
   }
+
 }, [])
 
-  /* Funcion que se encarga de solicitar la infor de un curso */
-  const loadInfoCourse =async (idCourse:TCourseTeacherResponse['id'])=>{
-    alert('se ejecuta load')
-    const response = await GetCourseTeacherAPI(idCourse)
-    /* Setear en el estado */
-    authStorage.setCourseTeacher(response)
-    setCourse(response)
-    /* Setear en el localStorage */
+  const refreshCoursesTeacher = async () => {
+    const token = authStorage.getToken();
+    if (token) {
+      // Limpiar cache de cursos antes de solicitar nuevos datos
+      authStorage.removeCoursesTeacher();
 
-
-
-  }
-  /* Funcion que se encarga de solicitar las lecciones de un curso */
-  const loadLessonsCourse  = async(idCourse:TCourseTeacherResponse['id'])=>{
-    try{
-        const lessonsRes = await GetLessonTeacherAPI(idCourse);
-
-        setLessons(lessonsRes) /* Setear las lecciones para poder renderizarlas en el home del curso */
-        /* Setear los valores al localstorage */
-        authStorage.setLessonsTeacher(lessonsRes)
-
-
-    }catch(error){
-        console.log(error)
-        toast.error('Ups ocurrio un error')
+      const dataCourses = await GetCoursesTeacherAPI();
+      authStorage.setCoursesTeacher(dataCourses);
+      setCourses(dataCourses);
     }
-  }
+  };
+
+
+  const loadInfoCourse = async (idCourse: TCourseTeacherResponse["id"]) => {
+    try {
+      // Limpiar datos del curso anterior antes de cargar nuevos
+      authStorage.removeCourseTeacher();
+
+      const courseRes = await GetCourseTeacherAPI(idCourse);
+      setCourse(courseRes);
+      authStorage.setCourseTeacher(courseRes);
+    } catch (error) {
+      console.log(error);
+      toast.error("Ups ocurrió un error");
+    }
+  };
+  const loadLessonsCourse = async (idCourse: TCourseTeacherResponse["id"]) => {
+    try {
+      // Limpiar lecciones del curso anterior antes de cargar nuevas
+      authStorage.clearLessonsData();
+
+      const lessonsRes = await GetLessonTeacherAPI(idCourse);
+
+      setLessons(lessonsRes);
+      authStorage.setLessonsTeacher(lessonsRes);
+    } catch (error) {
+      console.log(error);
+      toast.error("Ups este curso no cuenta con lecciones, recuerda agregar algunas!");
+    }
+  };
   /* Funcion que carga todo lo de la leccion */
   const loadLesson = async (idCourse: TCourseTeacherResponse["id"], idLesson: TLessonTeacherResponse['id']) => {
     try{
@@ -156,7 +171,7 @@ useEffect(() => {
         loadLesson,
         palette,
         setPalette,
-
+        refreshCoursesTeacher,
       }}
     >
       {/* Solo renderiza la app si ya se hizo la validación inicial de sesión */}

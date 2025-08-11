@@ -1,28 +1,27 @@
-/* styles/ParticlesBG.css */
 .particles-wrapper {
-  position: absolute; /* O relative si el main es contenedor */
+  position: absolute; 
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%; /* o la altura que necesite tu main */
-  pointer-events: none; /* evita bloquear clics */
+  height: 100%; 
+  pointer-events: none; 
 }
 
 #tsparticles {
   width: 100%;
-  height: 1050px; /* o cualquier valor en px, %, vh, etc. */
+  height: 1050px; 
   pointer-events: none;
-  z-index: -1; /* Detrás de todo */
+  z-index: -1; 
   
 }
 
 #background-canvas {
-  position: fixed; /* o absolute si lo prefieres */
+  position: fixed; 
   top: 0;
   left: 0;
   width: 100%;
   height: 625px;
-  z-index: -1; /* siempre detrás */
-  pointer-events: none; /* NO recibe clics ni eventos */
+  z-index: -1; 
+  pointer-events: none; 
 }
 

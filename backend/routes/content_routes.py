@@ -16,9 +16,10 @@ async def get_content(
     student: Student = Depends(get_current_student),
 ):
 
-    contents_lesson = await services.get_contend_by_lesson_id(id_course, id_lesson)
+    # contents_lesson = await services.get_contend_by_lesson_id(id_course, id_lesson)
 
-    content_lesson = contents_lesson[0]
+    # content_lesson = contents_lesson[0]
+    content_lesson = await services.get_contend_by_lesson_id(id_course, id_lesson)
 
     return {
         "status": 200,

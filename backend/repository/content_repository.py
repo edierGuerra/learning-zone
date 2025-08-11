@@ -21,7 +21,7 @@ class ContentRepo:
 
             query = await self.db.execute(
                 select(Course)
-                .options(selectinload(Course.lessons).selectinload(Lesson.contents))
+                .options(selectinload(Course.lessons).selectinload(Lesson.content))
                 .where(Course.id == id_course)
             )
 
@@ -31,7 +31,7 @@ class ContentRepo:
                 for lesson in course.lessons:
                     if lesson.id == id_lesson:
                         logger.info("[INFO]: Lección encontrada exitosamente.")
-                        return lesson.contents
+                        return lesson.content
             logger.warning(
                 f"[WARNING]: No se ha ha podido encontrar el curso: {id_course}"
             )

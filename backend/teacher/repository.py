@@ -3,6 +3,7 @@
 """Repositorio con todos los procesos"""
 
 # Modulos externos
+from typing import Optional
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -10,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 import json
 
+from models.student_model import Student
 from models.identification_model import Identification
 
 from .utils import save_and_upload_file
@@ -66,6 +68,17 @@ class TeacherRepo:
             logger.info(f"Creando curso con los datos: {course}")
             new_course = Course(**course)
             self.db.add(new_course)
+
+            stmt = await self.db.execute(
+                select(Student).options(selectinload(Student.courses))
+            )
+            students = stmt.scalars().all()
+            for student in students:
+                student.courses.append(new_course)
+                logger.info(
+                    f"Estudiante con ID {student.id} agregado al curso con ID: {new_course.id}"
+                )
+
             await self.db.commit()
             await self.db.refresh(new_course)
             logger.info(f"Curso creado exitosamente con ID: {new_course.id}")
@@ -232,7 +245,7 @@ class TeacherRepo:
         stmt = (
             select(Lesson)
             .where(Lesson.id == lesson_id)
-            .options(selectinload(Lesson.contents))  # precarga el contenido asociado
+            .options(selectinload(Lesson.content))  # precarga el contenido asociado
         )
         result = await self.db.execute(stmt)
 
@@ -254,7 +267,7 @@ class TeacherRepo:
         stmt = (
             select(Lesson)
             .where(Lesson.id == lesson_id)
-            .options(selectinload(Lesson.contents))
+            .options(selectinload(Lesson.content))
         )
         result = await self.db.execute(stmt)
         lesson = result.scalar_one_or_none()
@@ -263,30 +276,31 @@ class TeacherRepo:
             logger.error(f"Lección con ID {lesson_id} no encontrada.")
             raise HTTPException(status_code=404, detail="Lección no encontrada")
 
-        for key, value in lesson_data.items():
-            logger.info(f"Actualizando {key} a {value} para la lección ID {lesson_id}")
-            setattr(lesson, key, value)
-
-        # Actualizar contenido si se proporciona
-        if content_data:
-            content = lesson.contents[0] if lesson.contents else None
-            if not content:
-                raise HTTPException(
-                    status_code=404, detail="Contenido no encontrado en la lección"
+        if lesson_data:
+            for key, value in lesson_data.items():
+                logger.info(
+                    f"Actualizando {key} a {value} para la lección ID {lesson_id}"
                 )
+                setattr(lesson, key, value)
 
-            if "content_type" in content_data:
-                content.content_type = content_data["content_type"]
+        content = lesson.content
+        if content is None:
+            raise HTTPException(
+                status_code=404, detail="La lección no tiene contenido para actualizar."
+            )
 
-            if "text" in content_data:
-                content.text = content_data["text"]
-                content.content = content_data["text"]
+        if "content_type" in content_data:
+            content.content_type = content_data["content_type"]
 
-            if "file" in content_data:
-                url = await update_file_on_cloudinary(
-                    content_data["file"], public_id=lesson_id
-                )
-                content.content = url
+        if "text" in content_data:
+            content.text = content_data["text"]
+            content.content = content_data["text"]
+
+        if "file" in content_data:
+            url = await update_file_on_cloudinary(
+                content_data["file"], public_id=lesson_id
+            )
+            content.content = url
 
         await self.db.commit()
         await self.db.refresh(lesson)
@@ -307,7 +321,7 @@ class TeacherRepo:
             raise ValueError("Lección no encontrada")
 
         # Eliminar contenidos asociados y sus archivos si es necesario
-        for content in lesson.contents:
+        for content in lesson.content:
             await delete_file_from_cloudinary(content.content)
             await self.db.delete(content)
 
@@ -327,7 +341,7 @@ class TeacherRepo:
         stmt = (
             select(Lesson)
             .where(Lesson.id_course == course_id)
-            .options(selectinload(Lesson.contents))  # precarga el contenido asociado
+            .options(selectinload(Lesson.content))  # precarga el contenido asociado
         )
         result = await self.db.execute(stmt)
         lessons = result.scalars().all()
@@ -356,7 +370,7 @@ class TeacherRepo:
         await self.db.refresh(new_eval)
         return new_eval
 
-    async def get_evaluation_by_lesson_id(self, lesson_id: int):
+    async def get_evaluation_by_lesson_id(self, lesson_id: int) -> Optional[Evaluation]:
         """
         Obtiene una evaluación por el ID de la lección.
         :param lesson_id: ID de la lección.

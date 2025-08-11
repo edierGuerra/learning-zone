@@ -2,7 +2,7 @@ import json
 import logging
 from fastapi import HTTPException, UploadFile
 
-from models.evaluation_model import QuestionType
+from models.evaluation_model import Evaluation, QuestionType
 from models.lesson_model import Lesson
 from .repository import TeacherRepo
 from .utils import (
@@ -68,8 +68,6 @@ class TeacherServices:
             )
         courses = await self.repo.update_course(course_id, course_data)
         return courses.id
-        # course = await self.repo.update_course(course_id, course_data)
-        # return course.id
 
     async def delete_course(self, course_id: int) -> dict:
         """
@@ -143,7 +141,7 @@ class TeacherServices:
 
         lesson_data = []
         for lesson in lessons:
-            first_content = lesson.contents[0] if lesson.contents else None
+            first_content = lesson.content
 
             # Creamos un dict manualmente que coincida con el esquema `LessonCResponse`
             lesson_data.append(
@@ -213,7 +211,7 @@ class TeacherServices:
 
         return await self.repo.create_evaluation_for_lesson(data)
 
-    async def get_evaluation_by_lesson_id(self, lesson_id: int):
+    async def get_evaluation_by_lesson_id(self, lesson_id: int) -> Evaluation:
         """
         Obtiene una evaluación por el ID de la lección.
         :param lesson_id: ID de la lección.

@@ -319,12 +319,13 @@ class TeacherRepo:
         if not lesson:
             logger.error(f"Lección con ID {lesson_id} no encontrada.")
             raise ValueError("Lección no encontrada")
-
-        # Eliminar contenidos asociados y sus archivos si es necesario
-        for content in lesson.content:
-            await delete_file_from_cloudinary(content.content)
-            await self.db.delete(content)
-
+        if lesson.content:
+            try:
+                if lesson.content.content_type in {"image", "video"}:
+                    await delete_file_from_cloudinary(lesson.content.content)
+            except Exception:
+                pass
+            await self.db.delete(lesson.content)
         await self.db.delete(lesson)
         await self.db.commit()
         logger.info(f"Lección ID {lesson_id} eliminada exitosamente.")

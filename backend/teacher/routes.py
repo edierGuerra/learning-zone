@@ -38,29 +38,6 @@ router = APIRouter(prefix="/api/v1/teachers", tags=["Teacher"])
 bearer_scheme = HTTPBearer()
 
 
-# ---- Rutas de autenticación ----
-@router.post(
-    "/student",
-    status_code=status.HTTP_201_CREATED,
-    description="Autentica a un estudiante y devuelve su información.",
-    dependencies=[Depends(bearer_scheme)],
-    tags=["Students"],
-)
-async def authenticate_student(
-    data: IdentificationCreate,
-    teacher_services: TeacherServices = Depends(get_teacher_services),
-):
-    """
-    Autentica a un estudiante y devuelve un mensaje de éxito
-    """
-    new_ident = await teacher_services.add_identification(data.n_identification)
-    return {
-        "message": "Identificación registrada exitosamente",
-        "id": new_ident.id,
-        "n_identification": new_ident.n_identification,
-    }
-
-
 # ---- Rutas de Cursos ----
 @router.post(
     "/courses",
@@ -435,8 +412,6 @@ async def create_notifications(
     services: NotificationService = Depends(get_notification_services),
     teacher: Teacher = Depends(get_current_teacher),
 ) -> JSONResponse:
-    # Aquí deberías añadir una dependencia de seguridad para administradores, ej:
-    # current_admin: AdminUser = Depends(get_current_admin_user)
     """
     ## Crear y distribuir nueva notificación a todos los estudiantes
 
@@ -480,6 +455,55 @@ async def get_notifications(
     Obtiene todas las notificaciones para un profesor específico.
     """
     return await services.get_notifications_by_teacher_id(teacher.id)
+
+
+@router.delete("/notifications/", dependencies=[Depends(bearer_scheme)])
+async def delete_notification(
+    id_notification: Optional[int] = None,
+    services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    ## El profesor elimina notificaciones
+
+    Un profesor puede eliminar una notificación específica o todas las notificaciones del estudiante autenticado.
+
+    ### Parámetros:
+    - `teacher (Teacher)`: Profesor autenticado, inyectado por FastAPI.
+    - `id_notification (int | opcional)`: ID de la notificación a eliminar.
+      - Si se proporciona, se elimina solo esa notificación.
+      - Si no se proporciona, se eliminarán **todas** las notificaciones que tenga los estudiantes.
+    - `services (NotificationService)`: Servicio de lógica de negocio para notificaciones, inyectado por la dependencia `get_notification_services`.
+
+    ### Respuestas:
+    - **`404 Not Found`**: Si la notificación con el ID no existe o no pertenece al estudiante.
+    - **`500 Internal Server Error`**: Si ocurre un error inesperado en el proceso.
+
+    ### Seguridad:
+    - Requiere autenticación mediante token JWT.
+
+    ### Nota:
+    La lógica de eliminación está delegada al método `delete_notifications_teacher` del servicio, que debe manejar las validaciones correspondientes.
+    """
+
+    if id_notification:
+        result = await services.delete_teacher_notification(id_notification, teacher.id)
+        if result:
+            return JSONResponse(
+                status_code=status.HTTP_200_OK,
+                content={"message": "Se ha eliminado la notificación correctamente"},
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="No se ha podido encontrar la notificación o no pertenece al profesor",
+            )
+    else:
+        count = await services.delete_all_teacher_notifications(teacher.id)
+        return JSONResponse(
+            content={"message": f"{count} notificaciones eliminadas"},
+            status_code=status.HTTP_200_OK,
+        )
 
 
 # --- Rutas de estudiantes ---
@@ -531,3 +555,26 @@ async def register_student_identification(
         raise HTTPException(
             status_code=500, detail=f"Error interno del servidor: {str(e)}"
         )
+
+
+@router.post(
+    "/student",
+    status_code=status.HTTP_201_CREATED,
+    description="Autentica a un estudiante y devuelve su información.",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def authenticate_student(
+    data: IdentificationCreate,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Autentica a un estudiante y devuelve un mensaje de éxito
+    """
+    new_ident = await teacher_services.add_identification(data.n_identification)
+    return {
+        "message": "Identificación registrada exitosamente",
+        "id": new_ident.id,
+        "n_identification": new_ident.n_identification,
+    }

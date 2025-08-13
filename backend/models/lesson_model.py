@@ -3,7 +3,7 @@
 Este módulo define el modelo de datos para las lecciones de los cursos,
 incluyendo su nombre y descripción.
 """
-from typing import List
+from typing import List, Optional
 
 # Módulos internos
 # Módulo: LessonModel
@@ -37,8 +37,11 @@ class Lesson(Base):
     students: Mapped[List["Student"]] = relationship(
         back_populates="lessons", secondary=progress_model
     )
-    content: Mapped[List["Content"]] = relationship(
-        back_populates="lesson", uselist=False, cascade="all, delete-orphan"
+    content: Mapped[Optional["Content"]] = relationship(
+        back_populates="lesson",
+        uselist=False,
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
 
     # relaciones

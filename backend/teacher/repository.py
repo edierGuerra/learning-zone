@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 import json
 
+from models.notification_model import Notification
 from models.student_model import Student
 from models.identification_model import Identification
 
@@ -319,12 +320,13 @@ class TeacherRepo:
         if not lesson:
             logger.error(f"Lección con ID {lesson_id} no encontrada.")
             raise ValueError("Lección no encontrada")
-
-        # Eliminar contenidos asociados y sus archivos si es necesario
-        for content in lesson.content:
-            await delete_file_from_cloudinary(content.content)
-            await self.db.delete(content)
-
+        if lesson.content:
+            try:
+                if lesson.content.content_type in {"image", "video"}:
+                    await delete_file_from_cloudinary(lesson.content.content)
+            except Exception:
+                pass
+            await self.db.delete(lesson.content)
         await self.db.delete(lesson)
         await self.db.commit()
         logger.info(f"Lección ID {lesson_id} eliminada exitosamente.")
@@ -481,3 +483,34 @@ class TeacherRepo:
                 "id_number": id_number,
                 "error": str(e),
             }
+
+    async def delete_teacher_notification(
+        self, id_notification: int, teacher_id: int
+    ) -> bool:
+        result = await self.db.execute(
+            select(Notification)
+            .where(Notification.id == id_notification)
+            .options(selectinload(Notification.students))
+        )
+        notification = result.scalar_one_or_none()
+
+        if not notification or notification.teacher_id != teacher_id:
+            return False
+        notification.students.clear()  # Elimina la relación con los estudiantes
+        await self.db.delete(notification)
+        await self.db.commit()
+        return True
+
+    async def delete_all_teacher_notifications(self, teacher_id: int) -> int:
+        result = await self.db.execute(
+            select(Notification)
+            .where(Notification.teacher_id == teacher_id)
+            .options(selectinload(Notification.students))
+        )
+        notifications = result.scalars().all()
+        count = len(notifications)
+        for notification in notifications:
+            notification.students.clear()  # Elimina la relación con los estudiantes
+            await self.db.delete(notification)
+        await self.db.commit()
+        return count

@@ -37,6 +37,4 @@ class Notification(Base):
     students: Mapped[List["Student"]] = relationship(
         secondary=student_notification, back_populates="notifications"
     )
-    teacher: Mapped[List["Teacher"]] = relationship(
-        "Teacher", back_populates="notifications"
-    )
+    teacher: Mapped["Teacher"] = relationship("Teacher", back_populates="notifications")

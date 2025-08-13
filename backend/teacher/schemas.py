@@ -99,3 +99,7 @@ class LessonCResponse(BaseModel):
 #     question: str = Form(...),
 #     options: Optional[str] = Form(None),  # String JSON del frontend
 #     correct_answer: Optional[str] = Form(None),
+
+
+class IdentificationUpdate(BaseModel):
+    n_identification: int

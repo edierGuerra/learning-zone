@@ -1,6 +1,7 @@
 import json
 import logging
 from fastapi import HTTPException, UploadFile
+from typing import Optional
 
 from models.evaluation_model import Evaluation, QuestionType
 from models.lesson_model import Lesson
@@ -11,6 +12,7 @@ from .utils import (
     update_file_on_cloudinary,
 )
 from models.course_model import Course
+from models.identification_model import Identification
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -262,12 +264,7 @@ class TeacherServices:
         :param teacher_id: ID del profesor.
         :return: Lista de notificaciones.
         """
-        notifications = await self.repo.get_notifications_by_teacher_id(teacher_id)
-        if not notifications:
-            raise HTTPException(
-                status_code=404, detail="No se encontraron notificaciones."
-            )
-        return notifications
+        return await self.repo.get_notifications_by_teacher_id(teacher_id)
 
     async def delete_teacher_notification(
         self, id_notification: int, teacher_id: int
@@ -277,10 +274,10 @@ class TeacherServices:
     async def delete_all_teacher_notifications(self, teacher_id: int) -> int:
         return await self.repo.delete_all_teacher_notifications(teacher_id)
 
-    # --- Métodos de Estudiantes ---
-    async def register_students(self, file: UploadFile) -> dict:
+    # --- Métodos de Identificaciones ---
+    async def register_identifications(self, file: UploadFile) -> dict:
         """
-        Registra estudiantes en el sistema desde un archivo.
+        Registra numeros de identificación en el sistema desde un archivo.
         :param file: Archivo con números de identificación
         :return: Diccionario con estadísticas del proceso
         """
@@ -315,7 +312,59 @@ class TeacherServices:
             return results
 
         except Exception as e:
-            logger.error(f"Error en register_students: {e}")
+            logger.error(f"Error en register_identifications: {e}")
             raise HTTPException(
                 status_code=500, detail=f"Error procesando archivo: {str(e)}"
             )
+
+    async def get_identification_by_id(self, id: int) -> Identification:
+        """
+        Obtiene la identificación de un estudiante por su ID.
+        :param id: ID del estudiante.
+        :return: Diccionario con la información de la identificación.
+        """
+        identification = await self.repo.get_identification_by_id(id)
+        if not identification:
+            raise HTTPException(status_code=404, detail="Identificación no encontrada.")
+        return identification
+
+    async def get_all_identifications(self) -> list:
+        """
+        Obtiene todos los números de identificación.
+        """
+        all_identifications = []
+        identifications = await self.repo.get_identifications()
+        for identification in identifications:
+            status = await self.repo.get_status_student(identification.n_identification)
+            all_identifications.append(
+                {
+                    "id": identification.id,
+                    "number_identification": identification.n_identification,
+                    "status": status,
+                }
+            )
+        return all_identifications
+
+    async def delete_identification_by_id(self, id: int) -> dict:
+        """
+        Elimina un numero de identificación en base a su ID.
+        """
+        return await self.repo.delete_identification_by_id(id)
+
+    async def delete_all_identifications(self) -> dict:
+        """
+        Elimina todas las identificaciones de estudiantes.
+        """
+        return await self.repo.delete_all_identifications()
+
+    async def update_identification_by_id(self, id: int, new_id_number: str) -> dict:
+        """
+        Actualiza un número de identificación en base a su ID.
+        """
+        return await self.repo.update_identification_by_id(id, new_id_number)
+
+    async def get_status_student(self, id: int) -> Optional[bool]:
+        """
+        Obtiene el estado de un estudiante por su ID.
+        """
+        return await self.repo.get_status_student(id)

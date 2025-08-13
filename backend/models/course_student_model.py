@@ -18,7 +18,9 @@ class StateCourse(str, Enum):
 class CourseStudentAssociation(Base):
     __tablename__ = "course_students"
 
-    student_id: int = Column(ForeignKey("students.id"), primary_key=True)
+    student_id: int = Column(
+        ForeignKey("students.id", ondelete="CASCADE"), primary_key=True
+    )
     course_id: int = Column(ForeignKey("courses.id"), primary_key=True)
 
     status: StateCourse = Column(

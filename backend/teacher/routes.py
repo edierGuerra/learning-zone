@@ -13,10 +13,11 @@ from routes.notifications_routes import get_notification_services
 from schemas.lesson_schemas import LessonPResponse
 from schemas.notification_schemas import NotificationCreate, NotificationResponse
 from teacher.schemas import (
+    LessonCResponse,
     EvaluationCreate,
     EvaluationUpdate,
     IdentificationCreate,
-    LessonCResponse,
+    IdentificationUpdate,
 )
 from services.notification_services import NotificationService
 from teacher.model import Teacher
@@ -541,7 +542,7 @@ async def register_student_identification(
         )
 
     try:
-        result = await services.register_students(file)
+        result = await services.register_identifications(file)
         return {
             "message": f"Proceso completado. {result['processed']} números procesados, "
             f"{result['successful']} registrados exitosamente, "
@@ -558,7 +559,7 @@ async def register_student_identification(
 
 
 @router.post(
-    "/student",
+    "/students/identification",
     status_code=status.HTTP_201_CREATED,
     description="Autentica a un estudiante y devuelve su información.",
     dependencies=[Depends(bearer_scheme)],
@@ -577,4 +578,101 @@ async def authenticate_student(
         "message": "Identificación registrada exitosamente",
         "id": new_ident.id,
         "n_identification": new_ident.n_identification,
+    }
+
+
+@router.get(
+    "/students/identifications",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def get_identifications(
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Obtiene todas las identificaciones de estudiantes.
+    """
+    return await teacher_services.get_all_identifications()
+
+
+@router.get(
+    "/students/identification/{id}",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def get_identification_by_id(
+    id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Obtiene un numero de identificación en espesifico en base a su numero de id
+    """
+    identification = await teacher_services.get_identification_by_id(id)
+    status = await teacher_services.get_status_student(identification.n_identification)
+    return {
+        "id": identification.id,
+        "number_identification": identification.n_identification,
+        "status": status,
+    }
+
+
+@router.delete(
+    "/students/identifications",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def delete_identifications(
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Elimina todas las identificaciones de estudiantes.
+    """
+    await teacher_services.delete_all_identifications()
+    return {
+        "status": 200,
+        "message": "Se han eliminado todos los numeros de identificación.",
+    }
+
+
+@router.delete(
+    "/students/identification/{id}",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def delete_identification_by_id(
+    id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Elimina una identificación de estudiante en específico.
+    """
+    await teacher_services.delete_identification_by_id(id)
+    return {
+        "status": 200,
+        "message": "Número de identificación eliminado exitosamente.",
+    }
+
+
+@router.put(
+    "/students/identification/{id}",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def update_identification_by_id(
+    id: int,
+    data: IdentificationUpdate,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Actualiza una identificación de estudiante en específico.
+    """
+    await teacher_services.update_identification_by_id(id, data.n_identification)
+    return {
+        "status": 200,
+        "message": "Numero de identificación actualizado correctamente.",
     }

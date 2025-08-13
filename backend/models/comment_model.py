@@ -33,7 +33,9 @@ class Comment(Base):
     )
 
     # Relaciones
-    student_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
+    student_id: Mapped[int] = mapped_column(
+        ForeignKey("students.id", ondelete="CASCADE")
+    )
     course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"))
 
     student: Mapped["Student"] = relationship(back_populates="comments")

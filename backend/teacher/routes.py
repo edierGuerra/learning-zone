@@ -618,6 +618,23 @@ async def get_identification_by_id(
     }
 
 
+@router.get(
+    "/students/identification/by-number/{identification_number}",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Students"],
+)
+async def get_identification_by_number(
+    identification_number: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Obtiene un numero de identificación y su estado en base a su número de identificación
+    """
+    result = await teacher_services.get_identification_by_number(identification_number)
+    return result
+
+
 @router.delete(
     "/students/identifications",
     dependencies=[Depends(bearer_scheme)],

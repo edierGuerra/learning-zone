@@ -328,6 +328,25 @@ class TeacherServices:
             raise HTTPException(status_code=404, detail="Identificación no encontrada.")
         return identification
 
+    async def get_identification_by_number(self, identification_number: int) -> dict:
+        """
+        Obtiene la identificación de un estudiante por su número de identificación.
+        :param identification_number: Número de identificación del estudiante.
+        :return: Diccionario con la información de la identificación y su estado.
+        """
+        identification = await self.repo.get_identification_by_number(
+            identification_number
+        )
+        if not identification:
+            raise HTTPException(status_code=404, detail="Identificación no encontrada.")
+
+        status = await self.repo.get_status_student(identification.n_identification)
+        return {
+            "id": identification.id,
+            "number_identification": identification.n_identification,
+            "status": status,
+        }
+
     async def get_all_identifications(self) -> list:
         """
         Obtiene todos los números de identificación.

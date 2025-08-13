@@ -524,6 +524,18 @@ class TeacherRepo:
         result = await self.db.execute(stmt)
         return result.scalar_one_or_none()
 
+    async def get_identification_by_number(
+        self, identification_number: int
+    ) -> Optional[Identification]:
+        """
+        Obtiene un numero de identificación en especifico por su número.
+        """
+        stmt = select(Identification).where(
+            Identification.n_identification == identification_number
+        )
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()
+
     async def get_identifications(self) -> list[Identification]:
         """Obtiene todos los números de identificación."""
         stmt = select(Identification)

@@ -262,12 +262,7 @@ class TeacherServices:
         :param teacher_id: ID del profesor.
         :return: Lista de notificaciones.
         """
-        notifications = await self.repo.get_notifications_by_teacher_id(teacher_id)
-        if not notifications:
-            raise HTTPException(
-                status_code=404, detail="No se encontraron notificaciones."
-            )
-        return notifications
+        return await self.repo.get_notifications_by_teacher_id(teacher_id)
 
     async def delete_teacher_notification(
         self, id_notification: int, teacher_id: int

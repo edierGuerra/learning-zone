@@ -441,7 +441,7 @@ class TeacherRepo:
             logger.error(f"Profesor con ID {teacher_id} no encontrado.")
             return []
 
-        notifications = teacher.notifications
+        notifications = teacher.notifications or []
         logger.info(
             f"Se encontraron {len(notifications)} notificaciones para el profesor ID {teacher_id}."
         )

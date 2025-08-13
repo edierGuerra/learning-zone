@@ -25,7 +25,9 @@ class StudentAnswer(Base):
     __tablename__ = "student_answers"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
 
-    student_id: Mapped[int] = mapped_column(ForeignKey("students.id"), nullable=False)
+    student_id: Mapped[int] = mapped_column(
+        ForeignKey("students.id", ondelete="CASCADE"), nullable=False
+    )
     evaluation_id: Mapped[int] = mapped_column(
         ForeignKey("evaluations.id"), nullable=False
     )

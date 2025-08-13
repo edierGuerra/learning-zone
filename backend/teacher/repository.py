@@ -5,7 +5,7 @@
 # Modulos externos
 from typing import Optional
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import delete, select, update
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
@@ -447,6 +447,38 @@ class TeacherRepo:
         )
         return notifications
 
+    async def delete_teacher_notification(
+        self, id_notification: int, teacher_id: int
+    ) -> bool:
+        result = await self.db.execute(
+            select(Notification)
+            .where(Notification.id == id_notification)
+            .options(selectinload(Notification.students))
+        )
+        notification = result.scalar_one_or_none()
+
+        if not notification or notification.teacher_id != teacher_id:
+            return False
+        notification.students.clear()  # Elimina la relación con los estudiantes
+        await self.db.delete(notification)
+        await self.db.commit()
+        return True
+
+    async def delete_all_teacher_notifications(self, teacher_id: int) -> int:
+        result = await self.db.execute(
+            select(Notification)
+            .where(Notification.teacher_id == teacher_id)
+            .options(selectinload(Notification.students))
+        )
+        notifications = result.scalars().all()
+        count = len(notifications)
+        for notification in notifications:
+            notification.students.clear()  # Elimina la relación con los estudiantes
+            await self.db.delete(notification)
+        await self.db.commit()
+        return count
+
+    # --- Metodos de identificaciones ---
     async def register_identification(self, id_number: str) -> dict:
         """
         Registra la identificación de un estudiante, manejando duplicados correctamente.
@@ -484,33 +516,53 @@ class TeacherRepo:
                 "error": str(e),
             }
 
-    async def delete_teacher_notification(
-        self, id_notification: int, teacher_id: int
-    ) -> bool:
-        result = await self.db.execute(
-            select(Notification)
-            .where(Notification.id == id_notification)
-            .options(selectinload(Notification.students))
-        )
-        notification = result.scalar_one_or_none()
+    async def get_identification_by_id(self, id: int) -> Optional[Identification]:
+        """
+        Obtiene un numero de identificación en especifico.
+        """
+        stmt = select(Identification).where(Identification.id == id)
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()
 
-        if not notification or notification.teacher_id != teacher_id:
-            return False
-        notification.students.clear()  # Elimina la relación con los estudiantes
-        await self.db.delete(notification)
-        await self.db.commit()
-        return True
+    async def get_identifications(self) -> list[Identification]:
+        """Obtiene todos los números de identificación."""
+        stmt = select(Identification)
+        result = await self.db.execute(stmt)
+        return result.scalars().all()
 
-    async def delete_all_teacher_notifications(self, teacher_id: int) -> int:
-        result = await self.db.execute(
-            select(Notification)
-            .where(Notification.teacher_id == teacher_id)
-            .options(selectinload(Notification.students))
-        )
-        notifications = result.scalars().all()
-        count = len(notifications)
-        for notification in notifications:
-            notification.students.clear()  # Elimina la relación con los estudiantes
-            await self.db.delete(notification)
+    async def delete_all_identifications(self) -> None:
+        """
+        Elimina todos los números de identificación.
+        """
+        stmt = delete(Identification)
+        await self.db.execute(stmt)
         await self.db.commit()
-        return count
+
+    async def delete_identification_by_id(self, id: int) -> None:
+        """
+        Elimina un número de identificación por su ID.
+        """
+        stmt = delete(Identification).where(Identification.id == id)
+        await self.db.execute(stmt)
+        await self.db.commit()
+
+    async def update_identification_by_id(self, id: int, new_id_number: str) -> None:
+        """
+        Actualiza un número de identificación por su ID.
+        """
+        stmt = (
+            update(Identification)
+            .where(Identification.id == id)
+            .values(n_identification=new_id_number)
+        )
+        await self.db.execute(stmt)
+        await self.db.commit()
+
+    async def get_status_student(self, identification: int) -> Optional[bool]:
+        """
+        Obtiene el estado de un estudiante en base su numero de identificación.
+        """
+        stmt = select(Student).where(Student.identification_number == identification)
+        result = await self.db.execute(stmt)
+        student = result.scalar_one_or_none()
+        return student.is_verified if student else None

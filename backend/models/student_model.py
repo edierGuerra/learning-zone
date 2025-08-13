@@ -39,14 +39,18 @@ class Student(Base):
 
     # Claves foraneas
     identification_id: Mapped[int] = mapped_column(
-        ForeignKey("identifications.id"), unique=True, nullable=False
+        ForeignKey("identifications.id", ondelete="CASCADE"),
+        unique=True,
+        nullable=False,
     )
 
     # Relaciones
     identification: Mapped["Identification"] = relationship(
         back_populates="student", uselist=False
     )
-    comments: Mapped[List["Comment"]] = relationship(back_populates="student")
+    comments: Mapped[List["Comment"]] = relationship(
+        back_populates="student", cascade="all, delete-orphan"
+    )
     courses: Mapped[List["Course"]] = relationship(
         secondary="course_students", back_populates="students"
     )
@@ -69,7 +73,7 @@ class Student(Base):
         secondary=student_notification, back_populates="students"
     )  # Relacion con student_notfication hacia notification_Model
     student_answers_rel: Mapped[List["StudentAnswer"]] = relationship(
-        back_populates="student"
+        back_populates="student", cascade="all, delete-orphan"
     )
 
     # Validación de contraseña

@@ -31,7 +31,7 @@ progress_model = Table(
     "progress",
     Base.metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("student_id", ForeignKey("students.id"), nullable=False),
+    Column("student_id", ForeignKey("students.id", ondelete="CASCADE"), nullable=False),
     Column("lesson_id", ForeignKey("lessons.id"), nullable=False),
     Column(
         "state",

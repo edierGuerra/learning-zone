@@ -25,5 +25,8 @@ class Identification(Base):
 
     # Relaciones
     student: Mapped["Student"] = relationship(
-        "Student", back_populates="identification", uselist=False
+        "Student",
+        back_populates="identification",
+        uselist=False,
+        cascade="all, delete-orphan",
     )

@@ -222,15 +222,6 @@ class TeacherServices:
             raise HTTPException(status_code=404, detail="Evaluación no encontrada")
         return evaluation
 
-    # async def update_evaluation(self, evaluation_id: int, data: dict):
-    #     """
-    #     Actualiza una evaluación existente.
-    #     :param evaluation_id: ID de la evaluación a actualizar.
-    #     :param data: Datos actualizados de la evaluación.
-    #     :return: La evaluación actualizada.
-    #     """
-    #     return await self.repo.update_evaluation(evaluation_id, data)
-
     async def update_evaluation(self, evaluation_id: int, data: dict):
         """
         Actualiza una evaluación considerando el tipo de pregunta y evitando errores
@@ -277,6 +268,14 @@ class TeacherServices:
                 status_code=404, detail="No se encontraron notificaciones."
             )
         return notifications
+
+    async def delete_teacher_notification(
+        self, id_notification: int, teacher_id: int
+    ) -> bool:
+        return await self.repo.delete_teacher_notification(id_notification, teacher_id)
+
+    async def delete_all_teacher_notifications(self, teacher_id: int) -> int:
+        return await self.repo.delete_all_teacher_notifications(teacher_id)
 
     # --- Métodos de Estudiantes ---
     async def register_students(self, file: UploadFile) -> dict:

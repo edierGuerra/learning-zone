@@ -688,7 +688,7 @@ async def update_identification_by_id(
     """
     Actualiza una identificación de estudiante en específico.
     """
-    await teacher_services.update_identification_by_id(id, data.n_identification)
+    await teacher_services.update_identification_by_id(id, data.number_identification)
     return {
         "status": 200,
         "message": "Numero de identificación actualizado correctamente.",

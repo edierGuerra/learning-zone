@@ -102,4 +102,4 @@ class LessonCResponse(BaseModel):
 
 
 class IdentificationUpdate(BaseModel):
-    n_identification: int
+    new_number_identification: int

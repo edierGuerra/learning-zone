@@ -82,20 +82,19 @@ export default function CourseCreator() {
             {/* Categoría */}
             <div className="container-label-input-create-course">
               <Label>Categoría *</Label>
-              <select
+            <select
                 value={formData.category}
                 onChange={(e) => handleInputChange("category", e.target.value)}
                 className={errors.category ? "input-course-error" : ""}
               >
-                {Object.entries(COURSE_CATEGORY_LABELS).map(([key, label]) => (
-                  <option key={key} value={key}>
+                {Object.entries(COURSE_CATEGORY_LABELS).map(([key, { label, color }]) => (
+                  <option key={key} value={key} style={{ color }}>
                     {label}
                   </option>
                 ))}
-              </select>
-              {errors.category && (
-                <p className="text-error-course">{errors.category}</p>
-              )}
+            </select>
+
+              {errors.category && <p className="text-error-course">{errors.category}</p>}
             </div>
 
             {/* Paleta de colores */}

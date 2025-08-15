@@ -1,5 +1,4 @@
 // Componente genérico para mostrar un mapa de lecciones animado para cualquier curso con estilos aplicados
-
 import HeaderCourse from "../components/HeaderCourse";
 import { FaCheck } from "react-icons/fa";
 import { TbLock } from "react-icons/tb";
@@ -16,44 +15,49 @@ import type { TCourse } from "../types/CourseStudent";
 
 const defaultPalette: TCourse["palette"] = educationalPalettes.calmFocus;
 
+// 📌 Posiciones en porcentaje respecto al tamaño del SVG
 const lessonsPositions = [
-  { top: 190, left: 160 },
-  { top: 290, left: 360 },
-  { top: 210, left: 600 },
-  { top: 170, left: 880 },
-  { top: 310, left: 1120 },
-  { top: 490, left: 930 },
-  { top: 470, left: 700 },
-  { top: 610, left: 400 },
-  { top: 750, left: 770 },
-  { top: 890, left: 1050 },
-  { top: 1030, left: 750 },
-  { top: 990, left: 440 },
-  { top: 1120, left: 200 },
-  { top: 1350, left: 480 },
-  { top: 1300, left: 720 },
-  { top: 1440, left: 990 },
-  { top: 1710, left: 720 },
-  { top: 1670, left: 400 },
-  { top: 1850, left: 200 },
-  { top: 2070, left: 520 },
-  { top: 2090, left: 840 },
-  { top: 2210, left: 1100 },
+  { top: 8, left: 12 },
+  { top: 12, left: 26 },
+  { top: 9, left: 41 },
+  { top: 7, left: 60 },
+  { top: 15, left: 77 },
+  { top: 23, left: 64 },
+  { top: 22, left: 48 },
+  { top: 29, left: 28 },
+  { top: 36, left: 53 },
+  { top: 43, left: 72 },
+  { top: 50, left: 53 },
+  { top: 48, left: 31 },
+  { top: 54, left: 14 },
+  { top: 65, left: 33 },
+  { top: 62, left: 50 },
+  { top: 69, left: 68 },
+  { top: 82, left: 50 },
+  { top: 80, left: 28 },
+  { top: 89, left: 14 },
+  { top: 99, left: 35 },
+  { top: 98, left: 55 },
+  { top: 95, left: 76 },
 ];
 
+// 📌 Generar path suave (usa valores escala original para que la curva siga bien)
 function generateSmoothPath(points: { left: number; top: number }[]): string {
   if (points.length < 2) return "";
-  let d = `M ${points[0].left} ${points[0].top}`;
+  // Pasamos porcentajes a la escala del SVG (1450x2090)
+  const scaleX = 1450 / 100;
+  const scaleY = 2090 / 100;
+  let d = `M ${points[0].left * scaleX} ${points[0].top * scaleY}`;
   for (let i = 1; i < points.length; i++) {
-    const p0 = points[i - 1];
-    const p1 = points[i];
+    const p0 = { x: points[i - 1].left * scaleX, y: points[i - 1].top * scaleY };
+    const p1 = { x: points[i].left * scaleX, y: points[i].top * scaleY };
     const controlFactor = 0.35 + 0.15 * (i % 3);
     const zigzag = (i % 2 === 0 ? 1 : -1) * 60;
-    const c1x = p0.left + (p1.left - p0.left) * controlFactor;
-    const c1y = p0.top + (p1.top - p0.top) * controlFactor + zigzag;
-    const c2x = p1.left - (p1.left - p0.left) * controlFactor;
-    const c2y = p1.top - (p1.top - p0.top) * controlFactor - zigzag;
-    d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p1.left} ${p1.top}`;
+    const c1x = p0.x + (p1.x - p0.x) * controlFactor;
+    const c1y = p0.y + (p1.y - p0.y) * controlFactor + zigzag;
+    const c2x = p1.x - (p1.x - p0.x) * controlFactor;
+    const c2y = p1.y - (p1.y - p0.y) * controlFactor - zigzag;
+    d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p1.x} ${p1.y}`;
   }
   return d;
 }
@@ -103,10 +107,12 @@ export default function CourseHomePage() {
 
     if (targetIdx > 0) {
       const targetPos = lessonsPositions[targetIdx];
+      const scaleX = 1450 / 100;
+      const scaleY = 2090 / 100;
       let minDist = Infinity;
       for (let l = 0; l <= totalLen; l += 2) {
         const pt = pathRef.current.getPointAtLength(l);
-        const dist = Math.hypot(pt.x - targetPos.left, pt.y - targetPos.top);
+        const dist = Math.hypot(pt.x - targetPos.left * scaleX, pt.y - targetPos.top * scaleY);
         if (dist < minDist) {
           minDist = dist;
           targetPointLen = l;
@@ -139,13 +145,12 @@ export default function CourseHomePage() {
       if (tRaw < 1) animFrame = requestAnimationFrame(animateToTarget);
     }
 
+    
     const point = pathRef.current.getPointAtLength(0);
     setCarPos({ x: point.x, y: point.y, angle: 0 });
     animFrame = requestAnimationFrame(animateToTarget);
     return () => {
-      if (animFrame) {
-        cancelAnimationFrame(animFrame);
-      }
+      if (animFrame) cancelAnimationFrame(animFrame);
     };
   }, [pathD, lessons.map(l => l.progressState).join("")]);
 
@@ -155,40 +160,48 @@ export default function CourseHomePage() {
       className="container-home-course"
       style={{ backgroundColor: palette.surface, color: palette.text }}
     >
-      <HeaderCourse
-       key={idCourse} title={nameCourse!} idCourse={idCourse} />
+      <HeaderCourse key={idCourse} title={nameCourse!} idCourse={idCourse} />
 
-      <svg className="path-svg-course" width={1400}
-        height={2480} // <-- AJUSTA ESTE VALOR
-        viewBox={`0 0 1450 2090`} // <-- AJUSTA ESTE VALOR
-        preserveAspectRatio="xMidYMid meet">
-        <path
-          ref={pathRef}
-          d={pathD}
-          stroke={palette.brand}
-          strokeWidth="3"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          opacity={0.9}
-          style={{ filter: `drop-shadow(0px 0px 6px ${palette.brand})` }}
-        />
-        <g style={{ transform: `translate(${carPos.x - 20}px, ${carPos.y - 15}px) rotate(${carPos.angle}deg)`, transformOrigin: "20px 15px", transition: "transform 0.1s linear" }}>
-          <foreignObject width={40} height={30}>
-            <div className="flex items-center justify-center w-10 h-7">
-              <GiRoundStar size={32} color={palette.accent} />
-            </div>
-          </foreignObject>
-        </g>
-      </svg>
+      {/* Contenedor con relación de aspecto */}
+      <div className="map-container">
+        <svg
+          className="path-svg-course"
+          viewBox="0 0 1450 2090"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <path
+            ref={pathRef}
+            d={pathD}
+            stroke={palette.brand}
+            strokeWidth="3"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity={0.9}
+            style={{ filter: `drop-shadow(0px 0px 6px ${palette.brand})` }}
+          />
+          <g style={{
+            transform: `translate(${carPos.x - 20}px, ${carPos.y - 15}px) rotate(${carPos.angle}deg)`,
+            transformOrigin: "20px 15px",
+            transition: "transform 0.1s linear"
+          }}>
+            <foreignObject width={40} height={30}>
+              <div className="flex items-center justify-center w-10 h-7">
+                <GiRoundStar size={32} color={palette.accent} />
+              </div>
+            </foreignObject>
+          </g>
+        </svg>
 
-      <div className="container-lessons-course">
         {visualLessons.map((lesson, i) => (
           <div
             key={lesson.id}
             title={lesson.name}
             className="lesson-course"
-            style={{ top: lesson.position.top, left: lesson.position.left }}
+            style={{
+              top: `${lesson.position.top}%`,
+              left: `${lesson.position.left}%`
+            }}
             onClick={() => {
               if (lesson.progressState !== "blocked") {
                 renderContent(lesson.idCourse, lesson);

@@ -7,7 +7,6 @@ import "../styles/HomeCourse.css";
 import { useEffect, useRef, useState } from "react";
 import { authStorage } from "../../../shared/Utils/authStorage";
 import toast from "react-hot-toast";
-import { GiRoundStar } from "react-icons/gi";
 import { useStudentCourseContext } from "../hooks/useCourse";
 import { useParams } from "react-router-dom";
 import { educationalPalettes } from "../../../shared/theme/ColorPalettesCourses";
@@ -81,7 +80,6 @@ export default function CourseHomePage() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const pathRef = useRef<SVGPathElement | null>(null);
-  const [carPos, setCarPos] = useState({ x: 0, y: 0, angle: 0 });
 
   const pathD = generateSmoothPath(lessonsPositions);
   const visualLessons = lessons.map((lesson, i) => ({ ...lesson, position: lessonsPositions[i] }));
@@ -98,61 +96,6 @@ export default function CourseHomePage() {
     }
   }, [idCourse]);
 
-  useEffect(() => {
-    if (!pathRef.current || lessonsPositions.length === 0 || !pathD) return;
-    const inProgressIdx = lessons.findIndex(l => l.progressState === "in_progress");
-    const targetIdx = inProgressIdx === -1 ? 0 : inProgressIdx;
-    const totalLen = pathRef.current.getTotalLength();
-    let targetPointLen = 0;
-
-    if (targetIdx > 0) {
-      const targetPos = lessonsPositions[targetIdx];
-      const scaleX = 1450 / 100;
-      const scaleY = 2090 / 100;
-      let minDist = Infinity;
-      for (let l = 0; l <= totalLen; l += 2) {
-        const pt = pathRef.current.getPointAtLength(l);
-        const dist = Math.hypot(pt.x - targetPos.left * scaleX, pt.y - targetPos.top * scaleY);
-        if (dist < minDist) {
-          minDist = dist;
-          targetPointLen = l;
-        }
-      }
-    }
-
-    let animFrame: number | undefined;
-    let start: number | null = null;
-    const from = 0;
-    const duration = 4000;
-
-    function easeInOutCubic(x: number) {
-      return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-    }
-
-    function animateToTarget(ts: number) {
-      if (!start) start = ts;
-      const elapsed = ts - start;
-      const tRaw = Math.min(1, elapsed / duration);
-      const t = easeInOutCubic(tRaw);
-      const len = from + (targetPointLen - from) * t;
-
-      if (pathRef.current) {
-        const point = pathRef.current.getPointAtLength(len);
-        const prev = pathRef.current.getPointAtLength(Math.max(0, len - 2));
-        const angle = Math.atan2(point.y - prev.y, point.x - prev.x) * (180 / Math.PI);
-        setCarPos({ x: point.x, y: point.y, angle });
-      }
-      if (tRaw < 1) animFrame = requestAnimationFrame(animateToTarget);
-    }
-
-    
-    const point = pathRef.current.getPointAtLength(0);
-    setCarPos({ x: point.x, y: point.y, angle: 0 });
-    animFrame = requestAnimationFrame(animateToTarget);
-    return () => {
-      if (animFrame) cancelAnimationFrame(animFrame);
-    };
-  }, [pathD, lessons.map(l => l.progressState).join("")]);
 
   return (
     <div
@@ -160,38 +103,26 @@ export default function CourseHomePage() {
       className="container-home-course"
       style={{ backgroundColor: palette.surface, color: palette.text }}
     >
-      <HeaderCourse key={idCourse} title={nameCourse!} idCourse={idCourse} />
+      <HeaderCourse
+       key={idCourse} title={nameCourse!} idCourse={idCourse} palette={palette} />
 
-      {/* Contenedor con relación de aspecto */}
-      <div className="map-container">
-        <svg
-          className="path-svg-course"
-          viewBox="0 0 1450 2090"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <path
-            ref={pathRef}
-            d={pathD}
-            stroke={palette.brand}
-            strokeWidth="3"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity={0.9}
-            style={{ filter: `drop-shadow(0px 0px 6px ${palette.brand})` }}
-          />
-          <g style={{
-            transform: `translate(${carPos.x - 20}px, ${carPos.y - 15}px) rotate(${carPos.angle}deg)`,
-            transformOrigin: "20px 15px",
-            transition: "transform 0.1s linear"
-          }}>
-            <foreignObject width={40} height={30}>
-              <div className="flex items-center justify-center w-10 h-7">
-                <GiRoundStar size={32} color={palette.accent} />
-              </div>
-            </foreignObject>
-          </g>
-        </svg>
+      <svg className="path-svg-course" width={1400}
+        height={2480} // <-- AJUSTA ESTE VALOR
+        viewBox={`0 0 1450 2090`} // <-- AJUSTA ESTE VALOR
+        preserveAspectRatio="xMidYMid meet">
+        <path
+          ref={pathRef}
+          d={pathD}
+          stroke={palette.brand}
+          strokeWidth="3"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity={0.9}
+          style={{ filter: `drop-shadow(0px 0px 6px ${palette.brand})` }}
+        />
+
+      </svg>
 
         {visualLessons.map((lesson, i) => (
           <div
@@ -199,7 +130,7 @@ export default function CourseHomePage() {
             title={lesson.name}
             className="lesson-course"
             style={{
-              top: `${lesson.position.top}%`,
+              top: `${lesson.position.top +22}%`,
               left: `${lesson.position.left}%`
             }}
             onClick={() => {
@@ -221,7 +152,7 @@ export default function CourseHomePage() {
                   : ""
               }`}
               style={{
-                backgroundColor: lesson.progressState === "complete" ? 'yellow' : '#1003',
+                backgroundColor: lesson.progressState === "complete" ? palette.accent : '#1003',
                 color: palette.text,
               }}
             >
@@ -230,7 +161,6 @@ export default function CourseHomePage() {
             <span className="span-lesson-course">{`Lección ${i + 1}`}</span>
           </div>
         ))}
-      </div>
     </div>
   );
 }

@@ -37,3 +37,7 @@ npm install framer-motion react-icons
 
 Instala el adaptador de react para libreria de particulas base escrita en typescript para background courseCreator
 npm install tsparticles react-tsparticles
+
+
+Libreria para lo que son alertas de confirmacion
+npm i sweetalert2

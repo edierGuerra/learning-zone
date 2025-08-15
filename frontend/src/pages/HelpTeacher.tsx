@@ -3,7 +3,7 @@ import HelpSlide from './components/helpteacher/HelpSlideTeacher';
 import './components/help/styles/Help.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function Help() {
+export default function HelpTeacher() {
     const [index, setIndex] = useState(0);
     const navigate = useNavigate()
       // Función que se ejecuta cuando el usuario salta o finaliza la ayuda.

@@ -1,11 +1,11 @@
 import '../help/styles/Help.css';
 import HelpButtons from './HelpButtonsTeacher';
 import Home from '../../../modules/teacher/pages/TeacherHome';
-import image1 from '../../assets/Help/logo.png';
-import image2 from '../../assets/Help/cursos.png';
+import image1 from '../../assets/Help/logotipopro.png';
+import image2 from '../../assets/Help/cursoss.png'
 import image3 from '../../assets/Help/notificaciones.png';
 import image4 from '../../assets/Help/perfil.png';
-import image5 from '../../assets/Help/ayuda.png';
+import image5 from '../../assets/Help/ayudass.png';
 import image6 from '../../assets/Help/footer.png';
 import image7 from '../../assets/Help/cursos2.png';
 import image8 from '../../assets/Help/cursos2.png';

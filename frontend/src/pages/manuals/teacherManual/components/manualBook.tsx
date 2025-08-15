@@ -1,9 +1,9 @@
 import HTMLFlipBook from "react-pageflip";
 import pages from "../components/pagesData";
-import "../components/styles/manualBook.css"
+import "../components/styles/coverPage.css"
 import { useEffect, useRef } from "react";
 
-const ManualBook = () => {
+const ManualBookTeacher = () => {
   const bookRef = useRef<any>(null);
 
   const nextPage = () => {
@@ -81,4 +81,4 @@ const ManualBook = () => {
   );
 };
 
-export default ManualBook; 
+export default ManualBookTeacher;

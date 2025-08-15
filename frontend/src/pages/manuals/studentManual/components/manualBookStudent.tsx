@@ -3,7 +3,7 @@ import pages from "../components/pagesDataStudent";
 import "../components/styles/manualBookStudent.css";
 import { useEffect, useRef } from "react";
 
-const ManualBook = () => {
+const ManualBookStudent = () => {
   const bookRef = useRef<any>(null);
 
   const nextPage = () => {
@@ -81,4 +81,4 @@ const ManualBook = () => {
   );
 };
 
-export default ManualBook; 
+export default ManualBookStudent;

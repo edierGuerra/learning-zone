@@ -127,7 +127,6 @@
 
 /* ===== BOTÓN DE ENVÍO ===== */
 .btn-send-form-lesson {
-    background-image: linear-gradient(to right, #16222A 0%, #3A6073 51%, #16222A 100%);
     padding: 15px 45px;
     text-align: center;
     text-transform: uppercase;

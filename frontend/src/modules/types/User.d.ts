@@ -41,13 +41,8 @@ export type TStudentProfile = {
 
 
 export type TTeacher = {
-  id: number;
-  numIdentification: number;
   name: string;
-  lastNames: string;
   email: string;
-  password: string;
-  specialization: string; // ← CAMPO ÚNICO: Especialización del maestro
 };
 
 export type TTeacherProfileToken = {
@@ -59,9 +54,7 @@ export type TTeacherProfileToken = {
 export type TTeacherProfile = {
   id: TTeacher['id'];
   name: TTeacher['name'];
-  lastNames: TTeacher['lastNames'];
   email: TTeacher['email'];
-  specialization: TTeacher['specialization']; // ← CAMPO ÚNICO
   prefixProfile: string;
 };
 

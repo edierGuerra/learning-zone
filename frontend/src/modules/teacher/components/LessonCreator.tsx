@@ -21,7 +21,7 @@ import {
 import { useEffect } from "react";
 import { authStorage } from "../../../shared/Utils/authStorage";
 import { useFormCreateLessons } from "../hooks/useFormCreateLessons";
-import "../styles/LessonCreator.css"; // 🔹 tu nuevo CSS adaptado
+import "../styles/LessonCreator.css";
 
 export default function LessonCreate() {
   const {

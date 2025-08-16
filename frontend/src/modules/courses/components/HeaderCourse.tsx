@@ -62,7 +62,8 @@ export default function HeaderCourse({ title, idCourse, palette }: THeaderCourse
 
         <span
           className="progress-bar-bg"
-          style={{ borderBottomColor: palette.surface}}
+
+
         />
 
         <span

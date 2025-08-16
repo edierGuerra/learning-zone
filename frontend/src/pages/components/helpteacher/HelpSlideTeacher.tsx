@@ -2,14 +2,12 @@ import '../help/styles/Help.css';
 import HelpButtons from './HelpButtonsTeacher';
 import Home from '../../../modules/teacher/pages/TeacherHome';
 import image1 from '../../assets/Help/logotipopro.png';
-import image2 from '../../assets/Help/cursoss.png'
-import image3 from '../../assets/Help/notificaciones.png';
+import image2 from '../../assets/Help/miespacio.png'
+import image3 from '../../assets/Help/crearcurso.png';
 import image4 from '../../assets/Help/perfil.png';
 import image5 from '../../assets/Help/ayudass.png';
 import image6 from '../../assets/Help/footer.png';
-import image7 from '../../assets/Help/cursos2.png';
-import image8 from '../../assets/Help/cursos2.png';
-import image9 from '../../assets/Help/cursos2.png';
+import image7 from '../../assets/Help/coursesss.png';
 
 type HelpSlideProps = {
     index: number;// Paso actual en la guía
@@ -24,11 +22,11 @@ export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
             image: image1,
         },
         {
-            text: "APARTADO DE CATEGORÍA EN DONDE ESTÁN LOS CURSOS...",
+            text: "BOTON PARA ACCEDER A MI ESPACIO",
             image: image2,
         },
         {
-            text: "APARTADO DE NOTIFICACIONES: INFORMACIÓN IMPORTANTE.",
+            text: "BOTONES DE CREAR CURSO Y FILTRADO DE LECCIONES",
             image: image3,
         },
         {
@@ -44,17 +42,10 @@ export default function HelpSlide({ index, setIndex, onSkip }: HelpSlideProps) {
             image: image6,
         },
         {
-            text: "CURSOS DISPONIBLES QUE ESTARÁN COMPUESTOS POR LECCIONES.",
+            text: "CURSOS DISPONIBLES DONDE PUEDES INGRESAR Y EDITAR LECCIONES.",
             image: image7,
         },
-        {
-            text: "BOTON QUE TE ENVIARA A UN FORMULARIO PARA CREAR UN CURSO NUEVO",
-            image: image8,
-        },
-        {
-            text: "APARTADO QUE SERÁ EL ESPACIO DEL ADMINISTRADOR ",
-            image: image9,
-        },
+
     ];
       // Obtiene el paso actual según el índice recibido por props.
     const currentStep = helpSteps[index];

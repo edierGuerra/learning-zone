@@ -1,4 +1,5 @@
 import '../sectiones/styles/accesSection.css'
+import image from '../../../../assets/learningZone/loguin.png'
 
 const accessSection = () => (
     <div className="acces-section-container">
@@ -12,6 +13,8 @@ const accessSection = () => (
                 <li>Seguidamente te llegará un mensaje con un botón de confirmación al correo para validar tu usuario que te va a redirigir al home principal</li>
                 <li>Si ya tienes cuenta, simplemente inicia sesión con tus datos.</li>
             </ul>
+            <img src={image} alt="Logo de Learning Zone" className="accesplatform-section" />
+
             <p className="page-number">2</p>
 
 

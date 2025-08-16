@@ -16,3 +16,14 @@
     text-align: left
     
 }
+
+.container {
+    display: flex;
+    justify-content: space-between; /* una a cada extremo */
+    align-items: center; /* centradas verticalmente si tienen diferente altura */
+}
+
+.students-photo, .notifications-photo {
+    width: 355px;
+    height: 140px;
+}

@@ -69,15 +69,9 @@ const ManualBookTeacher = () => {
       </div>
       <br></br>
       <br></br>
-      <div className="navigation-buttons">
-        <div className="book-nav-btn" onClick={prevPage}>
-        ← Anterior
-        </div>
-        <div className="book-nav-btn" onClick={nextPage}>
-          Siguiente →
-        </div>
+ 
       </div>
-    </div>
+  
   );
 };
 

@@ -20,3 +20,13 @@
     font-size: 22px;
 
 }
+
+.myteam-photo{
+    width: 490px;
+    height: 300px;
+    align-content: center;
+    display: block;        
+    margin: 0 auto;
+
+
+}

@@ -9,6 +9,7 @@
     padding-bottom: 0.5rem;
     font-size: 2rem;
     border-bottom: 2px dashed #a47c48;
+     text-align: center;
 
 }
 
@@ -19,4 +20,13 @@
     text-align: left
 
     
+}
+
+.coursess-photo{
+    width: 555px;
+    height: 280px;
+    align-content: center;
+    display: block;        
+    margin: 0 auto;
+
 }

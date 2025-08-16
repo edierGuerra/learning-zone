@@ -2,9 +2,9 @@
    Contenedor principal del curso
    =============================== */
 .container-home-course {
-  padding: 60px;
+  padding: 20px;
   position: relative;
-  display: block; /* Para que los elementos absolutos se posicionen correctamente */
+  display: block; /* Permite posicionar elementos absolutos internamente */
   min-height: 90dvh;
   height: 100%;
   overflow-x: hidden; /* Evita scroll horizontal */
@@ -12,18 +12,17 @@
 }
 
 /* ===============================
-   Contenedor del mapa y camino
+    Contenedor del mapa y el camino
    =============================== */
 .map-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 1450 / 2090; /* Mantiene proporción del mapa */
+  aspect-ratio: 1450 / 2090; /* Mantiene la proporción del mapa */
 }
 
 .path-svg-course {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0; /* top:0, left:0, right:0, bottom:0 */
   width: 100%;
   height: 100%;
   z-index: 0;
@@ -35,15 +34,15 @@
 }
 
 /* ===============================
-   Contenedor de las lecciones
+    Contenedor de las lecciones
    =============================== */
 .container-lessons-course {
   position: relative;
-  height: 900px; /* Ajustable desde JS si el curso tiene muchas lecciones */
+  height: 900px; /* Ajustable dinámicamente según cantidad de lecciones */
 }
 
 /* ===============================
-   Estilo de cada lección
+    Estilo general de cada lección
    =============================== */
 .lesson-course {
   display: flex;
@@ -61,10 +60,10 @@
 }
 
 /* ===============================
-   Botón/Icono central de lección
+    Botón / Ícono central de lección
    =============================== */
 .btn-icon-lesson-course {
-  width: 64px; /* Tamaño fijo para que no se mueva al cambiar el icono */
+  width: 64px;  /* Tamaño fijo para evitar saltos al cambiar íconos */
   height: 64px;
   display: flex;
   align-items: center;
@@ -74,7 +73,6 @@
   transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
-/* Hover: agrandar suavemente sin alterar layout */
 .btn-icon-lesson-course:hover {
   transform: scale(1.1);
 }
@@ -90,7 +88,7 @@
 }
 
 /* ===============================
-   Estados de la lección
+    Estados de las lecciones
    =============================== */
 .course-complete {
   border: 2px solid;

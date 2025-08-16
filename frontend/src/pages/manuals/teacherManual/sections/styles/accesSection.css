@@ -22,7 +22,11 @@
 }
 
 .acces-section-photo{
-    width: 460px;
+    width: 485px;
     height: 230px;
+    align-content: center;
+    display: block;        /* Necesario para margin auto en imágenes */
+    margin: 0 auto;
+
 }
 

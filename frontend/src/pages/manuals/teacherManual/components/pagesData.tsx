@@ -7,7 +7,8 @@ import { CoursesManagement } from "../sections/coursesManagement";
 import { ComplaintsSection } from "../sections/complaintsSection";
 import FaqSection from "../sections/faqSection";
 import SupportSection from "../sections/supportSection";
-import NavigationSection from "../sections/navigationSection"
+import NavigationSection from "../sections/navigationSection";
+import Lessons from "../sections/lessons";
 
 const pages = [
   { component: <CoverPage /> },
@@ -16,6 +17,7 @@ const pages = [
   { component: <NavigationSection /> },
   { component: <StudentProgress /> },
   { component: <EvaluationsManagement /> },
+  { component: <Lessons /> },
   { component: <CoursesManagement /> },
   { component: <ComplaintsSection /> },
   { component: <FaqSection /> },

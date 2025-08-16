@@ -1,4 +1,5 @@
 import '../sections/styles/accesSection.css'
+import image from '../../../../assets/learningZone/loguin.png'
 const AccessSection = () => (
 <div className="acces-section-container">
   <section>
@@ -8,8 +9,10 @@ const AccessSection = () => (
       <li>Haz clic en “Iniciar sesión”.</li>
       <li>Ingresa su correo y contraseña y será redirigido al panel de administrador</li>
     </ul>
-{/*     <img src={image} alt="Logo de Learning Zone" className="acces-section-photo" />
- */}    <p className="page-number">2</p>
+    <br></br>
+ 
+    <img src={image} alt="Logo de Learning Zone" className="acces-section-photo" />
+   <p className="page-number">2</p>
 
   </section>
 

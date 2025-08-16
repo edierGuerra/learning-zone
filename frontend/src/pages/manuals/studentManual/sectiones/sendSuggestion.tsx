@@ -1,5 +1,5 @@
 import '../sectiones/styles/sendSuggestion.css'
-
+import image from '../../../../assets/learningZone/sugerencias.png'
 export const sendSuggestion =()=>{
     return (
         <div>
@@ -9,6 +9,8 @@ export const sendSuggestion =()=>{
                 <li>Llena el formulario con tu comentario.</li>
                 <li>La plataforma lo enviará al equipo administrativo.</li>
             </ul>
+            <img src={image} alt="suggestion" className="suggestion-photo" />
+
             <p className="page-number">7</p>
 
         </div>

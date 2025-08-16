@@ -4,13 +4,13 @@ const FAQSection = () => (
     <h2 className="FAQ-section-title">Preguntas frecuentes</h2>
     <ul className="FAQ-list">
       <li><strong>¿Cómo actualizo una lección?</strong><br />
-      Ve a la sección de cursos, selecciona la lección y haz clic en “Editar contenido”.</li>
+      Ve a la sección de mi espacio y alli visualizaras las lecciones de tu curso</li>
 
-      <li><strong>¿Puedo descargar los resultados de los estudiantes?</strong><br />
-      Sí, puedes exportar notas en formato Excel desde la sección de “Gestión de estudiantes”.</li>
+      <li><strong>No me sube una lección</strong><br />
+      Verifica tu conexión a internet.</li>
 
       <li><strong>¿Cómo cambio mi contraseña?</strong><br />
-      En tu perfil, haz clic en “Editar contraseña” y sigue los pasos.</li>
+      Comunicate con el soporte tecnico</li>
     </ul>
     <p className="page-number">8</p>
 

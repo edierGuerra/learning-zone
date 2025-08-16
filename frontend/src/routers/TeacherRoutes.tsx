@@ -17,8 +17,9 @@ import TeacherDashboard from "../modules/teacher/components/TeacherDashboard";
 import CourseCreator from "../modules/teacher/components/CourseCreator";
 import CourseEdit from "../modules/teacher/components/CourseEdit";
 import HelpTeacher from "../pages/HelpTeacher";
-import CreateNotificationTeacher from "../modules/teacher/notificationsTeacher/components/CreateNotificationTeacher";
+
 import MySpace from "../modules/teacher/mySpace/pages/MySpace";
+import ProfileTeacher from "../modules/teacher/components/ProfileTeacher";
 
 // COMPONENTE PRINCIPAL
 /**
@@ -38,7 +39,7 @@ export default function TeacherRoutes() {
       {/* Home */}
       <Route path="home-teacher" element={<TeacherDashboard />} /> {/* Page del teacher */}
       <Route path="help-teacher" element={<HelpTeacher />} />
-
+      <Route path="profile-teacher" element={<ProfileTeacher/>} />
 
       {/* Gestión de cursos */}
       <Route path="/courses" element={<TeacherHome />} />
@@ -57,11 +58,8 @@ export default function TeacherRoutes() {
       <Route path="/reports" element={<div>Reportes</div>} />
        */}
       {/* Notificaciones */}
-      <Route path="/notifications/create" element={<CreateNotificationTeacher/>} />
 
       {/* Configuración */}
-      <Route path="/profile" element={<div>Perfil del maestro</div>} />
-      <Route path="/settings" element={<div>Configuración</div>} />
     </Routes>
   );
 }

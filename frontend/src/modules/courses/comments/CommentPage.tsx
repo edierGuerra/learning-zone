@@ -49,7 +49,6 @@ export default function CommentPage({ courseId, nameCourse, palette }: CommentPa
     socket.on('newComment', (c: TComment) => {
       if (c.courseId === courseId) {
         setComments(prev => [...prev, c]);
-        if (c.nameStudent === student?.name) toast.success('¡Tu comentario fue enviado y ya es visible para todos!');
       }
     });
     socket.on('commentUpdated', (u: TComment) => {

@@ -1,5 +1,7 @@
 import iconLz from '../../assets/learningZone/icon-learning-zone.jpg'
 import iconIER from '../../assets/juanTamayo/icon-institucion.png'
+import { GiTeacher } from "react-icons/gi";
+import { PiStudentBold } from "react-icons/pi";
 // icons de react icons
 import { FaTiktok } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
@@ -20,11 +22,6 @@ export default function Footer() {
             <h2>Learning Zone</h2>
             <img src={iconLz} alt="" />
           </div>
-          <div className='contenedor-manuals'>
-            <h2>Manuales</h2>
-            <p className='paragraph-manual-student' onClick={()=>handleBtnNavigate('/manualStudent')}>Manual Estudiante</p>
-            <p className='paragraph-manual-teacher' onClick={()=>handleBtnNavigate('/manualTeacher')}>Manual Profesor</p>
-          </div>
           <div className="contendor-ubi">
             <MyMap/>
           </div>
@@ -43,6 +40,11 @@ export default function Footer() {
               <h3> <a href="https://www.facebook.com/photo/?fbid=122096209268225816&set=a.122096209292225816&__tn__=%3C" target='_blank'>I.E.R Juan Tamayo</a></h3>
               <img src={iconIER} alt="" />
             </div>
+            <div className='contenedor-manuals'>
+              <h2>Manuales</h2>
+                <p className='paragraph-manual-student' onClick={()=>handleBtnNavigate('/manualStudent')}><PiStudentBold/></p>
+                <p className='paragraph-manual-teacher' onClick={()=>handleBtnNavigate('/manualTeacher')}><GiTeacher/></p>
+              </div>
             <div className="contenedor-redes">
               <ul>
                 <a className="tikTok">{<FaTiktok className='icon' />}</a>

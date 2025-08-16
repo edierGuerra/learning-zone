@@ -74,7 +74,7 @@ export default function CourseEdit() {
           <Card>
             <CardHeader>
               <CardTitle>
-                <BookOpen /> Datos del Curso
+                <BookOpen />
               </CardTitle>
             </CardHeader>
 

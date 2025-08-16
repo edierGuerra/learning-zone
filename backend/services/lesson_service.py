@@ -52,7 +52,6 @@ class LessonService:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Curso no encontrado."
             )
-
         # Verificar si el estudiante ya tiene progreso para este curso usando ProgressRepository
         has_progress = await self.progress_repo.has_progress_for_course(
             student_id, course_id
@@ -105,9 +104,10 @@ class LessonService:
                 return []
 
             for course in courses:
-                lessons_with_progress = await self.get_course_lessons_with_progress(
-                    course_id=course.id, student_id=id_student
-                )
+                if course.is_published:
+                    lessons_with_progress = await self.get_course_lessons_with_progress(
+                        course_id=course.id, student_id=id_student
+                    )
 
                 completed = sum(
                     1

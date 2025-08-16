@@ -303,21 +303,23 @@ class EvaluationService:
                         )
                     )
 
-                    if progress_of_next_lesson is None:
+                    if (
+                        progress_of_next_lesson is None
+                        or progress_of_next_lesson == StateProgress.BLOCKED.value
+                    ):
+                        # Si la siguiente lección está bloqueada o no tiene progreso, pásala a 'in_progress'
                         await self.lesson_repo.update_progress_status_for_student_lesson(
                             student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
                         )
-
-                    elif str(progress_of_next_lesson).upper() not in [
-                        StateProgress.COMPLETE.value.upper()
-                    ]:
-                        await self.lesson_repo.update_progress_status_for_student_lesson(
-                            student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
-                        )
-
-                    else:
+                    elif progress_of_next_lesson == StateProgress.COMPLETE.value:
+                        # Si ya está completa, no la toques
                         logger.info(
-                            f"Lección {next_lesson.id} ya está completada para el estudiante {student_id}, no se actualiza a IN_PROGRESS."
+                            f"La lección {next_lesson.id} YA está completada para el estudiante {student_id}. No se actualiza."
+                        )
+                    else:
+                        # En cualquier otro caso (ya en progreso, etc), tampoco la toques
+                        logger.info(
+                            f"La lección {next_lesson.id} tiene estado '{progress_of_next_lesson}' no (completed, blocked). No se modifica."
                         )
                 else:
                     logger.info(

@@ -109,27 +109,27 @@ class LessonService:
                         course_id=course.id, student_id=id_student
                     )
 
-                completed = sum(
-                    1
-                    for lesson in lessons_with_progress
-                    if lesson.progress_state == StateProgress.COMPLETE
-                )
-                total = len(lessons_with_progress)
+                    completed = sum(
+                        1
+                        for lesson in lessons_with_progress
+                        if lesson.progress_state == StateProgress.COMPLETE
+                    )
+                    total = len(lessons_with_progress)
 
-                status_of_course = await self.course_repo.get_status_of_course(
-                    course.id
-                )
+                    status_of_course = await self.course_repo.get_status_of_course(
+                        course.id
+                    )
 
-                info_of_lessons_by_course.append(
-                    {
-                        "id_course": course.id,
-                        "name_course": course.name,
-                        "status": status_of_course,
-                        "completed_lessons": completed,
-                        "all_lessons": total,
-                        "palette": course.palette,
-                    }
-                )
+                    info_of_lessons_by_course.append(
+                        {
+                            "id_course": course.id,
+                            "name_course": course.name,
+                            "status": status_of_course,
+                            "completed_lessons": completed,
+                            "all_lessons": total,
+                            "palette": course.palette,
+                        }
+                    )
 
             logger.info("Operación realizada con exito")
             return info_of_lessons_by_course

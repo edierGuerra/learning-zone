@@ -126,266 +126,226 @@ class EvaluationService:
         Valida la respuesta del estudiante para una evaluación,
         actualiza el progreso y el score.
         """
-        # 1. Validar curso, lección y existencia de la evaluación
-        course_exists = await self.lesson_repo.get_course_by_id(course_id)
-        if not course_exists:
-            logger.warning(
-                f"Intengo de validar respuesta para curso inexistente {course_id}"
-            )
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Curso no encontrado."
-            )
-
-        lesson = await self.lesson_repo.get_lesson_by_id_and_course_id(
-            lesson_id, course_id
-        )
-        if not lesson:
-            logger.warning(
-                f"Lección {lesson_id} no encontrada o no pertenece al curso {course_id}."
-            )
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Lección no encontrada en este curso.",
-            )
-
-        evaluation_obj = await self.evaluation_repo.get_evaluation_by_lesson_id(
-            lesson_id
-        )
-        if not evaluation_obj or evaluation_obj.id != evaluation_id:
-            logger.warning(
-                f"Evaluación {evaluation_id} no encontrada para la lección {lesson_id}."
-            )
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Evaluación no encontrada para esta lección.",
-            )
-
-        # Asegurarse de que el question_type enviado coincida con el almacenado
-        if answer_data.question_type != evaluation_obj.question_type:
-            logger.warning(
-                f"Tipo de pregunta inconsistente: esperado {evaluation_obj.question_type}, recibido {answer_data.question_type}"
-            )
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Tipo de pregunta inconsistente con la evaluación.",
-            )
-
-        score_obtained = 0.0
-        is_pass = False
-
-        if answer_data.question_type == QuestionType.MULTIPLE_CHOICE:
-            # Lógica para opción múltiple
-            if (
-                evaluation_obj.correct_answer
-                and answer_data.response == evaluation_obj.correct_answer
-            ):
-                score_obtained = 100.0  # Puntaje fijo para opción múltiple correcta
-                is_pass = True
-
-        elif answer_data.question_type == QuestionType.OPEN_QUESTION:
-            if not self.gemini_model:
-                logger.error(
-                    "Modelo Gemini no está configurado para evaluar preguntas abiertas."
+        try:
+            # 1. Validar curso, lección y existencia de la evaluación
+            course_exists = await self.lesson_repo.get_course_by_id(course_id)
+            if not course_exists:
+                logger.warning(
+                    f"Intengo de validar respuesta para curso inexistente {course_id}"
                 )
                 raise HTTPException(
-                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                    detail="Servicio de IA no disponible para evaluar preguntas abiertas",
+                    status_code=status.HTTP_404_NOT_FOUND, detail="Curso no encontrado."
                 )
 
-            # Llamar a la función interna que usa Gemini
-            gpt_evaluation_result = await self._evaluate_with_gemini(
-                question=evaluation_obj.question, student_answer=answer_data.response
+            lesson = await self.lesson_repo.get_lesson_by_id_and_course_id(
+                lesson_id, course_id
             )
-            score_obtained = gpt_evaluation_result["porcentaje_correcto"]
-            logger.info(f"Puntaje obtenido (pregunta abierta): {score_obtained}")
-            is_pass = gpt_evaluation_result["aprobado"]
-
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Tipo de pregunta no soportado.",
-            )
-
-        # Si la respuesta fue incorrecta, retornar 400 Bad Request
-        if not is_pass:
-            return JSONResponse(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                content={  # Los datos van dentro del parámetro 'content'
-                    "status": status.HTTP_400_BAD_REQUEST,
-                    "message": "Respuesta incorrecta. Por favor, inténtalo de nuevo.",
-                },
-            )
-
-        # Si es correcta, guardar la respuesta del estudiante
-        # Primero, obtener el score total *antes* de esta evaluación para el 'old_score'
-        # implementar logica para manejar si ya existe una respuesta para esta evaluación.
-
-        # Verificar si ya existe una respuesta para esta evaluacion por este estudiante
-        existing_student_answer = (
-            await self.student_answer_repo.get_student_answer_for_evaluation(
-                student_id=student_id, evaluation_id=evaluation_id
-            )
-        )
-
-        # Obtener el puntaje total del sistema antes de la nueva evaluación, de ese estudiante (es traer la suma de los score de todas las evaluaciones de este estudiante)
-        old_global_score = await self.student_answer_repo.get_total_score_for_student(
-            student_id
-        )
-
-        old_eval_score = (
-            existing_student_answer.score
-            if existing_student_answer and existing_student_answer.score
-            else 0.0
-        )
-
-        incremento = 0.0
-        update_answer = False
-
-        # old_eval_score = 0.0
-        if existing_student_answer:
-            # Ajustar old_global_score para que no incluya el score actual de esta evaluacion
-            # old_global_score_sin_eval = old_global_score - old_eval_score
-
-            # Logica para actualizar score SOLO SI ES MAYOR Y SOLO PARA OPEN_QUESTION
-            if answer_data.question_type == QuestionType.OPEN_QUESTION:
-                if score_obtained > old_eval_score:
-                    incremento = score_obtained - old_eval_score
-                    update_answer = True
-                else:
-                    incremento = 0.0
-            elif answer_data.question_type == QuestionType.MULTIPLE_CHOICE:
-                # Solo se actualiza si nunca saco 100 antes
-
-                if old_eval_score < 100.0 and score_obtained == 100.0:
-                    incremento = 100.0 - old_eval_score
-                    update_answer = True
-                else:
-                    incremento = 0.0
-
-                # old_eval_score < 100.0 # creo que esta incorrecta este parte
-
-                # # if score_obtained > old_eval_score:
-                # update_answer = True
-                logger.info(
-                    f"Actualizando score (mejora detectada): Eva:{evaluation_id}, Est:{student_id}, Ant:{old_eval_score}, Nuevo:{score_obtained}"
+            if not lesson:
+                logger.warning(
+                    f"Lección {lesson_id} no encontrada o no pertenece al curso {course_id}."
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Lección no encontrada en este curso.",
                 )
 
-            if update_answer:
-                # Actualizar la respuesta existente
-                existing_student_answer.student_response = answer_data.response
-                existing_student_answer.score = score_obtained
-                existing_student_answer.answered_at = datetime.now(timezone.utc)
-                await self.db.flush()  # Hacer flush para que los cambios se reflejen antes del commit final
-                logger.info(
-                    f"Respuesta de evaluación {evaluation_id} actualizada para estudiante {student_id}."
+            evaluation_obj = await self.evaluation_repo.get_evaluation_by_lesson_id(
+                lesson_id
+            )
+            if not evaluation_obj or evaluation_obj.id != evaluation_id:
+                logger.warning(
+                    f"Evaluación {evaluation_id} no encontrada para la lección {lesson_id}."
                 )
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Evaluación no encontrada para esta lección.",
+                )
+
+            # Asegurarse de que el question_type enviado coincida con el almacenado
+            if answer_data.question_type != evaluation_obj.question_type:
+                logger.warning(
+                    f"Tipo de pregunta inconsistente: esperado {evaluation_obj.question_type}, recibido {answer_data.question_type}"
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Tipo de pregunta inconsistente con la evaluación.",
+                )
+
+            score_obtained = 0.0
+            is_pass = False
+
+            if answer_data.question_type == QuestionType.MULTIPLE_CHOICE:
+                if (
+                    evaluation_obj.correct_answer
+                    and answer_data.response == evaluation_obj.correct_answer
+                ):
+                    score_obtained = 100.0
+                    is_pass = True
+
+            elif answer_data.question_type == QuestionType.OPEN_QUESTION:
+                if not self.gemini_model:
+                    logger.error(
+                        "Modelo Gemini no está configurado para evaluar preguntas abiertas."
+                    )
+                    raise HTTPException(
+                        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                        detail="Servicio de IA no disponible para evaluar preguntas abiertas",
+                    )
+                gpt_evaluation_result = await self._evaluate_with_gemini(
+                    question=evaluation_obj.question,
+                    student_answer=answer_data.response,
+                )
+                score_obtained = gpt_evaluation_result["porcentaje_correcto"]
+                logger.info(f"Puntaje obtenido (pregunta abierta): {score_obtained}")
+                is_pass = gpt_evaluation_result["aprobado"]
+
             else:
-                incremento = 0.0
-                logger.info(
-                    f"Respuesta de evaluación {evaluation_id} no actualizada para estudiante {student_id} (score no mejorado o ya era 100)."
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Tipo de pregunta no soportado.",
                 )
 
-        #         incremento = score_obtained
-
-        #         old_global_score += (
-        #             old_eval_score  # Revertir la resta para el cálculo final
-        #         )
-        #         score_obtained = old_eval_score  # El score efectivo para el cálculo final es el que ya tenía
-        else:
-            # Crear una nueva respuesta si no existe
-
-            incremento = score_obtained
-            new_student_answer_obj = StudentAnswer(
-                student_id=student_id,
-                evaluation_id=evaluation_id,
-                student_response=answer_data.response,
-                score=score_obtained,
-                answered_at=datetime.now(timezone.utc),
-            )
-            await self.student_answer_repo.create_student_answer(new_student_answer_obj)
-            logger.info(
-                f"Nueva respuesta de evaluación {evaluation_id} creada para estudiante {student_id}."
-            )
-        new_global_score = old_global_score + incremento
-        await self.db.commit()  # Commit para guardar la respuesta del estudiante
-        # Calcular los scores acumulados
-
-        # old_score_final = old_global_score
-        # new_score_final = old_score_final + score_obtained  # Sumar el score
-        # await self.db.commit()  # Commit para persistir la respuesta del estudiante
-
-        # 2. Actualizar el estado de la lección
-        lessons_in_course = await self.lesson_repo.get_lessons_by_course_id_ordered(
-            course_id
-        )
-        current_lesson_index = -1
-        for index, lesson_item in enumerate(lessons_in_course):
-            if lesson_item.id == lesson_id:
-                current_lesson_index = index
-                break
-
-        if current_lesson_index != -1:
-            # Marcar la lección actual como 'completed'
-            await self.lesson_repo.update_progress_status_for_student_lesson(
-                student_id, lesson_id, StateProgress.COMPLETE.value
-            )
-            await self.db.commit()  # Commit para el cambio de progreso de la lección actual
-
-            # Marcar la siguiente lección como "in_progress" si existe
-            # Determinar si hay una siguiente lección o si el curso ha terminado
-
-            is_last_lesson = (current_lesson_index + 1) == len(lessons_in_course)
-
-            if not is_last_lesson:
-                # No es la última lección -> Marcar la sigueinte como 'in_progress'
-                next_lesson = lessons_in_course[current_lesson_index + 1]
-                progress_of_next_lesson = (
-                    await self.lesson_repo.get_progress_status_for_student_lesson(
-                        student_id, next_lesson.id
-                    )
+            if not is_pass:
+                # No se hace commit aquí porque no se ha cambiado el estado de nada aún.
+                return JSONResponse(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    content={
+                        "status": status.HTTP_400_BAD_REQUEST,
+                        "message": "Respuesta incorrecta. Por favor, inténtalo de nuevo.",
+                    },
                 )
 
-                # SOlo actualizar si la siguiente lección no está ya completada
-                # Solo marcar la siguiente lección como 'in_progress' si no está completada
-                if progress_of_next_lesson is None:
-                    # Si no hay progreso, créalo como 'in_progress'
-                    await self.lesson_repo.update_progress_status_for_student_lesson(
-                        student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
-                    )
-                    await self.db.commit()
-                elif str(progress_of_next_lesson).upper() not in [
-                    StateProgress.COMPLETE.value.upper()
-                ]:
-                    # Si el estado no es COMPLETED (mayúscula), actualiza a IN_PROGRESS
-                    await self.lesson_repo.update_progress_status_for_student_lesson(
-                        student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
-                    )
-                    await self.db.commit()
-                else:
-                    # Si la última lección -> Marcar el CURSO como "COMPLETED"
+            # Si es correcta, guardar la respuesta del estudiante
+            existing_student_answer = (
+                await self.student_answer_repo.get_student_answer_for_evaluation(
+                    student_id=student_id, evaluation_id=evaluation_id
+                )
+            )
+
+            old_global_score = (
+                await self.student_answer_repo.get_total_score_for_student(student_id)
+            )
+
+            if existing_student_answer and existing_student_answer.score is not None:
+                old_eval_score = existing_student_answer.score
+            else:
+                old_eval_score = 0.0
+
+            incremento = 0.0
+            update_answer = False
+
+            if existing_student_answer:
+                if answer_data.question_type == QuestionType.OPEN_QUESTION:
+                    if score_obtained > old_eval_score:
+                        incremento = score_obtained - old_eval_score
+                        update_answer = True
+                    else:
+                        incremento = 0.0
+                elif answer_data.question_type == QuestionType.MULTIPLE_CHOICE:
+                    if old_eval_score < 100.0 and score_obtained == 100.0:
+                        incremento = 100.0 - old_eval_score
+                        update_answer = True
+                    else:
+                        incremento = 0.0
+
+                if update_answer:
+                    existing_student_answer.student_response = answer_data.response
+                    existing_student_answer.score = score_obtained
+                    existing_student_answer.answered_at = datetime.now(timezone.utc)
+                    await self.db.flush()  # Solo flush, no commit aquí
                     logger.info(
-                        f"Lección {next_lesson.id} ya está completada para el estudiante {student_id}, no se actualiza a IN_PROGRESS."
+                        f"Respuesta de evaluación {evaluation_id} actualizada para estudiante {student_id}."
+                    )
+                else:
+                    incremento = 0.0
+                    logger.info(
+                        f"Respuesta de evaluación {evaluation_id} no actualizada para estudiante {student_id} (score no mejorado o ya era 100)."
                     )
             else:
-                # Si la última lección -> Marcar el CURSO como "COMPLETED"
+                incremento = score_obtained
+                new_student_answer_obj = StudentAnswer(
+                    student_id=student_id,
+                    evaluation_id=evaluation_id,
+                    student_response=answer_data.response,
+                    score=score_obtained,
+                    answered_at=datetime.now(timezone.utc),
+                )
+                await self.student_answer_repo.create_student_answer(
+                    new_student_answer_obj
+                )
                 logger.info(
-                    f"Estudiante {student_id} completó la última lección del curso {course_id}. Marcando curso como COMPLETED."
+                    f"Nueva respuesta de evaluación {evaluation_id} creada para estudiante {student_id}."
                 )
-                await self.course_repo.mark_course_as_completed_for_student(
-                    student_id, course_id
-                )
-                await self.db.commit()  # Guarda el cambio de estado del curso
 
-        # 3. Retornar la respuesta del score
-        return APIEvaluationScoreResponse(
-            status=status.HTTP_200_OK,
-            message="Evaluación pasada con éxito",
-            score=ScoreResponseDetails(
-                old_score=round(old_global_score, 2),  # Redondear
-                new_score=round(new_global_score, 2),
-                date=datetime.now().strftime("%H:%M:%S"),
-            ),
-        )
+            new_global_score = old_global_score + incremento
+
+            lessons_in_course = await self.lesson_repo.get_lessons_by_course_id_ordered(
+                course_id
+            )
+            current_lesson_index = -1
+            for index, lesson_item in enumerate(lessons_in_course):
+                if lesson_item.id == lesson_id:
+                    current_lesson_index = index
+                    break
+
+            if current_lesson_index != -1:
+                await self.lesson_repo.update_progress_status_for_student_lesson(
+                    student_id, lesson_id, StateProgress.COMPLETE.value
+                )
+
+                is_last_lesson = (current_lesson_index + 1) == len(lessons_in_course)
+
+                if not is_last_lesson:
+                    next_lesson = lessons_in_course[current_lesson_index + 1]
+                    progress_of_next_lesson = (
+                        await self.lesson_repo.get_progress_status_for_student_lesson(
+                            student_id, next_lesson.id
+                        )
+                    )
+
+                    if progress_of_next_lesson is None:
+                        await self.lesson_repo.update_progress_status_for_student_lesson(
+                            student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
+                        )
+
+                    elif str(progress_of_next_lesson).upper() not in [
+                        StateProgress.COMPLETE.value.upper()
+                    ]:
+                        await self.lesson_repo.update_progress_status_for_student_lesson(
+                            student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
+                        )
+
+                    else:
+                        logger.info(
+                            f"Lección {next_lesson.id} ya está completada para el estudiante {student_id}, no se actualiza a IN_PROGRESS."
+                        )
+                else:
+                    logger.info(
+                        f"Estudiante {student_id} completó la última lección del curso {course_id}. Marcando curso como COMPLETED."
+                    )
+                    await self.course_repo.mark_course_as_completed_for_student(
+                        student_id, course_id
+                    )
+
+            # ---- ÚNICO COMMIT AQUÍ (al final, para todo el proceso) ----
+            await self.db.commit()
+
+            return APIEvaluationScoreResponse(
+                status=status.HTTP_200_OK,
+                message="Evaluación pasada con éxito",
+                score=ScoreResponseDetails(
+                    old_score=round(old_global_score, 2),
+                    new_score=round(new_global_score, 2),
+                    date=datetime.now().strftime("%H:%M:%S"),
+                ),
+            )
+        except Exception:
+            await self.db.rollback()
+            logger.error(
+                "Error inesperado durante la evaluación, se realizó rollback.",
+                exc_info=True,
+            )
+            raise
 
     async def _evaluate_with_gemini(
         self, question: str, student_answer: str

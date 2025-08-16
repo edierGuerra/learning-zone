@@ -197,13 +197,14 @@ class EvaluationService:
                 question=evaluation_obj.question, student_answer=answer_data.response
             )
             score_obtained = gpt_evaluation_result["porcentaje_correcto"]
+            logger.info(f"Puntaje obtenido (pregunta abierta): {score_obtained}")
             is_pass = gpt_evaluation_result["aprobado"]
 
-        # else:
-        #     raise HTTPException(
-        #         status_code=status.HTTP_404_NOT_FOUND,
-        #         detail="Tipo de pregunta no soportado.",
-        #     )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Tipo de pregunta no soportado.",
+            )
 
         # Si la respuesta fue incorrecta, retornar 400 Bad Request
         if not is_pass:
@@ -226,51 +227,50 @@ class EvaluationService:
             )
         )
 
-        old_score_total_system = (
-            await self.student_answer_repo.get_total_score_for_student(student_id)
+        # Obtener el puntaje total del sistema antes de la nueva evaluación, de ese estudiante (es traer la suma de los score de todas las evaluaciones de este estudiante)
+        old_global_score = await self.student_answer_repo.get_total_score_for_student(
+            student_id
         )
 
-        # old_score_for_this_eval = 0.0
+        old_eval_score = (
+            existing_student_answer.score
+            if existing_student_answer and existing_student_answer.score
+            else 0.0
+        )
+
+        incremento = 0.0
+        update_answer = False
+
+        # old_eval_score = 0.0
         if existing_student_answer:
-            old_score_for_this_eval = (
-                existing_student_answer.score
-                if existing_student_answer.score is not None
-                else 0.0
-            )
+            # Ajustar old_global_score para que no incluya el score actual de esta evaluacion
+            # old_global_score_sin_eval = old_global_score - old_eval_score
 
-            # Ajustar old_score_total_system para que no incluya el score actual de esta evaluacion
-            old_score_total_system -= old_score_for_this_eval
-
-            should_update = False
             # Logica para actualizar score SOLO SI ES MAYOR Y SOLO PARA OPEN_QUESTION
-            if (
-                answer_data.question_type == QuestionType.OPEN_QUESTION
-                and score_obtained > old_score_for_this_eval
-            ) or (
-                answer_data.question_type == QuestionType.MULTIPLE_CHOICE
-                and old_score_for_this_eval < 100.0
-            ):
-                # if score_obtained > old_score_for_this_eval:
-                should_update = True
+            if answer_data.question_type == QuestionType.OPEN_QUESTION:
+                if score_obtained > old_eval_score:
+                    incremento = score_obtained - old_eval_score
+                    update_answer = True
+                else:
+                    incremento = 0.0
+            elif answer_data.question_type == QuestionType.MULTIPLE_CHOICE:
+                # Solo se actualiza si nunca saco 100 antes
+
+                if old_eval_score < 100.0 and score_obtained == 100.0:
+                    incremento = 100.0 - old_eval_score
+                    update_answer = True
+                else:
+                    incremento = 0.0
+
+                # old_eval_score < 100.0 # creo que esta incorrecta este parte
+
+                # # if score_obtained > old_eval_score:
+                # update_answer = True
                 logger.info(
-                    f"Actualizando score (mejora detectada): Eva:{evaluation_id}, Est:{student_id}, Ant:{old_score_for_this_eval}, Nuevo:{score_obtained}"
+                    f"Actualizando score (mejora detectada): Eva:{evaluation_id}, Est:{student_id}, Ant:{old_eval_score}, Nuevo:{score_obtained}"
                 )
-            # elif answer_data.question_type == QuestionType.MULTIPLE_CHOICE:
-            #     # Para multiple_choice, si ya la ganó (score 100), no se actualiza
-            #     if (
-            #         old_score_for_this_eval < 100.0
-            #     ):  # si no tenia 100.0 antes o no existía.
-            #         should_update = True
-            #         logger.info(
-            #             f"Actualizando score para multiple_choice (ganado por primera vez o reintentando): Eva:{evaluation_id}, Est:{student_id}, Ant:{old_score_for_this_eval}, Nuevo:{score_obtained}"
-            #         )
 
-            # else:
-            #     logger.info(
-            #         "Evaluación de multiple_choice ya estaba ganada. No se actualiza el score."
-            #     )
-
-            if should_update:
+            if update_answer:
                 # Actualizar la respuesta existente
                 existing_student_answer.student_response = answer_data.response
                 existing_student_answer.score = score_obtained
@@ -280,15 +280,21 @@ class EvaluationService:
                     f"Respuesta de evaluación {evaluation_id} actualizada para estudiante {student_id}."
                 )
             else:
+                incremento = 0.0
                 logger.info(
                     f"Respuesta de evaluación {evaluation_id} no actualizada para estudiante {student_id} (score no mejorado o ya era 100)."
                 )
-                old_score_total_system += (
-                    old_score_for_this_eval  # Revertir la resta para el cálculo final
-                )
-                score_obtained = old_score_for_this_eval  # El score efectivo para el cálculo final es el que ya tenía
+
+        #         incremento = score_obtained
+
+        #         old_global_score += (
+        #             old_eval_score  # Revertir la resta para el cálculo final
+        #         )
+        #         score_obtained = old_eval_score  # El score efectivo para el cálculo final es el que ya tenía
         else:
             # Crear una nueva respuesta si no existe
+
+            incremento = score_obtained
             new_student_answer_obj = StudentAnswer(
                 student_id=student_id,
                 evaluation_id=evaluation_id,
@@ -300,12 +306,13 @@ class EvaluationService:
             logger.info(
                 f"Nueva respuesta de evaluación {evaluation_id} creada para estudiante {student_id}."
             )
+        new_global_score = old_global_score + incremento
+        await self.db.commit()  # Commit para guardar la respuesta del estudiante
+        # Calcular los scores acumulados
 
-            # Calcular los scores acumulados
-
-        old_score_final = old_score_total_system
-        new_score_final = old_score_final + score_obtained  # Sumar el score
-        await self.db.commit()  # Commit para persistir la respuesta del estudiante
+        # old_score_final = old_global_score
+        # new_score_final = old_score_final + score_obtained  # Sumar el score
+        # await self.db.commit()  # Commit para persistir la respuesta del estudiante
 
         # 2. Actualizar el estado de la lección
         lessons_in_course = await self.lesson_repo.get_lessons_by_course_id_ordered(
@@ -339,11 +346,26 @@ class EvaluationService:
                 )
 
                 # SOlo actualizar si la siguiente lección no está ya completada
-                if progress_of_next_lesson != StateProgress.COMPLETE.value:
+                # Solo marcar la siguiente lección como 'in_progress' si no está completada
+                if progress_of_next_lesson is None:
+                    # Si no hay progreso, créalo como 'in_progress'
                     await self.lesson_repo.update_progress_status_for_student_lesson(
                         student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
                     )
                     await self.db.commit()
+                elif str(progress_of_next_lesson).upper() not in [
+                    StateProgress.COMPLETE.value.upper()
+                ]:
+                    # Si el estado no es COMPLETED (mayúscula), actualiza a IN_PROGRESS
+                    await self.lesson_repo.update_progress_status_for_student_lesson(
+                        student_id, next_lesson.id, StateProgress.IN_PROGRESS.value
+                    )
+                    await self.db.commit()
+                else:
+                    # Si la última lección -> Marcar el CURSO como "COMPLETED"
+                    logger.info(
+                        f"Lección {next_lesson.id} ya está completada para el estudiante {student_id}, no se actualiza a IN_PROGRESS."
+                    )
             else:
                 # Si la última lección -> Marcar el CURSO como "COMPLETED"
                 logger.info(
@@ -359,8 +381,8 @@ class EvaluationService:
             status=status.HTTP_200_OK,
             message="Evaluación pasada con éxito",
             score=ScoreResponseDetails(
-                old_score=round(old_score_final, 2),  # Redondear
-                new_score=round(new_score_final, 2),
+                old_score=round(old_global_score, 2),  # Redondear
+                new_score=round(new_global_score, 2),
                 date=datetime.now().strftime("%H:%M:%S"),
             ),
         )
@@ -421,7 +443,7 @@ class EvaluationService:
                     f"ValueError al convertir a int: '{porcentaje_texto}' para pregunta: '{question}'"
                 )
 
-            aprobado = porcentaje >= 75  # Umbral de aprobación (ajustable)
+            aprobado = porcentaje >= 70  # Umbral de aprobación (ajustable)
 
             return {
                 "porcentaje_correcto": float(

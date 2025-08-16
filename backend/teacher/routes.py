@@ -182,7 +182,7 @@ async def get_teacher_info(teacher: Teacher = Depends(get_current_teacher)):
         "names": teacher.names,
         "email": teacher.email,
         "prefix_profile": generate_profile_prefix(
-            name=teacher.names, last_name=teacher.last_names
+            name=teacher.names, last_name=teacher.email
         ),
     }
 

@@ -376,7 +376,7 @@ class TeacherServices:
         """
         return await self.repo.delete_all_identifications()
 
-    async def update_identification_by_id(self, id: int, new_id_number: str) -> dict:
+    async def update_identification_by_id(self, id: int, new_id_number: int) -> dict:
         """
         Actualiza un número de identificación en base a su ID.
         """

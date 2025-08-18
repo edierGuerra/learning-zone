@@ -693,3 +693,21 @@ async def update_identification_by_id(
         "status": 200,
         "message": "Numero de identificación actualizado correctamente.",
     }
+
+
+@router.get(
+    "/courses/{course_id}/students",
+    description="Obtiene todos los estudiantes inscritos en un curso específico.",
+    dependencies=[Depends(bearer_scheme)],
+    tags=["Courses", "Students"],
+)
+async def get_students_by_course(
+    course_id: int,
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """
+    Devuelve la lista de estudiantes inscritos en el curso especificado.
+    """
+    students = await teacher_services.get_students_by_course(course_id)
+    return {"students": students}

@@ -13,14 +13,17 @@ from .utils import (
 )
 from models.course_model import Course
 from models.identification_model import Identification
+from repository.student_answer_repository import StudentAnswerRepository
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 class TeacherServices:
-    def __init__(self, repo: TeacherRepo):
+    def __init__(self, repo: TeacherRepo, student_answer_repo: StudentAnswerRepository):
         self.repo = repo
+        self.student_answer_repo = student_answer_repo
 
     # --- Métodos de autenticación---
     async def add_identification(self, n_identification: int) -> int:
@@ -387,3 +390,25 @@ class TeacherServices:
         Obtiene el estado de un estudiante por su ID.
         """
         return await self.repo.get_status_student(id)
+
+    async def get_students_by_course(self, course_id: int) -> list:
+        """
+        Obtiene todos los estudiantes inscritos en un curso específico.
+        :param course_id: ID del curso.
+        :return: Lista de estudiantes.
+        """
+        students = await self.repo.get_students_by_course(course_id)
+        course = await self.repo.get_course_by_id(course_id)
+        return [
+            {
+                "id": student.id,
+                "number_identification": student.identification_number,
+                "name": student.names,
+                "status": await self.get_status_student(student.identification_number),
+                "score": await self.student_answer_repo.get_total_score_for_student(
+                    student.id
+                ),
+                "course": course.name,
+            }
+            for student in students
+        ]

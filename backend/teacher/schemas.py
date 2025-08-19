@@ -92,13 +92,13 @@ class LessonCResponse(BaseModel):
         from_attributes = True
 
 
-# async def create_evaluation_for_lesson(
-#     course_id: int,
-#     lesson_id: int,
-#     question_type: QuestionType = Form(...),
-#     question: str = Form(...),
-#     options: Optional[str] = Form(None),  # String JSON del frontend
-#     correct_answer: Optional[str] = Form(None),
+class CourseResponse(BaseModel):
+    id: int
+    name: str
+    image: str
+
+    class Config:
+        from_attributes = True
 
 
 class IdentificationUpdate(BaseModel):

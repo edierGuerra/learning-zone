@@ -578,3 +578,14 @@ class TeacherRepo:
         result = await self.db.execute(stmt)
         student = result.scalar_one_or_none()
         return student.is_verified if student else None
+
+    async def get_published_courses(self, teacher_id: int) -> list[Course]:
+        """
+        Obtiene todos los cursos publicados de un profesor.
+        """
+        stmt = select(Course).where(
+            Course.teacher_id == teacher_id,
+            Course.is_published,  # Si el id del teacher coincide y si el Course.is_published esta en True, es decir publicado
+        )
+        result = await self.db.execute(stmt)
+        return result.scalars().all()

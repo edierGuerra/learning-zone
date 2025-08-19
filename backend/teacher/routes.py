@@ -13,6 +13,7 @@ from routes.notifications_routes import get_notification_services
 from schemas.lesson_schemas import LessonPResponse
 from schemas.notification_schemas import NotificationCreate, NotificationResponse
 from teacher.schemas import (
+    CourseResponse,
     LessonCResponse,
     EvaluationCreate,
     EvaluationUpdate,
@@ -68,6 +69,20 @@ async def create_course(
     }
     new_course = await teacher_services.create_course(course=course_data)
     return {"message": "Curso creado con exito.", "id_course": new_course}
+
+
+@router.get(
+    "/courses/published",
+    description="obtiene los datos de todos los cursos que este publicados",
+    dependencies=[Depends(bearer_scheme)],
+    response_model=List[CourseResponse],
+)
+async def get_published_courses(
+    teacher_services: TeacherServices = Depends(get_teacher_services),
+    teacher: Teacher = Depends(get_current_teacher),
+):
+    """Obtiene todos los cursos publicados del profesor actual."""
+    return await teacher_services.get_published_courses(teacher.id)
 
 
 @router.get(

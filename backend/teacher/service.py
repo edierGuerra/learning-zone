@@ -411,6 +411,12 @@ class TeacherServices:
         """
         return await self.repo.get_status_student(id)
 
+    async def get_published_courses(self, teacher_id: int) -> list:
+        """
+        Obtiene todos los cursos publicados de un profesor.
+        """
+        return await self.repo.get_published_courses(teacher_id)
+
     async def get_students_by_course(self, course_id: int) -> list:
         """
         Obtiene todos los estudiantes inscritos en un curso específico.

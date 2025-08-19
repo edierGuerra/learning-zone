@@ -589,3 +589,21 @@ class TeacherRepo:
         )
         result = await self.db.execute(stmt)
         return result.scalars().all()
+
+    async def get_students_by_course(self, course_id: int) -> list[Student]:
+        """
+        Obtiene todos los estudiantes inscritos en un curso específico.
+        :param course_id: ID del curso.
+        :return: Lista de estudiantes.
+        """
+        stmt = (
+            select(Course)
+            .where(Course.id == course_id)
+            .options(selectinload(Course.students))
+        )
+        result = await self.db.execute(stmt)
+        course = result.scalar_one_or_none()
+        if not course:
+            logger.warning(f"Curso con ID {course_id} no encontrado o sin estudiantes.")
+            return []
+        return course.students

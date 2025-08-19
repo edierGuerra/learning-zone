@@ -1,4 +1,5 @@
 # main.py
+
 """
 Este módulo contiene toda la configuración inicial de FastAPI,
 estructurada de manera eficiente para garantizar

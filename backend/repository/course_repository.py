@@ -92,11 +92,12 @@ class CourseRepository:
         status = result.scalar_one_or_none()
         return status if status else StateCourse.IN_PROGRESS
 
-    async def get_status_of_course(self, id_course: int):
+    async def get_status_of_course(self, id_course: int, id_student: int):
         query = await self.db.execute(
             select(CourseStudentAssociation).where(
-                CourseStudentAssociation.course_id == id_course
+                CourseStudentAssociation.course_id == id_course,
+                CourseStudentAssociation.student_id == id_student,
             )
         )
         status_course = query.scalar_one_or_none()
-        return status_course.status
+        return status_course.status if status_course else None

@@ -117,7 +117,7 @@ class LessonService:
                     total = len(lessons_with_progress)
 
                     status_of_course = await self.course_repo.get_status_of_course(
-                        course.id
+                        id_course=course.id, id_student=id_student
                     )
 
                     info_of_lessons_by_course.append(

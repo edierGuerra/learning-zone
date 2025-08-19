@@ -331,7 +331,9 @@ class TeacherServices:
             raise HTTPException(status_code=404, detail="Identificación no encontrada.")
         return identification
 
-    async def get_identification_by_number(self, identification_number: int) -> dict:
+    async def get_identification_by_number(
+        self, identification_number: int, id_course: int = None
+    ) -> dict:
         """
         Obtiene la identificación de un estudiante por su número de identificación.
         :param identification_number: Número de identificación del estudiante.
@@ -340,6 +342,22 @@ class TeacherServices:
         identification = await self.repo.get_identification_by_number(
             identification_number
         )
+        score = 0
+        course_name = ""
+        if id_course is None:
+            score = await self.student_answer_repo.get_total_score_for_student(
+                identification.student.id
+            )
+            course_name = "Todos"
+        elif id_course is not None:
+            score = (
+                await self.student_answer_repo.get_total_score_for_student_in_course(
+                    identification.student.id, id_course
+                )
+            )
+            course = await self.repo.get_course_by_id(id_course)
+            course_name = course.name if course else "Desconocido"
+
         if not identification:
             raise HTTPException(status_code=404, detail="Identificación no encontrada.")
 
@@ -348,15 +366,9 @@ class TeacherServices:
             "id": identification.id,
             "number_identification": identification.n_identification,
             "status": status,
-            "score": (
-                self.student_answer_repo.get_total_score_for_student(
-                    identification.student.id
-                )
-                if identification.student
-                else None
-            ),
+            "score": score,
             "name": identification.student.names if identification.student else None,
-            "course": "Todos",
+            "course": course_name,
         }
 
     async def get_all_identifications(self) -> list:

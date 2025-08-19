@@ -520,7 +520,11 @@ class TeacherRepo:
         """
         Obtiene un numero de identificación en especifico.
         """
-        stmt = select(Identification).where(Identification.id == id)
+        stmt = (
+            select(Identification)
+            .options(selectinload(Identification.student))
+            .where(Identification.id == id)
+        )
         result = await self.db.execute(stmt)
         return result.scalar_one_or_none()
 

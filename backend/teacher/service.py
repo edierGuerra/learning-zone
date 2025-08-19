@@ -348,6 +348,15 @@ class TeacherServices:
             "id": identification.id,
             "number_identification": identification.n_identification,
             "status": status,
+            "score": (
+                self.student_answer_repo.get_total_score_for_student(
+                    identification.student.id
+                )
+                if identification.student
+                else None
+            ),
+            "name": identification.student.names if identification.student else None,
+            "course": "Todos",
         }
 
     async def get_all_identifications(self) -> list:
@@ -363,6 +372,17 @@ class TeacherServices:
                     "id": identification.id,
                     "number_identification": identification.n_identification,
                     "status": status,
+                    "score": (
+                        self.student_answer_repo.get_total_score_for_student(
+                            identification.student.id
+                        )
+                        if identification.student
+                        else None
+                    ),
+                    "name": (
+                        identification.student.names if identification.student else None
+                    ),
+                    "course": "Todos",
                 }
             )
         return all_identifications

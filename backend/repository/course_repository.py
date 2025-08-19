@@ -93,6 +93,7 @@ class CourseRepository:
         return status if status else StateCourse.IN_PROGRESS
 
     async def get_status_of_course(self, id_course: int, id_student: int):
+        """Obtiene el estado de un curso de un estudiante en especifico"""
         query = await self.db.execute(
             select(CourseStudentAssociation).where(
                 CourseStudentAssociation.course_id == id_course,

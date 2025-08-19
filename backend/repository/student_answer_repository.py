@@ -7,6 +7,8 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Modulos internos
+from models.evaluation_model import Evaluation
+from models.lesson_model import Lesson
 from models.student_answer_model import StudentAnswer
 
 logger = logging.getLogger(__name__)
@@ -55,3 +57,20 @@ class StudentAnswerRepository:
         )  # Obtener la mas reciente
         result = await self.db.execute(stmt)
         return result.scalar_one_or_none()
+
+    async def get_total_score_for_student_in_course(
+        self, student_id: int, course_id: int
+    ) -> float:
+        """
+        Suma todos los scores de un estudiante en un curso específico.
+        """
+        result = await self.db.execute(
+            select(func.sum(StudentAnswer.score))
+            .join(Evaluation, StudentAnswer.evaluation_id == Evaluation.id)
+            .join(Lesson, Evaluation.lesson_id == Lesson.id)
+            .where(
+                StudentAnswer.student_id == student_id, Lesson.id_course == course_id
+            )
+        )
+        total_score = result.scalar_one_or_none()
+        return total_score if total_score is not None else 0.0

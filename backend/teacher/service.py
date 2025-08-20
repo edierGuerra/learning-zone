@@ -385,7 +385,7 @@ class TeacherServices:
                     "number_identification": identification.n_identification,
                     "status": status,
                     "score": (
-                        self.student_answer_repo.get_total_score_for_student(
+                        await self.student_answer_repo.get_total_score_for_student(
                             identification.student.id
                         )
                         if identification.student

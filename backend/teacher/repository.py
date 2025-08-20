@@ -547,7 +547,7 @@ class TeacherRepo:
 
     async def get_identifications(self) -> list[Identification]:
         """Obtiene todos los números de identificación."""
-        stmt = select(Identification)
+        stmt = select(Identification).options(selectinload(Identification.student))
         result = await self.db.execute(stmt)
         return result.scalars().all()
 

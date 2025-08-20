@@ -640,11 +640,14 @@ async def get_identification_by_number(
     identification_number: int,
     teacher_services: TeacherServices = Depends(get_teacher_services),
     teacher: Teacher = Depends(get_current_teacher),
+    id_course: int = None,
 ):
     """
     Obtiene un numero de identificación y su estado en base a su número de identificación
     """
-    result = await teacher_services.get_identification_by_number(identification_number)
+    result = await teacher_services.get_identification_by_number(
+        identification_number, id_course
+    )
     return result
 
 

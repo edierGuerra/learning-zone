@@ -520,7 +520,11 @@ class TeacherRepo:
         """
         Obtiene un numero de identificación en especifico.
         """
-        stmt = select(Identification).where(Identification.id == id)
+        stmt = (
+            select(Identification)
+            .options(selectinload(Identification.student))
+            .where(Identification.id == id)
+        )
         result = await self.db.execute(stmt)
         return result.scalar_one_or_none()
 
@@ -530,9 +534,14 @@ class TeacherRepo:
         """
         Obtiene un numero de identificación en especifico por su número.
         """
-        stmt = select(Identification).where(
-            Identification.n_identification == identification_number
+        stmt = (
+            select(Identification)
+            .options(
+                selectinload(Identification.student)
+            )  # <--- Le dices que cargue la relación 'student'
+            .where(Identification.n_identification == identification_number)
         )
+
         result = await self.db.execute(stmt)
         return result.scalar_one_or_none()
 

@@ -1,26 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import "../feedbackform/styles/Complain.css";
 
-interface ComplaintFormProps {
-  onSuccess: () => void;
+interface UserData {
+  name: string;
+  email: string;
 }
 
-const ComplaintForm = ({ onSuccess }: ComplaintFormProps) => {
-  const [formData, setFormData] = useState({
-    nombre: "",
-    correo: "",
-    comentario: "",
-  });
+interface ComplaintFormProps {
+  onSuccess: () => void; 
+}
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/user/me");
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error("Error al traer datos del usuario:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Formulario enviado:", formData);
-    onSuccess();
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/complaints/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: userData?.name,
+          email: userData?.email,
+          message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al enviar la queja");
+      }
+
+      setMessage(""); 
+      onSuccess(); // avisamos al padre que fue exitoso
+    } catch (error) {
+      console.error("Error al enviar queja:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,36 +67,33 @@ const ComplaintForm = ({ onSuccess }: ComplaintFormProps) => {
       <input
         type="text"
         id="nombre"
-        name="nombre"
-        value={formData.nombre}
-        onChange={handleChange}
-        placeholder="Escribe tu nombre"
-        required
+        value={userData?.name || ""}
+        readOnly
+        placeholder="Cargando nombre..."
       />
 
       <label htmlFor="correo">Correo electrónico:</label>
       <input
         type="email"
         id="correo"
-        name="correo"
-        value={formData.correo}
-        onChange={handleChange}
-        placeholder="Escribe tu correo"
-        required
+        value={userData?.email || ""}
+        readOnly
+        placeholder="Cargando correo..."
       />
 
       <label htmlFor="comentario">Comentario:</label>
       <textarea
         id="comentario"
-        name="comentario"
         rows={5}
-        value={formData.comentario}
-        onChange={handleChange}
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
         placeholder="Escribe tu queja, sugerencia u observación"
         required
       />
 
-      <button type="submit">Enviar</button>
+      <button type="submit" disabled={loading}>
+        {loading ? "Enviando..." : "Enviar"}
+      </button>
     </form>
   );
 };

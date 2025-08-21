@@ -3,7 +3,7 @@ from pydantic import BaseModel, EmailStr, Field
 
 class SuggestionCreate(BaseModel):
     sender: str = Field(..., description="Nombre o identificador del remitente")
-    type_suggestion: str = Field(..., description="Tipo o título de la sugerencia")
+    email_sender: str = Field(..., description="Correo electrónico del remitente")
     content_message: str = Field(..., description="Contenido de la sugerencia")
     to_email: EmailStr = Field(
         "cjetechnologies.tech@gmail.com",

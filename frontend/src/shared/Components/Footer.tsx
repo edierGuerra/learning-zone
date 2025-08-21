@@ -11,9 +11,12 @@ import { FiGithub } from "react-icons/fi";
 import './Styles/Footer.css'
 import { useNavigationHandler } from '../../hooks/useNavigationHandler';
 import MyMap from './MyMap';
+import { useUser } from '../../modules/auth/Hooks/useAuth';
 // navegacion
 export default function Footer() {
   const handleBtnNavigate = useNavigationHandler()
+  const {user} = useUser()
+
 
   return (
     <footer>
@@ -32,7 +35,15 @@ export default function Footer() {
               <p>Copyright © 2025 © Cje-Tecnology inc. Todos los derechos reservados</p>
               <div className="container-all-t-p">
                 <p onClick={()=>handleBtnNavigate('/sitePolicies')}>Términos y condiciones   |   Políticas y Privacidad</p>
-                <p onClick={()=> handleBtnNavigate('/siteSugerences')}>Inquietudes y Sugerencias</p>
+                {user?.email &&
+                  <p onClick={()=>
+                    handleBtnNavigate('/siteSugerences')}>
+                    Inquietudes y Sugerencias
+                  </p>
+                }
+
+
+
               </div>
             </div>
 

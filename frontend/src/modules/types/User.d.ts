@@ -58,7 +58,7 @@ export type TTeacherProfile = {
   prefixProfile: string;
 };
 
-export type TUser = TStudentProfile | TTeacherProfile;
+export type TUser = TStudentProfile | TTeacherProfile ;
 
 export type TUserRole = 'student' | 'teacher';
 

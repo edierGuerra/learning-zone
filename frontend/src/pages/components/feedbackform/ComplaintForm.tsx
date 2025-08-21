@@ -1,21 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../feedbackform/styles/Complain.css";
+import { useUser } from "../../../modules/auth/Hooks/useAuth";
 
 interface UserData {
-  name: string;
-  email: string;
+  name: string,
+  email: string,
+  asunto:string,
+  comment: string
+}
+interface ComplaintFormProps {
+  onSuccess: () => void;
 }
 
-interface ComplaintFormProps {
-  onSuccess: () => void; 
-}
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [message, setMessage] = useState("");
+  const {user} = useUser()
+  const [userData, setUserData] = useState<UserData | null>({
+    asunto: '',
+    comment:'',
+    email:user!.email,
+    name:user!.name
+
+  });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+/*   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await fetch("http://127.0.0.1:8000/user/me");
@@ -27,30 +37,25 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
     };
 
     fetchUserData();
-  }, []);
+  }, []); */
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    console.log('dato listos para enviar', userData)
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/complaints/send-email", {
+      const response = await fetch(`${VITE_API_URL}/suggestions/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name: userData?.name,
-          email: userData?.email,
-          message,
-        }),
+        body: JSON.stringify({userData}),
       });
 
       if (!response.ok) {
         throw new Error("Error al enviar la queja");
       }
-
-      setMessage(""); 
       onSuccess(); // avisamos al padre que fue exitoso
     } catch (error) {
       console.error("Error al enviar queja:", error);
@@ -63,32 +68,37 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
     <form onSubmit={handleSubmit} className="complaint-form">
       <h2>Completar con tus datos</h2>
 
-      <label htmlFor="nombre">Nombre completo:</label>
+      <label htmlFor="asunto">Asunto</label>
       <input
         type="text"
-        id="nombre"
-        value={userData?.name || ""}
-        readOnly
-        placeholder="Cargando nombre..."
+        id="asunto"
+        value={userData?.asunto || ""}
+        onChange={(e)=>setUserData((prev)=>({
+          ...prev!,
+          asunto: e.target.value
+
+        }) )}
       />
 
-      <label htmlFor="correo">Correo electrónico:</label>
+{/*       <label htmlFor="correo">Correo electrónico:</label>
       <input
         type="email"
         id="correo"
         value={userData?.email || ""}
         readOnly
         placeholder="Cargando correo..."
-      />
+      /> */}
 
-      <label htmlFor="comentario">Comentario:</label>
+      <label htmlFor="comment ">Comentario:</label>
       <textarea
-        id="comentario"
+        id="comment"
         rows={5}
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        value={userData?.comment}
+        onChange={(e) => setUserData((prev)=>({
+          ...prev!,
+          comment:e.target.value
+        }))}
         placeholder="Escribe tu queja, sugerencia u observación"
-        required
       />
 
       <button type="submit" disabled={loading}>

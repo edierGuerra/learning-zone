@@ -1,16 +1,18 @@
+/* Servicio que solicita los cursos para filtrar */
 import axios from '../../../../../api/axiosInstance';
-import type { TStudentsRegisters } from '../ManageStudents';
+import type { TCoursesFilter } from '../ManageStudents';
 
 const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 type GetInfoRegisterStudentsAPIResponse = {
   status: number;
   message: string;
-  students: TStudentsRegisters;
+  courses: TCoursesFilter;
 };
-export default async function GetInfoRegisterStudentsAPI():Promise<GetInfoRegisterStudentsAPIResponse['students']> {
+export default async function GetCoursesFilterAPI():Promise<GetInfoRegisterStudentsAPIResponse['courses']> {
     try{
-        const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/students/identifications`)
-        console.log('Estaaa',response.data)
+/*         const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/students/courses`) */
+        const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/courses/published`)
+        console.log(response)
         if (response.status !== 200) {
             throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
         }
@@ -19,10 +21,11 @@ export default async function GetInfoRegisterStudentsAPI():Promise<GetInfoRegist
 /*         if (!responseData || typeof responseData !== "object") {
             throw new Error("Respuesta del servidor inválida: datos del profesor no presentes");
         } */
+       console.log('object', response.data)
         return response.data
 
     }catch (error) {
-        console.error('Error en GetCoursesByCategoryTeacher:', error);
+        console.error('Error en GetCoursesFilterAPI:', error);
         throw error;
     }
 

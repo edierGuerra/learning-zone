@@ -4,6 +4,8 @@ teacher/routes.py
 Este modulo contiene todas la rutas con las diferentes operaciones que puede realizar el profesor
 """
 
+from services.utils.email_sender import send_suggestion_email
+from schemas.suggestion_schemas import SuggestionCreate
 from fastapi import APIRouter, Depends, Form, UploadFile, File, status, HTTPException
 from fastapi.responses import JSONResponse
 from typing import Optional, List
@@ -729,3 +731,18 @@ async def get_students_by_course(
     """
     students = await teacher_services.get_students_by_course(course_id)
     return {"students": students}
+
+
+# -- Sugerencias
+@router.post("/suggestions/send", tags=["Suggestions"])
+async def send_suggestion(suggestion: SuggestionCreate):
+    """
+    Envía una sugerencia por correo usando la plantilla de SendGrid.
+    """
+    send_suggestion_email(
+        sender=suggestion.sender,
+        type_suggestion=suggestion.type_suggestion,
+        content_message=suggestion.content_message,
+        to_email=suggestion.to_email,
+    )
+    return {"message": "Sugerencia enviada correctamente"}

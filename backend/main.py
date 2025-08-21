@@ -165,7 +165,7 @@ async def send_suggestion(suggestion: SuggestionCreate):
     """
     send_suggestion_email(
         sender=suggestion.sender,
-        type_suggestion=suggestion.type_suggestion,
+        email_sender=suggestion.email_sender,
         content_message=suggestion.content_message,
         to_email=suggestion.to_email,
     )

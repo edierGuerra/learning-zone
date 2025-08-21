@@ -183,7 +183,7 @@ def send_notification_email(
 
 def send_suggestion_email(
     sender: str,
-    type_suggestion: str,
+    email_sender: str,
     content_message: str,
     to_email: str = "cjetechnologies.tech@gmail.com",
 ):
@@ -201,12 +201,11 @@ def send_suggestion_email(
         message = Mail(
             from_email=EMAIL_FROM_SUGGESTION,
             to_emails=to_email,
-            subject=f"Nueva sugerencia: {type_suggestion}",
         )
         message.template_id = TEMPLATE_ID_SUGGESTION
         message.dynamic_template_data = {
             "sender": sender,
-            "type_suggestion": type_suggestion,
+            "email_sender": email_sender,
             "content_message": content_message,
         }
         sg = SendGridAPIClient(SENDGRID_API_KEY)

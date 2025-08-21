@@ -41,7 +41,3 @@ npm install tsparticles react-tsparticles
 
 Libreria para lo que son alertas de confirmacion
 npm i sweetalert2
-
-
-Libreria de react para mostrar contenido en los manuales como si fueran paginas de libros
-npm install react-pageflip

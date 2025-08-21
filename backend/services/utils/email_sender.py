@@ -185,6 +185,7 @@ def send_suggestion_email(
     sender: str,
     email_sender: str,
     content_message: str,
+    subject: str,
     to_email: str = "cjetechnologies.tech@gmail.com",
 ):
     """
@@ -199,14 +200,14 @@ def send_suggestion_email(
     try:
 
         message = Mail(
-            from_email=EMAIL_FROM_SUGGESTION,
-            to_emails=to_email,
+            from_email=EMAIL_FROM_SUGGESTION, to_emails=to_email, subject=subject
         )
         message.template_id = TEMPLATE_ID_SUGGESTION
         message.dynamic_template_data = {
             "sender": sender,
             "email_sender": email_sender,
             "content_message": content_message,
+            "subject": subject,
         }
         sg = SendGridAPIClient(SENDGRID_API_KEY)
         response = sg.send(message)

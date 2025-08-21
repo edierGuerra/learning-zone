@@ -168,6 +168,7 @@ async def send_suggestion(suggestion: SuggestionCreate):
         email_sender=suggestion.email_sender,
         content_message=suggestion.content_message,
         to_email=suggestion.to_email,
+        subject=suggestion.subject,
     )
     return {"message": "Sugerencia enviada correctamente"}
 

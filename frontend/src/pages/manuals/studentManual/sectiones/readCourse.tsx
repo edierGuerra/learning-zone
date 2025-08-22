@@ -24,7 +24,7 @@ export const readCourse = ()=>{
         </div>
 
     )
-    
+
 
 }
 

@@ -1,4 +1,4 @@
-import CoverPage from "./coverPageStudent"; 
+import CoverPage from "./coverPageStudent";
 import IntroSection from "../sectiones/introSection";
 import AccessSection from "../sectiones/accesSection";
 import ReadProgress from "../sectiones/readProgress";

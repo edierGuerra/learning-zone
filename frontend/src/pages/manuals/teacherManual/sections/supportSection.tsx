@@ -9,6 +9,6 @@ const SupportSection = () => (
 
     <p className="page-number">10</p>
   </section>
-  
+
 );
 export default SupportSection;

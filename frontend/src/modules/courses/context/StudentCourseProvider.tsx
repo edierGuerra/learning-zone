@@ -11,14 +11,14 @@ import EvaluationLessonsAPI from "../services/EvaluationLesson.server";
 import LessonsCourseAPI from "../services/LessonsCourse.server";
 
 // Tipos
-import {
-  type TContent,
-  type TCourse,
-  type TCoursesStudents,
-  type TEvaluation,
-  type TLessonsStudent,
-  type TLessonStudent,
-  type TProgressCourses,
+import type {
+  TContent,
+  TCourse,
+  TCoursesStudents,
+  TEvaluation,
+  TLessonsStudent,
+  TLessonStudent,
+  TProgressCourses,
 } from "../types/CourseStudent";
 import toast from "react-hot-toast";
 import GetCoursesAPI from "../services/GetCourses";

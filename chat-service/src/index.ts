@@ -12,12 +12,21 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST']
-  }
+    origin: ["http://localhost:5173", "http://localhost:80", "http://frontend"],
+    methods: ["GET", "POST"],
+  },
 });
 
 app.use(cors());
+
+// Health check endpoint para Docker
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    service: "chat-service",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 registerSocketHandlers(io);
 

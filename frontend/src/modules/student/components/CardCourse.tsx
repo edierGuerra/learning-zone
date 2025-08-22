@@ -1,6 +1,6 @@
 import { RiProgress8Line } from "react-icons/ri";
 import { GrStatusGood } from "react-icons/gr";
-import '../Styles/CardCourse.css';
+import "../styles/CardCourse.css";
 import type { TCourse, TCourseStudent } from '../../courses/types/CourseStudent';
 import { useNavigate } from 'react-router-dom';
 import { useStudentCourseContext } from "../../courses/hooks/useCourse";

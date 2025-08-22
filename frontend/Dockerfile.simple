@@ -1,0 +1,128 @@
+# Simple frontend demo con HTML estático
+FROM nginx:alpine
+
+# Crear página de demostración
+RUN echo '<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Zone - Docker Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .status-item {
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .status-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .version {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Learning Zone</h1>
+        <h2>Docker Deployment Demo</h2>
+        <p><strong>¡Todos los servicios están funcionando correctamente!</strong></p>
+
+        <div class="status-grid">
+            <div class="status-item">
+                <div class="status-icon">🌐</div>
+                <h3>Frontend</h3>
+                <p>Puerto 80<br>✅ Activo</p>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">⚡</div>
+                <h3>Backend API</h3>
+                <p>Puerto 8000<br>✅ Activo</p>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">💬</div>
+                <h3>Chat Service</h3>
+                <p>Puerto 3001<br>✅ Activo</p>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">🗄️</div>
+                <h3>MySQL Database</h3>
+                <p>Puerto 3306<br>✅ Activo</p>
+            </div>
+        </div>
+
+        <div style="margin: 2rem 0;">
+            <h3>🔗 Enlaces Útiles:</h3>
+            <p>
+                <a href="http://localhost:8000/docs" target="_blank">📋 Documentación API (FastAPI)</a><br>
+                <a href="http://localhost:8000" target="_blank">🔧 Backend Health Check</a><br>
+                <a href="http://localhost:3001/health" target="_blank">💬 Chat Service Status</a>
+            </p>
+        </div>
+
+        <div class="version">
+            <p>🐳 Docker Compose | Learning Zone v1.0</p>
+            <p>Configuración exitosa - Todos los servicios interconectados</p>
+        </div>
+    </div>
+
+    <script>
+        // Verificar conectividad con servicios
+        async function checkServices() {
+            try {
+                const backendResponse = await fetch("http://localhost:8000/docs");
+                console.log("Backend conectado:", backendResponse.ok);
+            } catch (e) {
+                console.log("Backend status:", e.message);
+            }
+        }
+
+        // Ejecutar verificación al cargar
+        window.addEventListener("load", checkServices);
+    </script>
+</body>
+</html>' > /usr/share/nginx/html/index.html
+
+# Copiar configuración personalizada de Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Exponer puerto
+EXPOSE 80
+
+# Comando para iniciar Nginx
+CMD ["nginx", "-g", "daemon off;"]

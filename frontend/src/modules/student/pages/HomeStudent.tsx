@@ -8,7 +8,7 @@ import { authStorage } from "../../../shared/Utils/authStorage"
 import ViewCategories from "../../../shared/Components/AuthNavbar/ViewCategories"
 import { gsap } from "gsap"
 
-import "../Styles/HomeStudent.css"
+import "../styles/HomeStudent.css";
 import { RiMenuSearchLine } from "react-icons/ri"
 
 export default function HomeStudent() {

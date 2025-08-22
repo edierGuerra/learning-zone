@@ -10,7 +10,7 @@ const AccessSection = () => (
       <li>Ingresa su correo y contraseña y será redirigido al panel de administrador</li>
     </ul>
     <br></br>
- 
+
     <img src={image} alt="Logo de Learning Zone" className="acces-section-photo" />
    <p className="page-number">2</p>
 

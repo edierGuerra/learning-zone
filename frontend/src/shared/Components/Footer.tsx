@@ -8,7 +8,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FiGithub } from "react-icons/fi";
 //Style
-import './Styles/Footer.css'
+import "./styles/Footer.css";
 import { useNavigationHandler } from '../../hooks/useNavigationHandler';
 import MyMap from './MyMap';
 import { useUser } from '../../modules/auth/Hooks/useAuth';

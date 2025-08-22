@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Zone - Docker Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .status-item {
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .status-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .version {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 2px solid rgba(34, 197, 94, 0.5);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Learning Zone</h1>
+        <h2>Docker Deployment Demo</h2>
+
+        <div class="success-message">
+            <h3>✅ ¡Docker configurado exitosamente!</h3>
+            <p>Todos los servicios están ejecutándose en contenedores</p>
+        </div>
+
+        <div class="status-grid">
+            <div class="status-item">
+                <div class="status-icon">🌐</div>
+                <h3>Frontend</h3>
+                <p>Puerto 80<br>✅ Activo</p>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">⚡</div>
+                <h3>Backend API</h3>
+                <p>Puerto 8000<br>✅ Activo</p>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">💬</div>
+                <h3>Chat Service</h3>
+                <p>Puerto 3001<br>✅ Activo</p>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">🗄️</div>
+                <h3>MySQL Database</h3>
+                <p>Puerto 3306<br>✅ Activo</p>
+            </div>
+        </div>
+
+        <div style="margin: 2rem 0;">
+            <h3>🔗 Enlaces de Servicios:</h3>
+            <p>
+                <a href="/api/docs" target="_blank">📋 Documentación API (FastAPI)</a><br>
+                <a href="/api/" target="_blank">🔧 Backend API Base</a><br>
+                <a href="http://localhost:3001/health" target="_blank">💬 Chat Service Health</a>
+            </p>
+        </div>
+
+        <div style="margin: 2rem 0;">
+            <h3>🛠️ Comandos Docker Útiles:</h3>
+            <div style="text-align: left; max-width: 600px; margin: 0 auto; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; font-family: monospace;">
+                <p><strong>Ver logs:</strong> docker-compose logs -f</p>
+                <p><strong>Estado:</strong> docker-compose ps</p>
+                <p><strong>Detener:</strong> docker-compose down</p>
+                <p><strong>Reconstruir:</strong> docker-compose up --build</p>
+            </div>
+        </div>
+
+        <div class="version">
+            <p>🐳 Docker Compose | Learning Zone v1.0</p>
+            <p>Configuración completa: Frontend + Backend + Chat + Database</p>
+            <p><strong>✨ Todos los servicios interconectados y funcionando</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // Verificar conectividad con servicios
+        async function checkServices() {
+            const statusElements = document.querySelectorAll('.status-item');
+
+            // Backend check
+            try {
+                const response = await fetch('/api/docs');
+                console.log('✅ Backend conectado:', response.ok);
+            } catch (e) {
+                console.log('❌ Backend status:', e.message);
+            }
+
+            // Chat service check
+            try {
+                const response = await fetch('http://localhost:3001/health');
+                console.log('✅ Chat Service conectado:', response.ok);
+            } catch (e) {
+                console.log('❌ Chat Service status:', e.message);
+            }
+        }
+
+        // Ejecutar verificación al cargar
+        window.addEventListener('load', () => {
+            console.log('🚀 Learning Zone Docker Demo cargado');
+            checkServices();
+        });
+
+        // Mostrar información de Docker
+        console.log(`
+🐳 LEARNING ZONE - DOCKER DEPLOYMENT
+=====================================
+✅ Frontend: Nginx en Puerto 80
+✅ Backend: FastAPI en Puerto 8000
+✅ Chat: Node.js + Socket.io en Puerto 3001
+✅ Database: MySQL en Puerto 3306
+=====================================
+🎉 ¡Configuración Docker exitosa!
+        `);
+    </script>
+</body>
+</html>

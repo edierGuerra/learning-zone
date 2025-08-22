@@ -1,0 +1,115 @@
+services:
+  # Base de datos MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: learning_zone_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: learning_zone_db
+      MYSQL_USER: Edier
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - learning_zone_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Backend - FastAPI
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: learning_zone_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-mysql+aiomysql://Edier:admin@mysql:3306/learning_zone_db}
+      - EMAIL_FROM=${EMAIL_FROM:-learning-zone@cjetechnology.org}
+      - EMAIL_FROM_SUGGESTION=${EMAIL_FROM_SUGGESTION:-sugerencias@cjetechnology.org}
+      - SENDGRID_TEMPLATE_SUGGESTION_ID=${SENDGRID_TEMPLATE_SUGGESTION_ID}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - SENDGRID_TEMPLATE_REGISTER_ID=${SENDGRID_TEMPLATE_REGISTER_ID}
+      - SENDGRID_TEMPLATE_PASSWORD_ID=${SENDGRID_TEMPLATE_PASSWORD_ID}
+      - SENDGRID_TEMPLATE_NOTIFICATION_ID=${SENDGRID_TEMPLATE_NOTIFICATION_ID}
+      - TOKEN_KEY=${TOKEN_KEY:-change_this_secret_key}
+      - TOKEN_ALGORITHM=${TOKEN_ALGORITHM:-HS256}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - CLOUD_NAME=${CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - CLOUD_SECURE=${CLOUD_SECURE:-True}
+      - ADMIN_NAME=${ADMIN_NAME:-admin}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@learning-zone.com}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-change_this_password}
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/static:/app/static
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - learning_zone_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  # Chat Service - Node.js
+  chat-service:
+    build:
+      context: ./chat-service
+      dockerfile: Dockerfile
+    container_name: learning_zone_chat
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    depends_on:
+      - backend
+    networks:
+      - learning_zone_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      timeout: 30s
+      retries: 5
+
+  # Frontend - React con Nginx
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: learning_zone_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_CHAT_URL=http://localhost:3001
+    depends_on:
+      - backend
+      - chat-service
+    networks:
+      - learning_zone_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      timeout: 30s
+      retries: 5
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  learning_zone_network:
+    driver: bridge

@@ -1,0 +1,76 @@
+# Archivo de configuración para desarrollo con Docker Compose
+
+services:
+  # Base de datos MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: learning_zone_mysql_dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: learning_zone_db
+      MYSQL_USER: Edier
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - learning_zone_network
+
+  # Backend - FastAPI con hot reload
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: learning_zone_backend_dev
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql+aiomysql://Edier:admin@mysql:3306/learning_zone_db
+      - EMAIL_FROM=learning-zone@cjetechnology.org
+      - EMAIL_FROM_SUGGESTION=sugerencias@cjetechnology.org
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - TOKEN_KEY=mi_super_secret_key
+      - TOKEN_ALGORITHM=HS256
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - CLOUD_NAME=${CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    depends_on:
+      - mysql
+    networks:
+      - learning_zone_network
+
+  # Chat Service con hot reload
+  chat-service:
+    build:
+      context: ./chat-service
+      dockerfile: Dockerfile.dev
+    container_name: learning_zone_chat_dev
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    volumes:
+      - ./chat-service:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - learning_zone_network
+
+volumes:
+  mysql_dev_data:
+    driver: local
+
+networks:
+  learning_zone_network:
+    driver: bridge

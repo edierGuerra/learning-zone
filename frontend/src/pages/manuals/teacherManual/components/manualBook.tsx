@@ -69,9 +69,9 @@ const ManualBookTeacher = () => {
       </div>
       <br></br>
       <br></br>
- 
+
       </div>
-  
+
   );
 };
 

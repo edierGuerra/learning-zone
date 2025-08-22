@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import '../Styles/StudentPage.css'
+import "../styles/StudentPage.css";
 import UpdateInformation from "../components/UpdateInformation";
 import { useUser } from "../../auth/Hooks/useAuth";
 import { useStudentCourseContext } from "../../courses/hooks/useCourse";

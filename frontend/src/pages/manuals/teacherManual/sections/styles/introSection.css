@@ -11,11 +11,11 @@
 .introduction-parrafo {
   color: black;
   text-align: justify;
-  max-width: 90%;         
-  margin: 0 auto;         
-  padding: 1rem;         
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
   word-wrap: break-word;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   font-size: 22px
 }
 
@@ -33,7 +33,7 @@
     width: 240px;
     height: 170px;
     align-content: center;
-    display: block;       
+    display: block;
     margin: 0 auto;
 
 }

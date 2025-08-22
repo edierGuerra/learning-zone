@@ -10,6 +10,6 @@ const introduction = () => (
 
       <p className="page-number">1</p>
   </section>
-    
+
 );
 export default introduction;

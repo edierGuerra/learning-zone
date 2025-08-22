@@ -19,9 +19,9 @@ declare module "react-pageflip" {
     autoSize?: boolean;
     className?: string;
     children: React.ReactNode;
-    
+
   }
-  
+
 
 
   export default HTMLFlipBook;

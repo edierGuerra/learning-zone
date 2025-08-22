@@ -41,19 +41,19 @@ export default function InstitutionSlide({ index, setIndex }: SlideProps) {
     {
       title: "Misión",
       text: "Educación inclusiva y de calidad para niños, jóvenes, adultos; enfoque integral y agroindustrial, con modelo socio-cognitivo y currículo por competencias.",
-    
+
     },
     {
       title: "Visión",
       text: "Ser una institución líder en educación rural que promueva la formación integral de sus estudiantes, fortaleciendo valores, pensamiento crítico y competencias para la vida.",
-      
+
     },
 
 
     {
       title: "Redes Sociales",
 
-      
+
       text: (
         <>
         <br></br>

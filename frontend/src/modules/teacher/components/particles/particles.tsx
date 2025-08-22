@@ -19,7 +19,7 @@ function ParticlesBGBase() {
   const options = useMemo<ISourceOptions>(() => ({
     preset: "bigCircles",
     background: { color: { value: "transparent" } },
-    fullScreen: { enable: false },   
+    fullScreen: { enable: false },
     detectRetina: true,
     fpsLimit: 60,
     pauseOnBlur: false,
@@ -35,7 +35,7 @@ function ParticlesBGBase() {
       style={{
         position: "absolute",
         inset: 0,
-        zIndex: -1,           
+        zIndex: -1,
         pointerEvents: "none",
         overflow: "hidden",
         width: "100%",

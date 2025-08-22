@@ -8,12 +8,12 @@ export const supportSectionStudent =()=>{
             <p className="support-hour"><strong>Horario de atención:</strong> Lunes a viernes, 8:00 a.m. - 4:00 p.m.</p>
             <br></br>
             <img src={image} alt="myteam" className="myteam-photo" />
-            
+
             <p className="page-number">10</p>
 
 
         </div>
-        
+
     )
 }
 

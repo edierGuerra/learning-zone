@@ -16,13 +16,13 @@ export default function RightPanel({ onClose }: RightPanelProps) {
 
       <h2 className="panel-title">Misión</h2>
       <p className="panel-description">
-        Brindar acceso a herramientas educativas digitales de calidad para estudiantes de zona rural, fortaleciendo sus competencias 
+        Brindar acceso a herramientas educativas digitales de calidad para estudiantes de zona rural, fortaleciendo sus competencias
         tecnológicas y promoviendo una educación inclusiva, económica y transformadora.
       </p>
 
       <h2 className="panel-title">Visión</h2>
       <p className="panel-description">
-        Ser un aplicativo líder en educación digital rural, reconocida por mejorar las oportunidades 
+        Ser un aplicativo líder en educación digital rural, reconocida por mejorar las oportunidades
         académicas y laborales de los jóvenes mediante el uso de tecnología innovadora y accesible.
       </p>
 

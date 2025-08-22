@@ -1,5 +1,5 @@
 import useFormUpdateStudent from '../hooks/useFormUpdateStudent'
-import '../Styles/UpdateInformation.css'
+import "../styles/UpdateInformation.css";
 export default function UpdateInformation() {
   const { numIdentification, email, newName, newLastNames, setNewName, setNewLastNames, handleSubmitUpdate, errors } = useFormUpdateStudent()
   return (

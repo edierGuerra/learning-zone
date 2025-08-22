@@ -4,7 +4,7 @@ import Home from '../../../modules/student/pages/HomeStudent';
 
 import image1 from '../../assets/Help/logotipopro.png';
 import image2 from '../../assets/Help/cursoss.png';
-import image3 from '../../assets/Help/Notificaciones.png';
+import image3 from "../../assets/Help/notificaciones.png";
 import image4 from '../../assets/Help/perfil.png';
 import image5 from '../../assets/Help/ayudass.png';
 import image6 from '../../assets/Help/footer.png';

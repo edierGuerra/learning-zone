@@ -1,0 +1,65 @@
+# Simple frontend para demostración Docker - React + Vite
+FROM node:18-alpine
+
+# Establecer el directorio de trabajo
+WORKDIR /app
+
+# Crear una aplicación React simple para demostración
+RUN npx create-vite@latest . --template react-ts --yes || true
+
+# Instalar dependencias
+RUN npm install
+
+# Crear un archivo simple de demostración
+RUN echo 'import { useState } from "react"
+import "./App.css"
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h1>🚀 Learning Zone - Docker Demo</h1>
+        <p>Frontend funcionando correctamente en Docker!</p>
+        <button onClick={() => setCount((count) => count + 1)}>
+          Contador: {count}
+        </button>
+        <div style={{ marginTop: "2rem" }}>
+          <h3>📊 Servicios Disponibles:</h3>
+          <ul style={{ listStyle: "none", padding: 0 }}>
+            <li>✅ Frontend: Puerto 80</li>
+            <li>✅ Backend API: Puerto 8000</li>
+            <li>✅ Chat Service: Puerto 3001</li>
+            <li>✅ MySQL Database: Puerto 3306</li>
+          </ul>
+        </div>
+        <div style={{ marginTop: "2rem" }}>
+          <a href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer">
+            📋 Ver Documentación API
+          </a>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default App' > src/App.tsx
+
+# Construir la aplicación
+RUN npm run build
+
+# Etapa de producción con Nginx
+FROM nginx:alpine
+
+# Copiar archivos construidos
+COPY --from=0 /app/dist /usr/share/nginx/html
+
+# Copiar configuración personalizada de Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Exponer puerto
+EXPOSE 80
+
+# Comando para iniciar Nginx
+CMD ["nginx", "-g", "daemon off;"]

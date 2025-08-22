@@ -4,7 +4,7 @@ import image from '../../../../assets/learningZone/logotipopro.png';
 const CoverPage = () => {
   return (
     <div className="cover-page">
-      <div className="logo"> 
+      <div className="logo">
       <img src={image} alt="Logo de Learning Zone" className="cover-logo" />
       <h1 className="cover-page-title">Manual de Usuario</h1>
       <p className="paragraph-cover-page">
@@ -16,4 +16,3 @@ const CoverPage = () => {
 };
 
 export default CoverPage;
-

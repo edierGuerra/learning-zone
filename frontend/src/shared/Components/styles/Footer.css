@@ -13,6 +13,7 @@ footer {
     display: flex;
     flex-direction: column; /* Elementos apilados verticalmente */
     color: var(--color-text-light);
+    z-index: 10;
 }
 
 /* ===== CONTENEDOR 1: LOGO + UBICACIÓN ===== */

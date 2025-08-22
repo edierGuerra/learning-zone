@@ -33,9 +33,8 @@
     justify-content: center;
     text-align: center;
     width: 100%;
-    background-image: url('https://sdmntprwestcentralus.oaiusercontent.com/files/00000000-2e60-61fb-b409-b7ea942abccb/raw?se=2025-08-20T22%3A11%3A42Z&sp=r&sv=2024-08-04&sr=b&scid=0d225f75-9d15-55c8-9f7c-688a9e0618d8&skoid=ea1de0bc-0467-43d6-873a-9a5cf0a9f835&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-20T01%3A24%3A13Z&ske=2025-08-21T01%3A24%3A13Z&sks=b&skv=2024-08-04&sig=2a5oOkMfykI%2BuSq52nwjyKYiLKm/9WrKEMWM8SeF0ys%3D');
+    background-image: url("https://sdmntprwestcentralus.oaiusercontent.com/files/00000000-2e60-61fb-b409-b7ea942abccb/raw?se=2025-08-21T20%3A23%3A40Z&sp=r&sv=2024-08-04&sr=b&scid=d859906d-7874-5c8a-9f08-677b2c7a4ee3&skoid=02b7f7b5-29f8-416a-aeb6-99464748559d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-21T16%3A59%3A27Z&ske=2025-08-22T16%3A59%3A27Z&sks=b&skv=2024-08-04&sig=Pg14Wz668SzrSMlYFaCuCsmgRTzRKjgLtXWpfquPZv0%3D")
 }
-
 /* ===== ENVOLTURA DEL FORM ===== */
 .envoltura-form-lesson {
     padding: 2rem;

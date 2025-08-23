@@ -195,6 +195,14 @@ async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
+# Ruta de redirección para /api
+@app.get("/api", tags=["Root"])
+async def api_root():
+    """Redirección a la documentación de la API"""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/api/docs")
+
+
 # Health check endpoint para DigitalOcean
 @app.get("/health", tags=["Health"])
 async def health_check():

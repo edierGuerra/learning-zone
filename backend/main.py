@@ -15,7 +15,7 @@ from contextlib import asynccontextmanager
 from schemas.suggestion_schemas import SuggestionCreate
 from services.utils.email_sender import send_suggestion_email
 from core.security import get_current_role
-from database.config_db import Base, engine, async_session  # Base de datos
+from database.config_db import Base, engine, async_session, verify_database_connection  # Base de datos
 import google.generativeai as genai
 from dotenv import load_dotenv
 from config import settings
@@ -180,12 +180,20 @@ async def health_check():
 @app.get("/api/status", tags=["Status"])
 async def service_status():
     """Endpoint para verificar el estado del backend y sus dependencias"""
+    db_status = await verify_database_connection()
     return {
         "backend": "OK",
-        "database": "Connected",
+        "database": db_status,
         "cors_origins": origins,
         "gemini": "Configured" if gemini_model else "Not configured"
     }
+
+
+# Endpoint específico para verificar solo la base de datos
+@app.get("/api/database/status", tags=["Database"])
+async def database_status():
+    """Endpoint para verificar específicamente el estado de la base de datos"""
+    return await verify_database_connection()
 
 
 @app.get("/api/v1/role", dependencies=[Depends(bearer_scheme)])

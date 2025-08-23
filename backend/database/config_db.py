@@ -16,6 +16,7 @@ import ssl
 from pathlib import Path
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import text
 
 # ---------------------------
 # Definimos la URL de conexión
@@ -36,7 +37,7 @@ DATABASE_URL = settings.database_url
 #   backend/certs/ca-certificate.crt
 #
 # Construimos la ruta de forma robusta relativa a este archivo:
-PROJECT_ROOT = Path(_file_).resolve().parents[1]  # .../backend
+PROJECT_ROOT = Path(__file__).resolve().parents[1]  # .../backend
 CA_PATH = PROJECT_ROOT / "certs" / "ca-certificate.crt"
 
 # Creamos un contexto SSL que:
@@ -57,11 +58,22 @@ if hasattr(ssl, "TLSVersion"):
 #         y puede romper en Windows. Ahora pasamos un SSLContext real con la CA.
 # NOTA 2: Si prefieres, puedes usar asyncmy en lugar de aiomysql. Cambiarías el esquema
 #         a "mysql+asyncmy://..." y mantienes connect_args={"ssl": ssl_ctx}.
+
+# Verificar que el archivo de certificado existe
+if not CA_PATH.exists():
+    raise FileNotFoundError(f"Certificado CA no encontrado en: {CA_PATH}")
+
 engine = create_async_engine(
     DATABASE_URL,
-    echo=True,  # Para mostrar en consola las consultas SQL ejecutadas
+    echo=False,  # Cambiar a False en producción para mejor performance
     pool_pre_ping=True,  # Evita conexiones zombies (reintento keep-alive)
-    connect_args={"ssl": ssl_ctx},  # <- CAMBIO CLAVE: SSLContext con la CA de DO
+    pool_recycle=3600,  # Reciclar conexiones cada hora
+    pool_size=5,  # Número de conexiones en el pool
+    max_overflow=10,  # Conexiones adicionales permitidas
+    connect_args={
+        "ssl": ssl_ctx,  # <- CAMBIO CLAVE: SSLContext con la CA de DO
+        "charset": "utf8mb4",  # Soporte completo para UTF-8
+    },
 )
 
 # ---------------------------
@@ -92,3 +104,30 @@ async def get_session():
     """
     async with async_session() as session:
         yield session
+
+
+# ---------------------------
+# Función de verificación de conectividad
+# ---------------------------
+async def verify_database_connection():
+    """
+    Verifica la conexión a la base de datos.
+    Útil para health checks y diagnósticos.
+    """
+    try:
+        async with engine.begin() as conn:
+            result = await conn.execute(text("SELECT 1 as test"))
+            return {"status": "connected", "test_query": "OK"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
+# ---------------------------
+# Función para cerrar conexiones
+# ---------------------------
+async def close_database_connections():
+    """
+    Cierra todas las conexiones de la base de datos.
+    Útil para shutdown graceful.
+    """
+    await engine.dispose()

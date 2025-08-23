@@ -22,10 +22,10 @@ from sqlalchemy import text
 # Definimos la URL de conexión
 # ---------------------------
 # Ahora la obtenemos de nuestra instancia de configuración.
-# IMPORTANTE: Asegúrate de que settings.database_url NO incluya "?ssl=true" ni "http://"
+# IMPORTANTE: Cambiar aiomysql por asyncmy para mejor compatibilidad con Docker
 # Ejemplo correcto:
-# mysql+aiomysql://USER:PASS@HOST:25060/defaultdb
-DATABASE_URL = settings.database_url
+# mysql+asyncmy://USER:PASS@HOST:25060/defaultdb
+DATABASE_URL = settings.database_url.replace("mysql+aiomysql://", "mysql+asyncmy://") if "aiomysql" in settings.database_url else settings.database_url
 
 # ---------------------------
 # SSL/TLS para DigitalOcean
@@ -70,10 +70,9 @@ def create_ssl_context():
 # ---------------------------
 # Motor de conexión asíncrono
 # ---------------------------
-# NOTA 1: Antes usabas connect_args={"ssl": True}. Eso habilita TLS pero NO valida la CA,
-#         y puede romper en Windows. Ahora pasamos un SSLContext real con la CA.
-# NOTA 2: Si prefieres, puedes usar asyncmy en lugar de aiomysql. Cambiarías el esquema
-#         a "mysql+asyncmy://..." y mantienes connect_args={"ssl": ssl_ctx}.
+# NOTA 1: Usando asyncmy en lugar de aiomysql para mejor compatibilidad con Docker
+# NOTA 2: asyncmy es más estable y tiene mejor soporte para contenedores
+# NOTA 3: La configuración SSL funciona igual con ambos drivers
 
 # Obtener configuración SSL
 ssl_config = create_ssl_context()

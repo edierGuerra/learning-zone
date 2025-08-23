@@ -7,8 +7,11 @@ WORKDIR /app
 # Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     gcc \
+    g++ \
     pkg-config \
     default-libmysqlclient-dev \
+    libmysqlclient21 \
+    mysql-client \
     curl \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*

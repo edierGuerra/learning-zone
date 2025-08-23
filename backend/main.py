@@ -146,10 +146,10 @@ app = FastAPI(
     description="Learning Zone API es una API REST potente y completa que proporciona todas las funcionalidades esenciales para el óptimo funcionamiento del proyecto. Permite gestionar operaciones de manera eficiente, garantizando una integración fluida y un rendimiento confiable en cada etapa del proceso.",
     version="1.0",
     lifespan=lifespan,  # ✅ Aquí enlazamos la función
-    root_path="/api",  # 🔥 Configurar root path para /api (necesario para DigitalOcean)
-    openapi_url="/api/openapi.json",  # 🔥 URL explícita para OpenAPI
-    docs_url="/api/docs",  # 🔥 URL explícita para documentación
-    redoc_url="/api/redoc",  # 🔥 URL explícita para ReDoc
+    root_path="/backend",  # 🔥 Configurar root path para /backend (necesario para DigitalOcean)
+    openapi_url="/backend/openapi.json",  # 🔥 URL explícita para OpenAPI
+    docs_url="/backend/docs",  # 🔥 URL explícita para documentación
+    redoc_url="/backend/redoc",  # 🔥 URL explícita para ReDoc
     contact={
         "Authors": [
             "Edier Andrés Guerra Vargas",

@@ -12,7 +12,13 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:5173", "http://localhost:80", "http://frontend"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:80",
+      "http://frontend",
+      process.env.FRONTEND_URL || "https://localhost:3000",
+      // Agregar aquí tu dominio de DigitalOcean cuando lo tengas
+    ],
     methods: ["GET", "POST"],
   },
 });

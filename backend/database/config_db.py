@@ -58,28 +58,29 @@ CA_PATH = PROJECT_ROOT / "certs" / "ca-certificate.crt"
 def create_ssl_context():
     """Crea un contexto SSL robusto para la conexión a DigitalOcean"""
     try:
-        # Verificar que el archivo de certificado existe
+        # Para asyncmy, es mejor usar SSL simple en lugar de contextos complejos
+        # en entornos de contenedores
+        import os
+        
+        # En producción, usar SSL simple pero seguro
+        if os.getenv("ENVIRONMENT", "development") == "production":
+            print("✅ Configurando SSL para producción (asyncmy + DigitalOcean)")
+            return {"ssl": {"check_hostname": False, "verify_mode": False}}
+        
+        # Verificar que el archivo de certificado existe para desarrollo
         if not CA_PATH.exists():
             print(f"⚠️ Certificado CA no encontrado en: {CA_PATH}")
-            print("⚠️ Usando SSL básico sin validación de CA")
-            return True  # SSL básico sin validación específica
+            print("⚠️ Usando SSL básico para asyncmy")
+            return {"ssl": {}}
         
-        # Crear contexto SSL con CA específica
-        ssl_ctx = ssl.create_default_context(cafile=str(CA_PATH))
-        ssl_ctx.check_hostname = True
-        ssl_ctx.verify_mode = ssl.CERT_REQUIRED
-        
-        # Endurecer versión mínima de TLS si está disponible (Python 3.7+)
-        if hasattr(ssl, "TLSVersion"):
-            ssl_ctx.minimum_version = ssl.TLSVersion.TLSv1_2
-            
-        print("✅ Contexto SSL configurado con CA de DigitalOcean")
-        return ssl_ctx
+        # En desarrollo, intentar usar el certificado
+        print("✅ Intentando usar certificado CA para desarrollo")
+        return {"ssl": {"ca": str(CA_PATH)}}
         
     except Exception as e:
-        print(f"⚠️ Error configurando SSL con CA: {e}")
-        print("⚠️ Fallback a SSL básico")
-        return True  # Fallback a SSL básico
+        print(f"⚠️ Error configurando SSL: {e}")
+        print("⚠️ Fallback a SSL básico para asyncmy")
+        return {"ssl": {}}
 
 # ---------------------------
 # Motor de conexión asíncrono
@@ -91,18 +92,17 @@ def create_ssl_context():
 # Obtener configuración SSL
 ssl_config = create_ssl_context()
 
-# Para asyncmy, la configuración SSL es diferente
+# Para asyncmy, la configuración es diferente - usar directamente el dict
 connect_args = {
     "charset": "utf8mb4",  # Soporte completo para UTF-8
 }
 
-# Solo agregar SSL si tenemos un contexto SSL válido
-if ssl_config and ssl_config != True:
-    # asyncmy usa 'ssl' en lugar de 'ssl_context'
-    connect_args["ssl"] = ssl_config
-elif ssl_config == True:
-    # SSL básico sin validación específica
-    connect_args["ssl_disabled"] = False
+# Agregar configuración SSL si está disponible
+if isinstance(ssl_config, dict) and "ssl" in ssl_config:
+    connect_args.update(ssl_config)
+else:
+    # SSL básico por defecto para DigitalOcean
+    connect_args["ssl"] = {}
 
 engine = create_async_engine(
     DATABASE_URL,

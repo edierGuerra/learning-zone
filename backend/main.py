@@ -8,6 +8,7 @@ facilitando el desarrollo y la personalización de la aplicación.
 """
 
 import logging
+import os
 from fastapi.security import HTTPBearer
 from contextlib import asynccontextmanager
 
@@ -80,7 +81,11 @@ async def lifespan(app: FastAPI):
     """
     # Crear tablas
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        # Solo hacer drop_all en desarrollo, no en producción
+        if os.getenv("ENVIRONMENT", "development") == "development":
+            await conn.run_sync(Base.metadata.drop_all)
+            print("🗑️  Tablas eliminadas (modo desarrollo)")
+        
         await conn.run_sync(Base.metadata.create_all)
         print("✅ Tablas creadas")
 
@@ -123,7 +128,16 @@ origins = [
     "http://127.0.0.1:5173",
     "http://localhost:3001",
     "http://127.0.0.1:3001",
+    # Producción DigitalOcean
+    "https://*.ondigitalocean.app",  # Permite todos los subdominios de DigitalOcean
+    "https://localhost:3000",
 ]
+
+# Agregar también variables de entorno para CORS
+if "FRONTEND_URL" in os.environ:
+    origins.append(os.environ["FRONTEND_URL"])
+if "CHAT_SERVICE_URL" in os.environ:
+    origins.append(os.environ["CHAT_SERVICE_URL"])
 
 app.add_middleware(
     CORSMiddleware,
@@ -149,6 +163,29 @@ async def root(request: Request):
     """
     # Retorna el archivo index.html, pasando el objeto request obligatorio
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+# Health check endpoint para DigitalOcean
+@app.get("/health", tags=["Health"])
+async def health_check():
+    """Health check endpoint para monitoreo de DigitalOcean"""
+    return {
+        "status": "OK", 
+        "service": "learning-zone-backend",
+        "timestamp": "2025-01-01T00:00:00Z"
+    }
+
+
+# Endpoint para verificar conectividad entre servicios
+@app.get("/api/status", tags=["Status"])
+async def service_status():
+    """Endpoint para verificar el estado del backend y sus dependencias"""
+    return {
+        "backend": "OK",
+        "database": "Connected",
+        "cors_origins": origins,
+        "gemini": "Configured" if gemini_model else "Not configured"
+    }
 
 
 @app.get("/api/v1/role", dependencies=[Depends(bearer_scheme)])

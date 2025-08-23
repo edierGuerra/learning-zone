@@ -58,6 +58,14 @@ class Settings(BaseSettings):  # clase de configuracion heredando BaseSettings
     admin_email: str = Field(..., env="ADMIN_EMAIL")
     admin_password: str = Field(..., env="ADMIN_PASSWORD")
 
+    # URLs de servicios para DigitalOcean
+    frontend_url: str = Field(default="http://localhost:5173", env="FRONTEND_URL")
+    chat_service_url: str = Field(default="http://localhost:3001", env="CHAT_SERVICE_URL")
+    backend_url: str = Field(default="http://localhost:8000", env="BACKEND_URL")
+    
+    # Ambiente de ejecución
+    environment: str = Field(default="development", env="ENVIRONMENT")
+
 
 # Instancia de la configuración que se usará en toda la aplicación
 settings = Settings()

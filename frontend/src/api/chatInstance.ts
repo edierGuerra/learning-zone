@@ -5,7 +5,7 @@ import { io, Socket } from 'socket.io-client';
 let socket: Socket | null = null;
 
 export const initializeSocket = (): Socket => {
-  if (socket) {
+  if (socket && socket.connected) {
     return socket;
   }
 
@@ -22,8 +22,8 @@ export const initializeSocket = (): Socket => {
     console.log('✅ Connected to chat service');
   });
 
-  socket.on('disconnect', () => {
-    console.log('❌ Disconnected from chat service');
+  socket.on('disconnect', (reason) => {
+    console.log('❌ Disconnected from chat service:', reason);
   });
 
   socket.on('connect_error', (error) => {

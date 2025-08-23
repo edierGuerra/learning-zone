@@ -16,8 +16,8 @@ const io = new Server(httpServer, {
       "http://localhost:5173",
       "http://localhost:80",
       "http://frontend",
+      "https://learning-zone-app.ondigitalocean.app",
       process.env.FRONTEND_URL || "https://localhost:3000",
-      // Agregar aquí tu dominio de DigitalOcean cuando lo tengas
     ],
     methods: ["GET", "POST"],
   },

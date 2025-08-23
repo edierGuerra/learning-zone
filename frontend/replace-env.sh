@@ -3,13 +3,13 @@
 # Script para reemplazar variables de entorno en archivos estáticos
 # Se ejecuta durante el build en DigitalOcean
 
-# Valores por defecto si no están definidas las variables
-VITE_API_URL_DEFAULT="https://learning-zone-backend.ondigitalocean.app"
-VITE_CHAT_URL_DEFAULT="https://learning-zone-chat.ondigitalocean.app"
+# URLs de producción de DigitalOcean
+API_URL="https://learning-zone-app.ondigitalocean.app/api"
+CHAT_URL="https://learning-zone-app.ondigitalocean.app/chat"
 
-# Usar variables de entorno o valores por defecto
-API_URL=${VITE_API_URL:-$VITE_API_URL_DEFAULT}
-CHAT_URL=${VITE_CHAT_URL:-$VITE_CHAT_URL_DEFAULT}
+# Usar variables de entorno si están disponibles, sino usar las por defecto
+API_URL=${VITE_API_URL:-$API_URL}
+CHAT_URL=${VITE_CHAT_URL:-$CHAT_URL}
 
 echo "Replacing environment variables..."
 echo "API_URL: $API_URL"

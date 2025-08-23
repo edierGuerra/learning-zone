@@ -129,6 +129,7 @@ origins = [
     "http://localhost:3001",
     "http://127.0.0.1:3001",
     # Producción DigitalOcean
+    "https://learning-zone-app.ondigitalocean.app",
     "https://*.ondigitalocean.app",  # Permite todos los subdominios de DigitalOcean
     "https://localhost:3000",
 ]

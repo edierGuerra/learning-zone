@@ -1,17 +1,15 @@
-# Backend Dockerfile - FastAPI + Python
+# Backend Dockerfile - FastAPI + Python optimizado para asyncmy
 FROM python:3.13-slim
 
 # Establecer el directorio de trabajo
 WORKDIR /app
 
-# Instalar dependencias del sistema
+# Instalar dependencias del sistema necesarias para asyncmy
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     pkg-config \
     default-libmysqlclient-dev \
-    libmysqlclient21 \
-    mysql-client \
     curl \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
@@ -20,7 +18,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 
 # Instalar dependencias de Python
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copiar el código de la aplicación
 COPY . .

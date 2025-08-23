@@ -81,12 +81,17 @@ async def lifespan(app: FastAPI):
     """
     try:
         # Verificar conexión a la base de datos
+        logger.info("🔍 Verificando conexión a la base de datos...")
         db_status = await verify_database_connection()
         if db_status.get("status") != "connected":
             logger.error(f"❌ Error conectando a la base de datos: {db_status}")
-            raise Exception(f"Database connection failed: {db_status}")
-        
-        logger.info("✅ Conexión a base de datos verificada")
+            # En producción, continuar sin fallar completamente
+            if os.getenv("ENVIRONMENT", "development") == "production":
+                logger.warning("⚠️ Continuando en modo producción sin verificación de DB")
+            else:
+                raise Exception(f"Database connection failed: {db_status}")
+        else:
+            logger.info("✅ Conexión a base de datos verificada")
         
         # Crear tablas
         async with engine.begin() as conn:

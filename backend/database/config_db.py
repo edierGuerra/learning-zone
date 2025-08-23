@@ -21,11 +21,25 @@ from sqlalchemy import text
 # ---------------------------
 # Definimos la URL de conexión
 # ---------------------------
-# Ahora la obtenemos de nuestra instancia de configuración.
-# IMPORTANTE: Cambiar aiomysql por asyncmy para mejor compatibilidad con Docker
-# Ejemplo correcto:
-# mysql+asyncmy://USER:PASS@HOST:25060/defaultdb
-DATABASE_URL = settings.database_url.replace("mysql+aiomysql://", "mysql+asyncmy://") if "aiomysql" in settings.database_url else settings.database_url
+# Obtener DATABASE_URL de las variables de entorno
+raw_database_url = settings.database_url
+
+# Convertir automáticamente de mysql:// a mysql+asyncmy:// para compatibilidad
+if raw_database_url.startswith("mysql://"):
+    DATABASE_URL = raw_database_url.replace("mysql://", "mysql+asyncmy://")
+elif raw_database_url.startswith("mysql+aiomysql://"):
+    DATABASE_URL = raw_database_url.replace("mysql+aiomysql://", "mysql+asyncmy://")
+elif not raw_database_url.startswith("mysql+asyncmy://"):
+    # Si no tiene el esquema correcto, agregarlo
+    if "://" not in raw_database_url:
+        DATABASE_URL = f"mysql+asyncmy://{raw_database_url}"
+    else:
+        DATABASE_URL = raw_database_url
+else:
+    DATABASE_URL = raw_database_url
+
+print(f"✅ DATABASE_URL configurado para asyncmy")
+print(f"🔗 Host: {DATABASE_URL.split('@')[1].split('/')[0] if '@' in DATABASE_URL else 'hidden'}")
 
 # ---------------------------
 # SSL/TLS para DigitalOcean

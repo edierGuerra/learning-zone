@@ -25,7 +25,7 @@ import { authStorage } from '../../../../shared/Utils/authStorage';
 // Hook personalizado para manejar el formulario de creación de cursos
 // -------------------------------------------------
 export function useFormCreateCourse() {
-  const { loadInfoCourse, refreshCoursesTeacher } = useTeacherCourseContext();
+  const { refreshCoursesTeacher } = useTeacherCourseContext();
   const navigate = useNavigate(); // Hook de React Router para redirigir al usuario
 
   // ----------------------

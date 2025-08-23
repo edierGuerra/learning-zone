@@ -19,21 +19,22 @@ type TDeleteLessonAPIResponse = {
  * Elimina una lección específica de un curso.
  */
 export default async function DeleteLessonAPI({
-  idCourse,
   idLesson,
-}: TDeleteLessonAPIProps): Promise<TDeleteLessonAPIResponse> {
+}: Omit<TDeleteLessonAPIProps, "idCourse">): Promise<TDeleteLessonAPIResponse> {
   try {
     const response = await axios.delete(
-       `${VITE_TEACHER_ENDPOINT}/courses/lesson/${idLesson}`
+      `${VITE_TEACHER_ENDPOINT}/courses/lesson/${idLesson}`
     );
 
     if (response.status !== 200) {
-      throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);
+      throw new Error(
+        `HTTP ${response.status}: ${response.data?.message || "Error desconocido"}`
+      );
     }
 
     return response.data as TDeleteLessonAPIResponse;
   } catch (error) {
-    console.error('Error al eliminar la lección:', error);
+    console.error("Error al eliminar la lección:", error);
     throw error;
   }
 }

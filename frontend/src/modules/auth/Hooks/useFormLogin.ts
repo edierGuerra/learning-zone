@@ -8,21 +8,21 @@ import { useUser } from "../../auth/Hooks/useAuth"; // Hook para acceder a initS
 import { useNavigate } from "react-router-dom";
 
 export default function useFormLogin() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // --- Tipos utilizados para formularios y errores ---
   type LoginForm = Pick<TStudent, "email" | "password">;
   type FormErrors = Partial<Record<keyof LoginForm, string>>;
 
   // --- Estados del formulario ---
-  const [email, setEmail] = useState<TStudent['email']>('');               // Email ingresado por el usuario
-  const [password, setPassword] = useState<TStudent['password']>('');     // Contraseña ingresada por el usuario
-  const [showPassword, setShowPassword] = useState(false);                // Mostrar u ocultar contraseña
-  const [errors, setErrors] = useState<FormErrors>({});                   // Errores de validación
-  const [loading, setLoading] = useState(false);                          // Estado de carga (loading spinner)
-  const [viewSucessMessage, setViewSucessMessage] = useState(false);      // Mostrar mensaje de éxito (opcional)
+  const [email, setEmail] = useState<TStudent["email"]>(""); // Email ingresado por el usuario
+  const [password, setPassword] = useState<TStudent["password"]>(""); // Contraseña ingresada por el usuario
+  const [showPassword, setShowPassword] = useState(false); // Mostrar u ocultar contraseña
+  const [errors, setErrors] = useState<FormErrors>({}); // Errores de validación
+  const [loading, setLoading] = useState(false); // Estado de carga (loading spinner)
+  const [viewSucessMessage] = useState(false); // Mostrar mensaje de éxito (opcional)
 
-  const handleBtnNavigate = useNavigationHandler();                       // Hook personalizado para navegación SPA
-  const { initSession } = useUser();                                      // Función global para cargar usuario y rol
+  const handleBtnNavigate = useNavigationHandler(); // Hook personalizado para navegación SPA
+  const { initSession } = useUser(); // Función global para cargar usuario y rol
 
   // --- Alternar visibilidad de contraseña ---
   const togglePasswordVisibility = () => {
@@ -92,8 +92,6 @@ export default function useFormLogin() {
       if (success) {
         navigate("/redirect"); // Ahora sí, el rol ya está garantizado
       }
-
-
     } catch (err) {
       toast.error("No se pudo iniciar sesión.");
     } finally {

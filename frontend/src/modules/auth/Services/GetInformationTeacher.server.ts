@@ -7,11 +7,11 @@ const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
  * Estructura de los datos específicos del profesor que retorna el backend.
  */
 type TTeacherDataResponse = {
-  id: TTeacher['id'];
-  names: TTeacher['name'];
-  last_names: TTeacher['lastNames'];
-  email: TTeacher['email'];
-  specialization: TTeacher['specialization'];
+  id: number;
+  names: TTeacher["name"];
+  last_names: string;
+  email: TTeacher["email"];
+  specialization: string;
   prefix_profile: string;
 };
 

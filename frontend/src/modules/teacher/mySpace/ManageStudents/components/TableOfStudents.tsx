@@ -8,47 +8,58 @@ import type { TStudentRegisterResponse } from "../ManageStudents";
 
 /* Componente que tendrá la tabla con la información (id, estado, crud) */
 export default function TableOfStudents() {
-  const {infoRegisterStudents, deleteSingleStudentRegister, updateStudentRegister} = useManageStudents()
-  const [infoRegisterEdit, setInfoRegisterEdit] = useState<{id: number, currentId: TStudentRegisterResponse['number_identification']} | null>(null)
-  const [newNumberId, setNewNumberId] = useState<string>('')
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const {
+    infoRegisterStudents,
+    deleteSingleStudentRegister,
+    updateStudentRegister,
+  } = useManageStudents();
+  const [infoRegisterEdit, setInfoRegisterEdit] = useState<{
+    id: number;
+    currentId: TStudentRegisterResponse["number_identification"];
+  } | null>(null);
+  const [newNumberId, setNewNumberId] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading] = useState(false); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const getStatusClass = (status: boolean | null) => {
-    if (status === null) return 'status-no-registrado';
-    if (status === false) return 'status-registrado';
-    return 'status-activo';
+    if (status === null) return "status-no-registrado";
+    if (status === false) return "status-registrado";
+    return "status-activo";
   };
 
   const getStatusText = (status: boolean | null) => {
-    if (status === null) return 'No Registrado';
-    if (status === false) return 'Registrado';
-    return 'Activo';
+    if (status === null) return "No Registrado";
+    if (status === false) return "Registrado";
+    return "Activo";
   };
 
   const MAX_LEN = 10;
 
   const handleEditClick = (student: TStudentRegisterResponse) => {
-    setInfoRegisterEdit({ id: student.id, currentId: student.number_identification });
+    setInfoRegisterEdit({
+      id: student.id,
+      currentId: student.number_identification,
+    });
     setNewNumberId(student.number_identification.toString());
     setError(null);
   };
 
   const handleCancelEdit = () => {
     setInfoRegisterEdit(null);
-    setNewNumberId('');
+    setNewNumberId("");
     setError(null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, MAX_LEN);
+    const value = e.target.value.replace(/\D/g, "").slice(0, MAX_LEN);
     setNewNumberId(value);
     if (error) setError(null);
   };
 
   const validate = (value: string) => {
-    if (!value) return 'El número de identificación es obligatorio.';
-    if (value.length !== MAX_LEN) return `Debe tener exactamente ${MAX_LEN} dígitos.`;
+    if (!value) return "El número de identificación es obligatorio.";
+    if (value.length !== MAX_LEN)
+      return `Debe tener exactamente ${MAX_LEN} dígitos.`;
     return null;
   };
 
@@ -64,12 +75,12 @@ export default function TableOfStudents() {
     }
 
     if (Number(newNumberId) === infoRegisterEdit.currentId) {
-      toast.error('El nuevo número debe ser diferente al actual.');
+      toast.error("El nuevo número debe ser diferente al actual.");
       return;
     }
-    await updateStudentRegister(infoRegisterEdit.id, Number(newNumberId))
-    setInfoRegisterEdit(null)
-    setNewNumberId('')
+    await updateStudentRegister(infoRegisterEdit.id, Number(newNumberId));
+    setInfoRegisterEdit(null);
+    setNewNumberId("");
   };
 
   return (
@@ -86,7 +97,7 @@ export default function TableOfStudents() {
                 inputMode="numeric"
                 value={newNumberId}
                 onChange={handleInputChange}
-                className={`edit-input ${newNumberId ? 'has-content' : ''}`}
+                className={`edit-input ${newNumberId ? "has-content" : ""}`}
                 placeholder=" "
                 maxLength={MAX_LEN}
                 autoFocus
@@ -104,12 +115,8 @@ export default function TableOfStudents() {
               >
                 Cancelar
               </button>
-              <button
-                type="submit"
-                className="btn-update"
-                disabled={loading}
-              >
-                {loading ? 'Actualizando...' : 'Actualizar'}
+              <button type="submit" className="btn-update" disabled={loading}>
+                {loading ? "Actualizando..." : "Actualizar"}
               </button>
             </div>
           </form>
@@ -128,29 +135,84 @@ export default function TableOfStudents() {
           </tr>
         </thead>
         <tbody>
-            {infoRegisterStudents.map((infoRegisterStudent, index) => (
-              <tr key={infoRegisterStudent.id || index}
-              className={infoRegisterStudent.color === true ? 'tr-have-color' : ''}
-               >
-                <td className={infoRegisterStudent.color === true? 'tr-have-color': ''} >{infoRegisterStudent.id}</td>
-                <td className={infoRegisterStudent.color === true? 'tr-have-color': ''} >{infoRegisterStudent.number_identification}</td>
-                <td className={infoRegisterStudent.color === true? 'tr-have-color': ''} >{infoRegisterStudent.name === null? 'Null':infoRegisterStudent.name }</td>
-                <td className={infoRegisterStudent.color === true? 'tr-have-color': ''} >
-                  <span className={`status-cell ${getStatusClass(infoRegisterStudent.status)}`}>
-                    {getStatusText(infoRegisterStudent.status)}
-                  </span>
-                </td>
-                <td className={infoRegisterStudent.color === true? 'tr-have-color': ''} >{infoRegisterStudent.course}</td>
-                <td className={infoRegisterStudent.color === true? 'tr-have-color': ''} >{infoRegisterStudent.score === null? 'Null':infoRegisterStudent.score }</td>
+          {infoRegisterStudents.map((infoRegisterStudent, index) => (
+            <tr
+              key={infoRegisterStudent.id || index}
+              className={
+                infoRegisterStudent.color === true ? "tr-have-color" : ""
+              }
+            >
+              <td
+                className={
+                  infoRegisterStudent.color === true ? "tr-have-color" : ""
+                }
+              >
+                {infoRegisterStudent.id}
+              </td>
+              <td
+                className={
+                  infoRegisterStudent.color === true ? "tr-have-color" : ""
+                }
+              >
+                {infoRegisterStudent.number_identification}
+              </td>
+              <td
+                className={
+                  infoRegisterStudent.color === true ? "tr-have-color" : ""
+                }
+              >
+                {infoRegisterStudent.name === null
+                  ? "Null"
+                  : infoRegisterStudent.name}
+              </td>
+              <td
+                className={
+                  infoRegisterStudent.color === true ? "tr-have-color" : ""
+                }
+              >
+                <span
+                  className={`status-cell ${getStatusClass(infoRegisterStudent.status)}`}
+                >
+                  {getStatusText(infoRegisterStudent.status)}
+                </span>
+              </td>
+              <td
+                className={
+                  infoRegisterStudent.color === true ? "tr-have-color" : ""
+                }
+              >
+                {infoRegisterStudent.course}
+              </td>
+              <td
+                className={
+                  infoRegisterStudent.color === true ? "tr-have-color" : ""
+                }
+              >
+                {infoRegisterStudent.score === null
+                  ? "Null"
+                  : infoRegisterStudent.score}
+              </td>
 
-                <td>
-                  <div className="container-opc-crud-student">
-                    <button className="btn-crud btn-edit" onClick={() => handleEditClick(infoRegisterStudent)}>Editar</button>
-                    <button className="btn-crud btn-delete" onClick={()=>deleteSingleStudentRegister(infoRegisterStudent.id)}>Eliminar</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+              <td>
+                <div className="container-opc-crud-student">
+                  <button
+                    className="btn-crud btn-edit"
+                    onClick={() => handleEditClick(infoRegisterStudent)}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    className="btn-crud btn-delete"
+                    onClick={() =>
+                      deleteSingleStudentRegister(infoRegisterStudent.id)
+                    }
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

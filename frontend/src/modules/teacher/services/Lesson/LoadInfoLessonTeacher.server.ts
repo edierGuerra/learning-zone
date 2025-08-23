@@ -6,14 +6,6 @@ import type { TLessonContentResponse, TLessonTeacherResponse } from '../../types
 
 const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 
-// Tipo para la respuesta esperada según el estándar
-
-type TGetLessonAPIResponse = {
-  status: number;
-  message: string;
-  data: TLessonContentResponse; /* Cambiar lo que recibe del backend: que seria todo, el contenido y la evaluacion ya que esto se mostrar en una page para actualizar el curso */
-};
-
 
 export default async function LoadInfoLessonTeacherAPI( idLesson: TLessonTeacherResponse['id']): Promise<TLessonContentResponse> {
     try {

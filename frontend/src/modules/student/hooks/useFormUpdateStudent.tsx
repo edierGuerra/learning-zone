@@ -52,7 +52,7 @@ export default function useFormUpdateStudent() {
   const [errors, setErrors] = useState<FormErrors>({}); // Almacena errores del formulario
 
   // --- Efecto que carga los datos desde el localStorage una vez ---
-  const dataUser: TStudentProfile | null = authStorage.getUser();
+  const dataUser = authStorage.getUser() as TStudentProfile | null;
   const infoBackUser= {
     name: dataUser?.name,
     lastNames : dataUser?.lastNames,

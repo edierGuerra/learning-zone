@@ -36,7 +36,7 @@ export default function CardLessonCourse({ idCourse, idLesson, name }: CardLesso
     }
 
     try {
-      await DeleteLessonAPI({ idCourse, idLesson });
+      await DeleteLessonAPI({ idLesson });
 
       // Limpiar cache de lecciones después de eliminar
       authStorage.clearLessonData();

@@ -15,33 +15,36 @@ type TUpdateLessonAPIProps = {
 };
 
 // No esperamos body: resolvemos con void si el status es OK
-export default async function UpdateLessonAPI(
-  { idCourse, idLesson, lessonContent }: TUpdateLessonAPIProps
-): Promise<void> {
+export default async function UpdateLessonAPI({
+  idLesson,
+  lessonContent,
+}: Omit<TUpdateLessonAPIProps, "idCourse">): Promise<void> {
   const fd = new FormData();
   const c = lessonContent.content ?? ({} as any);
 
-  if (lessonContent.name) fd.append('name', lessonContent.name);
+  if (lessonContent.name) fd.append("name", lessonContent.name);
 
   // En este escenario limitas a image|video (sin text)
-  if (!c?.content_type) throw new Error('content_type es requerido');
-  fd.append('content_type', c.content_type as string);
+  if (!c?.content_type) throw new Error("content_type es requerido");
+  fd.append("content_type", c.content_type as string);
 
-/*   if (!c?.file) throw new Error('file es requerido para image|video');
+  /*   if (!c?.file) throw new Error('file es requerido para image|video');
   fd.append('file', c.file as File); */
 
   // URL: NO dupliques /teachers (ya viene en VITE_TEACHER_ENDPOINT)
   const url = `${API}/courses/lesson/${idLesson}`;
 
   const res = await axios.put(url, fd, {
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { "Content-Type": "multipart/form-data" },
     transformRequest: [(d) => d], // no serializar
     // No pongas responseType: 'json' si tu server responde vacío
   });
 
   // Backend “sin body”: considera 200/204 como éxito
   if (res.status !== 200 && res.status !== 204) {
-    throw new Error(`HTTP ${res.status}: ${res.data?.message ?? 'Error desconocido'}`);
+    throw new Error(
+      `HTTP ${res.status}: ${res.data?.message ?? "Error desconocido"}`
+    );
   }
   // No retornamos nada (void)
 }

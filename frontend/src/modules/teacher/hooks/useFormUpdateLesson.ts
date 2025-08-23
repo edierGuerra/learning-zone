@@ -127,7 +127,7 @@ export function useFormUpdateLessons() {
       const lessonContent = formDataLesson.lesson;
       // Debug opcional:
       // console.log('Contenido de leccion', lessonContent);
-      await UpdateLessonAPI({ idCourse, idLesson, lessonContent });
+      await UpdateLessonAPI({ idLesson, lessonContent });
 
       // 2) Actualizar evaluación
       const { question_type, question, options, correct_answer } = formDataLesson.evaluation;

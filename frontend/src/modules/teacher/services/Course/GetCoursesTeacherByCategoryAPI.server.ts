@@ -6,13 +6,6 @@ import type { TCoursesTeachers } from '../../types/Teacher';
 
 const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
 
-// Tipo para la respuesta esperada según el estándar
-type GetCoursesCategoryAPIResponse = {
-  status: number;
-  message: string;
-  courses: TCoursesTeachers;
-};
-
 export default async function GetCoursesTeacherByCategoryAPI(category:TCourse['category']): Promise<TCoursesTeachers> {
     try {
         /* traer el rol del estudiante y de acuerdo a este determinar el endpoint */

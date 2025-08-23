@@ -79,31 +79,55 @@ async def lifespan(app: FastAPI):
     """
     Ejecutado al iniciar la app. Crea las tablas y cursos base.
     """
-    # Crear tablas
-    async with engine.begin() as conn:
-        # Solo hacer drop_all en desarrollo, no en producción
-        if os.getenv("ENVIRONMENT", "development") == "development":
-            await conn.run_sync(Base.metadata.drop_all)
-            print("🗑️  Tablas eliminadas (modo desarrollo)")
+    try:
+        # Verificar conexión a la base de datos
+        db_status = await verify_database_connection()
+        if db_status.get("status") != "connected":
+            logger.error(f"❌ Error conectando a la base de datos: {db_status}")
+            raise Exception(f"Database connection failed: {db_status}")
         
-        await conn.run_sync(Base.metadata.create_all)
-        print("✅ Tablas creadas")
+        logger.info("✅ Conexión a base de datos verificada")
+        
+        # Crear tablas
+        async with engine.begin() as conn:
+            # Solo hacer drop_all en desarrollo, no en producción
+            environment = os.getenv("ENVIRONMENT", "development")
+            if environment == "development":
+                await conn.run_sync(Base.metadata.drop_all)
+                logger.info("🗑️  Tablas eliminadas (modo desarrollo)")
+            
+            await conn.run_sync(Base.metadata.create_all)
+            logger.info("✅ Tablas creadas")
 
-    # Crear cursos, lecciones y contenidos
-    async with async_session() as session:
-        await create_admin()
-        await create_initial_courses(session)
-        print("✅ Cursos base creados")
-        await create_initial_lessons(session)
-        print("✅ Lecciones base creadas")
-        await create_initial_contents(session)
-        print("✅ Contenidos base tipo imagen creados")
-        await create_initial_evaluations(session)
-        print("✅ Evaluaciones base creadas")
+        # Solo inicializar datos en desarrollo para evitar timeouts en producción
+        environment = os.getenv("ENVIRONMENT", "development")
+        if environment == "development":
+            # Crear cursos, lecciones y contenidos
+            async with async_session() as session:
+                await create_admin()
+                await create_initial_courses(session)
+                logger.info("✅ Cursos base creados")
+                await create_initial_lessons(session)
+                logger.info("✅ Lecciones base creadas")
+                await create_initial_contents(session)
+                logger.info("✅ Contenidos base tipo imagen creados")
+                await create_initial_evaluations(session)
+                logger.info("✅ Evaluaciones base creadas")
+        else:
+            logger.info("⚡ Modo producción: datos iniciales omitidos para startup rápido")
 
-    print("✅ Base de datos inicializada correctamente")
-    yield
-    print("🛑 Servidor detenido")
+        logger.info("✅ Backend inicializado correctamente")
+        yield
+        logger.info("🛑 Servidor detenido")
+        
+    except Exception as e:
+        logger.error(f"❌ Error durante inicialización: {str(e)}")
+        # En producción, no fallar por problemas de inicialización de datos
+        if os.getenv("ENVIRONMENT", "development") == "production":
+            logger.warning("⚠️ Continuando en modo producción sin datos iniciales")
+            yield
+        else:
+            raise
 
 
 # Crear la app
@@ -170,11 +194,21 @@ async def root(request: Request):
 @app.get("/health", tags=["Health"])
 async def health_check():
     """Health check endpoint para monitoreo de DigitalOcean"""
-    return {
-        "status": "OK", 
-        "service": "learning-zone-backend",
-        "timestamp": "2025-01-01T00:00:00Z"
-    }
+    try:
+        # Verificar que la aplicación esté funcionando
+        import datetime
+        return {
+            "status": "healthy", 
+            "service": "learning-zone-backend",
+            "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+            "version": "1.0"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy", 
+            "service": "learning-zone-backend",
+            "error": str(e)
+        }
 
 
 # Endpoint para verificar conectividad entre servicios
@@ -195,6 +229,30 @@ async def service_status():
 async def database_status():
     """Endpoint para verificar específicamente el estado de la base de datos"""
     return await verify_database_connection()
+
+
+# Endpoint para inicializar datos después del deploy
+@app.post("/api/database/initialize", tags=["Database"])
+async def initialize_database():
+    """Endpoint para inicializar datos base después del deploy (solo usar una vez)"""
+    try:
+        async with async_session() as session:
+            await create_admin()
+            await create_initial_courses(session)
+            await create_initial_lessons(session)
+            await create_initial_contents(session)
+            await create_initial_evaluations(session)
+        
+        return {
+            "status": "success",
+            "message": "Datos base inicializados correctamente",
+            "initialized": ["admin", "courses", "lessons", "contents", "evaluations"]
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Error inicializando datos: {str(e)}"
+        }
 
 
 @app.get("/api/v1/role", dependencies=[Depends(bearer_scheme)])

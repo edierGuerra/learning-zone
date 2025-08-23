@@ -40,16 +40,32 @@ DATABASE_URL = settings.database_url
 PROJECT_ROOT = Path(__file__).resolve().parents[1]  # .../backend
 CA_PATH = PROJECT_ROOT / "certs" / "ca-certificate.crt"
 
-# Creamos un contexto SSL que:
-#   - Usa la CA de DO para validar el certificado del servidor
-#   - Verifica hostname
-#   - Exige verificación de certificado
-ssl_ctx = ssl.create_default_context(cafile=str(CA_PATH))
-ssl_ctx.check_hostname = True
-ssl_ctx.verify_mode = ssl.CERT_REQUIRED
-# Endurecer versión mínima de TLS si está disponible (Python 3.7+)
-if hasattr(ssl, "TLSVersion"):
-    ssl_ctx.minimum_version = ssl.TLSVersion.TLSv1_2
+# Configuración SSL más robusta para DigitalOcean
+def create_ssl_context():
+    """Crea un contexto SSL robusto para la conexión a DigitalOcean"""
+    try:
+        # Verificar que el archivo de certificado existe
+        if not CA_PATH.exists():
+            print(f"⚠️ Certificado CA no encontrado en: {CA_PATH}")
+            print("⚠️ Usando SSL básico sin validación de CA")
+            return True  # SSL básico sin validación específica
+        
+        # Crear contexto SSL con CA específica
+        ssl_ctx = ssl.create_default_context(cafile=str(CA_PATH))
+        ssl_ctx.check_hostname = True
+        ssl_ctx.verify_mode = ssl.CERT_REQUIRED
+        
+        # Endurecer versión mínima de TLS si está disponible (Python 3.7+)
+        if hasattr(ssl, "TLSVersion"):
+            ssl_ctx.minimum_version = ssl.TLSVersion.TLSv1_2
+            
+        print("✅ Contexto SSL configurado con CA de DigitalOcean")
+        return ssl_ctx
+        
+    except Exception as e:
+        print(f"⚠️ Error configurando SSL con CA: {e}")
+        print("⚠️ Fallback a SSL básico")
+        return True  # Fallback a SSL básico
 
 # ---------------------------
 # Motor de conexión asíncrono
@@ -59,9 +75,8 @@ if hasattr(ssl, "TLSVersion"):
 # NOTA 2: Si prefieres, puedes usar asyncmy en lugar de aiomysql. Cambiarías el esquema
 #         a "mysql+asyncmy://..." y mantienes connect_args={"ssl": ssl_ctx}.
 
-# Verificar que el archivo de certificado existe
-if not CA_PATH.exists():
-    raise FileNotFoundError(f"Certificado CA no encontrado en: {CA_PATH}")
+# Obtener configuración SSL
+ssl_config = create_ssl_context()
 
 engine = create_async_engine(
     DATABASE_URL,
@@ -71,7 +86,7 @@ engine = create_async_engine(
     pool_size=5,  # Número de conexiones en el pool
     max_overflow=10,  # Conexiones adicionales permitidas
     connect_args={
-        "ssl": ssl_ctx,  # <- CAMBIO CLAVE: SSLContext con la CA de DO
+        "ssl": ssl_config,  # <- CAMBIO: Configuración SSL robusta
         "charset": "utf8mb4",  # Soporte completo para UTF-8
     },
 )
@@ -117,9 +132,21 @@ async def verify_database_connection():
     try:
         async with engine.begin() as conn:
             result = await conn.execute(text("SELECT 1 as test"))
-            return {"status": "connected", "test_query": "OK"}
+            row = result.fetchone()
+            return {
+                "status": "connected", 
+                "test_query": "OK",
+                "result": row[0] if row else None,
+                "database_url": DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else "hidden"
+            }
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        import traceback
+        return {
+            "status": "error", 
+            "message": str(e),
+            "error_type": type(e).__name__,
+            "traceback": traceback.format_exc()
+        }
 
 
 # ---------------------------

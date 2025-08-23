@@ -91,6 +91,19 @@ def create_ssl_context():
 # Obtener configuración SSL
 ssl_config = create_ssl_context()
 
+# Para asyncmy, la configuración SSL es diferente
+connect_args = {
+    "charset": "utf8mb4",  # Soporte completo para UTF-8
+}
+
+# Solo agregar SSL si tenemos un contexto SSL válido
+if ssl_config and ssl_config != True:
+    # asyncmy usa 'ssl' en lugar de 'ssl_context'
+    connect_args["ssl"] = ssl_config
+elif ssl_config == True:
+    # SSL básico sin validación específica
+    connect_args["ssl_disabled"] = False
+
 engine = create_async_engine(
     DATABASE_URL,
     echo=False,  # Cambiar a False en producción para mejor performance
@@ -98,10 +111,7 @@ engine = create_async_engine(
     pool_recycle=3600,  # Reciclar conexiones cada hora
     pool_size=5,  # Número de conexiones en el pool
     max_overflow=10,  # Conexiones adicionales permitidas
-    connect_args={
-        "ssl": ssl_config,  # <- CAMBIO: Configuración SSL robusta
-        "charset": "utf8mb4",  # Soporte completo para UTF-8
-    },
+    connect_args=connect_args,
 )
 
 # ---------------------------

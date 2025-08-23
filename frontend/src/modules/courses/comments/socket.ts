@@ -1,29 +1,32 @@
-import  io , {Socket}  from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
-let socket: typeof Socket | null = null;
+let socket: Socket | null = null;
 
-export const getSocket = () => {
+export const getSocket = (): Socket => {
   if (!socket) {
-    socket = io('http://localhost:3001', {
+    const chatUrl = import.meta.env.VITE_CHAT_URL || "http://localhost:3001";
+    socket = io(chatUrl, {
       autoConnect: false,
-      transports: ['websocket'],
       reconnectionAttempts: 2, // limita intentos
       reconnectionDelay: 3000,
     });
 
     // Log de conexión y errores
-    socket.on('connect', () => console.log('✅ Socket conectado'));
+    socket.on("connect", () => console.log("✅ Socket conectado"));
+    socket.on("connect_error", (error) =>
+      console.error("❌ Error de conexión:", error)
+    );
   }
   return socket;
 };
 
-export const connectSocket = () => {
+export const connectSocket = (): Socket => {
   const s = getSocket();
   if (!s.connected) s.connect();
   return s;
 };
 
-export const disconnectSocket = () => {
+export const disconnectSocket = (): void => {
   if (socket && socket.connected) {
     socket.disconnect();
   }

@@ -11,7 +11,7 @@ RUN apk add --no-cache python3 make g++
 COPY package*.json ./
 
 # Instalar dependencias incluyendo dev dependencies para compilar TypeScript
-RUN npm ci --only=production=false
+RUN npm ci --include=dev
 
 # Copiar el código fuente
 COPY . .

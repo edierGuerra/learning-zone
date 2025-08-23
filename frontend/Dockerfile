@@ -1,4 +1,4 @@
-# Frontend Dockerfile - React + Vite
+# Frontend Dockerfile simplificado para DigitalOcean
 FROM node:20-alpine AS build
 
 # Establecer el directorio de trabajo
@@ -7,16 +7,16 @@ WORKDIR /app
 # Instalar dependencias del sistema para compilación
 RUN apk add --no-cache python3 make g++
 
-# Copiar archivos de dependencias
+# Copiar package.json y package-lock.json
 COPY package*.json ./
 
-# Instalar dependencias incluyendo dev dependencies para compilar TypeScript
+# Instalar dependencias
 RUN npm ci --include=dev
 
-# Copiar el código fuente
+# Copiar código fuente
 COPY . .
 
-# Construir la aplicación para producción
+# Construir la aplicación
 RUN npm run build
 
 # Etapa de producción con Nginx
@@ -25,27 +25,22 @@ FROM nginx:alpine AS production
 # Instalar curl para health checks
 RUN apk add --no-cache curl
 
-# Copiar archivos construidos
+# Copiar archivos construidos desde la etapa anterior
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copiar configuración personalizada de Nginx
+# Copiar configuración de nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copiar script de reemplazo de variables de entorno
+# Copiar y hacer ejecutable el script de inicio
 COPY replace-env.sh /usr/local/bin/replace-env.sh
 RUN chmod +x /usr/local/bin/replace-env.sh
 
-# Crear usuario no privilegiado
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -S appuser -u 1001 -G appgroup
-
-# Cambiar permisos de los archivos
-RUN chown -R appuser:appgroup /usr/share/nginx/html && \
-    chown -R appuser:appgroup /var/cache/nginx && \
-    chown -R appuser:appgroup /var/log/nginx && \
-    chown -R appuser:appgroup /etc/nginx/conf.d && \
-    touch /var/run/nginx.pid && \
-    chown -R appuser:appgroup /var/run/nginx.pid
+# Crear script de inicio
+RUN echo '#!/bin/sh' > /usr/local/bin/start.sh && \
+    echo 'echo "Starting application..."' >> /usr/local/bin/start.sh && \
+    echo '/usr/local/bin/replace-env.sh' >> /usr/local/bin/start.sh && \
+    echo 'exec nginx -g "daemon off;"' >> /usr/local/bin/start.sh && \
+    chmod +x /usr/local/bin/start.sh
 
 # Exponer puerto
 EXPOSE 80
@@ -53,16 +48,6 @@ EXPOSE 80
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/ || exit 1
-
-# Script de inicio que reemplaza variables y luego inicia Nginx
-COPY <<EOF /usr/local/bin/start.sh
-#!/bin/sh
-echo "Starting application..."
-/usr/local/bin/replace-env.sh
-exec nginx -g "daemon off;"
-EOF
-
-RUN chmod +x /usr/local/bin/start.sh
 
 # Comando para iniciar la aplicación
 CMD ["/usr/local/bin/start.sh"]

@@ -106,10 +106,15 @@ async def lifespan(app: FastAPI):
 
         # Solo inicializar datos en desarrollo para evitar timeouts en producción
         environment = os.getenv("ENVIRONMENT", "development")
+        
+        # Siempre crear el administrador (tanto en desarrollo como producción)
+        async with async_session() as session:
+            await create_admin()
+            logger.info("✅ Administrador verificado/creado")
+        
         if environment == "development":
             # Crear cursos, lecciones y contenidos
             async with async_session() as session:
-                await create_admin()
                 await create_initial_courses(session)
                 logger.info("✅ Cursos base creados")
                 await create_initial_lessons(session)

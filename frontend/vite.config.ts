@@ -7,7 +7,24 @@ export default defineConfig({
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx", ".d.ts"],
   },
-  esbuild: {
-    logOverride: { "this-is-undefined-in-esm": "silent" },
+  build: {
+    outDir: 'dist',
+    sourcemap: false, // Desactivar sourcemaps en producción
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          mui: ['@mui/material'],
+        },
+      },
+    },
+  },
+  server: {
+    port: 5173,
+    host: true,
+  },
+  preview: {
+    port: 4173,
+    host: true,
   },
 });

@@ -4,10 +4,11 @@ import axios from "axios";
 import { authStorage } from "../shared/Utils/authStorage"; // mejor que usar directamente localStorage
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL /* || "http://localhost:8000/api" */,
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000",
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 10000, // 10 segundos timeout para producción
 });
 
 /* Este es un interceptor: se ejecuta antes de cada petición.
@@ -18,5 +19,18 @@ axiosInstance.interceptors.request.use((config) => {
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
+
+// Interceptor para manejar errores de respuesta
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expirado o inválido
+      authStorage.removeToken();
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default axiosInstance;

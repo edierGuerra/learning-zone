@@ -1,5 +1,5 @@
 # Frontend Dockerfile - React + Vite
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 # Establecer el directorio de trabajo
 WORKDIR /app
@@ -31,6 +31,10 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copiar configuración personalizada de Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Copiar script de reemplazo de variables de entorno
+COPY replace-env.sh /usr/local/bin/replace-env.sh
+RUN chmod +x /usr/local/bin/replace-env.sh
+
 # Crear usuario no privilegiado
 RUN addgroup -g 1001 -S appgroup && \
     adduser -S appuser -u 1001 -G appgroup
@@ -50,5 +54,15 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/ || exit 1
 
-# Comando para iniciar Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Script de inicio que reemplaza variables y luego inicia Nginx
+COPY <<EOF /usr/local/bin/start.sh
+#!/bin/sh
+echo "Starting application..."
+/usr/local/bin/replace-env.sh
+exec nginx -g "daemon off;"
+EOF
+
+RUN chmod +x /usr/local/bin/start.sh
+
+# Comando para iniciar la aplicación
+CMD ["/usr/local/bin/start.sh"]

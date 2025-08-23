@@ -24,21 +24,21 @@ from sqlalchemy import text
 # Obtener DATABASE_URL de las variables de entorno
 raw_database_url = settings.database_url
 
-# Convertir automáticamente de mysql:// a mysql+asyncmy:// para compatibilidad
+# Convertir automáticamente a mysql+aiomysql:// para compatibilidad
 if raw_database_url.startswith("mysql://"):
-    DATABASE_URL = raw_database_url.replace("mysql://", "mysql+asyncmy://")
-elif raw_database_url.startswith("mysql+aiomysql://"):
-    DATABASE_URL = raw_database_url.replace("mysql+aiomysql://", "mysql+asyncmy://")
-elif not raw_database_url.startswith("mysql+asyncmy://"):
+    DATABASE_URL = raw_database_url.replace("mysql://", "mysql+aiomysql://")
+elif raw_database_url.startswith("mysql+asyncmy://"):
+    DATABASE_URL = raw_database_url.replace("mysql+asyncmy://", "mysql+aiomysql://")
+elif not raw_database_url.startswith("mysql+aiomysql://"):
     # Si no tiene el esquema correcto, agregarlo
     if "://" not in raw_database_url:
-        DATABASE_URL = f"mysql+asyncmy://{raw_database_url}"
+        DATABASE_URL = f"mysql+aiomysql://{raw_database_url}"
     else:
         DATABASE_URL = raw_database_url
 else:
     DATABASE_URL = raw_database_url
 
-print(f"✅ DATABASE_URL configurado para asyncmy")
+print(f"✅ DATABASE_URL configurado para aiomysql")
 print(f"🔗 Host: {DATABASE_URL.split('@')[1].split('/')[0] if '@' in DATABASE_URL else 'hidden'}")
 
 # ---------------------------
@@ -58,51 +58,68 @@ CA_PATH = PROJECT_ROOT / "certs" / "ca-certificate.crt"
 def create_ssl_context():
     """Crea un contexto SSL robusto para la conexión a DigitalOcean"""
     try:
-        # Para asyncmy, es mejor usar SSL simple en lugar de contextos complejos
-        # en entornos de contenedores
         import os
+        import ssl as ssl_module
         
-        # En producción, usar SSL simple pero seguro
+        # Para aiomysql en DigitalOcean, usar configuración SSL compatible
+        # DigitalOcean Managed MySQL requiere SSL pero con verificación específica
+        
+        # En producción (DigitalOcean), usar SSL sin verificación estricta
         if os.getenv("ENVIRONMENT", "development") == "production":
-            print("✅ Configurando SSL para producción (asyncmy + DigitalOcean)")
-            return {"ssl": {"check_hostname": False, "verify_mode": False}}
+            print("✅ Configurando SSL para producción (aiomysql + DigitalOcean)")
+            # Crear contexto SSL que acepta certificados auto-firmados de DigitalOcean
+            ssl_context = ssl_module.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl_module.CERT_NONE
+            # Permitir certificados auto-firmados
+            ssl_context.set_ciphers('DEFAULT')
+            return {"ssl": ssl_context}
         
-        # Verificar que el archivo de certificado existe para desarrollo
-        if not CA_PATH.exists():
-            print(f"⚠️ Certificado CA no encontrado en: {CA_PATH}")
-            print("⚠️ Usando SSL básico para asyncmy")
-            return {"ssl": {}}
+        # En desarrollo, usar configuración SSL más permisiva
+        print("✅ Configurando SSL para desarrollo")
+        ssl_context = ssl_module.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl_module.CERT_NONE
         
-        # En desarrollo, intentar usar el certificado
-        print("✅ Intentando usar certificado CA para desarrollo")
-        return {"ssl": {"ca": str(CA_PATH)}}
+        # Intentar cargar certificado CA si existe
+        if CA_PATH.exists():
+            try:
+                ssl_context.load_verify_locations(cafile=str(CA_PATH))
+                print(f"✅ Certificado CA cargado: {CA_PATH}")
+            except Exception as e:
+                print(f"⚠️ No se pudo cargar el certificado CA: {e}")
+        
+        return {"ssl": ssl_context}
         
     except Exception as e:
         print(f"⚠️ Error configurando SSL: {e}")
-        print("⚠️ Fallback a SSL básico para asyncmy")
-        return {"ssl": {}}
+        print("⚠️ Fallback a SSL básico")
+        return {"ssl": True}
 
 # ---------------------------
 # Motor de conexión asíncrono
 # ---------------------------
-# NOTA 1: Usando asyncmy en lugar de aiomysql para mejor compatibilidad con Docker
-# NOTA 2: asyncmy es más estable y tiene mejor soporte para contenedores
-# NOTA 3: La configuración SSL funciona igual con ambos drivers
+# NOTA 1: Usando aiomysql para mejor compatibilidad con Windows
+# NOTA 2: aiomysql es más fácil de instalar y no requiere compilación
+# NOTA 3: La configuración SSL funciona con contextos SSL estándar de Python
 
 # Obtener configuración SSL
 ssl_config = create_ssl_context()
 
-# Para asyncmy, la configuración es diferente - usar directamente el dict
+# Para aiomysql, la configuración SSL va en connect_args
 connect_args = {
     "charset": "utf8mb4",  # Soporte completo para UTF-8
 }
 
-# Agregar configuración SSL si está disponible
-if isinstance(ssl_config, dict) and "ssl" in ssl_config:
+# Agregar configuración SSL
+if isinstance(ssl_config, dict):
+    # Los parámetros SSL van directamente en connect_args para aiomysql
     connect_args.update(ssl_config)
+    print(f"✅ SSL configurado para aiomysql: {list(ssl_config.keys())}")
 else:
     # SSL básico por defecto para DigitalOcean
-    connect_args["ssl"] = {}
+    connect_args["ssl"] = True
+    print("⚠️ Usando configuración SSL básica por defecto")
 
 engine = create_async_engine(
     DATABASE_URL,

@@ -3,8 +3,11 @@
 import axios from "axios";
 import { authStorage } from "../shared/Utils/authStorage"; // mejor que usar directamente localStorage
 
+const baseURL = import.meta.env.VITE_API_URL || "https://localhost:8000";
+console.log("🔧 axiosInstance baseURL:", baseURL);
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://localhost:8000",
+  baseURL,
   headers: {
     "Content-Type": "application/json",
   },

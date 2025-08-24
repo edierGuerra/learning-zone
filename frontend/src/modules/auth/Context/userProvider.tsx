@@ -65,16 +65,37 @@ const initSession = async (): Promise<boolean> => {
       console.log('✅ initSession - Datos del estudiante cargados:', userData);
     } else if(roleUser === 'teacher') {
       console.log('🔄 initSession - Obteniendo datos del profesor...');
-      const data = await GetTeacherAPI();
-      const userData: TUser = {
-        id: data.id,
-        name: data.names,
-        email: data.email,
-        prefixProfile: data.prefix_profile
-      };
-      authStorage.setUser(userData);
-      setUser(userData);
-      console.log('✅ initSession - Datos del profesor cargados:', userData);
+      try {
+        const data = await GetTeacherAPI();
+        const userData: TUser = {
+          id: data.id,
+          name: data.names,
+          email: data.email,
+          prefixProfile: data.prefix_profile,
+        };
+        authStorage.setUser(userData);
+        setUser(userData);
+        console.log("✅ initSession - Datos del profesor cargados:", userData);
+      } catch (teacherError) {
+        console.error(
+          "❌ initSession - Error al obtener datos del profesor:",
+          teacherError
+        );
+
+        // FALLBACK: Crear un usuario temporal con datos básicos del token
+        const fallbackUserData: TUser = {
+          id: 0, // ID temporal
+          name: "Profesor", // Nombre temporal
+          email: "profesor@temp.com", // Email temporal
+          prefixProfile: "PR",
+        };
+        authStorage.setUser(fallbackUserData);
+        setUser(fallbackUserData);
+        console.log(
+          "⚠️ initSession - Usando datos de fallback para el profesor:",
+          fallbackUserData
+        );
+      }
     }
 
 /*     const userNotifications = await GetNotificationsAPI();

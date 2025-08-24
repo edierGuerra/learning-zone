@@ -28,7 +28,11 @@ type TTeacherDataResponse = {
  */
 export async function GetTeacherAPI(): Promise<TTeacherDataResponse> {
   try {
+    console.log('🔄 GetTeacherAPI - Iniciando petición...');
+    console.log('🔄 GetTeacherAPI - BaseURL:', import.meta.env.VITE_API_URL);
+    
     const response = await axios.get("/api/v1/teachers");
+    console.log('✅ GetTeacherAPI - Respuesta recibida:', response);
 
     // Validar código de estado HTTP
     if (response.status !== 200) {
@@ -36,7 +40,6 @@ export async function GetTeacherAPI(): Promise<TTeacherDataResponse> {
         `HTTP ${response.status}: ${response.data?.message || "Error inesperado del servidor"}`
       );
     }
-    console.log(response)
 
     const data = response.data as TTeacherDataResponse;
 
@@ -44,9 +47,11 @@ export async function GetTeacherAPI(): Promise<TTeacherDataResponse> {
     if (!data || typeof data !== "object") {
       throw new Error("Respuesta del servidor inválida: datos del profesor no presentes");
     }
+    
+    console.log('✅ GetTeacherAPI - Datos procesados correctamente:', data);
     return data
   } catch (error) {
-    console.error("Error al obtener los datos del profesor:", error);
+    console.error("⛔Error al obtener los datos del profesor:", error);
     throw error;
   }
 }

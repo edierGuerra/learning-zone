@@ -12,11 +12,9 @@ type confirmEmailAPIPromise ={
     password_token:TStudentProfileToken['token'],
 }
 
-const VITE_VALIDATE_TOKEN_ENDPOINT = import.meta.env.VITE_VALIDATE_TOKEN_ENDPOINT;
-
 export default async function confirmEmailRequestAPI({token} : confirmEmailAPIProps):Promise<confirmEmailAPIPromise>{
     try{
-        const response = await axios.get(`${VITE_VALIDATE_TOKEN_ENDPOINT}`,{
+        const response = await axios.get("/api/v1/student/password/validate-token-password",{
             headers:{
                 token: token,
             },

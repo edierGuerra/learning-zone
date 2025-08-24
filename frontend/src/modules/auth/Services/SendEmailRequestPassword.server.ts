@@ -2,8 +2,6 @@
 import axios from "../../../api/axiosInstance";
 import type { TStudent } from "../../types/User";
 
-const VITE_CONFIRMEMAILREQUEST_ENDPOINT = import.meta.env.VITE_CONFIRMEMAILREQUEST_ENDPOINT;
-
 type RequestEmailResponse ={
   email: TStudent['email'],
   message:string
@@ -12,7 +10,7 @@ export const SendEmailRequestAPI = async (
  email:TStudent['email']
 ):Promise<RequestEmailResponse> => {
   try{
-    const response = await axios.post(`${VITE_CONFIRMEMAILREQUEST_ENDPOINT}`,{email});
+    const response = await axios.post("/api/v1/student/password/forgot",{email});
     return response.data
   }catch(error){
     console.error('Error en SendEmailRequestAPI', error)

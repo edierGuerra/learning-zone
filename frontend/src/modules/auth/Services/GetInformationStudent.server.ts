@@ -2,8 +2,6 @@
 import axios from "../../../api/axiosInstance";
 import type { TStudent } from "../../types/User";
 
-const VITE_GETSTUDENT_ENDPOINT = import.meta.env.VITE_GETSTUDENT_ENDPOINT;
-
 // Estructura esperada para los datos del usuario
 type TUserDataResponse = {
     id: TStudent['id'];
@@ -27,7 +25,7 @@ type StudentAPIResponse = {
  */
 export async function GetStudentAPI(): Promise<TUserDataResponse & { prefix_profile: string }> {
     try {
-        const response = await axios.get(VITE_GETSTUDENT_ENDPOINT);
+        const response = await axios.get("/api/v1/student");
 
         // Validar código de respuesta
         if (response.status !== 200) {

@@ -4,8 +4,6 @@ import axios from "../../../api/axiosInstance";
 
 import type { TStudent, TStudentProfileToken } from '../../types/User';
 
-const VITE_LOGIN_ENDPOINT = import.meta.env.VITE_LOGIN_ENDPOINT;
-
 type TLoginAPIProps ={
   email: TStudent['email'],
   password:TStudent['password']
@@ -18,7 +16,7 @@ type TLoginAPIResponse ={
 
 export const loginAPI = async({email, password}:TLoginAPIProps):Promise<TLoginAPIResponse> => {
   try{
-    const response = await axios.post(VITE_LOGIN_ENDPOINT, {email,password})
+    const response = await axios.post("/api/v1/student/login", {email,password})
     return response.data
 
   }catch(error){

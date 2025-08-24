@@ -2,8 +2,6 @@
 import axios from "../../../api/axiosInstance";
 import type { TStudent } from "../../types/User";
 
-const REGISTER_ENDPOINT = import.meta.env.VITE_REGISTER_ENDPOINT;
-
 type registerResponse ={
   email: TStudent['email'],
   id: TStudent['id'],
@@ -21,7 +19,7 @@ export const registerAPI = async (
       password:dataRegister.password,
       identification_id:dataRegister.id
     }
-    const response = await axios.post(`${REGISTER_ENDPOINT}`,registerData);
+    const response = await axios.post("/api/v1/student",registerData);
     return response.data
   }catch(error){
     console.error('Error en RegisterAPI', error)

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "../../../api/axiosInstance"; // Usar axios en lugar de fetch
 import "../feedbackform/styles/Complain.css";
 import { useUser } from "../../../modules/auth/Hooks/useAuth";
 
@@ -12,8 +13,6 @@ interface ComplaintFormProps {
   onSuccess: () => void;
 }
 
-const VITE_API_URL = import.meta.env.VITE_API_URL;
-
 const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
   const { user } = useUser();
   const [userData, setUserData] = useState<UserData | null>({
@@ -24,37 +23,14 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
   });
   const [loading, setLoading] = useState(false);
 
-  /*   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch("https://127.0.0.1:8000/user/me");
-        const data = await response.json();
-        setUserData(data);
-      } catch (error) {
-        console.error("Error al traer datos del usuario:", error);
-      }
-    };
-
-    fetchUserData();
-  }, []); */
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     console.log("dato listos para enviar", userData);
 
     try {
-      const response = await fetch(`${VITE_API_URL}/suggestions/send`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userData }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al enviar la queja");
-      }
+      const response = await axios.post("/suggestions/send", { userData });
+      
       onSuccess(); // avisamos al padre que fue exitoso
     } catch (error) {
       console.error("Error al enviar queja:", error);

@@ -15,20 +15,19 @@ interface ComplaintFormProps {
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
-  const {user} = useUser()
+  const { user } = useUser();
   const [userData, setUserData] = useState<UserData | null>({
-    asunto: '',
-    comment:'',
-    email:user!.email,
-    name:user!.name
-
+    asunto: "",
+    comment: "",
+    email: user!.email,
+    name: user!.name,
   });
   const [loading, setLoading] = useState(false);
 
-/*   useEffect(() => {
+  /*   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/user/me");
+        const response = await fetch("https://127.0.0.1:8000/user/me");
         const data = await response.json();
         setUserData(data);
       } catch (error) {
@@ -42,7 +41,7 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log('dato listos para enviar', userData)
+    console.log("dato listos para enviar", userData);
 
     try {
       const response = await fetch(`${VITE_API_URL}/suggestions/send`, {
@@ -50,7 +49,7 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({userData}),
+        body: JSON.stringify({ userData }),
       });
 
       if (!response.ok) {
@@ -73,14 +72,15 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
         type="text"
         id="asunto"
         value={userData?.asunto || ""}
-        onChange={(e)=>setUserData((prev)=>({
-          ...prev!,
-          asunto: e.target.value
-
-        }) )}
+        onChange={(e) =>
+          setUserData((prev) => ({
+            ...prev!,
+            asunto: e.target.value,
+          }))
+        }
       />
 
-{/*       <label htmlFor="correo">Correo electrónico:</label>
+      {/*       <label htmlFor="correo">Correo electrónico:</label>
       <input
         type="email"
         id="correo"
@@ -94,10 +94,12 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
         id="comment"
         rows={5}
         value={userData?.comment}
-        onChange={(e) => setUserData((prev)=>({
-          ...prev!,
-          comment:e.target.value
-        }))}
+        onChange={(e) =>
+          setUserData((prev) => ({
+            ...prev!,
+            comment: e.target.value,
+          }))
+        }
         placeholder="Escribe tu queja, sugerencia u observación"
       />
 

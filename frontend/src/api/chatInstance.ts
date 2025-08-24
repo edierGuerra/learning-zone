@@ -9,7 +9,7 @@ export const initializeSocket = (): Socket => {
     return socket;
   }
 
-  const chatUrl = import.meta.env.VITE_CHAT_URL || 'http://localhost:3001';
+  const chatUrl = import.meta.env.VITE_CHAT_URL || "https://localhost:3001";
   
   socket = io(chatUrl, {
     autoConnect: true,

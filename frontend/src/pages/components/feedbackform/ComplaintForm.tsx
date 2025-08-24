@@ -29,7 +29,7 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ onSuccess }) => {
     console.log("dato listos para enviar", userData);
 
     try {
-      const response = await axios.post("/suggestions/send", { userData });
+      await axios.post("/suggestions/send", { userData });
       
       onSuccess(); // avisamos al padre que fue exitoso
     } catch (error) {

@@ -36,15 +36,21 @@ export const UserProvider = ({ children }: Props) => {
    */
 const initSession = async (): Promise<boolean> => {
   const storedToken = authStorage.getToken();
-  if (!storedToken) return false;
+  if (!storedToken) {
+    console.log('❌ initSession - No hay token');
+    return false;
+  }
 
   try {
+    console.log('🔄 initSession - Obteniendo rol del usuario...');
     const roleUser = await GetRoleUserAPI();
     authStorage.setRole(roleUser);
     setRole(roleUser);
-    console.log('Role detectado:', roleUser);
+    setToken(storedToken);
+    console.log('✅ initSession - Role detectado:', roleUser);
 
     if (roleUser === "student") {
+      console.log('🔄 initSession - Obteniendo datos del estudiante...');
       const data = await GetStudentAPI();
       const userData: TUser = {
         id: data.id,
@@ -56,9 +62,10 @@ const initSession = async (): Promise<boolean> => {
       };
       authStorage.setUser(userData);
       setUser(userData);
-    }else if(roleUser === 'teacher') {
+      console.log('✅ initSession - Datos del estudiante cargados:', userData);
+    } else if(roleUser === 'teacher') {
+      console.log('🔄 initSession - Obteniendo datos del profesor...');
       const data = await GetTeacherAPI();
-      console.log(data.email)
       const userData: TUser = {
         id: data.id,
         name: data.names,
@@ -67,16 +74,18 @@ const initSession = async (): Promise<boolean> => {
       };
       authStorage.setUser(userData);
       setUser(userData);
+      console.log('✅ initSession - Datos del profesor cargados:', userData);
     }
 
 /*     const userNotifications = await GetNotificationsAPI();
     authStorage.setNotifications(userNotifications);
     setNotifications(userNotifications);
  */
+    console.log('✅ initSession - Sesión inicializada completamente');
     return true;
 
   } catch (error) {
-    console.error("Error al inicializar sesión:", error);
+    console.error("❌ initSession - Error al inicializar sesión:", error);
     return false;
   }
 };
@@ -93,21 +102,28 @@ const initSession = async (): Promise<boolean> => {
       hasUser: !!storedUser,
       hasNotifications: !!storedNotifications,
       hasRole: !!storedRole,
-      role: storedRole
+      role: storedRole,
+      user: storedUser
     });
 
-    // Si hay token pero no se ha cargado toda la información, ejecutar initSession
-    if (storedToken && (!storedUser || !storedRole)) {
-      console.log('🔄 UserProvider - Ejecutando initSession...');
-      initSession();
+    // NUEVO: Si hay token y rol pero NO usuario, ejecutar initSession
+    if (storedToken && storedRole && !storedUser) {
+      console.log('🔄 UserProvider - Token y rol presentes, pero NO usuario. Ejecutando initSession...');
+      initSession().then((success) => {
+        if (success) {
+          console.log('✅ UserProvider - initSession completado exitosamente');
+        } else {
+          console.log('❌ UserProvider - initSession falló');
+        }
+      });
     }
 
     // Si ya todo está guardado, restaurar directamente al contexto
-    if (storedUser && storedToken && storedNotifications && storedRole) {
+    if (storedUser && storedToken && storedRole) {
       console.log('✅ UserProvider - Restaurando sesión desde localStorage');
       setUser(storedUser);
       setToken(storedToken);
-      setNotifications(storedNotifications);
+      setNotifications(storedNotifications || []);
       setRole(storedRole);
     }
 

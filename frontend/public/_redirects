@@ -1,0 +1,4 @@
+# Redirects for Single Page Application (SPA) on DigitalOcean App Platform
+# All routes should redirect to index.html to handle React Router
+
+/*    /index.html   200

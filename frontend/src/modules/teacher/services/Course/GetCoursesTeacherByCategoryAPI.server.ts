@@ -4,12 +4,10 @@ import axios from '../../../../api/axiosInstance';
 import type { TCourse } from '../../../courses/types/CourseStudent';
 import type { TCoursesTeachers } from '../../types/Teacher';
 
-const VITE_TEACHER_ENDPOINT = import.meta.env.VITE_TEACHER_ENDPOINT;
-
 export default async function GetCoursesTeacherByCategoryAPI(category:TCourse['category']): Promise<TCoursesTeachers> {
     try {
         /* traer el rol del estudiante y de acuerdo a este determinar el endpoint */
-        const response = await axios.get(`${VITE_TEACHER_ENDPOINT}/courses/category/${category}`);
+        const response = await axios.get(`/api/v1/teachers/courses/category/${category}`);
         // Validar status code
         if (response.status !== 200) {
             throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);

@@ -7,11 +7,10 @@ type VerifyResponse = {
   status_code: number;
   identification_id: TStudent['id'] ;
 };
-const VERIFY_ENDPOINT = import.meta.env.VITE_VERIFY_ENDPOINT;
 
 export default async function verifyAPI(nIdentification:TStudent['numIdentification']):Promise<VerifyResponse> {
     try{
-        const response = await axios.post(VERIFY_ENDPOINT, {
+        const response = await axios.post("/identifications/verify", {
   identification_code: nIdentification
 });
         return response.data

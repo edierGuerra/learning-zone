@@ -25,16 +25,24 @@ export default function RoleGuard({
 }: RoleGuardProps) {
   const { user, role } = useUser();
 
+  // Debugging logs
+  console.log('🔐 RoleGuard - User:', user);
+  console.log('🔐 RoleGuard - Role:', role);
+  console.log('🔐 RoleGuard - Allowed roles:', allowedRoles);
+
   // Verificar si el usuario está autenticado
   if (!user || !role) {
+    console.log('❌ RoleGuard - No user or role, redirecting to:', redirectTo);
     return <Navigate to={redirectTo} replace />;
   }
 
   // Verificar si el rol está permitido
   if (!allowedRoles.includes(role)) {
+    console.log('❌ RoleGuard - Role not allowed, redirecting to:', redirectTo);
     return <Navigate to={redirectTo} replace />;
   }
 
+  console.log('✅ RoleGuard - Access granted');
   // Acceso permitido
   return <Outlet />;
 }

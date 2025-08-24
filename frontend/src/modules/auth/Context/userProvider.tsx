@@ -42,7 +42,7 @@ const initSession = async (): Promise<boolean> => {
     const roleUser = await GetRoleUserAPI();
     authStorage.setRole(roleUser);
     setRole(roleUser);
-    alert(roleUser)
+    console.log('Role detectado:', roleUser);
 
     if (roleUser === "student") {
       const data = await GetStudentAPI();
@@ -88,13 +88,23 @@ const initSession = async (): Promise<boolean> => {
     const storedNotifications = authStorage.getNotificationsStudent();
     const storedRole = authStorage.getRole();
 
+    console.log('🔄 UserProvider - Carga inicial:', {
+      hasToken: !!storedToken,
+      hasUser: !!storedUser,
+      hasNotifications: !!storedNotifications,
+      hasRole: !!storedRole,
+      role: storedRole
+    });
+
     // Si hay token pero no se ha cargado toda la información, ejecutar initSession
     if (storedToken && (!storedUser || !storedRole)) {
+      console.log('🔄 UserProvider - Ejecutando initSession...');
       initSession();
     }
 
     // Si ya todo está guardado, restaurar directamente al contexto
     if (storedUser && storedToken && storedNotifications && storedRole) {
+      console.log('✅ UserProvider - Restaurando sesión desde localStorage');
       setUser(storedUser);
       setToken(storedToken);
       setNotifications(storedNotifications);

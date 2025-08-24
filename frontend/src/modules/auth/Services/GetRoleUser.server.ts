@@ -2,8 +2,6 @@
 import axios from "../../../api/axiosInstance";
 import type { TUserRole } from "../../types/User";
 
-const VITE_GETROLEUSER_ENDPOINT = import.meta.env.VITE_GETROLEUSER_ENDPOINT;
-
 type GetRoleUserAPIResponse = {
   status: number;
   message: string;
@@ -12,7 +10,7 @@ type GetRoleUserAPIResponse = {
 
 export const GetRoleUserAPI = async (): Promise<TUserRole> => {
   try {
-    const response = await axios.get(`${VITE_GETROLEUSER_ENDPOINT}`);
+    const response = await axios.get("/api/v1/role");
 
     if (response.status !== 200) {
       throw new Error(

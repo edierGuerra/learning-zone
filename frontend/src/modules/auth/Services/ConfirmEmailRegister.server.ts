@@ -11,11 +11,9 @@ type confirmEmailAPIPromise ={
     is_active: boolean,
 }
 
-const VITE_CONFIRMEMAILREGISTER_ENDPOINT = import.meta.env.VITE_CONFIRMEMAILREGISTER_ENDPOINT;
-
 export default async function confirmEmailRegisterAPI({token,idAutoIncrementStudent}:confirmEmailAPIProps):Promise<confirmEmailAPIPromise>  {
     try{
-        const response = await axios.get(`${VITE_CONFIRMEMAILREGISTER_ENDPOINT}?email_token=${token}&id_student=${idAutoIncrementStudent}`);
+        const response = await axios.get(`/api/v1/student/verify_email?email_token=${token}&id_student=${idAutoIncrementStudent}`);
         return response.data
 
     }catch(error){

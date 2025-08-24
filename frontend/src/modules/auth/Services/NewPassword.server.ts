@@ -5,8 +5,6 @@
 import axios from "../../../api/axiosInstance";
 import type { TStudent, TStudentProfileToken } from "../../types/User";
 
-const VITE_PASSWORDREQUEST_ENDPOINT = import.meta.env.VITE_PASSWORDREQUEST_ENDPOINT;
-
 type TRequestNewPaswordAPIProps ={
     tokenRequestEmail: TStudentProfileToken['token'],
     password : TStudent['password']
@@ -19,7 +17,7 @@ export const SendPasswordRequestAPI=async({ tokenRequestEmail,password}:TRequest
             token: tokenRequestEmail,
             new_password:password
         }
-        const response = await axios.put(VITE_PASSWORDREQUEST_ENDPOINT, data)
+        const response = await axios.put("/api/v1/student/password/reset", data)
         // Si el backend retorna 204, response.data será undefined.
         if (response.status === 200) {
         return { success: true }; // retornamos manualmente algo útil

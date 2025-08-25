@@ -3,9 +3,9 @@
 # Script para reemplazar variables de entorno en archivos estáticos
 # Se ejecuta durante el build en DigitalOcean
 
-# URLs de producción de DigitalOcean
-API_URL="https://learning-zone-app.ondigitalocean.app/api"
-CHAT_URL="https://learning-zone-app.ondigitalocean.app/chat"
+# URLs de producción con nuevo dominio
+API_URL="https://cjetechnology.org/backend"
+CHAT_URL="https://cjetechnology.org/chat"
 
 # Usar variables de entorno si están disponibles, sino usar las por defecto
 API_URL=${VITE_API_URL:-$API_URL}

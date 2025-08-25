@@ -13,11 +13,24 @@ type confirmEmailAPIPromise ={
 
 export default async function confirmEmailRegisterAPI({token,idAutoIncrementStudent}:confirmEmailAPIProps):Promise<confirmEmailAPIPromise>  {
     try{
-        const response = await axios.get(`/api/v1/student/verify_email/?email_token=${token}&id_student=${idAutoIncrementStudent}`);
+        const url = `/api/v1/student/verify_email/?email_token=${token}&id_student=${idAutoIncrementStudent}`;
+        console.log('DEBUG: Making request to:', url);
+        console.log('DEBUG: Token:', token);
+        console.log('DEBUG: Student ID:', idAutoIncrementStudent);
+        
+        const response = await axios.get(url);
+        
+        console.log('DEBUG: Response status:', response.status);
+        console.log('DEBUG: Response data:', response.data);
+        
         return response.data
 
     }catch(error){
-        console.error('Error en confirmEmailRegisterAPI', error)
+        console.error('ERROR en confirmEmailRegisterAPI:', error);
+        if (error.response) {
+            console.error('ERROR Response status:', error.response.status);
+            console.error('ERROR Response data:', error.response.data);
+        }
         throw error
     }
 }

@@ -162,14 +162,16 @@ app = FastAPI(
 
 # --- CONFIGURACIÓN CORS ---
 origins = [
+    # Desarrollo local
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3001",
     "http://127.0.0.1:3001",
-    # Producción DigitalOcean
-    "https://cjetechnology.org",
-    "https://*.ondigitalocean.app",  # Permite todos los subdominios de DigitalOcean
     "https://localhost:3000",
+    # Producción - Dominio principal
+    "https://cjetechnology.org",
+    # Producción - DigitalOcean (mantener por compatibilidad)
+    "https://*.ondigitalocean.app",  # Permite todos los subdominios de DigitalOcean
 ]
 
 # Agregar también variables de entorno para CORS

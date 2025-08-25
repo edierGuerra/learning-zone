@@ -19,7 +19,24 @@ export default function useConfirmEmailRegister() {
         hasRun.current = true;
 
         const confirm = async () => {
-            const params = new URLSearchParams(window.location.search); // Esto busca en la URL y convierte en clave valor, con el fin de poder acceder al token
+            // Para HashRouter, necesitamos extraer parámetros del hash
+            const fullUrl = window.location.href;
+            const hashPart = window.location.hash; // #/confirmEmailRegister?token=...
+            
+            console.log('DEBUG: Full URL:', fullUrl);
+            console.log('DEBUG: Hash part:', hashPart);
+            console.log('DEBUG: window.location.search:', window.location.search);
+            
+            // Extraer parámetros del hash si existen
+            let params;
+            if (hashPart.includes('?')) {
+                const queryString = hashPart.split('?')[1];
+                params = new URLSearchParams(queryString);
+            } else {
+                // Fallback a search normal
+                params = new URLSearchParams(window.location.search);
+            }
+            
             const token = params.get('token');
             const idAutoIncrementStudent = authStorage.getIdAutoIncrementStudent();
 

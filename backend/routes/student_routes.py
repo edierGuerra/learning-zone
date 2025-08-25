@@ -76,21 +76,40 @@ async def verify_email_token(
     - `200 OK` con un token de acceso y los datos básicos del estudiante si todo es válido.
     - Otro código de estado si ocurre algún fallo en la verificación o búsqueda del usuario.
     """
-    token_valid = await service.verify_email(id_student=id_student, token=email_token)
-    if token_valid:
-        student = await service.get_student_by_id(id_student)
-        if student:
-            student_pyload = {"sub": str(student.id)}
-            token = encode_access_token(student_pyload)
-            return JSONResponse(
-                content={
-                    "access_token": token,
-                    "token_type": "bearer",
-                    "is_active": student.is_verified,
-                },
-                status_code=200,
+    try:
+        print(f"DEBUG: Verificando email_token={email_token}, id_student={id_student}")
+        token_valid = await service.verify_email(id_student=id_student, token=email_token)
+        print(f"DEBUG: token_valid={token_valid}")
+        
+        if token_valid:
+            student = await service.get_student_by_id(id_student)
+            print(f"DEBUG: student found={student is not None}")
+            
+            if student:
+                student_pyload = {"sub": str(student.id)}
+                token = encode_access_token(student_pyload)
+                return JSONResponse(
+                    content={
+                        "access_token": token,
+                        "token_type": "bearer",
+                        "is_active": student.is_verified,
+                    },
+                    status_code=200,
+                )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Estudiante no encontrado.",
+                )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="El token de verificación es inválido o ha expirado.",
             )
-    else:
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"DEBUG: Error inesperado: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Ha ocurrido un error en el servidor.",

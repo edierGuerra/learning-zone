@@ -13,7 +13,7 @@ type confirmEmailAPIPromise ={
 
 export default async function confirmEmailRegisterAPI({token,idAutoIncrementStudent}:confirmEmailAPIProps):Promise<confirmEmailAPIPromise>  {
     try{
-        const response = await axios.get(`/api/v1/student/verify_email?email_token=${token}&id_student=${idAutoIncrementStudent}`);
+        const response = await axios.get(`/api/v1/student/verify_email/?email_token=${token}&id_student=${idAutoIncrementStudent}`);
         return response.data
 
     }catch(error){

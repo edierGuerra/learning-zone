@@ -23,15 +23,22 @@ export default function useConfirmEmailRegister() {
             const token = params.get('token');
             const idAutoIncrementStudent = authStorage.getIdAutoIncrementStudent();
 
+            console.log('DEBUG: token from URL:', token);
+            console.log('DEBUG: idAutoIncrementStudent from localStorage:', idAutoIncrementStudent);
+
             // EN caso de que no exista un token o el ID no esté disponible, definir success como false
             if (!token || idAutoIncrementStudent === null) {
+                console.log('DEBUG: Missing token or idAutoIncrementStudent');
+                setMessage('Enlace inválido: falta información requerida');
                 setSuccess(false);
                 return;
             }
             try {
+                console.log('DEBUG: Calling confirmEmailRegisterAPI with:', { token, idAutoIncrementStudent });
                 // EN caso de que exista el token, realizar peticion al backend
                 const responseConfirm = await confirmEmailRegisterAPI({ token, idAutoIncrementStudent });
 
+                console.log('DEBUG: Response from backend:', responseConfirm);
                 // Si la respuesta es inválida o vacía
                 if (!responseConfirm) {
                     setMessage('Ups! hubo un error');
@@ -47,12 +54,13 @@ export default function useConfirmEmailRegister() {
                     authStorage.removeIdAutoIncrementStudent();
                 }
                 else{
-                    return
+                    setMessage('La cuenta no se pudo activar. Contacta al administrador.');
+                    setSuccess(false);
                 }
 
             } catch (error) {
                 // Error capturado en caso de fallar la solicitud o expirar el token
-                console.error(error);
+                console.error('DEBUG: Error caught:', error);
                 setMessage('El enlace es inválido o ha expirado');
                 setSuccess(false);
             }

@@ -19,7 +19,7 @@ export const registerAPI = async (
       password:dataRegister.password,
       identification_id:dataRegister.id
     }
-    const response = await axios.post("/api/v1/student",registerData);
+    const response = await axios.post("/api/v1/student/",registerData);
     return response.data
   }catch(error){
     console.error('Error en RegisterAPI', error)

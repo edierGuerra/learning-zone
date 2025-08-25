@@ -65,16 +65,14 @@ services:
     routes:
       - path: /api
   - name: frontend
+    type: static_site
     source_dir: /frontend
     github:
       repo: CJE-TECHNOLOGIES-SAS/learning-zone
       branch: main
     build_command: npm install && npm run build
-    run_command: npm run preview -- --port $PORT --host 0.0.0.0
-    environment_slug: node-js
-    instance_count: 1
-    instance_size_slug: basic-xxs
-    http_port: 8080
+    output_dir: /dist
+    catchall_document: index.html
     routes:
       - path: /
   - name: chat-service

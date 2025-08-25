@@ -34,7 +34,7 @@ export default function Register() {
 useEffect(() => {
   if (viewSucessMessage) {
     const timeout = setTimeout(() => {
-      window.location.href = '/confirmEmailRegister';
+      window.location.href = '/#/confirmEmailRegister';
     }, 3000);
 
     return () => clearTimeout(timeout); // limpieza si desmonta antes

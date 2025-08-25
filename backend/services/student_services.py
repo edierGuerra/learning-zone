@@ -49,7 +49,7 @@ class StudentService:
             send_verification_email(
                 student_name=new_student.names,
                 to_email=student_schemas.email,
-                verification_link=f"http://localhost:5173/confirmEmailRegister?token={token}",
+                verification_link=f"https://learning-zone-app-6rk92.ondigitalocean.app/#/confirmEmailRegister?token={token}",
             )
         return new_student
 

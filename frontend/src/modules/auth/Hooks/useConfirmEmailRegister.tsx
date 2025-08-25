@@ -3,6 +3,7 @@
 // y el estado del acceso para dirijir al login o no
 
 import { useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { authStorage } from '../../../shared/Utils/authStorage'
 import confirmEmailRegisterAPI from '../Services/ConfirmEmailRegister.server';
 
@@ -12,6 +13,9 @@ export default function useConfirmEmailRegister() {
     // Estado que cambia a true si ya se confirmo el token en el backend
     const [success, setSuccess] = useState<boolean | null>(false);
     const hasRun = useRef(false); // ✅ Previene ejecuciones múltiples en desarrollo (modo Strict de React 18)
+    
+    // Hook de React Router para obtener parámetros de búsqueda
+    const [searchParams] = useSearchParams();
 
     // Hacer uso para que se ejecute cuando se renderice el componente
     useEffect(() => {
@@ -19,41 +23,67 @@ export default function useConfirmEmailRegister() {
         hasRun.current = true;
 
         const confirm = async () => {
-            // Para HashRouter, necesitamos extraer parámetros del hash
+            // Múltiples métodos para obtener el token
+            const tokenFromSearchParams = searchParams.get('token');
+            const idAutoIncrementStudent = authStorage.getIdAutoIncrementStudent();
+            
+            // Método alternativo: extraer del hash manualmente
             const fullUrl = window.location.href;
-            const hashPart = window.location.hash; // #/confirmEmailRegister?token=...
+            const hashPart = window.location.hash;
             
-            console.log('DEBUG: Full URL:', fullUrl);
-            console.log('DEBUG: Hash part:', hashPart);
-            console.log('DEBUG: window.location.search:', window.location.search);
+            // Método 1: Desde el hash completo
+            const hashQuery = hashPart.includes('?') ? hashPart.split('?')[1] : '';
+            const searchParamsFromHash = new URLSearchParams(hashQuery);
+            const tokenFromHash = searchParamsFromHash.get('token');
             
-            // Extraer parámetros del hash si existen
-            let params;
-            if (hashPart.includes('?')) {
-                const queryString = hashPart.split('?')[1];
-                params = new URLSearchParams(queryString);
-            } else {
-                // Fallback a search normal
-                params = new URLSearchParams(window.location.search);
+            // Método 2: Regex más específico para el hash
+            const hashTokenRegex = /#\/[^?]*\?.*[?&]?token=([^&#]+)/;
+            const hashTokenMatch = fullUrl.match(hashTokenRegex);
+            const tokenFromHashRegex = hashTokenMatch ? hashTokenMatch[1] : null;
+            
+            // Método 3: Regex general en toda la URL
+            const generalTokenRegex = /[?&]token=([^&#]+)/;
+            const generalTokenMatch = fullUrl.match(generalTokenRegex);
+            const tokenFromGeneralRegex = generalTokenMatch ? generalTokenMatch[1] : null;
+            
+            // Método 4: Split manual más directo
+            let tokenFromSplit = null;
+            if (hashPart.includes('token=')) {
+                const tokenPart = hashPart.split('token=')[1];
+                if (tokenPart) {
+                    tokenFromSplit = tokenPart.split('&')[0];
+                }
             }
             
-            const token = params.get('token');
-            const idAutoIncrementStudent = authStorage.getIdAutoIncrementStudent();
-
-            console.log('DEBUG: token from URL:', token);
+            // Debug información completa
+            console.log('DEBUG: Full URL:', fullUrl);
+            console.log('DEBUG: Hash part:', hashPart);
+            console.log('DEBUG: Hash query part:', hashQuery);
+            console.log('DEBUG: window.location.search:', window.location.search);
+            console.log('DEBUG: searchParams token (useSearchParams):', tokenFromSearchParams);
+            console.log('DEBUG: token from hash manually:', tokenFromHash);
+            console.log('DEBUG: token from hash regex:', tokenFromHashRegex);
+            console.log('DEBUG: token from general regex:', tokenFromGeneralRegex);
+            console.log('DEBUG: token from split:', tokenFromSplit);
             console.log('DEBUG: idAutoIncrementStudent from localStorage:', idAutoIncrementStudent);
+            
+            // Usar el primer token válido que encontremos
+            const finalToken = tokenFromSearchParams || tokenFromHash || tokenFromHashRegex || tokenFromGeneralRegex || tokenFromSplit;
 
             // EN caso de que no exista un token o el ID no esté disponible, definir success como false
-            if (!token || idAutoIncrementStudent === null) {
+            if (!finalToken || idAutoIncrementStudent === null) {
                 console.log('DEBUG: Missing token or idAutoIncrementStudent');
+                console.log('DEBUG: finalToken is null?', finalToken === null);
+                console.log('DEBUG: finalToken is empty?', finalToken === '');
+                console.log('DEBUG: idAutoIncrementStudent is null?', idAutoIncrementStudent === null);
                 setMessage('Enlace inválido: falta información requerida');
                 setSuccess(false);
                 return;
             }
             try {
-                console.log('DEBUG: Calling confirmEmailRegisterAPI with:', { token, idAutoIncrementStudent });
+                console.log('DEBUG: Calling confirmEmailRegisterAPI with:', { token: finalToken, idAutoIncrementStudent });
                 // EN caso de que exista el token, realizar peticion al backend
-                const responseConfirm = await confirmEmailRegisterAPI({ token, idAutoIncrementStudent });
+                const responseConfirm = await confirmEmailRegisterAPI({ token: finalToken, idAutoIncrementStudent });
 
                 console.log('DEBUG: Response from backend:', responseConfirm);
                 // Si la respuesta es inválida o vacía

@@ -135,21 +135,25 @@ export default function CourseHomePage() {
   const pathD = generateSmoothPath(lessonsPositions);
   const visualLessons = lessons.map((lesson, i) => ({
     ...lesson,
-    position: lessonsPositions[i],
+    position: lessonsPositions[i] || { top: 50, left: 50 }, // ✅ Fallback para posiciones fuera de rango
   }));
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Aparece cada nodo .lesson-course con "pop" sutil
-      gsap.from(".lesson-course", {
-        opacity: 0,
-        scale: .90,
-        y: 16,
-        duration: 0.5,
-        stagger: .099,
-        ease: "back.out(1.7)",
-        clearProps: "",
-      });
+      // Validar que existan elementos .lesson-course antes de animar
+      const lessonElements = document.querySelectorAll(".lesson-course");
+      if (lessonElements.length > 0) {
+        // Aparece cada nodo .lesson-course con "pop" sutil
+        gsap.from(".lesson-course", {
+          opacity: 0,
+          scale: 0.9,
+          y: 16,
+          duration: 0.5,
+          stagger: 0.099,
+          ease: "back.out(1.7)",
+          clearProps: "",
+        });
+      }
     }, containerRef);
 
     return () => ctx.revert();

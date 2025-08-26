@@ -4,7 +4,8 @@
 import axios from '../../../api/axiosInstance';
 import type { TCourse, TCoursesStudents } from '../types/CourseStudent';
 
-const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
+// Usar ruta base para cursos por categoría específica
+const COURSES_BASE_ENDPOINT = "/api/v1/student/courses";
 
 // Tipo para la respuesta esperada según el estándar
 type GetCoursesCategoryAPIResponse = {
@@ -20,7 +21,7 @@ export default async function GetCoursesStudentByCategoryAPI(category:TCourse['c
         const encodedCategory = encodeURIComponent(category);
 
         // Usar el patrón correcto: /courses/category/{category} en lugar de solo /{category}
-        const fullUrl = `${VITE_GETCOURSES_ENDPOINT}/category/${encodedCategory}`;
+        const fullUrl = `${COURSES_BASE_ENDPOINT}/category/${encodedCategory}`;
         console.log('🔗 GetCoursesStudentByCategory - URL construida:', fullUrl);
 
         const response = await axios.get(fullUrl);

@@ -2,7 +2,8 @@
 import axios from '../../../api/axiosInstance';
 import type {TCourseStudent, TEvaluation, TLessonStudent } from '../types/CourseStudent';
 
-const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
+// Usar ruta base para evaluaciones de lecciones específicas
+const COURSES_BASE_ENDPOINT = "/api/v1/student/courses";
 /* Agregar en response un atributo score que es el puntaje */
 type EvaluationLessonsAPIProps = {
     idCourse: TCourseStudent['id'],
@@ -27,7 +28,7 @@ export default async function EvaluationLessonsAPI({idCourse, idLesson}: Evaluat
     try {
         const id_course = idCourse;
         const id_lesson = idLesson;
-        const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/${id_course}/lessons/${id_lesson}/evaluation`);
+        const response = await axios.get(`${COURSES_BASE_ENDPOINT}/${id_course}/lessons/${id_lesson}/evaluation`);
         console.log(response)
 
         // Validar status code

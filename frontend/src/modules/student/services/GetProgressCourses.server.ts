@@ -3,7 +3,8 @@
 import axios from '../../../api/axiosInstance';
 import type { TProgressCourses } from '../../courses/types/CourseStudent';
 
-const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
+// Usar ruta base para progreso de cursos específico
+const COURSES_BASE_ENDPOINT = "/api/v1/student/courses";
 
 // Tipo para la respuesta esperada según el estándar
 type ProgressAPIResponse = {
@@ -14,7 +15,7 @@ type ProgressAPIResponse = {
 
 export default async function ProgressCoursesAPI(): Promise<TProgressCourses> {
     try {
-        const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/lessons`);
+        const response = await axios.get(`${COURSES_BASE_ENDPOINT}/lessons`);
         // Validar status code
         if (response.status !== 200) {
             throw new Error(`HTTP ${response.status}: ${response.data?.message || 'Error desconocido'}`);

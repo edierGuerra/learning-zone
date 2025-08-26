@@ -2,7 +2,8 @@
 import axios from '../../../api/axiosInstance';
 import type { TContent, TCourse, TLessonStudent } from '../types/CourseStudent';
 
-const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
+// Usar ruta base para contenido de lecciones específicas
+const COURSES_BASE_ENDPOINT = "/api/v1/student/courses";
 
 type ContentLessonsAPIProps = {
     idCourse: TCourse['id'],
@@ -27,7 +28,7 @@ export default async function ContentLessonsAPI({idCourse, idLesson}: ContentLes
     try {
         const id_course = idCourse;
         const id_lesson = idLesson;
-        const response = await axios.get(`${VITE_GETCOURSES_ENDPOINT}/${id_course}/lessons/${id_lesson}/content`);
+        const response = await axios.get(`${COURSES_BASE_ENDPOINT}/${id_course}/lessons/${id_lesson}/content`);
 
 
         // Validar status code

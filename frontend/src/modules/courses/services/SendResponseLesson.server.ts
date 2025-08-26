@@ -2,7 +2,8 @@
 import axios from '../../../api/axiosInstance';
 import type { TCourse, TEvaluation, TLessonStudent, TScore } from '../types/CourseStudent';
 
-const VITE_GETCOURSES_ENDPOINT = import.meta.env.VITE_GETCOURSES_ENDPOINT;
+// Usar ruta base para envío de respuestas de lecciones específicas
+const COURSES_BASE_ENDPOINT = "/api/v1/student/courses";
 
 type SendResponseLessonAPIProps = {
   id: TEvaluation['id'];            // id de la evaluación
@@ -34,7 +35,7 @@ export default async function SendResponseLessonAPI({
   const id_evaluation = id;
 
   const res = await axios.post(
-    `${VITE_GETCOURSES_ENDPOINT}/${id_course}/lessons/${id_lesson}/evaluation/${id_evaluation}`,
+    `${COURSES_BASE_ENDPOINT}/${id_course}/lessons/${id_lesson}/evaluation/${id_evaluation}`,
     {
       question_type: questionType,
       response,

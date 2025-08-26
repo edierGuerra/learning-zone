@@ -6,7 +6,10 @@ import { authStorage } from "../shared/Utils/authStorage"; // mejor que usar dir
 const baseURL = import.meta.env.VITE_API_URL || "https://localhost:8000";
 // Forzar HTTPS en producción para evitar Mixed Content
 const secureBaseURL = baseURL.replace(/^http:/, 'https:');
-console.log("🔧 axiosInstance baseURL:", secureBaseURL);
+console.log("🔧 axiosInstance MODE:", import.meta.env.MODE);
+console.log("🔧 axiosInstance VITE_API_URL:", import.meta.env.VITE_API_URL);
+console.log("🔧 axiosInstance baseURL original:", baseURL);
+console.log("🔧 axiosInstance baseURL final:", secureBaseURL);
 
 const axiosInstance = axios.create({
   baseURL: secureBaseURL,

@@ -116,7 +116,7 @@ async def verify_email_token(
         )
 
 
-@router.get("/")
+@router.get("/profile")
 async def get_student(student: Student = Depends(get_current_student)):
     """
     ## Obtener estudiante

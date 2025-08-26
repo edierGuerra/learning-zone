@@ -25,7 +25,7 @@ type StudentAPIResponse = {
  */
 export async function GetStudentAPI(): Promise<TUserDataResponse & { prefix_profile: string }> {
     try {
-        const response = await axios.get("/api/v1/student");
+        const response = await axios.get("/api/v1/student/profile");
 
         // Validar código de respuesta
         if (response.status !== 200) {

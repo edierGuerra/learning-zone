@@ -35,7 +35,7 @@ async def get_notification_services(
     return NotificationService(notification_repo)
 
 
-@router.get("/")
+@router.get("/list")
 async def get_notifications(
     student: Student = Depends(get_current_student),
     services: StudentService = Depends(get_student_services),

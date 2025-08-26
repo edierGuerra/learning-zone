@@ -9,7 +9,7 @@ from core.security import get_current_student
 router = APIRouter(prefix="/api/v1/student/courses", tags=["Courses"])
 
 
-@router.get("/")
+@router.get("/list")
 async def get_courses(
     student: Student = Depends(get_current_student),
     course_services: CourseServices = Depends(get_course_services),

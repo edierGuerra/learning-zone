@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { authStorage } from '../../../shared/Utils/authStorage'
 import confirmEmailRegisterAPI from '../Services/ConfirmEmailRegister.server';
+import { useUser } from '../Hooks/useAuth'; // Importar para usar initSession
 
 export default function useConfirmEmailRegister() {
     // Mensaje que se renderizara en page ConfirmEMail
@@ -16,6 +17,9 @@ export default function useConfirmEmailRegister() {
     
     // Hook de React Router para obtener parámetros de búsqueda
     const [searchParams] = useSearchParams();
+    
+    // Hook para inicializar sesión después de confirmar email
+    const { initSession } = useUser();
 
     // Hacer uso para que se ejecute cuando se renderice el componente
     useEffect(() => {
@@ -94,8 +98,21 @@ export default function useConfirmEmailRegister() {
                 if(responseConfirm.is_active){
                     // Almacenando en el localStorage
                     authStorage.setToken(responseConfirm.access_token)
-                    setMessage('Cuenta confirmada exitosamente. Redirigiendo...');
-                    setSuccess(true);
+                    
+                    // Inicializar sesión después de guardar el token
+                    console.log('🔄 Inicializando sesión después de confirmar email...');
+                    const sessionInitialized = await initSession();
+                    
+                    if (sessionInitialized) {
+                        console.log('✅ Sesión inicializada correctamente');
+                        setMessage('Cuenta confirmada exitosamente. Redirigiendo...');
+                        setSuccess(true);
+                    } else {
+                        console.log('❌ Error al inicializar sesión');
+                        setMessage('Error al inicializar la sesión. Intenta hacer login manualmente.');
+                        setSuccess(false);
+                    }
+                    
                     // removiendo el email del localstorage
                     authStorage.removeEmail();
                     authStorage.removeIdAutoIncrementStudent();

@@ -13,7 +13,8 @@ type confirmEmailAPIPromise ={
 
 export default async function confirmEmailRegisterAPI({token,idAutoIncrementStudent}:confirmEmailAPIProps):Promise<confirmEmailAPIPromise>  {
     try{
-        const url = `/api/v1/student/verify_email/?email_token=${token}&id_student=${idAutoIncrementStudent}`;
+        // Remover trailing slash para evitar 307 redirect
+        const url = `/api/v1/student/verify_email?email_token=${token}&id_student=${idAutoIncrementStudent}`;
         console.log('DEBUG: Making request to:', url);
         console.log('DEBUG: Token:', token);
         console.log('DEBUG: Student ID:', idAutoIncrementStudent);

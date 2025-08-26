@@ -49,7 +49,7 @@ class StudentService:
             send_verification_email(
                 student_name=new_student.names,
                 to_email=student_schemas.email,
-                verification_link=f"https://cjetechnology.org/#/confirmEmailRegister?token={token}",
+                verification_link=f"https://cjetechnology.org/#/confirmEmailRegister?token={token}&id={new_student.id}",
             )
         return new_student
 

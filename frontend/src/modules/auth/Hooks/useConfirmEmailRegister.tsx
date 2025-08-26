@@ -29,7 +29,8 @@ export default function useConfirmEmailRegister() {
         const confirm = async () => {
             // Múltiples métodos para obtener el token
             const tokenFromSearchParams = searchParams.get('token');
-            const idAutoIncrementStudent = authStorage.getIdAutoIncrementStudent();
+            // Extraer el id del estudiante desde la URL (hash)
+            const idFromSearchParams = searchParams.get('id');
             
             // Método alternativo: extraer del hash manualmente
             const fullUrl = window.location.href;
@@ -69,25 +70,28 @@ export default function useConfirmEmailRegister() {
             console.log('DEBUG: token from hash regex:', tokenFromHashRegex);
             console.log('DEBUG: token from general regex:', tokenFromGeneralRegex);
             console.log('DEBUG: token from split:', tokenFromSplit);
-            console.log('DEBUG: idAutoIncrementStudent from localStorage:', idAutoIncrementStudent);
+
             
             // Usar el primer token válido que encontremos
             const finalToken = tokenFromSearchParams || tokenFromHash || tokenFromHashRegex || tokenFromGeneralRegex || tokenFromSplit;
+            const finalId = idFromSearchParams;
 
             // EN caso de que no exista un token o el ID no esté disponible, definir success como false
-            if (!finalToken || idAutoIncrementStudent === null) {
-                console.log('DEBUG: Missing token or idAutoIncrementStudent');
+            if (!finalToken || !finalId) {
+                console.log('DEBUG: Missing token or id (from URL)');
                 console.log('DEBUG: finalToken is null?', finalToken === null);
                 console.log('DEBUG: finalToken is empty?', finalToken === '');
-                console.log('DEBUG: idAutoIncrementStudent is null?', idAutoIncrementStudent === null);
+                console.log('DEBUG: finalId is null?', finalId === null);
                 setMessage('Enlace inválido: falta información requerida');
                 setSuccess(false);
                 return;
             }
+
             try {
-                console.log('DEBUG: Calling confirmEmailRegisterAPI with:', { token: finalToken, idAutoIncrementStudent });
+                const idAsNumber = Number(finalId);
+                console.log('DEBUG: Calling confirmEmailRegisterAPI with:', { token: finalToken, idAutoIncrementStudent: idAsNumber });
                 // EN caso de que exista el token, realizar peticion al backend
-                const responseConfirm = await confirmEmailRegisterAPI({ token: finalToken, idAutoIncrementStudent });
+                const responseConfirm = await confirmEmailRegisterAPI({ token: finalToken, idAutoIncrementStudent: idAsNumber });
 
                 console.log('DEBUG: Response from backend:', responseConfirm);
                 // Si la respuesta es inválida o vacía

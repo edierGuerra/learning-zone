@@ -17,9 +17,10 @@ export default function ConfirmEmailRegister() {
 
     useEffect(()=>{
         if(success){
-            // Almacenar en el localstorage
+            // Almacenar en el localstorage y redirigir al dashboard del estudiante
             const timeOuth = setTimeout(()=>{
-                window.location.href = '/';
+                // Redirigir al home del estudiante (ruta correcta)
+                window.location.href = '/student/home-student';
 
             },2000)
 

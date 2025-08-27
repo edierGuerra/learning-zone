@@ -13,10 +13,11 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: [
-      "http://localhost:5173",
+      "http://cjetechnology.org",
+      "http://cjetechnology.org/chat",
       "http://localhost:80",
       "http://frontend",
-      "https://learning-zone-app.ondigitalocean.app",
+      "https://cjetechnology.org/backend",
       process.env.FRONTEND_URL || "https://localhost:3000",
     ],
     methods: ["GET", "POST"],
@@ -38,5 +39,5 @@ registerSocketHandlers(io);
 
 const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT, () => {
-  console.log(`🚀 Socket server running at http://localhost:${PORT}`);
+  console.log(`🚀 Socket server running at http://cjetechnology.org/chat:${PORT}`);
 });

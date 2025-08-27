@@ -4,7 +4,8 @@ let socket: Socket | null = null;
 
 export const getSocket = (): Socket => {
   if (!socket) {
-    const chatUrl = import.meta.env.VITE_CHAT_URL || "http://cjetechnology.org/chat";
+    const chatUrl =
+      import.meta.env.VITE_CHAT_URL || "http://cjetechnology.org/chat";
     socket = io(chatUrl, {
       autoConnect: false,
       reconnectionAttempts: 2, // limita intentos

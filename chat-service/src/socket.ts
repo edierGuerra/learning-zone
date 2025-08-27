@@ -7,6 +7,10 @@ import { TComment, TCommentDelete, TCommentSend, TUpdateComment } from './types'
 
 dotenv.config();
 
+// Debug: Verificar variables de entorno
+console.log("🔌 FastAPI URL:", process.env.FASTAPI_URL);
+console.log("🔌 Chat Socket Path:", process.env.CHAT_SOCKET_PATH);
+
 type TCommentResponse = {
   id: TComment['id'];
   name_student: TComment['nameStudent'];
@@ -36,6 +40,32 @@ const api = axios.create({
     maxSockets: 50,
   }),
 });
+
+// 🔧 Interceptor para debug de peticiones
+api.interceptors.request.use(
+  (config) => {
+    console.log(`🔧 Making request to: ${config.baseURL}${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error('🔧 Request error:', error);
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    console.log(`✅ Response received from: ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    console.error(
+      `❌ Response error from ${error.config?.url}:`,
+      error.message
+    );
+    return Promise.reject(error);
+  }
+);
 
 // Funciones auxiliares para centralizar las llamadas
 async function deleteCommentRequest(idComment: number, idCourse: number, token: string) {

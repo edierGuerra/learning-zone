@@ -170,6 +170,7 @@ origins = [
     "https://localhost:3000",
     # Producción - Dominio principal
     "https://cjetechnology.org",
+    "https://cjetechnology.org/chat",
     # Producción - DigitalOcean (mantener por compatibilidad)
     "https://*.ondigitalocean.app",  # Permite todos los subdominios de DigitalOcean
 ]

@@ -4,11 +4,12 @@ let socket: Socket | null = null;
 
 export const getSocket = (): Socket => {
   if (!socket) {
-    const chatUrl = import.meta.env.VITE_CHAT_URL || "https://cjetechnology.org/chat";
+    const chatUrl = import.meta.env.VITE_CHAT_URL || "http://cjetechnology.org/chat";
     socket = io(chatUrl, {
       autoConnect: false,
       reconnectionAttempts: 2, // limita intentos
       reconnectionDelay: 3000,
+      path: "/chat/socket.io/", // ✅ Configurar path correcto para Socket.IO
     });
 
     // Log de conexión y errores

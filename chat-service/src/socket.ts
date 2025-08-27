@@ -77,14 +77,14 @@ api.interceptors.response.use(
 // Funciones auxiliares para centralizar las llamadas
 async function deleteCommentRequest(idComment: number, idCourse: number, token: string) {
   return api.delete<TNewCommentResponse>(
-    `/api/v1/comments/${idComment}?id_course=${idCourse}`,
+    `/api/v1/comments/${idComment}/?id_course=${idCourse}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 }
 
 async function updateCommentRequest(idComment: number, idCourse: number, text: string, token: string) {
   return api.put<TNewCommentResponse>(
-    `/api/v1/comments/${idComment}?id_course=${idCourse}`,
+    `/api/v1/comments/${idComment}/?id_course=${idCourse}`,
     { text }, // El backend espera "text", no "new_text"
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -97,13 +97,40 @@ export const registerSocketHandlers = (io: Server) => {
     // Unirse al chat de un curso
     socket.on('join', async ({ name, courseId, token }) => {
       // 🔧 DEBUG: Verificar datos recibidos
-      console.log('🔧 JOIN event received:');
-      console.log('🔧 - name:', name);
-      console.log('🔧 - courseId:', courseId);
-      console.log('🔧 - token:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
+      console.log("🔧 JOIN event received:");
+      console.log("🔧 - name:", name);
+      console.log("🔧 - courseId:", courseId);
+      console.log(
+        "🔧 - token:",
+        token ? `${token.substring(0, 20)}...` : "NO TOKEN"
+      );
+
+      // 🔧 DEBUG: Decodificar token JWT para ver su contenido
+      if (token) {
+        try {
+          const payload = JSON.parse(
+            Buffer.from(token.split(".")[1], "base64").toString()
+          );
+          console.log("🔧 Token payload:", {
+            exp: payload.exp ? new Date(payload.exp * 1000) : "No expiry",
+            iat: payload.iat ? new Date(payload.iat * 1000) : "No issued at",
+            user_id: payload.user_id || payload.sub || "No user ID",
+            email: payload.email || "No email",
+          });
+
+          // Verificar si el token ha expirado
+          if (payload.exp && Date.now() >= payload.exp * 1000) {
+            console.warn("⚠️ TOKEN EXPIRADO!");
+          }
+        } catch (e) {
+          console.error("🔧 Error decodificando token:", e);
+        }
+      }
 
       if (!token || !courseId || !name) {
-        console.warn(`⚠️ Conexión rechazada (datos incompletos) -> name:${name}, courseId:${courseId}, token:${!!token}`);
+        console.warn(
+          `⚠️ Conexión rechazada (datos incompletos) -> name:${name}, courseId:${courseId}, token:${!!token}`
+        );
         return;
       }
       socket.data.username = name;
@@ -115,7 +142,7 @@ export const registerSocketHandlers = (io: Server) => {
         );
 
         const data = res.data.list_ids_connects;
-        io.emit('listStudentsConnects', data);
+        io.emit("listStudentsConnects", data);
 
         const comments: TComment[] = res.data.comments.map((c) => ({
           id: c.id,
@@ -127,11 +154,14 @@ export const registerSocketHandlers = (io: Server) => {
           timestamp: c.timestamp,
         }));
 
-        socket.emit('commentList', comments);
+        socket.emit("commentList", comments);
       } catch (err: any) {
-        console.error(`❌ Error obteniendo comentarios para curso ${courseId}:`, err.message);
-        console.error('🔧 Error status:', err.response?.status);
-        console.error('🔧 Error data:', err.response?.data);
+        console.error(
+          `❌ Error obteniendo comentarios para curso ${courseId}:`,
+          err.message
+        );
+        console.error("🔧 Error status:", err.response?.status);
+        console.error("🔧 Error data:", err.response?.data);
       }
     });
 
@@ -154,7 +184,7 @@ export const registerSocketHandlers = (io: Server) => {
 
       try {
         const res = await api.post<TNewCommentResponse>(
-          '/api/v1/comments',
+          '/api/v1/comments/',
           { text, parent_id: parentId, course_id: courseId },
           { headers: { Authorization: `Bearer ${token}` } }
         );

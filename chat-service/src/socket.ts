@@ -45,6 +45,9 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     console.log(`🔧 Making request to: ${config.baseURL}${config.url}`);
+    // 🔧 DEBUG: Verificar headers de autorización
+    const authHeader = config.headers?.Authorization;
+    console.log(`🔧 Authorization header:`, authHeader ? `${String(authHeader).substring(0, 20)}...` : 'NO AUTH HEADER');
     return config;
   },
   (error) => {
@@ -63,6 +66,10 @@ api.interceptors.response.use(
       `❌ Response error from ${error.config?.url}:`,
       error.message
     );
+    // 🔧 DEBUG: Mostrar detalles del error 401
+    if (error.response?.status === 401) {
+      console.error('🔧 401 Error details:', error.response?.data);
+    }
     return Promise.reject(error);
   }
 );
@@ -89,8 +96,14 @@ export const registerSocketHandlers = (io: Server) => {
 
     // Unirse al chat de un curso
     socket.on('join', async ({ name, courseId, token }) => {
+      // 🔧 DEBUG: Verificar datos recibidos
+      console.log('🔧 JOIN event received:');
+      console.log('🔧 - name:', name);
+      console.log('🔧 - courseId:', courseId);
+      console.log('🔧 - token:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
+
       if (!token || !courseId || !name) {
-        console.warn(`⚠️ Conexión rechazada (datos incompletos) -> name:${name}, courseId:${courseId}`);
+        console.warn(`⚠️ Conexión rechazada (datos incompletos) -> name:${name}, courseId:${courseId}, token:${!!token}`);
         return;
       }
       socket.data.username = name;
@@ -117,13 +130,24 @@ export const registerSocketHandlers = (io: Server) => {
         socket.emit('commentList', comments);
       } catch (err: any) {
         console.error(`❌ Error obteniendo comentarios para curso ${courseId}:`, err.message);
+        console.error('🔧 Error status:', err.response?.status);
+        console.error('🔧 Error data:', err.response?.data);
       }
     });
 
     // Nuevo comentario
     socket.on('newComment', async (newComment: TCommentSend) => {
       const { token, text, parentId, courseId } = newComment;
+      
+      // 🔧 DEBUG: Verificar datos del nuevo comentario
+      console.log('🔧 NEW COMMENT event received:');
+      console.log('🔧 - text:', text);
+      console.log('🔧 - courseId:', courseId);
+      console.log('🔧 - parentId:', parentId);
+      console.log('🔧 - token:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
+
       if (!token) {
+        console.warn('⚠️ newComment: No token provided');
         socket.emit('commentError', { message: 'No tienes permisos para comentar' });
         return;
       }
@@ -149,6 +173,7 @@ export const registerSocketHandlers = (io: Server) => {
         io.emit('listStudentsConnects', res.data.list_ids_connects);
         socket.emit('commentSuccess', { message: 'Comentario enviado exitosamente' });
       } catch (err: any) {
+        console.error('❌ Error creating comment:', err.response?.data);
         socket.emit('commentError', {
           message: 'Error al enviar el comentario',
           details: err.response?.data?.detail || err.message
@@ -159,7 +184,15 @@ export const registerSocketHandlers = (io: Server) => {
     // Eliminar comentario
     socket.on('deleteComment', async (deleteData: TCommentDelete) => {
       const { token, idComment, idCourse } = deleteData;
+      
+      // 🔧 DEBUG: Verificar datos del delete
+      console.log('🔧 DELETE COMMENT event received:');
+      console.log('🔧 - idComment:', idComment);
+      console.log('🔧 - idCourse:', idCourse);
+      console.log('🔧 - token:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
+
       if (!token) {
+        console.warn('⚠️ deleteComment: No token provided');
         socket.emit('commentError', { message: 'No tienes permisos para comentar' });
         return;
       }
@@ -179,6 +212,7 @@ export const registerSocketHandlers = (io: Server) => {
         io.emit('listStudentsConnects', res.data.list_ids_connects);
         socket.emit('commentSuccess', { message: 'Comentario eliminado exitosamente' });
       } catch (err: any) {
+        console.error('❌ Error deleting comment:', err.response?.data);
         socket.emit('commentError', {
           message: 'Error al eliminar el comentario',
           details: err.response?.data?.detail || err.message
@@ -189,7 +223,16 @@ export const registerSocketHandlers = (io: Server) => {
     // Actualizar comentario
     socket.on('updateComment', async (updateData: TUpdateComment) => {
       const { token, idComment, idCourse, text } = updateData;
+      
+      // 🔧 DEBUG: Verificar datos del update
+      console.log('🔧 UPDATE COMMENT event received:');
+      console.log('🔧 - idComment:', idComment);
+      console.log('🔧 - idCourse:', idCourse);
+      console.log('🔧 - text:', text);
+      console.log('🔧 - token:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
+
       if (!token) {
+        console.warn('⚠️ updateComment: No token provided');
         socket.emit('commentError', { message: 'No tienes permisos para comentar' });
         return;
       }
@@ -211,6 +254,7 @@ export const registerSocketHandlers = (io: Server) => {
         io.emit('listStudentsConnects', res.data.list_ids_connects);
         socket.emit('commentSuccess', { message: 'Comentario actualizado exitosamente' });
       } catch (err: any) {
+        console.error('❌ Error updating comment:', err.response?.data);
         socket.emit('commentError', {
           message: 'Error al actualizar el comentario',
           details: err.response?.data?.detail || err.message

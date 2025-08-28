@@ -7,7 +7,7 @@ type TDeleteNotificationsAPIResponse = {
 };
 
 // Usar endpoint específico para eliminar notificaciones
-const DELETE_NOTIFICATIONS_ENDPOINT = import.meta.env.VITE_DELETE_NOTIFICATIONS_ENDPOINT || '/api/v1/student/notifications';
+const DELETE_NOTIFICATIONS_ENDPOINT = import.meta.env.VITE_DELETE_NOTIFICATIONS_ENDPOINT || '/api/v1/student/notifications/';
 
 export default async function DeleteNotificationsAPI(
   idNotificacion?: TNotification['id']

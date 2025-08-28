@@ -17,7 +17,7 @@ export const initializeSocket = (): Socket => {
   
   if (import.meta.env.VITE_CHAT_URL) {
     // Si se define explícitamente en variables de entorno
-    chatUrl = import.meta.env.VITE_CHAT_URL;
+    chatUrl = import.meta.env.VITE_CHAT_URL || "https://cjetechnology.org/chat";
   } else if (isProduction) {
     // CAMBIO: Usar el dominio principal, no el subdirectorio
     chatUrl = "https://cjetechnology.org";

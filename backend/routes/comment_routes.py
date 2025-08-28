@@ -42,7 +42,7 @@ async def create_comment(
     }
 
 
-@router.get("/", response_model=CommentListResponse)
+@router.get("/list", response_model=CommentListResponse)
 async def get_comments(
     course_id: int,
     student: Student = Depends(get_current_student),

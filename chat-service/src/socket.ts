@@ -77,14 +77,14 @@ api.interceptors.response.use(
 // Funciones auxiliares para centralizar las llamadas
 async function deleteCommentRequest(idComment: number, idCourse: number, token: string) {
   return api.delete<TNewCommentResponse>(
-    `/api/v1/comments/${idComment}/delete/?id_course=${idCourse}`,
+    `/api/v1/comments/${idComment}/delete?id_course=${idCourse}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 }
 
 async function updateCommentRequest(idComment: number, idCourse: number, text: string, token: string) {
   return api.put<TNewCommentResponse>(
-    `/api/v1/comments/${idComment}/update/?id_course=${idCourse}`,
+    `/api/v1/comments/${idComment}/update?id_course=${idCourse}`,
     { text }, // El backend espera "text", no "new_text"
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -137,7 +137,7 @@ export const registerSocketHandlers = (io: Server) => {
 
       try {
         const res = await api.get<TListComments>(
-          `/api/v1/comments?course_id=${courseId}`,
+          `/api/v1/comments/list?course_id=${courseId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

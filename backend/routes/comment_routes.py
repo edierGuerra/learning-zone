@@ -56,7 +56,7 @@ async def get_comments(
     return {"comments": comments, "list_ids_connects": list_id_of_students}
 
 
-@router.put("/{id_comment}")
+@router.put("/{id_comment}/update")
 async def update_comment(
     id_course: int,
     id_comment: int,
@@ -75,7 +75,7 @@ async def update_comment(
     }
 
 
-@router.delete("/{id_comment}")
+@router.delete("/{id_comment}/delete")
 async def delete_comment(
     id_course: int,
     id_comment: int,

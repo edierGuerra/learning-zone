@@ -12,9 +12,18 @@ import "../styles/HomeStudent.css";
 import { RiMenuSearchLine } from "react-icons/ri"
 
 export default function HomeStudent() {
-  const { user } = useUser()
+  const { user,refreshNotifications } = useUser()
   const { courses, refreshCoursesStudent } = useStudentCourseContext()
+  const token = authStorage.getToken();
+    useEffect(() => {
+    const role = authStorage.getRole();
 
+    if (token && role === "student") {
+        refreshNotifications(); // Solo si es estudiante
+  /*       const timer = setInterval(refreshNotifications, pollingInterval);
+        return () => clearInterval(timer); */
+    }
+    }, []);
   // Panel de categorías
   const [viewCategories, setViewCategories] = useState(false)
   const categoriesRef = useRef<HTMLDivElement>(null)

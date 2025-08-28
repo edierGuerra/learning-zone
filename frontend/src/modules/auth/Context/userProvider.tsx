@@ -1,5 +1,5 @@
 /* agregar consulta al backend del rol y retornarlo */
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState } from "react";
 import { UserContext } from "./userContext";
 import { authStorage } from "../../../shared/Utils/authStorage";
 import type { TUser, TUserRole } from "../../types/User";
@@ -104,7 +104,7 @@ const initSession = async (): Promise<boolean> => {
  */
     console.log('✅ initSession - Sesión inicializada completamente');
     return true;
-
+  
   } catch (error) {
     console.error("❌ initSession - Error al inicializar sesión:", error);
     return false;
@@ -150,6 +150,11 @@ const initSession = async (): Promise<boolean> => {
 
     setIsReady(true);
   }, []);
+  const refreshNotifications = useCallback(async () => {
+        const updated = await GetNotificationsAPI();
+        setNotifications(updated);
+        authStorage.setNotificationsStudent(updated);
+    }, [setNotifications]); // Solo cambia si cambia `setNotifications`
 
   // Verifica si el usuario está logueado
   const isLoggedIn = !!user && !!role;
@@ -188,7 +193,8 @@ const initSession = async (): Promise<boolean> => {
         setNotifications,
         notifications,
         numberNotifications,
-        initSession // Se expone al contexto para uso posterior
+        initSession, // Se expone al contexto para uso posterior,
+        refreshNotifications
       }}
     >
       {isReady ? children : null}

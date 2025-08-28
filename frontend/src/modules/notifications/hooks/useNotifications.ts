@@ -6,25 +6,18 @@ import GetNotificationsAPI from "../services/GetNotifications.server"
 import toast from 'react-hot-toast';
 
 /* Logica de las notificaciones */
-export default function useNotifications(pollingInterval=4000 ) {
-    const {setNotifications } = useUser()
+export default function useNotifications(/* pollingInterval=4000 */ ) {
+    const {refreshNotifications } = useUser()
     const [loadingNot, setLoadingNot] = useState(false)
 
-    const refreshNotifications = useCallback(async () => {
-        const updated = await GetNotificationsAPI();
-        setNotifications(updated);
-        authStorage.setNotificationsStudent(updated);
-    }, [setNotifications]); // Solo cambia si cambia `setNotifications`
-
-    // Activar polling (peticion automatica) automático con useEffect
     const token = authStorage.getToken();
     useEffect(() => {
     const role = authStorage.getRole();
 
     if (token && role === "student") {
         refreshNotifications(); // Solo si es estudiante
-        const timer = setInterval(refreshNotifications, pollingInterval);
-        return () => clearInterval(timer);
+  /*       const timer = setInterval(refreshNotifications, pollingInterval);
+        return () => clearInterval(timer); */
     }
     }, []);
 

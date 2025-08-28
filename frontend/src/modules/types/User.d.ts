@@ -92,5 +92,7 @@ export type TUserContext = {
   setNotifications: React.Dispatch<React.SetStateAction<TNotifications>>;
   numberNotifications: number;
   initSession: ()=>Promise<boolean>
+  refreshNotifications: () => Promise<void>
+
 
 };

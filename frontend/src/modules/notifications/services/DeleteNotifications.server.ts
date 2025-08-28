@@ -6,8 +6,8 @@ type TDeleteNotificationsAPIResponse = {
   message: string;
 };
 
-// Usar endpoint específico para eliminar notificaciones
-const DELETE_NOTIFICATIONS_ENDPOINT = import.meta.env.VITE_DELETE_NOTIFICATIONS_ENDPOINT || '/api/v1/student/notifications/';
+/* // Usar endpoint específico para eliminar notificaciones
+const DELETE_NOTIFICATIONS_ENDPOINT = import.meta.env.VITE_DELETE_NOTIFICATIONS_ENDPOINT || '/api/v1/student/notifications/'; */
 
 export default async function DeleteNotificationsAPI(
   idNotificacion?: TNotification['id']
@@ -22,7 +22,7 @@ export default async function DeleteNotificationsAPI(
 
     console.log('🔧 Delete config:', config);
 
-    const response = await axios.delete(DELETE_NOTIFICATIONS_ENDPOINT, config);
+    const response = await axios.delete(/* DELETE_NOTIFICATIONS_ENDPOINT */"/api/v1/student/notifications/delete", config);
 
     // Aquí sí se puede acceder al contenido porque el backend devuelve status 200 con JSON
     return {

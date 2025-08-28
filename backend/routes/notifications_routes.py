@@ -79,7 +79,7 @@ async def get_notifications(
     ]
 
 
-@router.delete("/")
+@router.delete("/delete")
 async def delete_notifications(
     student: Student = Depends(get_current_student),
     id_notification: int = None,

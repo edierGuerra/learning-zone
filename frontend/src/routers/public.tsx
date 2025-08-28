@@ -23,7 +23,7 @@ export default function RoutersPublic() {
                 <Route path="/confirmEmailRegister" element={<ConfirmEmailRegister/>}/>{/* ################## tener en cuenta para backend */}
                 <Route path="/emailNewPassword" element={<RecoverPassword viewFormNewPassword={false}/>}/>
                 <Route path="/newPassword" element={<RecoverPassword viewFormNewPassword={true}/>}/>
-                <Route path="/confirmEmailRequest" element={<ConfirmEmailRequest/>}/>
+                <Route path="/#/confirmEmailRequest" element={<ConfirmEmailRequest/>}/>
                 <Route path="/login" element={<LoginAndRegister opcAuth ={true}/>}/>
                 <Route path="/redirect" element={<RoleRedirect />} />
                 {sharedRoutes}

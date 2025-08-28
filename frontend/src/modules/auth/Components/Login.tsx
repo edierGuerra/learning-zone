@@ -54,7 +54,7 @@ export default function Login() {
               {showPassword ? <GrView /> : <GrFormViewHide />}
             </span> */}
           </div>
-          <p className='paragraph-forgot-a' onClick={()=>handleBtnNavigate('/emailNewPassword')}>Forgot password</p>
+          <p className='paragraph-forgot-a' onClick={()=>handleBtnNavigate('/#/emailNewPassword')}>Forgot password</p>
           <input className='btn-login' type="submit" value={'Login'} />
           <p onClick={()=>handleBtnNavigate('/register')} className='paragraph-create-account'>Don´t have an Account <a>Register</a></p>
           <a onClick={()=>handleBtnNavigate('/sitePolicies')}  className='paragraph-policies-login'>Términos y condiciones Política de Privacidad</a>

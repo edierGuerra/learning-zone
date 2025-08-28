@@ -135,7 +135,7 @@ class StudentService:
             send_password_reset_email(
                 to_email=student.email,
                 student_name=student.names,
-                reset_link=f"http://localhost:5173/confirmEmailRequest?token={password_token}",
+                reset_link=f"http://cjetechnology.org/#/confirmEmailRequest?token={password_token}",
             )
             return student
 
